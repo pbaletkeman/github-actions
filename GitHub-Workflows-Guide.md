@@ -10,7 +10,10 @@
 6. [Default Environment Variables](#default-environment-variables)
 7. [Environment Protection Rules](#environment-protection-rules)
 8. [GitHub Workflow Artifacts](#github-workflow-artifacts)
-9. [Common Failures and Troubleshooting](#common-failures-and-troubleshooting)
+9. [GitHub Workflow Caching](#github-workflow-caching)
+10. [Workflow Sharing](#workflow-sharing)
+11. [Workflow Debugging](#workflow-debugging)
+12. [Common Failures and Troubleshooting](#common-failures-and-troubleshooting)
 
 ---
 
@@ -3925,6 +3928,1289 @@ jobs:
 
 - name: Extract After Download
   run: tar -xzf build-archive.tar.gz
+```
+
+---
+
+## GitHub Workflow Caching
+
+### What is Workflow Caching?
+
+Workflow caching is a mechanism that stores files and directories during a workflow run and retrieves them in subsequent runs. Instead of downloading or rebuilding dependencies every time your workflow runs, cached files are restored, significantly reducing workflow execution time and bandwidth usage.
+
+### Why Use Caching?
+
+**Key Benefits:**
+
+1. **Performance**: Dramatically reduce workflow execution time by avoiding redundant downloads and builds
+2. **Cost Efficiency**: Lower bandwidth usage and reduced resource consumption
+3. **Reliability**: Reduce dependency on external services and network issues
+4. **Developer Experience**: Faster feedback loops for CI/CD pipelines
+5. **Scalability**: Enable faster builds as your project grows
+
+**Real-World Impact Example:**
+
+```
+Without Caching:
+- Install dependencies: 3-5 minutes
+- Build: 2 minutes
+- Test: 3 minutes
+- Total: 8-10 minutes per run
+
+With Caching:
+- Restore cache: 10-20 seconds
+- Build: 2 minutes (unchanged)
+- Test: 3 minutes (unchanged)
+- Total: 5-6 minutes per run (40-50% improvement)
+```
+
+### How Caching Works
+
+**Cache Mechanism:**
+
+1. **Save Phase**: At end of workflow, specified files are zipped and stored
+2. **Key Generation**: Cache is identified by a unique key based on files or inputs
+3. **Restore Phase**: On next run, if key matches, cache is restored before workflow starts
+4. **Fallback**: If exact key doesn't match, fallback keys are tried in order
+
+**Storage Details:**
+
+- Storage limit: 5 GB per repository
+- Cache accessible only to same branch
+- Cache expires after 7 days of no access
+- Free tier provides full cache access
+
+### 1. **Basic Caching**
+
+#### Caching Dependencies
+
+```yaml
+name: Cache Dependencies
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Restore cache from previous runs
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      # Cache hit will skip this install if exact key matches
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+```
+
+#### How This Works
+
+```
+First Run:
+- Cache key: ubuntu-npm-abc123def456
+- Key not found in cache
+- npm ci runs and downloads dependencies
+- ~/.npm directory is cached
+
+Second Run (same dependencies):
+- Cache key: ubuntu-npm-abc123def456
+- Key found! Cache restored
+- npm ci runs but dependencies already present
+- Execution ~50x faster
+
+Third Run (dependencies updated):
+- Cache key: ubuntu-npm-xyz789uvw012 (new hash)
+- Key not found (new dependency hash)
+- Falls back to: ubuntu-npm- (tries ubuntu-npm-*)
+- Finds previous cache, uses as starting point
+- Only new dependencies downloaded
+```
+
+#### Check if Cache Hit Occurred
+
+```yaml
+- uses: actions/cache@v3
+  id: cache
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+- name: Cache Status
+  run: |
+    if [ "${{ steps.cache.outputs.cache-hit }}" = "true" ]; then
+      echo "✓ Cache hit! Dependencies restored"
+    else
+      echo "✗ Cache miss. Fresh dependencies installed"
+    fi
+```
+
+### 2. **Multiple Cache Paths**
+
+```yaml
+- uses: actions/cache@v3
+  with:
+    path: |
+      ~/.npm
+      ~/.gradle/caches
+      ~/.gradle/wrapper
+    key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json', '**/gradle.properties') }}
+    restore-keys: |
+      ${{ runner.os }}-build-
+```
+
+### 3. **Language-Specific Caching**
+
+#### Node.js / npm / yarn
+
+```yaml
+# Cache npm dependencies
+- uses: actions/cache@v3
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+# Cache yarn dependencies
+- uses: actions/cache@v3
+  with:
+    path: ~/.yarn/cache
+    key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+```
+
+#### Python / pip
+
+```yaml
+- uses: actions/cache@v3
+  with:
+    path: ~/.cache/pip
+    key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+    restore-keys: |
+      ${{ runner.os }}-pip-
+```
+
+#### Java / Maven
+
+```yaml
+- uses: actions/cache@v3
+  with:
+    path: ~/.m2/repository
+    key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+```
+
+#### Java / Gradle
+
+```yaml
+- uses: actions/cache@v3
+  with:
+    path: |
+      ~/.gradle/caches
+      ~/.gradle/wrapper
+    key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle.properties', '**/gradle/wrapper/gradle-wrapper.properties') }}
+```
+
+#### Ruby / Bundler
+
+```yaml
+- uses: actions/cache@v3
+  with:
+    path: vendor/bundle
+    key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile.lock') }}
+```
+
+### 4. **Practical Full CI Pipeline with Caching**
+
+```yaml
+name: Optimized CI with Caching
+
+on: push
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16, 18, 20]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Cache node_modules by Node version
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        id: node-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
+            ${{ runner.os }}-node-
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Only run if cache miss
+      - name: Install Dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      # Cache build output
+      - name: Cache Build Directory
+        uses: actions/cache@v3
+        id: build-cache
+        with:
+          path: dist
+          key: ${{ runner.os }}-build-${{ matrix.node-version }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ matrix.node-version }}-
+
+      - name: Build
+        run: npm run build
+
+      # Cache test coverage results
+      - name: Run Tests
+        run: npm test -- --coverage
+
+      - name: Upload Coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-node-${{ matrix.node-version }}
+          path: coverage/
+```
+
+### 5. **Advanced Caching Strategies**
+
+#### Restore Multiple Cache Keys in Order
+
+```yaml
+- uses: actions/cache@v3
+  with:
+    path: ~/.cache/build
+    # Exact match first, then broader matches
+    key: build-${{ runner.os }}-${{ github.sha }}
+    restore-keys: |
+      build-${{ runner.os }}-
+      build-
+```
+
+#### Cache with Conditional Logic
+
+```yaml
+- name: Determine Cache Key
+  id: cache-key
+  run: |
+    if [ "${{ github.event_name }}" = "pull_request" ]; then
+      echo "key=pr-cache-${{ github.head_ref }}" >> $GITHUB_OUTPUT
+    else
+      echo "key=main-cache-${{ github.ref }}" >> $GITHUB_OUTPUT
+    fi
+
+- uses: actions/cache@v3
+  with:
+    path: build-cache/
+    key: ${{ steps.cache-key.outputs.key }}
+```
+
+#### Clearing Cache When Needed
+
+```bash
+# Via GitHub CLI
+gh actions-cache delete CACHE_KEY --repo OWNER/REPO --branch BRANCH
+
+# Delete all caches for a branch
+gh actions-cache list --repo OWNER/REPO --branch BRANCH | \
+  cut -f 1 | xargs -I {} gh actions-cache delete {} \
+  --repo OWNER/REPO --branch BRANCH --confirm
+```
+
+### 6. **Caching Best Practices**
+
+#### ✓ Recommended Practices
+
+```yaml
+# ✓ Use hashFiles for cache keys based on lock files
+- uses: actions/cache@v3
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+# ✓ Include fallback restore keys
+    restore-keys: |
+      ${{ runner.os }}-npm-
+      ${{ runner.os }}-
+
+# ✓ Cache only necessary files
+    path: node_modules  # Don't cache entire project
+
+# ✓ Cache language-specific directories
+    path: |
+      ~/.npm
+      ~/.cargo
+      ~/.m2
+
+# ✓ Check cache hit status
+- if: steps.cache.outputs.cache-hit != 'true'
+  run: npm ci
+```
+
+#### ✗ Anti-Patterns to Avoid
+
+```yaml
+# ✗ Don't cache entire repository
+- uses: actions/cache@v3
+  with:
+    path: .  # BAD - caches entire project
+
+# ✗ Don't use dynamic content in cache key
+    key: ${{ github.run_number }}  # Changes every run!
+
+# ✗ Don't cache files with secrets
+    path: |
+      ~/.ssh
+      ~/.aws/credentials
+      .env
+
+# ✗ Don't ignore cache hit status
+- run: npm ci  # Runs every time, defeating cache purpose
+```
+
+### 7. **Troubleshooting Caching**
+
+#### Cache Not Being Used
+
+```yaml
+# Debug: Print cache key that would be generated
+- name: Debug Cache Key
+  run: |
+    echo "Cache key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}"
+    ls -la package-lock.json
+
+# Check if cache is enabled
+- name: Verify Cache Hit
+  run: echo "Cache hit: ${{ steps.cache.outputs.cache-hit }}"
+```
+
+#### Cache Size Growing Too Large
+
+```yaml
+# Monitor cache size
+- name: Check Cache Size
+  run: |
+    du -sh ~/.npm
+    du -sh ~/.gradle/caches
+    du -sh node_modules
+```
+
+---
+
+## Workflow Sharing
+
+### What is Workflow Sharing?
+
+Workflow sharing allows you to reuse workflow files across multiple repositories or share standardized automation patterns within your organization. Instead of duplicating workflow code, you can create a single source of truth and reference it from other repositories.
+
+### Why Share Workflows?
+
+**Key Benefits:**
+
+1. **Code Reuse**: Avoid duplicating workflows across repositories
+2. **Consistency**: Ensure all projects follow the same CI/CD standards
+3. **Maintainability**: Update workflows in one place, benefits all repositories
+4. **Standardization**: Enforce organizational best practices
+5. **Reduced Errors**: Centralized quality and security checks
+6. **Quick Onboarding**: New projects inherit established workflows
+
+**Real-World Scenario:**
+
+```
+Scenario: Organization with 50 repositories
+
+Without Sharing:
+- Create workflows separately for each project
+- Duplicate code across 50 repositories
+- Update takes 50x effort
+- Inconsistent standards across projects
+- Risk of different security practices
+
+With Sharing:
+- Create workflow once in shared repository
+- Import in all 50 projects with one line
+- Update in one place, all projects updated
+- Consistent standards organization-wide
+- Centralized security policy enforcement
+```
+
+### How Workflow Sharing Works
+
+**Sharing Methods:**
+
+1. **Reusable Workflows**: Call workflows from other workflows (same/different repos)
+2. **Shared Actions**: Create custom actions in a shared repository
+3. **Workflow Templates**: GitHub provides starter templates
+4. **Private Repository Actions**: Use actions from private repos with access token
+
+### 1. **Reusable Workflows**
+
+#### Creating a Reusable Workflow
+
+```yaml
+# .github/workflows/shared-tests.yml (in shared-workflows repository)
+name: Shared Test Workflow
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: "18"
+      test-command:
+        required: false
+        type: string
+        default: "npm test"
+    secrets:
+      npm-token:
+        required: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm-token }}
+
+      - name: Run Tests
+        run: ${{ inputs.test-command }}
+```
+
+#### Using a Reusable Workflow
+
+```yaml
+# .github/workflows/ci.yml (in consuming repository)
+name: CI
+
+on: push
+
+jobs:
+  test:
+    uses: org/shared-workflows/.github/workflows/shared-tests.yml@main
+    with:
+      node-version: "20"
+      test-command: "npm test -- --coverage"
+    secrets:
+      npm-token: ${{ secrets.NPM_TOKEN }}
+```
+
+#### Key Components
+
+```yaml
+on:
+  workflow_call: # Makes this workflow reusable
+    inputs: # Define inputs from caller
+      parameter-name:
+        type: string # string, boolean, number, environment
+        required: false
+        default: "value"
+    secrets: # Define secrets from caller
+      secret-name:
+        required: true
+
+jobs:
+  job-name:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ inputs.parameter-name }}
+      - run: echo ${{ secrets.secret-name }}
+```
+
+### 2. **Complete Reusable Workflow Examples**
+
+#### Build and Push Docker Image (Reusable)
+
+```yaml
+# org/shared-workflows/.github/workflows/docker-build.yml
+name: Docker Build and Push
+
+on:
+  workflow_call:
+    inputs:
+      image-name:
+        required: true
+        type: string
+      dockerfile-path:
+        required: false
+        type: string
+        default: "./Dockerfile"
+      build-context:
+        required: false
+        type: string
+        default: "."
+      docker-tags:
+        required: false
+        type: string
+        default: "latest"
+    secrets:
+      registry-username:
+        required: true
+      registry-password:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Registry
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.registry-username }}
+          password: ${{ secrets.registry-password }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v4
+        with:
+          context: ${{ inputs.build-context }}
+          file: ${{ inputs.dockerfile-path }}
+          push: true
+          tags: |
+            ${{ inputs.image-name }}:${{ inputs.docker-tags }}
+```
+
+**Using the reusable workflow:**
+
+```yaml
+jobs:
+  docker:
+    uses: org/shared-workflows/.github/workflows/docker-build.yml@v1
+    with:
+      image-name: myregistry.azurecr.io/myapp
+      dockerfile-path: "./docker/Dockerfile"
+      docker-tags: |
+        latest
+        ${{ github.sha }}
+    secrets:
+      registry-username: ${{ secrets.REGISTRY_USERNAME }}
+      registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+```
+
+#### Code Quality Check (Reusable)
+
+```yaml
+# org/shared-workflows/.github/workflows/quality-checks.yml
+name: Quality Checks
+
+on:
+  workflow_call:
+    inputs:
+      language:
+        required: true
+        type: string # javascript, python, java, etc.
+      lint-command:
+        required: true
+        type: string
+      build-command:
+        required: false
+        type: string
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ inputs.language }}
+
+      - name: Lint Code
+        run: ${{ inputs.lint-command }}
+
+      - name: Build (if specified)
+        if: inputs.build-command != ''
+        run: ${{ inputs.build-command }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+```
+
+### 3. **Calling Reusable Workflows from Other Workflows**
+
+```yaml
+# Complete CI/CD using multiple reusable workflows
+name: Full CI/CD
+
+on: push
+
+jobs:
+  quality:
+    uses: org/shared-workflows/.github/workflows/quality-checks.yml@main
+    with:
+      language: javascript
+      lint-command: npm run lint
+      build-command: npm run build
+
+  test:
+    needs: quality
+    uses: org/shared-workflows/.github/workflows/shared-tests.yml@main
+    with:
+      node-version: "18"
+
+  docker:
+    needs: test
+    uses: org/shared-workflows/.github/workflows/docker-build.yml@v1
+    with:
+      image-name: myregistry.azurecr.io/myapp
+      docker-tags: ${{ github.sha }}
+    secrets:
+      registry-username: ${{ secrets.REGISTRY_USERNAME }}
+      registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+```
+
+### 4. **Creating Shared Actions**
+
+#### Composite Action Example
+
+```yaml
+# org/shared-actions/deploy-to-azure/action.yml
+name: Deploy to Azure
+description: Deploy application to Azure App Service
+
+inputs:
+  resource-group:
+    description: Azure resource group name
+    required: true
+  app-name:
+    description: Azure App Service name
+    required: true
+  subscription-id:
+    description: Azure subscription ID
+    required: true
+  azure-credentials:
+    description: Azure credentials JSON
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azure-credentials }}
+
+    - name: Deploy to App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ inputs.app-name }}
+        package: "."
+        resource-group: ${{ inputs.resource-group }}
+
+    - name: Logout from Azure
+      run: az logout
+      shell: bash
+```
+
+**Using the shared action:**
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Application
+        run: npm run build
+
+      - name: Deploy
+        uses: org/shared-actions/deploy-to-azure@v1
+        with:
+          resource-group: prod-rg
+          app-name: my-app-prod
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+```
+
+### 5. **Best Practices for Workflow Sharing**
+
+#### ✓ Recommended Practices
+
+```yaml
+# ✓ Version your reusable workflows
+uses: org/shared-workflows/.github/workflows/build.yml@v1.0.0
+uses: org/shared-workflows/.github/workflows/build.yml@main  # or main branch
+
+# ✓ Document inputs and secrets clearly
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Deployment environment (dev, staging, prod)'
+        required: true
+        type: choice
+        default: dev
+    secrets:
+      api-key:
+        description: 'API key for service authentication'
+        required: true
+
+# ✓ Use descriptive workflow file names
+test.yml
+test-nodejs.yml
+test-python.yml
+
+# ✓ Include usage documentation
+# README.md in shared-workflows repository with examples
+```
+
+#### ✗ Anti-Patterns to Avoid
+
+```yaml
+# ✗ Don't use workflows from untrusted sources
+uses: random-org/workflows/.github/workflows/build.yml@main
+
+# ✗ Don't expose secrets unnecessarily
+outputs:  # Don't output secrets!
+  api-key: ${{ secrets.API_KEY }}
+
+# ✗ Don't make workflows overly rigid
+# Allow customization via inputs
+
+# ✗ Don't use latest without pinning versions
+uses: org/workflows/.github/workflows/build.yml@main  # Risky!
+uses: org/workflows/.github/workflows/build.yml@v1    # Better
+```
+
+---
+
+## Workflow Debugging
+
+### What is Workflow Debugging?
+
+Workflow debugging is the process of identifying and fixing issues in GitHub Actions workflows. It involves understanding why workflows fail, examining logs, adding diagnostic output, and validating configurations. Debugging techniques range from simple log inspection to advanced tracing and performance analysis.
+
+### Why Debug Workflows?
+
+**Key Reasons:**
+
+1. **Failure Resolution**: Quickly identify and fix workflow failures
+2. **Performance Optimization**: Identify slow steps and bottlenecks
+3. **Cost Reduction**: Optimize resource usage and execution time
+4. **Reliability**: Ensure workflows run consistently
+5. **Learning**: Understand workflow behavior and best practices
+6. **Prevention**: Catch issues before they reach production
+
+### How Debugging Works
+
+**Debugging Workflow:**
+
+1. **Identify**: Recognize workflow has failed or behaves unexpectedly
+2. **Inspect**: Review workflow logs and error messages
+3. **Analyze**: Determine root cause using available information
+4. **Test**: Add diagnostic steps to gather more information
+5. **Fix**: Apply solution based on findings
+6. **Verify**: Confirm workflow works as expected
+
+### 1. **Understanding Workflow Logs**
+
+#### Accessing Workflow Logs
+
+**Via GitHub Web UI:**
+
+```
+1. Navigate to Repository → Actions tab
+2. Click on specific workflow run
+3. View logs for each job and step
+4. Click on individual steps to expand logs
+```
+
+**Log Levels:**
+
+```
+[INFO] Standard information messages
+[WARNING] Potential issues
+[ERROR] Error conditions
+[DEBUG] Detailed diagnostic information (when enabled)
+```
+
+#### Environment Information in Logs
+
+```yaml
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Environment
+        run: |
+          echo "=== GitHub Context ==="
+          echo "Event: $GITHUB_EVENT_NAME"
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Branch: $GITHUB_REF_NAME"
+          echo "Actor: $GITHUB_ACTOR"
+          echo "Workspace: $GITHUB_WORKSPACE"
+
+          echo ""
+          echo "=== Runner Info ==="
+          echo "OS: $RUNNER_OS"
+          echo "Arch: $RUNNER_ARCH"
+          uname -a
+
+          echo ""
+          echo "=== Disk Space ==="
+          df -h
+```
+
+### 2. **Enabling Debug Logging**
+
+#### RUNNER_DEBUG Variable
+
+**Enable in Workflow:**
+
+```yaml
+- name: Run with Debug
+  env:
+    RUNNER_DEBUG: true
+  run: npm test
+```
+
+**Enable via Secrets:**
+
+1. Go to `Settings → Secrets → Actions`
+2. Create secret: `ACTIONS_STEP_DEBUG: true`
+3. Re-run workflow - all steps produce verbose output
+
+#### Output with RUNNER_DEBUG
+
+```bash
+# Without RUNNER_DEBUG:
+/usr/bin/npm test
+Test Results: PASS
+
+# With RUNNER_DEBUG:
+::debug::Preparing command: npm test
+::debug::PWD: /home/runner/work/repo/repo
+::debug::PATH: /usr/local/sbin:/usr/local/bin:...
+::debug::Arguments: ['test']
+::debug::Exit code: 0
+/usr/bin/npm test
+Test Results: PASS
+```
+
+### 3. **Using Workflow Commands**
+
+#### Add Diagnostic Markers
+
+```yaml
+- name: Step with Diagnostics
+  run: |
+    echo "::debug::Starting build process"
+    npm run build
+    echo "::notice::Build completed successfully"
+    echo "::warning::Deprecated feature used in code"
+    echo "::error::Critical issue found"
+```
+
+#### Output Variables for Debugging
+
+```yaml
+- name: Capture Build Output
+  id: build
+  run: |
+    echo "::debug::Running build..."
+    BUILD_OUTPUT=$(npm run build 2>&1)
+    echo "output=$BUILD_OUTPUT" >> $GITHUB_OUTPUT
+    echo "::debug::Build output: $BUILD_OUTPUT"
+
+- name: Check Build Output
+  run: echo "Build: ${{ steps.build.outputs.output }}"
+```
+
+#### Grouping Output
+
+```yaml
+- name: Complex Step
+  run: |
+    echo "::group::Build Process"
+    echo "Starting build..."
+    npm run build
+    echo "Build complete"
+    echo "::endgroup::"
+
+    echo "::group::Test Process"
+    npm test
+    echo "::endgroup::"
+```
+
+### 4. **Common Debugging Scenarios**
+
+#### Scenario 1: Authentication Failures
+
+```yaml
+jobs:
+  debug-auth:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug GitHub Token
+        run: |
+          # Check if token is present
+          if [ -z "$GITHUB_TOKEN" ]; then
+            echo "::error::GITHUB_TOKEN not set"
+            exit 1
+          fi
+
+          # Check token permissions
+          echo "::debug::Checking GitHub token permissions"
+          curl -H "Authorization: token $GITHUB_TOKEN" \
+               https://api.github.com/user \
+               -o /dev/null -w "HTTP Status: %{http_code}\n"
+
+          if [ $? -ne 0 ]; then
+            echo "::error::Token authentication failed"
+            exit 1
+          fi
+          echo "::notice::Token authentication successful"
+```
+
+#### Scenario 2: Dependency Issues
+
+```yaml
+jobs:
+  debug-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Debug Dependencies
+        run: |
+          echo "::group::Dependency Information"
+
+          echo "Node version:"
+          node --version
+
+          echo "\nNPM version:"
+          npm --version
+
+          echo "\nChecking package-lock.json:"
+          if [ -f package-lock.json ]; then
+            echo "package-lock.json exists"
+            echo "Hash: $(md5sum package-lock.json)"
+          else
+            echo "::warning::package-lock.json not found"
+          fi
+
+          echo "\nDisk space available:"
+          df -h | grep -E '^/dev/|Available'
+
+          echo "::endgroup::"
+
+      - name: Install with Verbose Output
+        run: npm ci --verbose
+```
+
+#### Scenario 3: Timeout Issues
+
+```yaml
+jobs:
+  debug-timeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check Start Time
+        id: start
+        run: echo "time=$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Long Running Task
+        run: |
+          echo "::debug::Task started at ${{ steps.start.outputs.time }}"
+          ./long-task.sh
+          echo "::debug::Task completed at $(date +%s)"
+
+      - name: Check Elapsed Time
+        if: always()
+        run: |
+          START=${{ steps.start.outputs.time }}
+          END=$(date +%s)
+          ELAPSED=$((END - START))
+          echo "::notice::Elapsed time: ${ELAPSED}s"
+
+          if [ $ELAPSED -gt 540 ]; then
+            echo "::warning::Task approaching timeout (9 minutes)"
+          fi
+```
+
+### 5. **Performance and Profiling**
+
+#### Identify Slow Steps
+
+```yaml
+name: Performance Profiling
+
+on: push
+
+jobs:
+  profile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Profile Step Times
+        run: |
+          #!/bin/bash
+          declare -A times
+
+          echo "::group::Performance Metrics"
+
+          # Step 1: Setup
+          START=$(date +%s%N)
+          npm install
+          END=$(date +%s%N)
+          TIME=$(( ($END - $START) / 1000000 ))
+          echo "Setup time: ${TIME}ms"
+          times[setup]=$TIME
+
+          # Step 2: Build
+          START=$(date +%s%N)
+          npm run build
+          END=$(date +%s%N)
+          TIME=$(( ($END - $START) / 1000000 ))
+          echo "Build time: ${TIME}ms"
+          times[build]=$TIME
+
+          # Step 3: Test
+          START=$(date +%s%N)
+          npm test
+          END=$(date +%s%N)
+          TIME=$(( ($END - $START) / 1000000 ))
+          echo "Test time: ${TIME}ms"
+          times[test]=$TIME
+
+          # Find slowest step
+          slowest_key=$(for k in "${!times[@]}"; do echo "$k:${times[$k]}"; done | sort -t: -k2 -nr | head -1 | cut -d: -f1)
+          echo "::notice::Slowest step: $slowest_key (${times[$slowest_key]}ms)"
+
+          echo "::endgroup::"
+```
+
+#### Cache Hit Analysis
+
+```yaml
+- uses: actions/cache@v3
+  id: cache
+  with:
+    path: node_modules
+    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+- name: Analyze Cache Performance
+  run: |
+    echo "::group::Cache Analysis"
+    CACHE_HIT="${{ steps.cache.outputs.cache-hit }}"
+
+    if [ "$CACHE_HIT" = "true" ]; then
+      echo "✓ Cache hit - dependencies restored"
+    else
+      echo "✗ Cache miss - fresh dependencies installed"
+      echo "::warning::Consider checking if lock file changed unexpectedly"
+    fi
+
+    echo "Node modules size:"
+    du -sh node_modules
+
+    echo "::endgroup::"
+```
+
+### 6. **Debugging Common Failures**
+
+#### File Not Found Error
+
+```yaml
+- name: Debug File Issue
+  run: |
+    echo "::group::File Debugging"
+
+    TARGET_FILE="dist/index.js"
+
+    if [ ! -f "$TARGET_FILE" ]; then
+      echo "::error::File not found: $TARGET_FILE"
+
+      echo "Current directory: $(pwd)"
+      echo "Directory contents:"
+      ls -la
+
+      echo "\nSearching for index.js:"
+      find . -name "index.js" -type f
+
+      exit 1
+    fi
+
+    echo "✓ File found: $TARGET_FILE"
+    echo "::endgroup::"
+```
+
+#### Environment Variable Issues
+
+```yaml
+- name: Debug Environment Variables
+  run: |
+    echo "::group::Environment Variables"
+
+    # Check if expected variables exist
+    REQUIRED_VARS=("DATABASE_URL" "API_KEY" "ENVIRONMENT")
+
+    for var in "${REQUIRED_VARS[@]}"; do
+      if [ -z "${!var}" ]; then
+        echo "::error::Required variable not set: $var"
+      else
+        echo "✓ $var is set"
+      fi
+    done
+
+    echo "All available workflow variables:"
+    compgen -e | sort
+
+    echo "::endgroup::"
+```
+
+### 7. **Best Practices for Debugging**
+
+#### ✓ Recommended Practices
+
+```yaml
+# ✓ Add strategic debug output at key points
+- run: |
+    echo "::debug::Starting build process"
+    npm run build
+    echo "::debug::Build completed"
+
+# ✓ Capture and analyze logs
+- run: npm test 2>&1 | tee test-output.log
+- uses: actions/upload-artifact@v3
+  if: always()
+  with:
+    name: test-logs
+    path: test-output.log
+
+# ✓ Use meaningful error messages
+- run: |
+    if [ ! -f config.json ]; then
+      echo "::error::config.json required but not found"
+      exit 1
+    fi
+
+# ✓ Group related debugging information
+- run: |
+    echo "::group::System Information"
+    uname -a
+    df -h
+    echo "::endgroup::"
+
+# ✓ Enable debugging only when needed
+- name: Run with Debug (if triggered)
+  env:
+    RUNNER_DEBUG: ${{ secrets.ACTIONS_STEP_DEBUG }}
+  run: npm test
+```
+
+#### ✗ Anti-Patterns to Avoid
+
+```yaml
+# ✗ Don't expose secrets in debug output
+- run: echo "::debug::API Key: ${{ secrets.API_KEY }}"  # NEVER!
+
+# ✗ Don't leave debug logging on permanently
+# (Wastes resources and clutters logs)
+- run: |
+    set -x  # Debug mode - only for troubleshooting
+    npm test
+    set +x
+
+# ✗ Don't ignore failed steps
+- run: npm test || true  # BAD - hides failures
+
+# ✗ Don't use hardcoded test paths
+- run: /home/runner/work/specific-repo/specific-repo/test.sh  # Not portable!
+```
+
+### 8. **Advanced Debugging Techniques**
+
+#### Real-time Log Streaming
+
+```yaml
+- name: Stream Logs in Real-time
+  run: |
+    (
+      npm test
+    ) 2>&1 | while IFS= read -r line; do
+      echo "[$(date +'%Y-%m-%d %H:%M:%S')] $line"
+    done
+```
+
+#### Conditional Debugging
+
+```yaml
+- name: Run with Conditional Debug
+  run: |
+    if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+      echo "::debug::PR detected - enabling verbose mode"
+      DEBUG_FLAGS="--verbose"
+    else
+      DEBUG_FLAGS=""
+    fi
+
+    npm test $DEBUG_FLAGS
+```
+
+#### Artifact Collection for Analysis
+
+```yaml
+- name: Collect Debug Artifacts
+  if: always()
+  run: |
+    mkdir -p debug-artifacts
+
+    # Collect logs
+    cp /var/log/syslog debug-artifacts/ || true
+
+    # Collect build outputs
+    cp -r build debug-artifacts/ || true
+
+    # Collect test results
+    cp -r coverage debug-artifacts/ || true
+
+    # Collect environment info
+    env > debug-artifacts/environment.txt
+
+    # Create archive
+    tar -czf debug-artifacts.tar.gz debug-artifacts/
+
+- uses: actions/upload-artifact@v3
+  if: always()
+  with:
+    name: debug-artifacts
+    path: debug-artifacts.tar.gz
 ```
 
 ---
