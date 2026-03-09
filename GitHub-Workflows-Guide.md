@@ -14,7 +14,10 @@
 10. [Workflow Sharing](#workflow-sharing)
 11. [Workflow Debugging](#workflow-debugging)
 12. [GitHub Workflows REST API](#github-workflows-rest-api)
-13. [Common Failures and Troubleshooting](#common-failures-and-troubleshooting)
+13. [Reviewing Deployments](#reviewing-deployments)
+14. [Creating and Publishing Actions](#creating-and-publishing-actions)
+15. [Managing Runners](#managing-runners)
+16. [Common Failures and Troubleshooting](#common-failures-and-troubleshooting)
 
 ---
 
@@ -5993,6 +5996,1142 @@ def safe_api_call(url, headers, max_retries=3):
                 continue
 
         raise Exception(f"API error: {response.status_code} - {response.text}")
+```
+
+---
+
+## Reviewing Deployments
+
+### What is Deployment Review?
+
+Deployment review is a process where designated team members must approve deployment actions before they proceed to production or other protected environments. GitHub requires explicit approval from reviewers before a workflow can access a protected environment, enabling governance, compliance, and quality assurance.
+
+### Why Review Deployments?
+
+**Key Benefits:**
+
+1. **Compliance**: Enforce organizational policies and regulatory requirements
+2. **Quality Assurance**: Catch issues before they reach production
+3. **Risk Mitigation**: Reduce blast radius of failed deployments
+4. **Accountability**: Create audit trail of deployment decisions
+5. **Knowledge Sharing**: Team members stay informed about changes
+6. **Context Review**: Reviewers can check related code changes, test results
+7. **Scheduled Deployment**: Deployments can be held until convenient time
+
+### How Deployment Review Works
+
+**Workflow:**
+
+1. Workflow reaches deployment step with protected environment
+2. Execution pauses and requests approval from designated reviewers
+3. Reviewers can examine job execution logs, code changes, and context
+4. Reviewer approves or rejects deployment
+5. If approved, deployment proceeds; if rejected, workflow stops
+
+### 1. **Configuring Environment for Review**
+
+**Repository Settings:**
+
+Navigate to: `Settings > Environments > Create environment or select protection rules`
+
+```yaml
+# Enable Required Reviewers in GitHub UI:
+# 1. Go to Settings > Environments
+# 2. Select or create environment (e.g., production)
+# 3. Check "Required reviewers"
+# 4. Select users/teams who must review deployments
+# 5. Optionally set wait timer before deployment
+```
+
+**Workflow Configuration:**
+
+```yaml
+name: Deploy with Review
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://example.com
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Pre-deployment checks
+        run: |
+          echo "Running pre-deployment checks..."
+          npm run test
+          npm run lint
+
+      - name: Deploy
+        run: npm run deploy
+```
+
+### 2. **Review Process**
+
+#### Step 1: Workflow Pauses for Review
+
+When workflow reaches a protected environment step:
+
+```
+✓ Checkout
+✓ Tests passed
+✓ Build successful
+⏸ WAITING FOR REVIEW
+  Environment: production
+  Reviewers needed: 2 from [eng-leads]
+```
+
+#### Step 2: Reviewer Examines Deployment
+
+**Reviewer's Perspective:**
+
+```
+GitHub Actions > Your Workflow > Review Deployment
+
+Deployment Details:
+- Environment: production
+- Triggered by: john-dev
+- Branch: main
+- Commit: abc123def456
+- Tests: PASSED
+- Build: PASSED
+
+Linked Changes:
+- 5 files changed
+- 150 additions
+- 20 deletions
+
+Review Options:
+[✓ Approve]  [✗ Reject]
+```
+
+#### Step 3: Reviewer Action
+
+**Approve Deployment:**
+
+```yaml
+# Reviewer clicks "Approve"
+# Workflow continues immediately
+
+- name: Deploy to Production
+  run: |
+    npm run deploy:prod
+    echo "Deployment successful"
+```
+
+**Reject Deployment:**
+
+```yaml
+# Reviewer clicks "Reject" with comment: "Test coverage insufficient"
+# Workflow stops, deployment does not proceed
+# Notification sent to original trigger user
+```
+
+### 3. **Complete Deployment Review Workflow**
+
+```yaml
+name: Production Deployment with Multi-Stage Review
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm test -- --coverage
+
+      - name: Run Lint
+        run: npm run lint
+
+      - name: Build Application
+        run: npm run build
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 1
+
+      - name: Create Deployment Summary
+        run: |
+          cat > deployment-summary.md <<EOF
+          # Deployment Summary
+          - **Branch**: ${{ github.ref_name }}
+          - **Commit**: ${{ github.sha }}
+          - **Author**: ${{ github.actor }}
+          - **Triggered at**: $(date)
+          - **Test Status**: ✅ PASSED
+          - **Build Status**: ✅ SUCCESS
+          EOF
+
+      - name: Upload Summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-summary
+          path: deployment-summary.md
+
+  deploy-staging:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    # Staging doesn't require review
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: ./dist/
+
+      - name: Deploy to Staging
+        run: |
+          echo "=== Deploying to Staging ==="
+          echo "Build artifacts size: $(du -sh dist/)"
+          # Deploy script here
+          # ./scripts/deploy-staging.sh
+
+      - name: Run Staging Tests
+        run: |
+          echo "Running integration tests against staging..."
+          # npm run test:integration -- --env=staging
+
+      - name: Notify Deployment
+        run: |
+          echo "✓ Staging deployment successful"
+          echo "URL: https://staging.example.com"
+
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    # Production requires review from DevOps team
+    environment:
+      name: production
+      url: https://example.com
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: ./dist/
+
+      - name: Pre-production Checklist
+        run: |
+          echo "=== Pre-production Checks ==="
+          echo "✓ Build artifacts verified"
+          echo "✓ Staging tests passed"
+          echo "✓ Awaiting production reviewer approval"
+          echo "Review environment is set up"
+
+      - name: Deploy to Production
+        run: |
+          echo "=== DEPLOYING TO PRODUCTION ==="
+          echo "Timestamp: $(date)"
+          echo "Version: ${{ github.ref_name }}-${{ github.run_number }}"
+          # ./scripts/deploy-prod.sh
+
+      - name: Verify Deployment
+        run: |
+          # Health checks
+          echo "Running post-deployment health checks..."
+          sleep 5
+          echo "✓ Application health: OK"
+          echo "✓ API responding: OK"
+          echo "✓ Database connected: OK"
+
+      - name: Create Release Annotation
+        run: |
+          echo "Release deployed to production"
+          echo "Commit: ${{ github.sha }}"
+          echo "Deployed by: ${{ github.actor }} (with approval)"
+
+      - name: Notify Team
+        if: success()
+        run: echo "🚀 Production deployment successful!"
+```
+
+### 4. **Reviewing Deployment Best Practices**
+
+#### ✓ Recommended Practices
+
+```yaml
+# ✓ Require reviewers for production
+environment:
+  name: production
+  url: https://example.com
+  # Configured in settings with Required Reviewers
+
+# ✓ Include wait timer for safety
+# Settings > Environments > 30-minute wait timer
+
+# ✓ Add clear pre-deployment information
+- name: Deployment Information
+  run: |
+    echo "=== Deployment Details ==="
+    echo "Environment: ${{ github.environment }}"
+    echo "Triggered by: ${{ github.actor }}"
+    echo "Branch: ${{ github.ref_name }}"
+    echo "Commit: ${{ github.sha }}"
+
+# ✓ Document purpose of each deployment
+- name: Deployment Purpose
+  run: |
+    cat > DEPLOYMENT_NOTES.md <<EOF
+    ## Changes in This Deployment
+    - Feature: New user authentication system
+    - Breaking changes: API v1 deprecated
+    - Rollback plan: Use v2.0.0 tag
+    EOF
+
+# ✓ Implement gradual deployments
+- name: Canary Deployment
+  run: |
+    ./deploy.sh --canary --percentage=10
+    sleep 300  # Monitor for 5 minutes
+    ./deploy.sh --full
+```
+
+#### ✗ Anti-Patterns to Avoid
+
+```yaml
+# ✗ Don't bypass reviews even in emergency
+if: github.actor == 'admin'
+  environment: production  # Bad - circumvents review
+
+# ✗ Don't auto-approve without manual check
+# Reviews MUST be manual human decisions
+
+# ✗ Don't deploy without collecting metrics
+- name: Deploy
+  run: ./deploy.sh  # No health checks!
+
+# ✗ Don't ignore wait timers
+# Setting 0 wait timer for production is risky
+```
+
+### 5. **Monitoring Reviewed Deployments**
+
+```bash
+#!/bin/bash
+
+# Get all deployments with review status
+curl -H "Authorization: token YOUR_TOKEN" \
+  "https://api.github.com/repos/owner/repo/deployments?environment=production" | \
+  jq '.[] | {id, status, created_at, creator, environment}'
+
+# Output:
+# {
+#   "id": 123456,
+#   "status": "success",
+#   "created_at": "2024-03-09T14:30:00Z",
+#   "creator": {"login": "reviewer-name"},
+#   "environment": "production"
+# }
+```
+
+---
+
+## Creating and Publishing Actions
+
+### What are GitHub Actions?
+
+GitHub Actions are reusable units of code that perform specific tasks. You can create custom actions from Docker containers, JavaScript, or composite scripts, then publish them to the GitHub Marketplace or use them privately across repositories.
+
+### Why Create Custom Actions?
+
+**Key Benefits:**
+
+1. **Code Reuse**: Share functionality across multiple workflows
+2. **Abstraction**: Hide complexity behind simple interface
+3. **Maintainability**: Update logic in one place
+4. **Standardization**: Enforce consistent practices
+5. **Community**: Share utilities with broader developer ecosystem
+6. **Discoverability**: Marketplace makes finding actions easy
+7. **Versioning**: Release versions independently from workflows
+
+### How Actions Work
+
+**Action Types:**
+
+1. **JavaScript Actions**: Node.js-based, fast execution
+2. **Docker Container Actions**: Any language, larger file size
+3. **Composite Actions**: Combine multiple steps using workflow syntax
+
+### 1. **Creating a JavaScript Action**
+
+**Project Structure:**
+
+```
+my-action/
+├── action.yml           # Action metadata
+├── package.json         # Node.js dependencies
+├── index.js            # Main action code
+├── lib/
+│   └── utils.js        # Helper functions
+└── README.md           # Documentation
+```
+
+**action.yml** - Action Definition
+
+```yaml
+name: "Deploy App"
+description: "Deploy application to server"
+
+inputs:
+  environment:
+    description: "Target environment"
+    required: true
+    default: "staging"
+
+  version:
+    description: "Version to deploy"
+    required: true
+
+  debug:
+    description: "Enable debug mode"
+    required: false
+    default: "false"
+
+outputs:
+  deployment-url:
+    description: "URL of deployed application"
+    value: ${{ steps.deploy.outputs.url }}
+
+  deployment-id:
+    description: "Deployment identifier"
+    value: ${{ steps.deploy.outputs.id }}
+
+runs:
+  using: "node20"
+  main: "index.js"
+
+branding:
+  icon: "send"
+  color: "blue"
+```
+
+**index.js** - Action Implementation
+
+```javascript
+const core = require("@actions/core");
+const exec = require("@actions/exec");
+const github = require("@actions/github");
+const fs = require("fs");
+const path = require("path");
+
+async function run() {
+  try {
+    // Get inputs
+    const environment = core.getInput("environment");
+    const version = core.getInput("version");
+    const debug = core.getInput("debug") === "true";
+
+    // Set debug mode
+    if (debug) {
+      core.debug("Debug mode enabled");
+    }
+
+    core.info(`Deploying version ${version} to ${environment}`);
+
+    // Validate inputs
+    if (!["staging", "production"].includes(environment)) {
+      throw new Error(`Invalid environment: ${environment}`);
+    }
+
+    // Get context information
+    const context = github.context;
+    core.info(`Triggered by: ${context.actor}`);
+    core.info(`Repository: ${context.repo.owner}/${context.repo.repo}`);
+    core.info(`Branch: ${context.ref}`);
+
+    // Perform deployment
+    core.startGroup("Starting deployment");
+
+    // Run deployment command
+    let deployUrl = "";
+    let deployId = "";
+
+    let output = "";
+    const myExec = core.getInput("exec") || "sh";
+
+    await exec.exec("bash", ["./deploy.sh", environment, version], {
+      listeners: {
+        stdout: (data) => {
+          output += data.toString();
+        },
+        stderr: (data) => {
+          core.warning(data.toString());
+        },
+      },
+    });
+
+    // Parse output
+    const lines = output.split("\n");
+    const urlLine = lines.find((l) => l.includes("DEPLOYMENT_URL="));
+    const idLine = lines.find((l) => l.includes("DEPLOYMENT_ID="));
+
+    if (urlLine) {
+      deployUrl = urlLine.split("=")[1];
+    }
+    if (idLine) {
+      deployId = idLine.split("=")[1];
+    }
+
+    core.endGroup();
+
+    // Set outputs
+    core.setOutput("deployment-url", deployUrl);
+    core.setOutput("deployment-id", deployId);
+
+    // Create asset
+    core.notice(`✓ Deployment successful!\nURL: ${deployUrl}\nID: ${deployId}`);
+  } catch (error) {
+    core.setFailed(`Action failed: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+run();
+```
+
+**package.json**
+
+```json
+{
+  "name": "deploy-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "description": "Deploy application to server",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.0"
+  },
+  "scripts": {
+    "build": "npm install",
+    "test": "jest"
+  }
+}
+```
+
+### 2. **Using Your JavaScript Action**
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy with Custom Action
+        id: deploy
+        uses: ./ # Local action in same repo
+        with:
+          environment: production
+          version: 1.2.3
+          debug: true
+
+      - name: Use Deployment Output
+        run: |
+          echo "Deployed URL: ${{ steps.deploy.outputs.deployment-url }}"
+          echo "Deployment ID: ${{ steps.deploy.outputs.deployment-id }}"
+```
+
+### 3. **Creating a Composite Action**
+
+**action.yml** - Composite Action
+
+```yaml
+name: "Build and Test"
+description: "Build application and run tests"
+
+inputs:
+  node-version:
+    description: "Node.js version"
+    required: false
+    default: "18"
+
+  test-command:
+    description: "Command to run tests"
+    required: false
+    default: "npm test"
+
+outputs:
+  build-time:
+    description: "Time taken for build"
+    value: ${{ steps.build.outputs.time }}
+
+  test-results:
+    description: "Test results summary"
+    value: ${{ steps.test.outputs.summary }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: npm
+
+    - name: Install Dependencies
+      run: npm ci
+      shell: bash
+
+    - name: Build
+      id: build
+      run: |
+        START=$(date +%s%N)
+        npm run build
+        END=$(date +%s%N)
+        TIME=$(( ($END - $START) / 1000000 ))
+        echo "time=${TIME}ms" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Run Tests
+      id: test
+      run: |
+        ${{ inputs.test-command }} 2>&1 | tee test-output.log
+        PASSED=$(grep -c "passed" test-output.log || echo 0)
+        echo "summary=${PASSED} tests passed" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Upload Coverage
+      if: always()
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage/coverage-final.json
+```
+
+### 4. **Publishing Action to Marketplace**
+
+**Create Release Management Action - Marketplace Requirements:**
+
+```markdown
+# Checklist for Publishing to Marketplace
+
+✓ Create public repository named [owner]/[action-name]
+✓ Add `action.yml` with proper metadata
+✓ Add `README.md` with:
+
+- Description of what action does
+- Screenshots (if applicable)
+- Prequisites
+- Usage examples
+- Inputs and outputs
+- Contributing guidelines
+  ✓ Create release with semantic versioning (v1.0.0)
+  ✓ Create major version tag (v1)
+  ✓ Add LICENSE file (MIT recommended)
+  ✓ Add action.yml to repository root
+```
+
+**README.md Template**
+
+````markdown
+# Deploy App Action
+
+[![GitHub Actions](https://img.shields.io/badge/GitHub-Actions-blue)](https://github.com/features/actions)
+[![Marketplace](https://img.shields.io/badge/Marketplace-Available-green)](https://github.com/marketplace/actions/deploy-app)
+
+`Deploy App` is a GitHub Action that deploys your application to a server with automatic health checks and rollback capabilities.
+
+## Features
+
+- ✅ Deploy to staging and production
+- ✅ Automatic health checks
+- ✅ Rollback on failure
+- ✅ Deployment notifications
+- ✅ Debug mode support
+
+## Usage
+
+```yaml
+- name: Deploy App
+  uses: owner/deploy-app-action@v1
+  with:
+    environment: production
+    version: 1.0.0
+```
+````
+
+## Inputs
+
+| Input         | Required | Default | Description                              |
+| ------------- | -------- | ------- | ---------------------------------------- |
+| `environment` | Yes      | -       | Target environment (staging, production) |
+| `version`     | Yes      | -       | Version to deploy                        |
+| `debug`       | No       | false   | Enable debug logging                     |
+
+## Outputs
+
+| Output           | Description                 |
+| ---------------- | --------------------------- |
+| `deployment-url` | URL of deployed application |
+| `deployment-id`  | Deployment identifier       |
+
+## Example
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: owner/deploy-app-action@v1
+        id: deploy
+        with:
+          environment: production
+          version: ${{ github.ref_name }}
+      - run: echo "Deployed to ${{ steps.deploy.outputs.deployment-url }}"
+```
+
+## License
+
+MIT
+
+````
+
+**Release and Version Management**
+
+```bash
+# Create major version tag
+git tag -a v1 -m "Release v1"
+git push origin v1
+
+# Create specific version tag
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin v1.0.0
+
+# Update major version tag to point to latest minor/patch
+git tag -fa v1 -m "Update v1 to latest"
+git push origin v1 --force
+````
+
+### 5. **Best Practices for Actions**
+
+#### ✓ Recommended Practices
+
+```yaml
+# ✓ Use semantic versioning
+- uses: owner/action@v1.0.0  # Specific version
+- uses: owner/action@v1      # Major version (auto-updates)
+- uses: owner/action@main    # Development (for testing)
+
+# ✓ Provide clear inputs and outputs
+inputs:
+  environment:
+    description: 'Target environment for deployment'
+    required: true
+    type: choice
+    options:
+      - staging
+      - production
+
+# ✓ Add comprehensive documentation
+# Include examples for common use cases
+# Document all inputs, outputs, and error cases
+
+# ✓ Cache dependencies
+- name: Cache Node Modules
+  uses: actions/cache@v3
+  with:
+    path: node_modules
+    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+# ✓ Provide informative output
+core.info('Deployment started');
+core.debug('Debug information');
+core.warning('Warning message');
+core.error('Error message');
+```
+
+#### ✗ Anti-Patterns to Avoid
+
+```yaml
+# ✗ Don't hardcode sensitive information
+uses: owner/action@v1
+  with:
+    api-key: "sk-1234567890"  # NEVER!
+
+# ✗ Don't create actions that require external setup
+# Actions should be self-contained
+
+# ✗ Don't ignore action versioning
+- uses: owner/action@main  # Risky in production!
+
+# ✗ Don't make breaking changes without major version update
+# v1.1.0: backward compatible only
+# v2.0.0: breaking changes allowed
+```
+
+---
+
+## Managing Runners
+
+### What are Runners?
+
+Runners are servers that execute jobs in your GitHub Actions workflows. GitHub provides hosted runners (Ubuntu, Windows, macOS) or you can use self-hosted runners for custom environments, specific hardware, or private networks.
+
+### Why Manage Runners?
+
+**Key Benefits:**
+
+1. **Control**: Run workflows on specific hardware or software
+2. **Cost**: Self-hosted runners reduce per-minute charges
+3. **Privacy**: Keep code on your own infrastructure
+4. **Speed**: Local runners eliminate network latency
+5. **Customization**: Custom tools, libraries, and configurations
+6. **Compliance**: Meet security and regulatory requirements
+7. **Capacity**: Scale without GitHub's limitations
+
+### How Runners Work
+
+**Hosted Runners**: GitHub-managed servers with standard operating systems
+**Self-Hosted Runners**: Your own servers or machines running the GitHub Actions agent
+
+### 1. **Understanding Hosted Runners**
+
+**Runner Types and Specifications:**
+
+```yaml
+jobs:
+  # Ubuntu hosted runner (most common)
+  ubuntu-job:
+    runs-on: ubuntu-latest # or ubuntu-22.04, ubuntu-20.04
+    steps:
+      - run: echo "Running on Ubuntu"
+
+  # Windows hosted runner
+  windows-job:
+    runs-on: windows-latest # or windows-2022, windows-2019
+    steps:
+      - run: echo "Running on Windows"
+
+  # macOS hosted runner
+  macos-job:
+    runs-on: macos-latest # or macos-12, macos-11
+    steps:
+      - run: echo "Running on macOS"
+```
+
+**Hosted Runner Specifications:**
+
+| Runner         | CPUs | Memory | Storage | Network |
+| -------------- | ---- | ------ | ------- | ------- |
+| ubuntu-latest  | 2+   | 7 GB   | 14 GB   | 1 Gbps  |
+| windows-latest | 2+   | 7 GB   | 14 GB   | 1 Gbps  |
+| macos-latest   | 3+   | 14 GB  | 14 GB   | 1 Gbps  |
+
+### 2. **Setting Up Self-Hosted Runners**
+
+**Installation on Linux:**
+
+```bash
+#!/bin/bash
+
+# On your server/machine
+mkdir actions-runner && cd actions-runner
+
+# Download latest runner
+wget https://github.com/actions/runner/releases/download/v2.311.0/actions-runner-linux-x64-2.311.0.tar.gz
+tar xzf ./actions-runner-linux-x64-2.311.0.tar.gz
+
+# Configure runner
+./config.sh --url https://github.com/owner/repo --token YOUR_REGISTRATION_TOKEN
+
+# Install as service (optional)
+sudo ./svc.sh install
+sudo ./svc.sh start
+```
+
+**The GitHub UI provides specific token and setup instructions:**
+
+```
+Repository Settings > Actions > Runners > New self-hosted runner
+
+1. Select Operating System (Linux, Windows, macOS)
+2. Select Architecture (x64, ARM64, ARM)
+3. Copy and run provided commands
+4. Runner automatically registers with your repository
+```
+
+### 3. **Using Self-Hosted Runners in Workflows**
+
+```yaml
+jobs:
+  build:
+    # Run on specific self-hosted runner
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./build.sh
+
+  deploy:
+    # Use runner with specific label
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - run: ./deploy.sh
+
+  deploy-special:
+    # Run on runner with GPU
+    runs-on: [self-hosted, gpu, cuda-12]
+    steps:
+      - run: python train_model.py # GPU-accelerated
+```
+
+### 4. **Managing Self-Hosted Runners via API**
+
+**List Runners:**
+
+```bash
+curl -H "Authorization: token YOUR_TOKEN" \
+  https://api.github.com/repos/owner/repo/actions/runners
+```
+
+**Response:**
+
+```json
+{
+  "total_count": 2,
+  "runners": [
+    {
+      "id": 1,
+      "name": "runner-1",
+      "os": "linux",
+      "status": "online",
+      "busy": false,
+      "labels": [
+        { "name": "self-hosted" },
+        { "name": "gpu" },
+        { "name": "linux" }
+      ]
+    }
+  ]
+}
+```
+
+**Python Script: Runner Management**
+
+```python
+import requests
+
+class RunnerManager:
+    def __init__(self, owner, repo, token):
+        self.owner = owner
+        self.repo = repo
+        self.token = token
+        self.headers = {"Authorization": f"token {token}"}
+        self.base_url = "https://api.github.com"
+
+    def list_runners(self):
+        """List all self-hosted runners"""
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/runners"
+        response = requests.get(url, headers=self.headers)
+        return response.json()["runners"]
+
+    def get_runner_status(self):
+        """Get status of all runners"""
+        runners = self.list_runners()
+        status = {
+            "online": 0,
+            "offline": 0,
+            "busy": 0
+        }
+
+        for runner in runners:
+            if runner["status"] == "online":
+                status["online"] += 1
+                if runner["busy"]:
+                    status["busy"] += 1
+            else:
+                status["offline"] += 1
+
+        return status
+
+    def remove_runner(self, runner_id):
+        """Remove a self-hosted runner"""
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/runners/{runner_id}"
+        response = requests.delete(url, headers=self.headers)
+        return response.status_code == 204
+
+# Usage
+manager = RunnerManager("owner", "repo", "YOUR_TOKEN")
+
+# Get status
+status = manager.get_runner_status()
+print(f"Runners - Online: {status['online']}, Offline: {status['offline']}, Busy: {status['busy']}")
+
+# List all runners
+for runner in manager.list_runners():
+    print(f"{runner['name']}: {runner['status']} (busy: {runner['busy']})")
+```
+
+### 5. **Runner Labels and Organization**
+
+```yaml
+name: Pipeline with Runner Selection
+
+on: push
+
+jobs:
+  quick-tests:
+    runs-on: [self-hosted, linux, fast]
+    steps:
+      - run: echo "Running on fast runner"
+
+  heavy-build:
+    runs-on: [self-hosted, linux, gpu, high-memory]
+    steps:
+      - run: echo "Running on high-performance runner with GPU"
+
+  mobile-build:
+    runs-on: [self-hosted, macos, arm64]
+    steps:
+      - run: echo "Building for iOS/macOS on Apple Silicon"
+
+  integration-tests:
+    runs-on: [self-hosted, docker, docker-in-docker]
+    steps:
+      - run: docker build -t myapp .
+```
+
+### 6. **Scaling and Monitoring Runners**
+
+**Auto-Scaling Setup (Cloud Provider Example):**
+
+```bash
+#!/bin/bash
+
+# Script to check runner workload and scale
+
+API_TOKEN="YOUR_TOKEN"
+REPO="owner/repo"
+
+# Get runner status
+RUNNERS=$(curl -s -H "Authorization: token $API_TOKEN" \
+  https://api.github.com/repos/$REPO/actions/runners | jq '.runners')
+
+BUSY_COUNT=$(echo $RUNNERS | jq '[.[] | select(.busy == true)] | length')
+ONLINE_COUNT=$(echo $RUNNERS | jq '[.[] | select(.status == "online")] | length')
+
+echo "Runners - Online: $ONLINE_COUNT, Busy: $BUSY_COUNT"
+
+# If more than 80% busy, scale up
+BUSY_PERCENT=$(( (BUSY_COUNT * 100) / ONLINE_COUNT ))
+
+if [ $BUSY_PERCENT -gt 80 ]; then
+    echo "High load detected ($BUSY_PERCENT% busy). Scaling up..."
+    # Launch new runner instance (cloud-specific command)
+    # aws ec2 run-instances --image-id ami-xxx --count 1
+fi
+```
+
+### 7. **Runner Maintenance and Updates**
+
+```bash
+#!/bin/bash
+
+# Graceful runner shutdown
+# On the runner machine
+
+cd ~/actions-runner
+
+# Stop accepting new jobs
+./run.sh --once
+
+# Wait for current jobs to complete
+while ps aux | grep -v grep | grep -q Runner.Listener; do
+    echo "Waiting for current job to complete..."
+    sleep 10
+done
+
+# Remove runner from GitHub
+./config.sh remove --token YOUR_REMOVAL_TOKEN
+
+# Update runner
+wget https://github.com/actions/runner/releases/download/v2.311.0/actions-runner-linux-x64-2.311.0.tar.gz
+tar xzf ./actions-runner-linux-x64-2.311.0.tar.gz
+
+# Re-register
+./config.sh --url https://github.com/owner/repo --token YOUR_REGISTRATION_TOKEN
+```
+
+### 8. **Best Practices for Runner Management**
+
+#### ✓ Recommended Practices
+
+```yaml
+# ✓ Use specific runner labels
+runs-on: [self-hosted, linux, docker]
+
+# ✓ Tag runners by capability
+# Labels: gpu, docker, high-memory, fast
+
+# ✓ Monitor runner health
+- name: Check Runner Health
+  run: |
+    echo "CPU Usage: $(top -bn1 | grep load)"
+    echo "Disk Space: $(df -h /)"
+    echo "Memory: $(free -h)"
+
+# ✓ Update runners regularly
+# Check for new runner agent versions monthly
+
+# ✓ Secure self-hosted runners
+# Run privileged jobs in containers
+# Limit network access
+# Keep OS and tools updated
+```
+
+#### ✗ Anti-Patterns to Avoid
+
+```yaml
+# ✗ Don't run PRs from untrusted sources on self-hosted runners
+runs-on: self-hosted  # Risky for public repositories!
+
+# ✗ Don't store secrets on runner machines
+# Use GitHub Secrets instead
+
+# ✗ Don't run without runner labels
+runs-on: self-hosted  # Ambiguous which runner
+
+# ✗ Don't ignore runner isolation
+# Each job should be isolated
+# Don't share state between runs
 ```
 
 ---
