@@ -1055,7 +1055,7 @@ name: Push Event Handler
 on:
   push:
     branches: [main, develop]
-    paths: ['src/**', 'package.json']
+    paths: ["src/**", "package.json"]
 
 jobs:
   on-push:
@@ -1104,25 +1104,25 @@ on:
 
 #### PR Event Types
 
-| Type | Description |
-|------|-------------|
-| `opened` | Pull request created |
-| `reopened` | Previously closed PR reopened |
-| `synchronize` | PR commits added (code changed) |
-| `converted_to_draft` | PR converted to draft |
-| `ready_for_review` | Draft PR marked ready for review |
-| `labeled` | Label added to PR |
-| `unlabeled` | Label removed from PR |
-| `assigned` | Assignee added |
-| `unassigned` | Assignee removed |
-| `edited` | PR title/description edited |
-| `auto_merge_enabled` | Auto-merge enabled |
-| `auto_merge_disabled` | Auto-merge disabled |
-| `closed` | PR closed |
-| `locked` | PR locked |
-| `unlocked` | PR unlocked |
-| `review_requested` | Review requested |
-| `review_request_removed` | Review request removed |
+| Type                     | Description                      |
+| ------------------------ | -------------------------------- |
+| `opened`                 | Pull request created             |
+| `reopened`               | Previously closed PR reopened    |
+| `synchronize`            | PR commits added (code changed)  |
+| `converted_to_draft`     | PR converted to draft            |
+| `ready_for_review`       | Draft PR marked ready for review |
+| `labeled`                | Label added to PR                |
+| `unlabeled`              | Label removed from PR            |
+| `assigned`               | Assignee added                   |
+| `unassigned`             | Assignee removed                 |
+| `edited`                 | PR title/description edited      |
+| `auto_merge_enabled`     | Auto-merge enabled               |
+| `auto_merge_disabled`    | Auto-merge disabled              |
+| `closed`                 | PR closed                        |
+| `locked`                 | PR locked                        |
+| `unlocked`               | PR unlocked                      |
+| `review_requested`       | Review requested                 |
+| `review_request_removed` | Review request removed           |
 
 #### Practical Example
 
@@ -1175,7 +1175,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deployment environment'
+        description: "Deployment environment"
         required: true
         type: choice
         options:
@@ -1183,11 +1183,11 @@ on:
           - staging
           - production
       version:
-        description: 'Version to deploy'
+        description: "Version to deploy"
         required: false
         type: string
       dry_run:
-        description: 'Run as dry-run'
+        description: "Run as dry-run"
         required: false
         type: boolean
         default: true
@@ -1204,12 +1204,12 @@ jobs:
 
 #### Input Types
 
-| Type | Description | Example |
-|------|-------------|---------|
-| `string` | Text input | `version: "1.0.0"` |
-| `choice` | Dropdown selection | Environment selection |
-| `boolean` | Checkbox | `true` or `false` |
-| `environment` | Select environment | Production, staging |
+| Type          | Description        | Example               |
+| ------------- | ------------------ | --------------------- |
+| `string`      | Text input         | `version: "1.0.0"`    |
+| `choice`      | Dropdown selection | Environment selection |
+| `boolean`     | Checkbox           | `true` or `false`     |
+| `environment` | Select environment | Production, staging   |
 
 ---
 
@@ -1221,16 +1221,16 @@ Trigger workflows on a schedule using cron syntax.
 on:
   schedule:
     # Run every day at midnight UTC
-    - cron: '0 0 * * *'
-    
+    - cron: "0 0 * * *"
+
     # Run every 6 hours
-    - cron: '0 */6 * * *'
-    
+    - cron: "0 */6 * * *"
+
     # Run at 8 AM Monday-Friday
-    - cron: '0 8 * * 1-5'
-    
+    - cron: "0 8 * * 1-5"
+
     # Run first day of month at 2 AM
-    - cron: '0 2 1 * *'
+    - cron: "0 2 1 * *"
 
 jobs:
   scheduled-job:
@@ -1254,15 +1254,15 @@ jobs:
 
 #### Common Cron Patterns
 
-| Pattern | Description |
-|---------|-------------|
-| `0 0 * * *` | Daily at midnight UTC |
-| `0 */6 * * *` | Every 6 hours |
-| `0 8 * * 1-5` | 8 AM Monday-Friday |
-| `0 2 1 * *` | First day of month at 2 AM |
-| `*/30 * * * *` | Every 30 minutes |
-| `0 9 * * MON` | Every Monday at 9 AM |
-| `0 0 * * 0` | Every Sunday at midnight |
+| Pattern        | Description                |
+| -------------- | -------------------------- |
+| `0 0 * * *`    | Daily at midnight UTC      |
+| `0 */6 * * *`  | Every 6 hours              |
+| `0 8 * * 1-5`  | 8 AM Monday-Friday         |
+| `0 2 1 * *`    | First day of month at 2 AM |
+| `*/30 * * * *` | Every 30 minutes           |
+| `0 9 * * MON`  | Every Monday at 9 AM       |
+| `0 0 * * 0`    | Every Sunday at midnight   |
 
 ---
 
@@ -1273,7 +1273,7 @@ Triggers based on another workflow's completion.
 ```yaml
 on:
   workflow_run:
-    workflows: ['Deploy']  # Workflow name or file path
+    workflows: ["Deploy"] # Workflow name or file path
     types:
       - completed
       - requested
@@ -1288,9 +1288,9 @@ jobs:
 
 #### Workflow Run Types
 
-| Type | Description |
-|------|-------------|
-| `completed` | Workflow run finished |
+| Type        | Description               |
+| ----------- | ------------------------- |
+| `completed` | Workflow run finished     |
 | `requested` | Workflow requested to run |
 
 ---
@@ -1321,15 +1321,15 @@ jobs:
 
 #### Release Types
 
-| Type | Description |
-|------|-------------|
-| `published` | Release published (including pre-releases when published) |
-| `unpublished` | Release unpublished |
-| `created` | Release created (or a pre-release published) |
-| `edited` | Release edited |
-| `deleted` | Release deleted |
-| `prereleased` | Marked as pre-release |
-| `released` | Released (after being pre-release) |
+| Type          | Description                                               |
+| ------------- | --------------------------------------------------------- |
+| `published`   | Release published (including pre-releases when published) |
+| `unpublished` | Release unpublished                                       |
+| `created`     | Release created (or a pre-release published)              |
+| `edited`      | Release edited                                            |
+| `deleted`     | Release deleted                                           |
+| `prereleased` | Marked as pre-release                                     |
+| `released`    | Released (after being pre-release)                        |
 
 ---
 
@@ -1359,21 +1359,21 @@ jobs:
 
 #### Issue Types
 
-| Type | Description |
-|------|-------------|
-| `opened` | Issue created |
-| `closed` | Issue closed |
-| `reopened` | Issue reopened |
-| `assigned` | Assignee added |
-| `unassigned` | Assignee removed |
-| `labeled` | Label added |
-| `unlabeled` | Label removed |
-| `milestoned` | Milestone added |
+| Type           | Description       |
+| -------------- | ----------------- |
+| `opened`       | Issue created     |
+| `closed`       | Issue closed      |
+| `reopened`     | Issue reopened    |
+| `assigned`     | Assignee added    |
+| `unassigned`   | Assignee removed  |
+| `labeled`      | Label added       |
+| `unlabeled`    | Label removed     |
+| `milestoned`   | Milestone added   |
 | `demilestoned` | Milestone removed |
-| `transferred` | Issue transferred |
-| `pinned` | Issue pinned |
-| `unpinned` | Issue unpinned |
-| `deleted` | Issue deleted |
+| `transferred`  | Issue transferred |
+| `pinned`       | Issue pinned      |
+| `unpinned`     | Issue unpinned    |
+| `deleted`      | Issue deleted     |
 
 ---
 
@@ -1546,7 +1546,7 @@ Automatic event when pushing to a branch with branch protection rules.
 ```yaml
 on:
   push:
-    branches: [main]  # Main is typically protected
+    branches: [main] # Main is typically protected
 
 jobs:
   protected-push:
@@ -1720,7 +1720,7 @@ on:
   # Repository events
   push:
     branches: [main]
-    paths: ['src/**']
+    paths: ["src/**"]
   pull_request:
     types: [opened, synchronize]
   release:
@@ -1735,11 +1735,11 @@ on:
   create: {}
   delete: {}
   public: {}
-  
+
   # Scheduled events
   schedule:
-    - cron: '0 0 * * *'
-  
+    - cron: "0 0 * * *"
+
   # Manual trigger
   workflow_dispatch:
     inputs:
@@ -1779,18 +1779,18 @@ jobs:
 
 ### Event Availability Summary
 
-| Event | When Triggered | Secret Access | Write Permissions |
-|-------|---|---|---|
-| `push` | Code push | ✓ | ✓ |
-| `pull_request` | PR activity | Limited | Limited |
-| `workflow_dispatch` | Manual | ✓ | ✓ |
-| `schedule` | Cron schedule | ✓ | ✓ |
-| `release` | Release published | ✓ | ✓ |
-| `issues` | Issue activity | ✓ | ✓ |
-| `issue_comment` | Comments | ✓ | ✓ |
-| `workflow_run` | Workflow completes | ✓ | ✓ |
-| `repository_dispatch` | API call | ✓ | ✓ |
-| `fork` | Repository forked | Limited | Limited |
+| Event                 | When Triggered     | Secret Access | Write Permissions |
+| --------------------- | ------------------ | ------------- | ----------------- |
+| `push`                | Code push          | ✓             | ✓                 |
+| `pull_request`        | PR activity        | Limited       | Limited           |
+| `workflow_dispatch`   | Manual             | ✓             | ✓                 |
+| `schedule`            | Cron schedule      | ✓             | ✓                 |
+| `release`             | Release published  | ✓             | ✓                 |
+| `issues`              | Issue activity     | ✓             | ✓                 |
+| `issue_comment`       | Comments           | ✓             | ✓                 |
+| `workflow_run`        | Workflow completes | ✓             | ✓                 |
+| `repository_dispatch` | API call           | ✓             | ✓                 |
+| `fork`                | Repository forked  | Limited       | Limited           |
 
 ---
 
