@@ -194,6 +194,14 @@
       - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid)
     - [7. **Testing Protection Rules**](#7-testing-protection-rules)
     - [8. **Monitoring and Auditing Deployments**](#8-monitoring-and-auditing-deployments)
+    - [9. **Advanced Environment Protections**](#9-advanced-environment-protections)
+      - [Deployment Branches and Restrictions](#deployment-branches-and-restrictions)
+      - [Required Reviewers with Role-Based Access](#required-reviewers-with-role-based-access)
+      - [Custom Deployment Scripts with Approval Gates](#custom-deployment-scripts-with-approval-gates)
+      - [Approval Timeout and Wait Timers](#approval-timeout-and-wait-timers)
+      - [Environment Secrets with Restricted Scope](#environment-secrets-with-restricted-scope)
+      - [Deployment Status Checks and CI Requirements](#deployment-status-checks-and-ci-requirements)
+      - [Monitoring Sensitive Deployments](#monitoring-sensitive-deployments)
   - [GitHub Workflow Artifacts](#github-workflow-artifacts)
     - [Overview of GitHub Artifacts](#overview-of-github-artifacts)
     - [Why Use Artifacts?](#why-use-artifacts)
@@ -267,6 +275,7 @@
       - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-3)
     - [6. **Starter Workflows**](#6-starter-workflows)
       - [Creating an Organization Starter Workflow](#creating-an-organization-starter-workflow)
+      - [Organizational Workflow Templates vs GitHub-Provided Starter Workflows](#organizational-workflow-templates-vs-github-provided-starter-workflows)
       - [Disabling vs Deleting a Workflow](#disabling-vs-deleting-a-workflow)
     - [7. **Workflow Status Badges**](#7-workflow-status-badges)
   - [Workflow Debugging](#workflow-debugging)
@@ -287,6 +296,7 @@
       - [Scenario 1: Authentication Failures](#scenario-1-authentication-failures)
       - [Scenario 2: Dependency Issues](#scenario-2-dependency-issues)
       - [Scenario 3: Timeout Issues](#scenario-3-timeout-issues)
+      - [Scenario 4: Matrix Selective Reruns](#scenario-4-matrix-selective-reruns)
     - [5. **Performance and Profiling**](#5-performance-and-profiling)
       - [Identify Slow Steps](#identify-slow-steps)
       - [Cache Hit Analysis](#cache-hit-analysis)
@@ -325,8 +335,7 @@
     - [12. **Best Practices for REST API Usage**](#12-best-practices-for-rest-api-usage)
       - [✓ Recommended Practices](#-recommended-practices-5)
       - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-5)
-    - [13. **Complete Real-World Automation Example**](#13-complete-real-world-automation-example)
-    - [14. **API Rate Limits and Quotas**](#14-api-rate-limits-and-quotas)
+    - [13. **API Rate Limits and Quotas**](#13-api-rate-limits-and-quotas)
       - [Check Rate Limit Status](#check-rate-limit-status)
       - [Handle Rate Limit Errors](#handle-rate-limit-errors)
   - [Reviewing Deployments](#reviewing-deployments)
@@ -355,6 +364,21 @@
   - [Outputs](#outputs-1)
   - [Example](#example-2)
   - [License](#license)
+    - [4. **Action Versioning \& Release Strategies**](#4-action-versioning--release-strategies)
+      - [Semantic Versioning for Actions](#semantic-versioning-for-actions)
+      - [Major Version Tag Strategy](#major-version-tag-strategy)
+      - [Release Checklist](#release-checklist)
+      - [Deprecation and Migration Guide](#deprecation-and-migration-guide)
+    - [After (v2)](#after-v2)
+  - [Support Timeline](#support-timeline)
+    - [4.5 **Action Distribution Models**](#45-action-distribution-models)
+      - [Distribution Models Comparison](#distribution-models-comparison)
+      - [Public Repository Model](#public-repository-model)
+      - [Private Repository Model](#private-repository-model)
+      - [GitHub Marketplace Model](#github-marketplace-model)
+      - [Private Marketplace Model (Enterprise)](#private-marketplace-model-enterprise)
+      - [Comparison: When to Use Each Model](#comparison-when-to-use-each-model)
+      - [Migration Path Example](#migration-path-example)
     - [5. **Best Practices for Actions**](#5-best-practices-for-actions)
       - [✓ Recommended Practices](#-recommended-practices-7)
       - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-7)
@@ -380,6 +404,7 @@
     - [4. **IP Allow Lists**](#4-ip-allow-lists)
     - [5. **Preinstalled Software on GitHub-Hosted Runners**](#5-preinstalled-software-on-github-hosted-runners)
     - [6. **Secrets and Variables at Organization, Repository, and Environment Levels**](#6-secrets-and-variables-at-organization-repository-and-environment-levels)
+      - [Comprehensive REST API CRUD Examples for Secrets \& Variables](#comprehensive-rest-api-crud-examples-for-secrets--variables)
   - [Security and Optimization](#security-and-optimization)
     - [Overview](#overview-1)
     - [1. **GITHUB_TOKEN — Lifecycle, Permissions, and Granular Scopes**](#1-github_token--lifecycle-permissions-and-granular-scopes)
@@ -393,6 +418,12 @@
       - [Advanced Pattern: Sanitization Functions](#advanced-pattern-sanitization-functions)
       - [Common Injection Payloads to Test Against](#common-injection-payloads-to-test-against)
     - [5. **Identifying Trustworthy Marketplace Actions**](#5-identifying-trustworthy-marketplace-actions)
+      - [Action Trust Assessment Framework](#action-trust-assessment-framework)
+      - [Comprehensive Trust Checklist](#comprehensive-trust-checklist)
+      - [Trust Assessment Workflow](#trust-assessment-workflow)
+      - [Real-World Assessment Example](#real-world-assessment-example)
+      - [Trustworthy Action Examples](#trustworthy-action-examples)
+      - [Pinning Strategy by Trust Tier](#pinning-strategy-by-trust-tier)
     - [6. **Artifact Attestations and SLSA Provenance**](#6-artifact-attestations-and-slsa-provenance)
     - [7. **Dependency Policy: Caching and Artifact Retention**](#7-dependency-policy-caching-and-artifact-retention)
   - [Common Failures and Troubleshooting](#common-failures-and-troubleshooting)
@@ -7411,126 +7442,7 @@ curl -H "Authorization: token ghp_1234567890abcdefg" ...  # BAD!
 echo "API Response: $RESPONSE"  # If contains sensitive data!
 ```
 
-### 13. **Complete Real-World Automation Example**
-
-**Use Case**: Monitor workflows and send alerts for failures
-
-```python
-import requests
-import json
-from datetime import datetime, timedelta
-from typing import List, Dict
-
-class WorkflowMonitor:
-    def __init__(self, owner: str, repo: str, token: str, webhook_url: str = None):
-        self.owner = owner
-        self.repo = repo
-        self.token = token
-        self.webhook_url = webhook_url
-        self.base_url = "https://api.github.com"
-        self.headers = {
-            "Authorization": f"token {token}",
-            "Accept": "application/vnd.github.v3+json"
-        }
-
-    def get_recent_runs(self, hours: int = 24) -> List[Dict]:
-        """Get workflow runs from last N hours"""
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/runs"
-        params = {
-            "per_page": 100,
-            "status": "completed"
-        }
-
-        response = requests.get(url, headers=self.headers, params=params)
-        response.raise_for_status()
-
-        cutoff_time = datetime.utcnow() - timedelta(hours=hours)
-        runs = response.json()["workflow_runs"]
-
-        return [
-            run for run in runs
-            if datetime.fromisoformat(run["updated_at"].replace("Z", "+00:00")) > cutoff_time
-        ]
-
-    def get_failure_summary(self) -> Dict:
-        """Get summary of failed workflows"""
-        runs = self.get_recent_runs(hours=24)
-        failed = [r for r in runs if r["conclusion"] == "failure"]
-
-        return {
-            "total_runs": len(runs),
-            "failed_runs": len(failed),
-            "success_rate": ((len(runs) - len(failed)) / len(runs) * 100) if runs else 0,
-            "failed_workflows": [
-                {
-                    "run_number": r["run_number"],
-                    "workflow_name": r["name"],
-                    "branch": r["head_branch"],
-                    "actor": r["actor"]["login"],
-                    "url": r["html_url"]
-                }
-                for r in failed
-            ]
-        }
-
-    def send_alert(self, summary: Dict) -> None:
-        """Send alert via webhook (e.g., Slack)"""
-        if not self.webhook_url or not summary["failed_runs"]:
-            return
-
-        message = f"""🚨 Workflow Alert
-
-Repository: {self.owner}/{self.repo}
-Success Rate: {summary['success_rate']:.1f}%
-Failed Runs: {summary['failed_runs']}
-
-Failed Workflows:
-"""
-
-        for workflow in summary["failed_workflows"]:
-            message += f"\n- {workflow['workflow_name']} (run #{workflow['run_number']})\n  Branch: {workflow['branch']}\n  Triggered by: {workflow['actor']}\n  Link: {workflow['url']}"
-
-        payload = {"text": message}
-        requests.post(self.webhook_url, json=payload)
-
-    def auto_retry_failed_runs(self, max_retries: int = 3) -> int:
-        """Automatically retry failed workflow runs"""
-        runs = self.get_recent_runs(hours=1)
-        failed = [r for r in runs if r["conclusion"] == "failure"]
-
-        retried_count = 0
-        for run in failed:
-            url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/runs/{run['id']}/rerun"
-            response = requests.post(url, headers=self.headers)
-
-            if response.status_code == 201:
-                retried_count += 1
-                print(f"✓ Retried run #{run['run_number']}")
-
-        return retried_count
-
-# Usage
-if __name__ == "__main__":
-    monitor = WorkflowMonitor(
-        owner="octocat",
-        repo="Hello-World",
-        token="YOUR_GITHUB_TOKEN",
-        webhook_url="https://hooks.slack.com/services/YOUR_WEBHOOK"
-    )
-
-    # Get failure summary
-    summary = monitor.get_failure_summary()
-    print(json.dumps(summary, indent=2))
-
-    # Send alert if failures detected
-    monitor.send_alert(summary)
-
-    # Auto-retry failures
-    retried = monitor.auto_retry_failed_runs()
-    print(f"Auto-retried {retried} workflows")
-```
-
-### 14. **API Rate Limits and Quotas**
+### 13. **API Rate Limits and Quotas**
 
 | Category                 | Limit | Resets     |
 | ------------------------ | ----- | ---------- |
@@ -8944,62 +8856,6 @@ curl -H "Authorization: token YOUR_TOKEN" \
 }
 ```
 
-**Python Script: Runner Management**
-
-```python
-import requests
-
-class RunnerManager:
-    def __init__(self, owner, repo, token):
-        self.owner = owner
-        self.repo = repo
-        self.token = token
-        self.headers = {"Authorization": f"token {token}"}
-        self.base_url = "https://api.github.com"
-
-    def list_runners(self):
-        """List all self-hosted runners"""
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/runners"
-        response = requests.get(url, headers=self.headers)
-        return response.json()["runners"]
-
-    def get_runner_status(self):
-        """Get status of all runners"""
-        runners = self.list_runners()
-        status = {
-            "online": 0,
-            "offline": 0,
-            "busy": 0
-        }
-
-        for runner in runners:
-            if runner["status"] == "online":
-                status["online"] += 1
-                if runner["busy"]:
-                    status["busy"] += 1
-            else:
-                status["offline"] += 1
-
-        return status
-
-    def remove_runner(self, runner_id):
-        """Remove a self-hosted runner"""
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/runners/{runner_id}"
-        response = requests.delete(url, headers=self.headers)
-        return response.status_code == 204
-
-# Usage
-manager = RunnerManager("owner", "repo", "YOUR_TOKEN")
-
-# Get status
-status = manager.get_runner_status()
-print(f"Runners - Online: {status['online']}, Offline: {status['offline']}, Busy: {status['busy']}")
-
-# List all runners
-for runner in manager.list_runners():
-    print(f"{runner['name']}: {runner['status']} (busy: {runner['busy']})")
-```
-
 ### 5. **Runner Labels and Organization**
 
 ```yaml
@@ -9597,93 +9453,6 @@ curl -X DELETE \
 curl -X DELETE \
   -H "Authorization: Bearer $TOKEN" \
   https://api.github.com/orgs/ORG/actions/variables/ORG_REGISTRY
-```
-
-**Python Helper Class for Secrets Management:**
-
-```python
-import requests
-import base64
-import nacl.public
-import nacl.utils
-from typing import Dict, List, Optional
-
-class SecretsManager:
-    def __init__(self, owner: str, repo: str, token: str):
-        self.owner = owner
-        self.repo = repo
-        self.token = token
-        self.base_url = "https://api.github.com"
-        self.headers = {"Authorization": f"Bearer {token}"}
-
-    def _get_public_key(self) -> tuple:
-        """Get repo public key for encryption"""
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/secrets/public-key"
-        response = requests.get(url, headers=self.headers)
-        data = response.json()
-        return data["key"], data["key_id"]
-
-    def _encrypt_secret(self, secret_value: str) -> str:
-        """Encrypt secret with repo public key"""
-        public_key_str, _ = self._get_public_key()
-        public_key = nacl.public.PublicKey(
-            public_key_str,
-            encoder=nacl.encoding.Base64Encoder
-        )
-        sealed_box = nacl.public.SealedBox(public_key)
-        encrypted = sealed_box.encrypt(secret_value.encode())
-        return base64.b64encode(encrypted).decode()
-
-    def create_secret(self, name: str, value: str) -> bool:
-        """Create or update a repository secret"""
-        encrypted_value = self._encrypt_secret(value)
-        _, key_id = self._get_public_key()
-
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/secrets/{name}"
-        payload = {
-            "encrypted_value": encrypted_value,
-            "key_id": key_id
-        }
-
-        response = requests.put(url, json=payload, headers=self.headers)
-        return response.status_code in [201, 204]
-
-    def read_variables(self) -> List[Dict]:
-        """List all repository variables"""
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/variables"
-        response = requests.get(url, headers=self.headers)
-        return response.json().get("variables", [])
-
-    def update_variable(self, name: str, value: str) -> bool:
-        """Update a repository variable"""
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/variables/{name}"
-        payload = {"name": name, "value": value}
-
-        response = requests.patch(url, json=payload, headers=self.headers)
-        return response.status_code == 204
-
-    def delete_secret(self, name: str) -> bool:
-        """Delete a repository secret"""
-        url = f"{self.base_url}/repos/{self.owner}/{self.repo}/actions/secrets/{name}"
-        response = requests.delete(url, headers=self.headers)
-        return response.status_code == 204
-
-# Usage
-manager = SecretsManager("owner", "repo", "YOUR_TOKEN")
-
-# Create a new secret
-manager.create_secret("API_KEY", "sk-1234567890abcdef")
-
-# Read all variables
-variables = manager.read_variables()
-for var in variables:
-    print(f"{var['name']}: {var['value']}")
-
-# Update a variable
-manager.update_variable("BUILD_ENV", "staging")
-
-# Delete a secret
-manager.delete_secret("OLD_TOKEN")
 ```
 
 ---
