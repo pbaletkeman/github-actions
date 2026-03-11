@@ -36,7 +36,10 @@
       - [Example 3: Using Contexts at Step Level](#example-3-using-contexts-at-step-level)
       - [Example 4: Cross-Job Context Usage with needs](#example-4-cross-job-context-usage-with-needs)
     - [Important Notes on Context Availability](#important-notes-on-context-availability)
+      - [1. Secret Redaction](#1-secret-redaction)
     - [2. Limited Context in Dynamic Action Selection](#2-limited-context-in-dynamic-action-selection)
+      - [3. Matrix Context Availability](#3-matrix-context-availability)
+      - [4. Passing Context Between Jobs](#4-passing-context-between-jobs)
     - [5. Static vs Runtime Expression Evaluation](#5-static-vs-runtime-expression-evaluation)
     - [6. Secret Leakage Prevention in Expressions](#6-secret-leakage-prevention-in-expressions)
   - [GitHub Workflow File Structure](#github-workflow-file-structure)
@@ -210,7 +213,7 @@
       - [Monitoring Sensitive Deployments](#monitoring-sensitive-deployments)
   - [GitHub Workflow Artifacts](#github-workflow-artifacts)
     - [Overview of GitHub Artifacts](#overview-of-github-artifacts)
-    - [Why Use Artifacts?](#why-use-artifacts)
+    - [Why Use Artifacts](#why-use-artifacts)
     - [1. **Uploading Artifacts**](#1-uploading-artifacts)
       - [Basic Upload](#basic-upload)
       - [Upload Multiple Files](#upload-multiple-files)
@@ -237,8 +240,8 @@
       - [Storage Quota Exceeded](#storage-quota-exceeded)
       - [Large File Size](#large-file-size)
   - [GitHub Workflow Caching](#github-workflow-caching)
-    - [What is Workflow Caching?](#what-is-workflow-caching)
-    - [Why Use Caching?](#why-use-caching)
+    - [What is Workflow Caching](#what-is-workflow-caching)
+    - [Why Use Caching](#why-use-caching)
     - [How Caching Works](#how-caching-works)
     - [1. **Basic Caching**](#1-basic-caching)
       - [Caching Dependencies](#caching-dependencies)
@@ -263,8 +266,8 @@
       - [Cache Not Being Used](#cache-not-being-used)
       - [Cache Size Growing Too Large](#cache-size-growing-too-large)
   - [Workflow Sharing](#workflow-sharing)
-    - [What is Workflow Sharing?](#what-is-workflow-sharing)
-    - [Why Share Workflows?](#why-share-workflows)
+    - [What is Workflow Sharing](#what-is-workflow-sharing)
+    - [Why Share Workflows](#why-share-workflows)
     - [How Workflow Sharing Works](#how-workflow-sharing-works)
     - [1. **Reusable Workflows**](#1-reusable-workflows)
       - [Creating a Reusable Workflow](#creating-a-reusable-workflow)
@@ -287,8 +290,8 @@
       - [Disabling vs Deleting a Workflow](#disabling-vs-deleting-a-workflow)
     - [7. **Workflow Status Badges**](#7-workflow-status-badges)
   - [Workflow Debugging](#workflow-debugging)
-    - [What is Workflow Debugging?](#what-is-workflow-debugging)
-    - [Why Debug Workflows?](#why-debug-workflows)
+    - [What is Workflow Debugging](#what-is-workflow-debugging)
+    - [Why Debug Workflows](#why-debug-workflows)
     - [How Debugging Works](#how-debugging-works)
     - [1. **Understanding Workflow Logs**](#1-understanding-workflow-logs)
       - [Accessing Workflow Logs](#accessing-workflow-logs)
@@ -312,15 +315,15 @@
       - [File Not Found Error](#file-not-found-error)
       - [Environment Variable Issues](#environment-variable-issues)
     - [7. **Best Practices for Debugging**](#7-best-practices-for-debugging)
-      - [✓ Recommended Practices](#-recommended-practices-1)
+      - [✓ Recommended Practices — Debugging](#-recommended-practices--debugging)
       - [✗ Anti-Patterns to Avoid — Runner Debugging](#-anti-patterns-to-avoid--runner-debugging)
     - [8. **Advanced Debugging Techniques**](#8-advanced-debugging-techniques)
       - [Real-time Log Streaming](#real-time-log-streaming)
       - [Conditional Debugging](#conditional-debugging)
       - [Artifact Collection for Analysis](#artifact-collection-for-analysis)
   - [GitHub Workflows REST API](#github-workflows-rest-api)
-    - [What is the GitHub Workflows REST API?](#what-is-the-github-workflows-rest-api)
-    - [Why Use the Workflows REST API?](#why-use-the-workflows-rest-api)
+    - [What is the GitHub Workflows REST API](#what-is-the-github-workflows-rest-api)
+    - [Why Use the Workflows REST API](#why-use-the-workflows-rest-api)
     - [How the REST API Works](#how-the-rest-api-works)
     - [1. **List Workflows**](#1-list-workflows)
       - [Using in a Script](#using-in-a-script)
@@ -343,13 +346,13 @@
       - [Clean Up Old Artifacts](#clean-up-old-artifacts)
     - [12. **Best Practices for REST API Usage**](#12-best-practices-for-rest-api-usage)
       - [✓ Recommended Practices — REST API Usage](#-recommended-practices--rest-api-usage)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-1)
+      - [✗ Anti-Patterns to Avoid — REST API Usage](#-anti-patterns-to-avoid--rest-api-usage)
     - [13. **API Rate Limits and Quotas**](#13-api-rate-limits-and-quotas)
       - [Check Rate Limit Status](#check-rate-limit-status)
       - [Handle Rate Limit Errors](#handle-rate-limit-errors)
   - [Reviewing Deployments](#reviewing-deployments)
-    - [What is Deployment Review?](#what-is-deployment-review)
-    - [Why Review Deployments?](#why-review-deployments)
+    - [What is Deployment Review](#what-is-deployment-review)
+    - [Why Review Deployments](#why-review-deployments)
     - [How Deployment Review Works](#how-deployment-review-works)
     - [1. **Configuring Environment for Review**](#1-configuring-environment-for-review)
     - [2. **Review Process**](#2-review-process)
@@ -358,12 +361,12 @@
       - [Step 3: Reviewer Action](#step-3-reviewer-action)
     - [3. **Complete Deployment Review Workflow**](#3-complete-deployment-review-workflow)
     - [4. **Reviewing Deployment Best Practices**](#4-reviewing-deployment-best-practices)
-      - [✓ Recommended Practices](#-recommended-practices-2)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-2)
+      - [✓ Recommended Practices — Deployment Review](#-recommended-practices--deployment-review)
+      - [✗ Anti-Patterns to Avoid — Deployment Review](#-anti-patterns-to-avoid--deployment-review)
     - [5. **Monitoring Reviewed Deployments**](#5-monitoring-reviewed-deployments)
   - [Creating and Publishing Actions](#creating-and-publishing-actions)
-    - [What are GitHub Actions?](#what-are-github-actions)
-    - [Why Create Custom Actions?](#why-create-custom-actions)
+    - [What are GitHub Actions](#what-are-github-actions)
+    - [Why Create Custom Actions](#why-create-custom-actions)
     - [How Actions Work](#how-actions-work)
     - [1. **Creating a JavaScript Action**](#1-creating-a-javascript-action)
       - [package.json](#packagejson)
@@ -371,6 +374,31 @@
     - [3. **Creating a Composite Action**](#3-creating-a-composite-action)
     - [4. **Publishing Action to Marketplace**](#4-publishing-action-to-marketplace)
       - [README.md Template](#readmemd-template)
+- [Deploy App Action](#deploy-app-action)
+  - [Features](#features)
+  - [Usage](#usage)
+  - [Inputs](#inputs)
+  - [Outputs](#outputs-1)
+  - [Example](#example-1)
+  - [License](#license)
+    - [4. **Action Versioning \& Release Strategies**](#4-action-versioning--release-strategies)
+      - [Semantic Versioning for Actions](#semantic-versioning-for-actions)
+      - [Major Version Tag Strategy](#major-version-tag-strategy)
+      - [Release Checklist](#release-checklist)
+      - [Deprecation and Migration Guide](#deprecation-and-migration-guide)
+      - [5. Use self-hosted runners for cost-sensitive workloads](#5-use-self-hosted-runners-for-cost-sensitive-workloads)
+      - [6. Set timeouts to avoid runaway jobs](#6-set-timeouts-to-avoid-runaway-jobs)
+      - [7. Summary decision table](#7-summary-decision-table)
+    - [11. **Docker and Container Issues**](#11-docker-and-container-issues)
+      - [Problem: Docker image push fails](#problem-docker-image-push-fails)
+      - [Causes — Docker Push](#causes--docker-push)
+      - [Solutions — Docker Push](#solutions--docker-push)
+    - [12. **Notification and Rollback Issues**](#12-notification-and-rollback-issues)
+      - [Problem: Notifications fail silently](#problem-notifications-fail-silently)
+      - [Causes — Notification Failure](#causes--notification-failure)
+      - [Solutions — Notification Failure](#solutions--notification-failure)
+    - [13. **Quick Troubleshooting Checklist**](#13-quick-troubleshooting-checklist)
+  - [Additional Resources](#additional-resources)
 
 ---
 
@@ -939,7 +967,8 @@ jobs:
 
 ### Important Notes on Context Availability
 
-**1. Secret Redaction**
+#### 1. Secret Redaction
+
 Secrets are never available at certain levels to prevent accidental exposure:
 
 - Not available in `uses` (action selection)
@@ -956,7 +985,8 @@ Secrets are never available at certain levels to prevent accidental exposure:
   if: github.event_name == 'push'
 ```
 
-**3. Matrix Context Availability**
+#### 3. Matrix Context Availability
+
 The `matrix` context is only available within the job where it's defined:
 
 ```yaml
@@ -973,7 +1003,8 @@ other-job:
     - run: echo "OS: ${{ matrix.os }}"  # ✗ Does not work, no matrix in this job
 ```
 
-**4. Passing Context Between Jobs**
+#### 4. Passing Context Between Jobs
+
 To use values from one job in another, use job outputs:
 
 ```yaml
@@ -4660,7 +4691,7 @@ Artifacts provide several critical capabilities:
 - **Performance Metrics**: Archive performance benchmarks and metrics
 - **Retention**: Control how long artifacts are stored (5 to 90 days)
 
-### Why Use Artifacts?
+### Why Use Artifacts
 
 **Common Use Cases:**
 
@@ -5227,11 +5258,11 @@ jobs:
 
 ## GitHub Workflow Caching
 
-### What is Workflow Caching?
+### What is Workflow Caching
 
 Workflow caching is a mechanism that stores files and directories during a workflow run and retrieves them in subsequent runs. Instead of downloading or rebuilding dependencies every time your workflow runs, cached files are restored, significantly reducing workflow execution time and bandwidth usage.
 
-### Why Use Caching?
+### Why Use Caching
 
 **Key Benefits:**
 
@@ -5606,11 +5637,11 @@ gh actions-cache list --repo OWNER/REPO --branch BRANCH | \
 
 ## Workflow Sharing
 
-### What is Workflow Sharing?
+### What is Workflow Sharing
 
 Workflow sharing allows you to reuse workflow files across multiple repositories or share standardized automation patterns within your organization. Instead of duplicating workflow code, you can create a single source of truth and reference it from other repositories.
 
-### Why Share Workflows?
+### Why Share Workflows
 
 **Key Benefits:**
 
@@ -6156,66 +6187,66 @@ Starter workflow files support a small set of placeholder variables that GitHub 
 1. **Create or update the `.github` repository** in your organization
 2. **Add template files** in `.github/workflow-templates/`:
 
-```plaintext
-.github/
-└── workflow-templates/
-    ├── security-scan.properties.json
-    ├── security-scan.yml
-    ├── deploy-prod.properties.json
-    └── deploy-prod.yml
-```
+   ```plaintext
+   .github/
+   └── workflow-templates/
+       ├── security-scan.properties.json
+       ├── security-scan.yml
+       ├── deploy-prod.properties.json
+       └── deploy-prod.yml
+   ```
 
-3. **Template metadata** (`security-scan.properties.json`):
+   - **Template metadata** (`security-scan.properties.json`):
 
-```json
-{
-  "name": "Security Scanning Pipeline",
-  "description": "Run CodeQL and SAST for all branches",
-  "iconName": "octicon shield",
-  "categories": ["Security", "CI"],
-  "filePatterns": []
-}
-```
+   ```json
+   {
+     "name": "Security Scanning Pipeline",
+     "description": "Run CodeQL and SAST for all branches",
+     "iconName": "octicon shield",
+     "categories": ["Security", "CI"],
+     "filePatterns": []
+   }
+   ```
 
-4. **Template workflow with organization placeholders** (`security-scan.yml`):
+   - **Template workflow with organization placeholders** (`security-scan.yml`):
 
-```yaml
-name: Security Scanning
+   ```yaml
+   name: Security Scanning
 
-on:
-  push:
-    branches: [$default-branch]
-  pull_request:
-    branches: [$default-branch]
+   on:
+     push:
+       branches: [$default-branch]
+     pull_request:
+       branches: [$default-branch]
 
-env:
-  # Organization-wide defaults
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+   env:
+     # Organization-wide defaults
+     REGISTRY: ghcr.io
+     IMAGE_NAME: ${{ github.repository }}
 
-jobs:
-  security-scan:
-    runs-on: ubuntu-latest
-    permissions:
-      # Org-standard permissions
-      security-events: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
+   jobs:
+     security-scan:
+       runs-on: ubuntu-latest
+       permissions:
+         # Org-standard permissions
+         security-events: write
+         contents: read
+       steps:
+         - uses: actions/checkout@v4
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
-        with:
-          languages: javascript # Customize per repo on copy
+         - name: Initialize CodeQL
+           uses: github/codeql-action/init@v2
+           with:
+             languages: javascript # Customize per repo on copy
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+         - name: Perform CodeQL Analysis
+           uses: github/codeql-action/analyze@v2
 
-      - name: Upload SARIF results
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif-file: results.sarif
-```
+         - name: Upload SARIF results
+           uses: github/codeql-action/upload-sarif@v2
+           with:
+             sarif-file: results.sarif
+   ```
 
 **Discovering and Using Org Templates:**
 
@@ -6360,11 +6391,11 @@ https://github.com/{OWNER}/{REPO}/actions/workflows/{WORKFLOW_FILE}/badge.svg?br
 
 ## Workflow Debugging
 
-### What is Workflow Debugging?
+### What is Workflow Debugging
 
 Workflow debugging is the process of identifying and fixing issues in GitHub Actions workflows. It involves understanding why workflows fail, examining logs, adding diagnostic output, and validating configurations. Debugging techniques range from simple log inspection to advanced tracing and performance analysis.
 
-### Why Debug Workflows?
+### Why Debug Workflows
 
 **Key Reasons:**
 
@@ -6895,7 +6926,7 @@ jobs:
 
 ### 7. **Best Practices for Debugging**
 
-#### ✓ Recommended Practices
+#### ✓ Recommended Practices — Debugging
 
 ```yaml
 # ✓ Add strategic debug output at key points
@@ -7016,11 +7047,11 @@ jobs:
 
 ## GitHub Workflows REST API
 
-### What is the GitHub Workflows REST API?
+### What is the GitHub Workflows REST API
 
 The GitHub Workflows REST API is a set of HTTP endpoints provided by GitHub that allow you to programmatically interact with GitHub Actions workflows. Instead of manually triggering workflows or managing them through the web UI, you can use the REST API to automate workflow management from external systems, scripts, or applications.
 
-### Why Use the Workflows REST API?
+### Why Use the Workflows REST API
 
 **Key Benefits:**
 
@@ -7595,7 +7626,7 @@ elif response.status_code == 404:
     print("Resource not found")
 ```
 
-#### ✗ Anti-Patterns to Avoid
+#### ✗ Anti-Patterns to Avoid — REST API Usage
 
 ```bash
 # ✗ Never hardcode tokens
@@ -7678,11 +7709,11 @@ def safe_api_call(url, headers, max_retries=3):
 
 ## Reviewing Deployments
 
-### What is Deployment Review?
+### What is Deployment Review
 
 Deployment review is a process where designated team members must approve deployment actions before they proceed to production or other protected environments. GitHub requires explicit approval from reviewers before a workflow can access a protected environment, enabling governance, compliance, and quality assurance.
 
-### Why Review Deployments?
+### Why Review Deployments
 
 **Key Benefits:**
 
@@ -7961,7 +7992,7 @@ jobs:
 
 ### 4. **Reviewing Deployment Best Practices**
 
-#### ✓ Recommended Practices
+#### ✓ Recommended Practices — Deployment Review
 
 ```yaml
 # ✓ Require reviewers for production
@@ -8000,7 +8031,7 @@ environment:
     ./deploy.sh --full
 ```
 
-#### ✗ Anti-Patterns to Avoid
+#### ✗ Anti-Patterns to Avoid — Deployment Review
 
 ```yaml
 # ✗ Don't bypass reviews even in emergency
@@ -8042,11 +8073,11 @@ curl -H "Authorization: token YOUR_TOKEN" \
 
 ## Creating and Publishing Actions
 
-### What are GitHub Actions?
+### What are GitHub Actions
 
 GitHub Actions are reusable units of code that perform specific tasks. You can create custom actions from Docker containers, JavaScript, or composite scripts, then publish them to the GitHub Marketplace or use them privately across repositories.
 
-### Why Create Custom Actions?
+### Why Create Custom Actions
 
 **Key Benefits:**
 
@@ -9100,11 +9131,11 @@ jobs:
 
 ## Managing Runners
 
-### What are Runners?
+### What are Runners
 
 Runners are servers that execute jobs in your GitHub Actions workflows. GitHub provides hosted runners (Ubuntu, Windows, macOS) or you can use self-hosted runners for custom environments, specific hardware, or private networks.
 
-### Why Manage Runners?
+### Why Manage Runners
 
 **Key Benefits:**
 
@@ -11641,7 +11672,7 @@ on:
 
 When designing workflows for scale, apply these strategies in combination:
 
-**1. Maximize job parallelism**
+#### 1. Maximize job parallelism
 
 ```yaml
 jobs:
@@ -11662,7 +11693,7 @@ jobs:
     steps: [...]
 ```
 
-**2. Use concurrency groups to cancel superseded runs**
+#### 2. Use concurrency groups to cancel superseded runs
 
 ```yaml
 concurrency:
@@ -11672,7 +11703,7 @@ concurrency:
 
 > Use `cancel-in-progress: false` for deployment workflows where partial runs could cause inconsistent state.
 
-**3. Decompose large workflows** — split slow jobs into a separate triggered workflow:
+#### 3. Decompose large workflows — split slow jobs into a separate triggered workflow:
 
 ```yaml
 # Fast CI: runs on every push (< 5 min target)
@@ -11691,23 +11722,18 @@ jobs:
     ...
 ```
 
-**4. Use `paths:` filters to skip unnecessary runs**
+#### 4. Use `paths:` filters to skip unnecessary runs
 
-```yaml
-on:
-  push:
-    paths:
-      - "src/**" # Only run when source changes
-      - "tests/**"
-      - "package.json"
-```
+push:
+paths: - "src/**" # Only run when source changes - "tests/**" - "package.json"
+````
 
-**5. Use self-hosted runners for cost-sensitive workloads**
+#### 5. Use self-hosted runners for cost-sensitive workloads
 
 - GitHub-hosted runners charge per minute; self-hosted runners have no per-minute billing
 - Use auto-scaling self-hosted runners (e.g., `actions/actions-runner-controller` on Kubernetes) to scale to zero when idle
 
-**6. Set timeouts to avoid runaway jobs**
+#### 6. Set timeouts to avoid runaway jobs
 
 ```yaml
 jobs:
@@ -11718,7 +11744,7 @@ jobs:
         timeout-minutes: 10 # Step-level timeout
 ```
 
-**7. Summary decision table**
+#### 7. Summary decision table
 
 | Problem                          | Strategy                                         |
 | -------------------------------- | ------------------------------------------------ |
@@ -11845,17 +11871,4 @@ Workflow succeeds but no Slack message sent
 - [GitHub Actions Marketplace](https://github.com/marketplace?type=actions)
 
 ---
-
-```
-
-```
-
-```
-
-```
-````
 `````
-
-```
-
-```
