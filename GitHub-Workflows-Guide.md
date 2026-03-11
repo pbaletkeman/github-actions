@@ -391,6 +391,11 @@
       - [Debugging Docker Container Actions](#debugging-docker-container-actions)
       - [Debugging Composite Actions](#debugging-composite-actions)
       - [Common Action Failure Patterns](#common-action-failure-patterns)
+    - [7. **Using Workflow Commands Inside Custom Actions**](#7-using-workflow-commands-inside-custom-actions)
+      - [Workflow Command Reference](#workflow-command-reference)
+      - [Using Workflow Commands in Composite Actions](#using-workflow-commands-in-composite-actions)
+      - [Using Workflow Commands in JavaScript Actions](#using-workflow-commands-in-javascript-actions)
+      - [Accessing Action Outputs in the Calling Workflow](#accessing-action-outputs-in-the-calling-workflow)
   - [Managing Runners](#managing-runners)
     - [What are Runners?](#what-are-runners)
     - [Why Manage Runners?](#why-manage-runners)
@@ -409,6 +414,7 @@
     - [Overview](#overview)
     - [1. **Organizational Use Policies**](#1-organizational-use-policies)
     - [2. **Controlling Access to Actions and Workflows Within an Enterprise**](#2-controlling-access-to-actions-and-workflows-within-an-enterprise)
+      - [Fork-Specific Workflow Policies](#fork-specific-workflow-policies)
     - [3. **Runner Groups**](#3-runner-groups)
     - [4. **IP Allow Lists**](#4-ip-allow-lists)
     - [5. **Preinstalled Software on GitHub-Hosted Runners**](#5-preinstalled-software-on-github-hosted-runners)
@@ -426,6 +432,7 @@
       - [Azure Federated Credentials Setup (Detailed)](#azure-federated-credentials-setup-detailed)
       - [OIDC Subject Claim (sub) Specification](#oidc-subject-claim-sub-specification)
     - [3. **Pinning Actions to Full Commit SHAs**](#3-pinning-actions-to-full-commit-shas)
+      - [Action Registry Sources](#action-registry-sources)
     - [4. **Script Injection Mitigation**](#4-script-injection-mitigation)
       - [Shell-Specific Quoting Rules](#shell-specific-quoting-rules)
       - [Advanced Pattern: Sanitization Functions](#advanced-pattern-sanitization-functions)
@@ -460,6 +467,9 @@
       - [Problem: `ubuntu-latest` runner has outdated software](#problem-ubuntu-latest-runner-has-outdated-software)
       - [Causes:](#causes-4)
       - [Solutions:](#solutions-4)
+      - [Problem: Self-hosted runner is offline or not picking up jobs](#problem-self-hosted-runner-is-offline-or-not-picking-up-jobs)
+      - [Problem: Jobs are queued but no runner picks them up (label mismatch)](#problem-jobs-are-queued-but-no-runner-picks-them-up-label-mismatch)
+      - [Problem: Self-hosted runner fails with permission errors or environment issues](#problem-self-hosted-runner-fails-with-permission-errors-or-environment-issues)
     - [6. **Artifact and Caching Issues**](#6-artifact-and-caching-issues)
       - [Problem: Artifact not found when downloading](#problem-artifact-not-found-when-downloading)
       - [Causes:](#causes-5)
@@ -484,6 +494,7 @@
       - [Solutions: Matrix Sizing and Concurrency Control](#solutions-matrix-sizing-and-concurrency-control)
       - [Solutions: Identifying Bottlenecks](#solutions-identifying-bottlenecks)
       - [Solutions: Cost Optimization](#solutions-cost-optimization)
+      - [Recommended Strategies for Scaling and Optimizing Workflows](#recommended-strategies-for-scaling-and-optimizing-workflows)
     - [11. **Docker and Container Issues**](#11-docker-and-container-issues)
       - [Problem: Docker image push fails](#problem-docker-image-push-fails)
       - [Causes:](#causes-10)
@@ -5882,13 +5893,53 @@ on:
     secrets: # Define secrets from caller
       secret-name:
         required: true
+    outputs: # Declare values this workflow returns to the caller
+      artifact-version:
+        description: "The version string of the built artifact"
+        value: ${{ jobs.job-name.outputs.version }} # Must reference a job output
 
 jobs:
   job-name:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.value }} # Promote step output to job output
     steps:
       - run: echo ${{ inputs.parameter-name }}
       - run: echo ${{ secrets.secret-name }}
+      - name: Get version
+        id: get-version
+        run: echo "value=1.2.3" >> $GITHUB_OUTPUT
+```
+
+**How the caller accesses reusable workflow outputs:**
+
+```yaml
+# Calling workflow
+jobs:
+  build:
+    uses: org/shared-workflows/.github/workflows/build.yml@main
+    with:
+      parameter-name: "hello"
+    secrets:
+      secret-name: ${{ secrets.MY_SECRET }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying version ${{ needs.build.outputs.artifact-version }}"
+      # Access via: needs.<job-id>.outputs.<output-name>
+      # where <job-id> is the job that called the reusable workflow
+```
+
+**Complete three-layer output chain:**
+
+```
+Step output          →   Job output              →   Workflow output         →  Caller
+echo "x=v" >>             jobs.<id>.outputs:          workflow_call.outputs:    needs.<job>.outputs.
+$GITHUB_OUTPUT            key: ${{ steps.<id>         key:                      key
+                              .outputs.key }}            value: ${{ jobs.<id>
+                                                             .outputs.key }}
 ```
 
 ### 2. **Complete Reusable Workflow Examples**
@@ -9060,6 +9111,118 @@ steps:
 | Output not available to caller       | Step is missing an `id:`                       | Add `id:` to the output-producing step               |
 | Dependency version conflict          | `package-lock.json` mismatch                   | Delete `node_modules`, run `npm ci`, rebuild `dist/` |
 
+### 7. **Using Workflow Commands Inside Custom Actions**
+
+Custom actions can emit structured output to the runner log and pass data back to the calling workflow using **workflow commands**. These are special strings written to stdout in the format `::command parameter=value::message`.
+
+#### Workflow Command Reference
+
+| Command syntax                      | Purpose                                                             | Equivalent JS (via `@actions/core`)     |
+| ----------------------------------- | ------------------------------------------------------------------- | --------------------------------------- |
+| `::debug::message`                  | Print debug-level log (visible only with `ACTIONS_STEP_DEBUG=true`) | `core.debug()`                          |
+| `::notice file=f,line=l::message`   | Create a notice annotation in the PR / summary                      | `core.notice()`                         |
+| `::warning file=f,line=l::message`  | Create a warning annotation                                         | `core.warning()`                        |
+| `::error file=f,line=l::message`    | Create an error annotation                                          | `core.error()`                          |
+| `::group::title` / `::endgroup::`   | Collapse a log section in the UI                                    | `core.startGroup()` / `core.endGroup()` |
+| `::add-mask::value`                 | Redact `value` from all subsequent log output                       | `core.setSecret()`                      |
+| `echo "name=val" >> $GITHUB_OUTPUT` | Set a step output for the caller to use via `steps.<id>.outputs`    | `core.setOutput()`                      |
+| `echo "VAR=val" >> $GITHUB_ENV`     | Append an environment variable for subsequent steps                 | `core.exportVariable()`                 |
+| `echo "/path" >> $GITHUB_PATH`      | Prepend a directory to `PATH` for subsequent steps                  | `core.addPath()`                        |
+
+> **Note:** The old `::set-output::`, `::set-env::`, and `::add-path::` command syntax is **deprecated**. Use the `GITHUB_OUTPUT`, `GITHUB_ENV`, and `GITHUB_PATH` environment files instead.
+
+#### Using Workflow Commands in Composite Actions
+
+Composite actions (which use shell `run:` steps) communicate with the caller using the same environment files:
+
+```yaml
+# .github/actions/my-composite/action.yml
+name: My Composite Action
+description: Demonstrates workflow command usage in a composite action
+inputs:
+  version:
+    required: true
+    description: Version to process
+outputs:
+  processed-version:
+    description: The normalized version string
+    value: ${{ steps.normalize.outputs.result }}
+
+runs:
+  using: composite
+  steps:
+    - name: Mask the version from logs if sensitive
+      shell: bash
+      run: echo "::add-mask::${{ inputs.version }}"
+
+    - name: Normalize version
+      id: normalize
+      shell: bash
+      run: |
+        VERSION="${{ inputs.version }}"
+        NORMALIZED="${VERSION#v}"    # Strip leading 'v'
+        echo "result=$NORMALIZED" >> $GITHUB_OUTPUT
+        echo "::notice::Processed version: $NORMALIZED"
+
+    - name: Group diagnostic output
+      shell: bash
+      run: |
+        echo "::group::Diagnostic info"
+        echo "Runner OS: ${{ runner.os }}"
+        echo "Version input: ${{ inputs.version }}"
+        echo "::endgroup::"
+```
+
+#### Using Workflow Commands in JavaScript Actions
+
+JavaScript actions use the `@actions/core` library which wraps the same workflow commands:
+
+```javascript
+const core = require("@actions/core");
+
+async function run() {
+  const version = core.getInput("version");
+
+  // Mask a derived secret before logging
+  const token = process.env.API_TOKEN;
+  core.setSecret(token); // Equivalent to ::add-mask::
+
+  core.startGroup("Processing version");
+  core.debug(`Raw input: ${version}`);
+  const normalized = version.replace(/^v/, "");
+  core.info(`Normalized version: ${normalized}`);
+  core.endGroup();
+
+  // Pass output back to the workflow
+  core.setOutput("processed-version", normalized);
+
+  // Annotate a file with a warning (appears in PR diff)
+  core.warning("Version format may be deprecated", {
+    file: "package.json",
+    startLine: 3,
+  });
+}
+
+run().catch(core.setFailed);
+```
+
+#### Accessing Action Outputs in the Calling Workflow
+
+```yaml
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run composite action
+        id: my-action
+        uses: ./.github/actions/my-composite
+        with:
+          version: "v1.2.3"
+
+      - name: Use the output
+        run: echo "Processed: ${{ steps.my-action.outputs.processed-version }}"
+```
+
 ---
 
 ## Managing Runners
@@ -9237,6 +9400,46 @@ jobs:
 
 ### 6. **Scaling and Monitoring Runners**
 
+**Monitoring runner health and status:**
+
+Use the GitHub REST API to monitor runner availability, workload, and online/offline status programmatically.
+
+```bash
+# Runner status at repository level
+curl -H "Authorization: Bearer $TOKEN" \
+  "https://api.github.com/repos/OWNER/REPO/actions/runners" \
+  | jq '.runners[] | {id, name, os, status, busy, labels: [.labels[].name]}'
+
+# Runner status at organization level
+curl -H "Authorization: Bearer $TOKEN" \
+  "https://api.github.com/orgs/ORG/actions/runners" \
+  | jq '[.runners[] | {name, status, busy}]'
+```
+
+**Key status fields:**
+
+| Field    | Values               | Meaning                                           |
+| -------- | -------------------- | ------------------------------------------------- |
+| `status` | `online` / `offline` | Whether the runner process is reachable by GitHub |
+| `busy`   | `true` / `false`     | Whether the runner is currently executing a job   |
+
+**Detecting queue depth (no idle runners):**
+
+```bash
+#!/bin/bash
+RUNNERS=$(curl -s -H "Authorization: Bearer $TOKEN" \
+  "https://api.github.com/orgs/ORG/actions/runners" | jq '.runners')
+
+ONLINE=$(echo "$RUNNERS" | jq '[.[] | select(.status=="online")] | length')
+BUSY=$(echo "$RUNNERS" | jq '[.[] | select(.busy==true)] | length')
+IDLE=$(( ONLINE - BUSY ))
+
+echo "Online: $ONLINE | Busy: $BUSY | Idle: $IDLE"
+if [ "$IDLE" -eq 0 ] && [ "$ONLINE" -gt 0 ]; then
+  echo "⚠️  All runners busy — jobs may queue. Consider scaling up."
+fi
+```
+
 **Auto-Scaling Setup (Cloud Provider Example):**
 
 ```bash
@@ -9410,6 +9613,76 @@ Enterprise admins can enforce that specific reusable workflows run on all reposi
 Enterprise Settings → Policies → Required workflows
 → Add workflow: org/compliance-workflows/.github/workflows/scan.yml@main
 → Apply to: all repositories in selected organizations
+```
+
+**Required workflow enforcement behavior:**
+
+- Required workflows run even if the repository owner disables Actions for the repo
+- They are always added to workflow runs regardless of repo-level configuration
+- Results appear in the PR checks list just like any other workflow
+
+#### Fork-Specific Workflow Policies
+
+Workflows triggered by pull requests from **forked repositories** run with restricted permissions by default to prevent untrusted code from accessing secrets. Understanding and configuring these policies is critical for public repositories and open-source projects.
+
+**Default behavior for fork PRs:**
+
+| Trigger event                    | Default behavior                                          |
+| -------------------------------- | --------------------------------------------------------- |
+| `pull_request`                   | Runs with read-only token; secrets NOT available          |
+| `pull_request_target`            | Runs with write token and secrets (use with extreme care) |
+| Fork from first-time contributor | Requires **manual approval** before workflow runs         |
+
+**Configuring fork PR approval requirements:**
+
+GitHub allows organizations to require manual approval before running workflows for PRs from outside collaborators or first-time contributors:
+
+```
+Organization Settings → Actions → General → Fork pull request workflows
+→ Options:
+   • "Require approval for first-time contributors who are new to GitHub"  (default)
+   • "Require approval for first-time contributors"
+   • "Require approval for all outside collaborators"
+```
+
+For **enterprise-level** enforcement:
+
+```
+Enterprise Settings → Policies → Actions → Fork pull request workflows
+→ Enforce one of the approval options across all organizations
+```
+
+**Security rules for fork workflows:**
+
+- Secrets are **never** available to `pull_request` workflows from forks (safeguard against credential theft)
+- The `GITHUB_TOKEN` in fork PR workflows is always **read-only**
+- To grant write access intentionally, use `pull_request_target` — but ONLY after validating the forked code does not run in a privileged context:
+
+```yaml
+# ✅ SAFE: pull_request_target with explicit checkout of base ref (not fork code)
+on:
+  pull_request_target:
+    types: [opened, labeled]
+
+jobs:
+  label-check:
+    if: contains(github.event.pull_request.labels.*.name, 'approved-for-ci')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }} # Only after labeling approval
+```
+
+**Restricting which actions forks can invoke:**
+
+For public repositories with CI triggered by fork PRs, restrict which actions the workflow can use via the organization policy:
+
+```
+Organization → Settings → Actions → General → Policies
+→ "Allow select actions and reusable workflows"
+→ Add only verified/trusted actions to the allow list
+→ This applies to ALL workflows, including those from forks
 ```
 
 ---
@@ -10347,6 +10620,62 @@ SHA abc123 → always points to commit A, forever
 
 This is why SLSA and security-conscious teams combine SHA pinning (in the workflow file) with artifact attestations (for the build outputs) to achieve end-to-end supply-chain integrity.
 
+#### Action Registry Sources
+
+When you reference an action in a workflow, the action code is fetched from a **registry** — the location where the action's files are stored. Understanding registry sources is essential for security and consistency, especially in enterprise and GHES environments.
+
+**Registry types for GitHub Actions:**
+
+| Registry Source                 | How to reference                                        | Use case                                     |
+| ------------------------------- | ------------------------------------------------------- | -------------------------------------------- |
+| **GitHub.com (default)**        | `uses: owner/repo@SHA`                                  | Public and internal actions; all GitHub SaaS |
+| **GitHub Enterprise Server**    | Configured via enterprise URL; same `owner/repo` syntax | Air-gapped or on-premise deploys             |
+| **Docker Hub** (Docker actions) | Specified in `action.yml` `image: docker://image:tag`   | Docker container actions                     |
+| **GitHub Container Registry**   | `image: docker://ghcr.io/owner/image:tag`               | Private Docker actions via GHCR              |
+| **Local action** (same repo)    | `uses: ./path/to/action`                                | Actions co-located with the calling workflow |
+
+**Implications of registry source for immutable pinning:**
+
+- **JavaScript and composite actions** are always fetched from the GitHub git repository. Pinning to a full commit SHA (`owner/repo@abc1234`) guarantees the exact source files regardless of registry state.
+- **Docker container actions** require two levels of immutability:
+  1. Pin the action definition itself to a SHA in the GitHub repository (`uses: owner/action@SHA`)
+  2. Also pin the Docker image within `action.yml` to a digest: `image: docker://ghcr.io/owner/image@sha256:abc123…`
+  - Using `image: docker://owner/image:v1` is mutable — the tag can be overwritten on the registry.
+
+```yaml
+# Example: Fully immutable Docker container action reference
+steps:
+  # Pin the action repo to a SHA (immutable on GitHub side)
+  - uses: owner/docker-action@a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2
+
+# Inside action.yml of that action (the action author controls this):
+runs:
+  using: docker
+  image: docker://ghcr.io/owner/image@sha256:e3b0c44298fc1c149afbf4c8996fb924...
+  # Using a digest rather than a tag ensures the image cannot change
+```
+
+**GHES (GitHub Enterprise Server) registry behavior:**
+
+On GHES, action resolution can be configured to:
+
+- **Use GitHub.com** actions (requires internet access or proxy)
+- **Use a local mirror** of actions (air-gapped environments): GHES admins set up `github-actions-importer` to sync selected actions, and the internal registry serves the cached versions
+- When enforcing immutable actions on GHES, the same SHA pinning requirement applies; however, the SHA resolves against the **local GHES instance**, not GitHub.com
+
+**Best practice for enterprise:**
+
+```yaml
+# ✅ Fully pinned: GitHub repo SHA + Docker digest (for Docker actions)
+- uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+# ✅ For Docker actions used internally: pin both ref and image digest
+- uses: my-org/deploy-action@a3c7f912b456...
+  # action.yml in that ref specifies: image: docker://ghcr.io/my-org/deploy@sha256:...
+# ❌ Avoid: floating tags on Docker images, even if the action repo is SHA-pinned
+# If action.yml says: image: docker://my-org/image:latest — the container is mutable
+```
+
 ---
 
 ### 4. **Script Injection Mitigation**
@@ -11045,6 +11374,103 @@ runs-on: windows-2022
 ./config.sh
 ```
 
+#### Problem: Self-hosted runner is offline or not picking up jobs
+
+```
+No runner is available to run this job; waiting for a self-hosted runner to come online...
+```
+
+**Causes:**
+
+- Runner process crashed or was stopped
+- Network connectivity lost between runner and GitHub
+- Firewall blocking outbound HTTPS to `github.com` / `api.github.com` / `*.actions.githubusercontent.com`
+- Runner registration token expired (tokens expire after 1 hour)
+
+**Diagnosis steps:**
+
+```bash
+# 1. Check if the runner process is running (on the runner machine)
+ps aux | grep Runner.Listener
+
+# 2. Check runner logs (Linux/macOS)
+cat ~/actions-runner/_diag/Runner_*.log | tail -100
+
+# 3. Verify network connectivity from the runner
+curl -I https://api.github.com      # Should return 200
+curl -I https://github.com          # Should return 200
+
+# 4. Check runner registration in the UI
+# Repository → Settings → Actions → Runners
+# Status will show: Active / Offline / Idle
+```
+
+**Resolution:**
+
+```bash
+# Restart the runner service (Linux systemd)
+sudo systemctl restart actions.runner.<scope>-<name>.service
+
+# Or restart manually
+cd ~/actions-runner
+./run.sh &
+
+# If registration is broken, re-register with a fresh token
+./config.sh remove --token OLD_TOKEN
+./config.sh --url https://github.com/owner/repo --token NEW_TOKEN
+```
+
+#### Problem: Jobs are queued but no runner picks them up (label mismatch)
+
+```
+Waiting for a runner with labels: [self-hosted, gpu, linux]
+```
+
+**Cause:** No registered runner has ALL the labels specified in `runs-on:`.
+
+**Diagnosis:**
+
+```bash
+# List runners and their labels via API
+curl -H "Authorization: Bearer $TOKEN" \
+  "https://api.github.com/repos/OWNER/REPO/actions/runners" \
+  | jq '.runners[] | {name, labels: [.labels[].name], status}'
+```
+
+**Resolution:**
+
+```bash
+# Add a missing label to an existing runner via API
+curl -X POST \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  "https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID/labels" \
+  -d '{"labels": ["gpu"]}'
+```
+
+#### Problem: Self-hosted runner fails with permission errors or environment issues
+
+```
+Error: EACCES: permission denied, open '/home/runner/work/_temp/_github_workflow/...'
+```
+
+**Causes:**
+
+- Runner is running as root without proper workspace permissions
+- Previous job left behind locked files
+- Docker socket not accessible
+
+**Resolution:**
+
+```bash
+# Clean the workspace manually
+rm -rf ~/actions-runner/_work/*
+
+# Run the runner process as a non-root user with proper group permissions
+# For Docker socket access, add the runner user to the docker group:
+sudo usermod -aG docker runner_user
+```
+
 ---
 
 ### 6. **Artifact and Caching Issues**
@@ -11337,6 +11763,98 @@ on:
       - "docs/**"
       - ".github/ISSUE_TEMPLATE/**"
 ```
+
+#### Recommended Strategies for Scaling and Optimizing Workflows
+
+When designing workflows for scale, apply these strategies in combination:
+
+**1. Maximize job parallelism**
+
+```yaml
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps: [...]
+
+  test:
+    runs-on: ubuntu-latest # Runs in parallel with lint — no needs: dependency
+    steps: [...]
+
+  security-scan:
+    runs-on: ubuntu-latest # Runs in parallel too
+    steps: [...]
+
+  build:
+    needs: [lint, test, security-scan] # Waits for all three — creates a fan-in gate
+    steps: [...]
+```
+
+**2. Use concurrency groups to cancel superseded runs**
+
+```yaml
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true # New push supersedes previous run on same branch
+```
+
+> Use `cancel-in-progress: false` for deployment workflows where partial runs could cause inconsistent state.
+
+**3. Decompose large workflows** — split slow jobs into a separate triggered workflow:
+
+```yaml
+# Fast CI: runs on every push (< 5 min target)
+on: [push, pull_request]
+jobs:
+  fast-checks: { ... }   # lint, type-check, unit tests
+
+# Slow CI: triggered only when fast-checks pass
+on:
+  workflow_run:
+    workflows: ["Fast CI"]
+    types: [completed]
+jobs:
+  integration-tests:
+    if: github.event.workflow_run.conclusion == 'success'
+    ...
+```
+
+**4. Use `paths:` filters to skip unnecessary runs**
+
+```yaml
+on:
+  push:
+    paths:
+      - "src/**" # Only run when source changes
+      - "tests/**"
+      - "package.json"
+```
+
+**5. Use self-hosted runners for cost-sensitive workloads**
+
+- GitHub-hosted runners charge per minute; self-hosted runners have no per-minute billing
+- Use auto-scaling self-hosted runners (e.g., `actions/actions-runner-controller` on Kubernetes) to scale to zero when idle
+
+**6. Set timeouts to avoid runaway jobs**
+
+```yaml
+jobs:
+  build:
+    timeout-minutes: 30 # Kill job if it exceeds 30 minutes — prevent wasted minutes
+    steps:
+      - name: Long step
+        timeout-minutes: 10 # Step-level timeout
+```
+
+**7. Summary decision table**
+
+| Problem                          | Strategy                                         |
+| -------------------------------- | ------------------------------------------------ |
+| Workflow takes too long          | Parallelize jobs; split workflow; cache deps     |
+| Too many concurrent runs         | Use `concurrency:` with `cancel-in-progress`     |
+| High compute cost                | Use `paths-ignore:`, reduce matrix, self-hosted  |
+| Flaky/slow integration tests     | Separate into `workflow_run`-triggered workflow  |
+| All matrix jobs fail on one bad  | Set `fail-fast: false`; analyze individually     |
+| Runners always busy (queue wait) | Add more self-hosted runners or use auto-scaling |
 
 ---
 
