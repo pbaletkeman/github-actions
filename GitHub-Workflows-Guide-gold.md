@@ -23,6 +23,7 @@
     - [7. **matrix Context**](#7-matrix-context)
     - [8. **inputs Context**](#8-inputs-context)
     - [9. **needs Context**](#9-needs-context)
+    - [10. **strategy Context**](#10-strategy-context)
   - [Context Availability Reference](#context-availability-reference)
     - [Contexts by Workflow Key](#contexts-by-workflow-key)
     - [Contexts by Scope](#contexts-by-scope)
@@ -860,6 +861,52 @@ jobs:
 
 ---
 
+### 10. **strategy Context**
+
+The `strategy` context contains information about the matrix execution strategy for the current job. It is available inside any job that defines a `strategy:` block.
+
+| Property                | Type    | Description                                                           |
+| ----------------------- | ------- | --------------------------------------------------------------------- |
+| `strategy.fail-fast`    | boolean | Whether the workflow cancels remaining matrix jobs when any job fails |
+| `strategy.job-index`    | number  | The 0-based index of the current job in the full set of matrix jobs   |
+| `strategy.job-total`    | number  | The total number of jobs in the matrix                                |
+| `strategy.max-parallel` | number  | The maximum number of simultaneous matrix jobs allowed                |
+
+```yaml
+name: Strategy Context Example
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [18, 20]
+    steps:
+      - name: Print Strategy Context
+        run: |
+          echo "Job index:    ${{ strategy.job-index }}"
+          echo "Total jobs:   ${{ strategy.job-total }}"
+          echo "Fail-fast:    ${{ strategy.fail-fast }}"
+          echo "Max parallel: ${{ strategy.max-parallel }}"
+
+      - name: Only on first matrix job
+        if: strategy.job-index == 0
+        run: echo "This step only runs on the first matrix combination"
+```
+
+**Key use-cases:**
+
+- `strategy.job-index == 0` — run a setup or notification step only once across the entire matrix
+- `strategy.job-total` — display progress ("job 2 of 6")
+- `strategy.fail-fast` — surface the effective fail-fast setting in logs for debugging
+
+---
+
 ## Context Availability Reference
 
 This section shows which contexts can be used in different parts of a GitHub workflow file. Understanding context availability is crucial for proper workflow configuration.
@@ -1062,6 +1109,61 @@ jobs:
     steps:
       - run: echo ${{ needs.job1.outputs.value }}
 ```
+
+**5. Static vs Runtime Expression Evaluation**
+
+GitHub Actions evaluates expressions in two phases:
+
+- **Static (parse-time) evaluation** — happens before any runner is assigned. Only a limited set of contexts (`github`, `inputs`, `vars`) are available. Fields like `runs-on:`, `uses:`, `if:` at the job level, and `strategy.matrix` are evaluated statically.
+- **Runtime evaluation** — happens on the runner during job execution. Full context access (`env`, `secrets`, `job`, `runner`, `steps`, `matrix`, `needs`, `strategy`) is available in `run:`, `with:`, step-level `if:`, and `env:` blocks.
+
+```yaml
+# ❌ FAILS — 'env' context is not available at static parse time for 'runs-on'
+jobs:
+  build:
+    runs-on: ${{ env.RUNNER_LABEL }}  # parse-time: only github/inputs/vars allowed
+
+# ✅ WORKS — use 'vars' context (available at parse time) or a literal value
+jobs:
+  build:
+    runs-on: ${{ vars.RUNNER_LABEL }}  # vars is evaluated statically
+
+# ✅ WORKS — secrets available in 'run:' (runtime) but NOT in 'uses:' (static)
+steps:
+  - uses: actions/checkout@v4   # 'secrets' NOT available here
+  - run: echo "$MY_TOKEN"       # 'secrets' IS available here (passed via env)
+    env:
+      MY_TOKEN: ${{ secrets.GH_TOKEN }}
+```
+
+**6. Secret Leakage Prevention in Expressions**
+
+Secrets are automatically masked in logs, but certain patterns can still expose them:
+
+```yaml
+# ❌ DANGEROUS — interpolating secrets directly into 'run:' embeds the value
+# in the shell command line, which can appear in process lists or debug output
+- run: curl -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" https://api.example.com
+
+# ✅ SAFE — pass secrets via environment variables (the value is passed out of
+# the rendered script and into the process environment by the runner agent)
+- run: curl -H "Authorization: Bearer $API_TOKEN" https://api.example.com
+  env:
+    API_TOKEN: ${{ secrets.API_TOKEN }}
+
+# ❌ DANGEROUS — toJSON(secrets) prints ALL secret names and values as JSON
+- run: echo '${{ toJSON(secrets) }}'
+
+# ❌ DANGEROUS — using add-mask to re-mask a secret that leaked into a variable
+# is a workaround, not a substitute for proper env-var passing
+```
+
+**Key rules:**
+
+- Never write `${{ secrets.X }}` inside a `run:` block — always map to an `env:` variable first
+- Never use `toJSON(secrets)` in any output or log step
+- Use `::add-mask::` only as a last resort to suppress accidental exposures; it does not prevent the value from being passed to processes
+- Secrets are automatically redacted from logs but not from external HTTP requests made by your scripts
 
 ---
 
@@ -1858,6 +1960,37 @@ jobs:
 - Anchors are resolved by the YAML parser; the **workflow logs show the resolved values**, not anchor names
 - Anchors cannot span across files — they only work within the same `.yml` file
 - The `<<` merge key merges all key–value pairs from the referenced mapping; existing keys in the current mapping take precedence
+
+**Reading and interpreting YAML anchors (consumer perspective):**
+
+When reviewing a workflow that uses anchors, mentally expand `<<: *anchor-name` by substituting the anchor's key–value pairs into the current mapping. Keys already defined in the current block override those from the anchor.
+
+```yaml
+# Before anchor expansion (what you read in the source file)
+x-common-env: &common-env
+  NODE_ENV: production
+  LOG_LEVEL: info
+
+jobs:
+  build:
+    env:
+      <<: *common-env    # ← expands to NODE_ENV + LOG_LEVEL
+      APP_VERSION: "2.1.0"
+
+# After anchor expansion (what the runner actually sees)
+jobs:
+  build:
+    env:
+      NODE_ENV: production    # from anchor
+      LOG_LEVEL: info         # from anchor
+      APP_VERSION: "2.1.0"   # defined locally, not overridden
+```
+
+The **workflow run logs** always show the fully resolved values — you will never see `*common-env` or `<<:` in the expanded YAML that GitHub Actions processes. This means:
+
+- Log output and GitHub's workflow visualization show concrete values, not anchor names
+- If a local key conflicts with an anchor key, the **local key wins** (anchors cannot override explicit values)
+- If you see unexpected environment variables in a workflow, check anchor definitions at the top (`x-` prefixed keys) of the file
 
 ---
 
@@ -5701,6 +5834,40 @@ jobs:
       npm-token: ${{ secrets.NPM_TOKEN }}
 ```
 
+**Passing secrets to reusable workflows — two patterns:**
+
+```yaml
+# Pattern A: Explicit mapping — pass named secrets individually
+jobs:
+  call-workflow:
+    uses: org/shared-workflows/.github/workflows/deploy.yml@main
+    with:
+      environment: production
+    secrets:
+      deploy-token: ${{ secrets.DEPLOY_TOKEN }}
+      api-key: ${{ secrets.API_KEY }}
+
+# Pattern B: secrets: inherit — passes ALL caller secrets automatically.
+# The called workflow can access them by the same name via ${{ secrets.* }}.
+jobs:
+  call-workflow:
+    uses: org/shared-workflows/.github/workflows/deploy.yml@main
+    with:
+      environment: production
+    secrets: inherit
+```
+
+**Choosing between the two patterns:**
+
+|                 | Explicit mapping                      | `secrets: inherit`                          |
+| --------------- | ------------------------------------- | ------------------------------------------- |
+| Security        | Higher — only named secrets flow      | Lower — all secrets flow automatically      |
+| Maintenance     | Higher — must list every secret       | Lower — no updates when secrets change      |
+| Visibility      | Clear which secrets are used          | Implicit; reader must check called workflow |
+| Recommended for | Public/third-party reusable workflows | Internal org-owned workflows                |
+
+> **Note:** The called workflow must declare the secret in its `on.workflow_call.secrets:` block to receive it via explicit mapping. When using `secrets: inherit`, secrets are passed without requiring declaration in the called workflow.
+
 #### Key Components
 
 ```yaml
@@ -9311,6 +9478,93 @@ Each runner image folder contains an `Included-Software.md` file.
 > **Ubuntu 20.04 deprecation:** As of late 2024, `ubuntu-20.04` images are deprecated. Migrate to `ubuntu-22.04` or `ubuntu-latest`.
 > **`windows-latest`** now points to Windows Server 2025 images.
 
+**Installing additional software at runtime:**
+
+When a required tool is not preinstalled, you can install it during the job using the runner's package manager:
+
+```yaml
+# Ubuntu/Debian — apt-get
+- name: Install additional packages
+  run: |
+    sudo apt-get update
+    sudo apt-get install -y jq wget gnupg lsof
+
+# macOS — Homebrew
+- name: Install additional packages (macOS)
+  run: brew install libpq
+
+# Windows — Chocolatey
+- name: Install additional packages (Windows)
+  run: choco install -y sysinternals
+
+# Cross-platform — pip (Python)
+- name: Install Python packages at runtime
+  run: pip install boto3 requests
+
+# Cross-platform — npm global tool
+- name: Install Node.js CLI tool at runtime
+  run: npm install -g typescript
+```
+
+**Strategies for providing custom software:**
+
+| Approach                                                       | Best for                                   | Trade-off                                      |
+| -------------------------------------------------------------- | ------------------------------------------ | ---------------------------------------------- |
+| `apt-get` / `brew` / `choco` at runtime                        | One-off tools, CI-specific utilities       | Slower starts; network dependency              |
+| `setup-*` actions (`setup-node`, `setup-python`, `setup-java`) | Language runtimes with version control     | Well-maintained; uses tool cache               |
+| Job container (`container:` key)                               | Pre-baked Linux environments with all deps | Faster cold starts; requires image maintenance |
+| Custom self-hosted runner AMI/image                            | Enterprise; consistent heavy toolchains    | High setup cost; own image lifecycle           |
+
+**Using a job container to pre-bake software:**
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine # all Node.js tools pre-installed in the image
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci && npm test # Node.js already available, no setup-* needed
+```
+
+**Using `setup-*` actions for version management:**
+
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    node-version: "20"
+    cache: "npm" # also caches npm dependencies in the tool cache
+
+- uses: actions/setup-python@v5
+  with:
+    python-version: "3.12"
+    cache: "pip"
+
+- uses: actions/setup-java@v4
+  with:
+    distribution: "temurin"
+    java-version: "21"
+    cache: "maven"
+```
+
+**Caching custom installed tools across runs:**
+
+```yaml
+- name: Cache custom tool
+  uses: actions/cache@v4
+  id: cache-tool
+  with:
+    path: ~/.local/bin/mytool
+    key: mytool-${{ runner.os }}-v1.2.3
+
+- name: Install custom tool (only on cache miss)
+  if: steps.cache-tool.outputs.cache-hit != 'true'
+  run: |
+    curl -Lo ~/.local/bin/mytool https://example.com/mytool-v1.2.3-linux-amd64
+    chmod +x ~/.local/bin/mytool
+```
+
 ---
 
 ### 6. **Secrets and Variables at Organization, Repository, and Environment Levels**
@@ -10006,6 +10260,32 @@ gh api repos/actions/checkout/git/ref/tags/v4.2.2 --jq '.object.sha'
 
 GitHub has introduced a policy where GitHub-hosted runners can enforce that only immutable (SHA-pinned) action references are permitted. When enabled at the organization or enterprise level, workflows using `@v4` or `@main` will fail unless the action is also in the allow list.
 
+**How immutability works:**
+
+When you reference an action with a full commit SHA, GitHub fetches the action from a **content-addressed store** — the exact files at that commit are retrieved and cached. The content cannot be substituted or altered after the fact, even if someone force-pushes over that SHA on the action's repository.
+
+Tags like `@v4` or `@main` are **mutable** because the tag or branch can be moved to a different commit at any time. A workflow pinned to `@v4` could silently start running different code if the action maintainer retags.
+
+**Rollout and enforcement options:**
+
+| Setting                                    | Effect                                                                |
+| ------------------------------------------ | --------------------------------------------------------------------- |
+| No policy                                  | Any action reference is allowed (`@v4`, `@main`, SHA)                 |
+| Organization policy: "Require SHA pinning" | Workflows fail if `uses:` references a mutable ref (tag/branch)       |
+| Enterprise policy                          | Same as org policy, applied across all org repos                      |
+| Per-repo allow list                        | Specific actions at mutable refs can be exempted from the requirement |
+
+**Why SHA pinning + immutability guarantees supply-chain safety:**
+
+```
+Tag @v4 → could point to commit A today, commit B tomorrow
+SHA abc123 → always points to commit A, forever
+             content of commit A is stored immutably on GitHub infra
+             even if the upstream repo is deleted, cached content is used
+```
+
+This is why SLSA and security-conscious teams combine SHA pinning (in the workflow file) with artifact attestations (for the build outputs) to achieve end-to-end supply-chain integrity.
+
 ---
 
 ### 4. **Script Injection Mitigation**
@@ -10361,6 +10641,59 @@ gh attestation verify myapp-abc123.tar.gz \
 
 `attest-build-provenance` targeting GitHub-hosted runners achieves **SLSA Level 3** out of the box.
 
+**Integrating attestation verification into a deployment gate:**
+
+By adding attestation verification as a required step before deployment, you ensure that only artifacts built by trusted workflows are promoted to production:
+
+```yaml
+name: Deploy with Attestation Verification
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact-name:
+        description: "Name of the artifact to deploy"
+        required: true
+
+jobs:
+  verify-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      id-token: write # required for attestation verification
+      contents: read
+    steps:
+      - name: Download artifact
+        run: |
+          gh release download --pattern "${{ inputs.artifact-name }}" \
+            --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify attestation before deploying
+        # This step FAILS if the artifact was not built by the expected workflow,
+        # preventing deployment of tampered or unauthorized artifacts
+        run: |
+          gh attestation verify "${{ inputs.artifact-name }}" \
+            --repo ${{ github.repository }} \
+            --signer-workflow .github/workflows/build.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy artifact
+        # Only reached if attestation verification passed above
+        run: ./scripts/deploy.sh "${{ inputs.artifact-name }}"
+```
+
+**Verification flags:**
+
+| Flag                    | Purpose                                                   |
+| ----------------------- | --------------------------------------------------------- |
+| `--repo`                | Require artifact was built in this repository             |
+| `--signer-workflow`     | Require artifact was built by this specific workflow file |
+| `--signer-repo`         | Require the signing workflow came from this repository    |
+| `--cert-identity-regex` | Match the OIDC subject claim with a regex                 |
+
 ---
 
 ### 7. **Dependency Policy: Caching and Artifact Retention**
@@ -10403,6 +10736,36 @@ curl -X DELETE \
   -H "Authorization: Bearer $TOKEN" \
   https://api.github.com/repos/OWNER/REPO/actions/artifacts/ARTIFACT_ID
 ```
+
+**Configuring default retention via REST API:**
+
+GitHub allows admins to set **default retention days** for artifacts and logs at both the repository and organization level.
+
+```bash
+# Set default artifact/log retention for a repository (1–400 days)
+curl -X PATCH \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"actions_retention_days": 30}' \
+  https://api.github.com/repos/OWNER/REPO
+
+# Set default artifact/log retention for an organization
+curl -X PATCH \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"actions_default_workflow_file_run_duration_days": 30}' \
+  https://api.github.com/orgs/ORG
+```
+
+The `GITHUB_RETENTION_DAYS` environment variable in a running workflow reflects the currently configured default for the repository or organization — you can read it to make retention decisions dynamically:
+
+```yaml
+- run: |
+    echo "Default retention: $GITHUB_RETENTION_DAYS days"
+    # Override per artifact with retention-days in upload-artifact
+```
+
+**Retention precedence:** An explicit `retention-days` on `actions/upload-artifact` overrides the repository/org default. The repository default overrides the organization default.
 
 ---
 
