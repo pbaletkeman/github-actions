@@ -23,6 +23,7 @@
     - [7. **matrix Context**](#7-matrix-context)
     - [8. **inputs Context**](#8-inputs-context)
     - [9. **needs Context**](#9-needs-context)
+    - [10. **strategy Context**](#10-strategy-context)
   - [Context Availability Reference](#context-availability-reference)
     - [Contexts by Workflow Key](#contexts-by-workflow-key)
     - [Contexts by Scope](#contexts-by-scope)
@@ -277,6 +278,7 @@
       - [Creating an Organization Starter Workflow](#creating-an-organization-starter-workflow)
       - [Template Placeholder Variables](#template-placeholder-variables)
       - [Organizational Workflow Templates vs GitHub-Provided Starter Workflows](#organizational-workflow-templates-vs-github-provided-starter-workflows)
+      - [Access and Permission Model for Non-Public Org Templates](#access-and-permission-model-for-non-public-org-templates)
       - [Disabling vs Deleting a Workflow](#disabling-vs-deleting-a-workflow)
     - [7. **Workflow Status Badges**](#7-workflow-status-badges)
   - [Workflow Debugging](#workflow-debugging)
@@ -6305,6 +6307,66 @@ jobs:
 3. Click on a template to create a copy
 4. The template is copied into `.github/workflows/` of that repository (fully independent)
 5. Customize as needed
+
+#### Access and Permission Model for Non-Public Org Templates
+
+Understanding who can see and use non-public (private/internal) org workflow templates is important for governance.
+
+**Visibility of the `.github` repository:**
+
+| `.github` repo visibility                | Who sees org templates in "New workflow" UI                          |
+| ---------------------------------------- | -------------------------------------------------------------------- |
+| **Public**                               | All GitHub users (not just org members)                              |
+| **Private**                              | Only org members with at least **Read** access to the `.github` repo |
+| **Internal** _(GitHub Enterprise Cloud)_ | All members of the enterprise (across orgs)                          |
+
+**Key rules:**
+
+- The `.github` repository controls access to all templates stored inside it
+- By default, organization members have **Read** access to repos in the org if the org's base permission is `Read` or higher — this applies to `.github` as well
+- If the `.github` repo is **private** and a member has no explicit access, they will **not see the org's templates** in the new-workflow UI
+- Owners and admins can restrict the base permission of the org to `None`, which means the `.github` repo must have explicit collaborator or team access granted for members to see the templates
+
+**Granting access to non-public templates:**
+
+```
+Organization Settings → Member privileges → Base permissions
+  └─ Set to "Read" so all members can see the .github repo templates
+
+  OR (more granular):
+
+Organization Settings → Teams → [team-name] → Repositories
+  └─ Add the .github repo with Read access for that team only
+```
+
+**Repository-level permission requirements to copy a template:**
+
+A user can discover and **initiate** a template copy if they can see the `.github` repo. To actually save the copied workflow file, they need **Write** (or higher) access to the **target repository** where they are creating the new workflow — standard repository write permission applies.
+
+**Enterprise considerations:**
+
+On **GitHub Enterprise Cloud**, setting the `.github` repo visibility to **Internal** is the recommended approach for org-wide templates that all enterprise members should access without making them fully public:
+
+```
+.github repo visibility: Internal
+→ Visible to all enterprise members regardless of org membership
+→ Not visible to external collaborators or the public
+→ Templates appear in "New workflow" for any enterprise repo
+```
+
+On **GitHub Enterprise Server**, the same internal visibility model applies within the server instance.
+
+**Restricting which repos can use certain templates (workaround):**
+
+GitHub does not natively restrict which target repos can copy a specific template (all or nothing per `.github` repo visibility). For fine-grained control, split templates across separate template repositories and apply access controls per repository. A common pattern:
+
+```
+{org}/.github                    → public templates (base scaffold)
+{org}/.github-internal           → internal/compliance templates (restricted team access)
+{org}/.github-security           → security team templates (security team only)
+```
+
+> **Note:** Only the special `.github` repository name triggers the "workflow templates" feature. Alternative repositories (`-internal`, `-security` etc.) will not show their templates in the new-workflow UI — they must be accessed and copied manually.
 
 **Sync Pattern for Org Templates** (if you want changes to propagate):
 

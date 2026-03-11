@@ -73,24 +73,24 @@
     - [Overview of Trigger Events](#overview-of-trigger-events)
     - [1. **push** - Code Push Event](#1-push---code-push-event)
       - [Practical Example](#practical-example)
-    - [2. **pull\_request** - Pull Request Event](#2-pull_request---pull-request-event)
+    - [2. **pull_request** - Pull Request Event](#2-pull_request---pull-request-event)
       - [PR Event Types](#pr-event-types)
       - [Practical Example](#practical-example-1)
-    - [3. **pull\_request\_target** - PR Target Event](#3-pull_request_target---pr-target-event)
-    - [4. **workflow\_dispatch** - Manual Trigger](#4-workflow_dispatch---manual-trigger)
+    - [3. **pull_request_target** - PR Target Event](#3-pull_request_target---pr-target-event)
+    - [4. **workflow_dispatch** - Manual Trigger](#4-workflow_dispatch---manual-trigger)
       - [Input Types](#input-types)
     - [5. **schedule** - Scheduled Events (Cron)](#5-schedule---scheduled-events-cron)
       - [Cron Syntax Reference](#cron-syntax-reference)
       - [Common Cron Patterns](#common-cron-patterns)
-    - [6. **workflow\_run** - Trigger on Another Workflow](#6-workflow_run---trigger-on-another-workflow)
+    - [6. **workflow_run** - Trigger on Another Workflow](#6-workflow_run---trigger-on-another-workflow)
       - [Workflow Run Types](#workflow-run-types)
     - [7. **release** - Release Events](#7-release---release-events)
       - [Release Types](#release-types)
     - [8. **issues** - Issue Events](#8-issues---issue-events)
       - [Issue Types](#issue-types)
-    - [9. **issue\_comment** - Issue Comment Events](#9-issue_comment---issue-comment-events)
+    - [9. **issue_comment** - Issue Comment Events](#9-issue_comment---issue-comment-events)
     - [10. **discussion** - Discussion Events](#10-discussion---discussion-events)
-    - [11. **discussion\_comment** - Discussion Comment Events](#11-discussion_comment---discussion-comment-events)
+    - [11. **discussion_comment** - Discussion Comment Events](#11-discussion_comment---discussion-comment-events)
     - [12. **fork** - Repository Fork Event](#12-fork---repository-fork-event)
     - [13. **gollum** - Wiki Changes](#13-gollum---wiki-changes)
     - [14. **watch** - Star/Watch Event](#14-watch---starwatch-event)
@@ -98,14 +98,14 @@
     - [16. **delete** - Branch/Tag Deletion](#16-delete---branchtag-deletion)
     - [17. **public** - Repository Public Event](#17-public---repository-public-event)
     - [18. **push to protected branch** - Protected Branch Push](#18-push-to-protected-branch---protected-branch-push)
-    - [19. **repository\_dispatch** - External Trigger via API](#19-repository_dispatch---external-trigger-via-api)
-    - [20. **check\_run** - Check Run Events](#20-check_run---check-run-events)
-    - [21. **check\_suite** - Check Suite Events](#21-check_suite---check-suite-events)
-    - [22. **pull\_request\_review** - PR Review Events](#22-pull_request_review---pr-review-events)
-    - [23. **pull\_request\_review\_comment** - PR Review Comment Events](#23-pull_request_review_comment---pr-review-comment-events)
+    - [19. **repository_dispatch** - External Trigger via API](#19-repository_dispatch---external-trigger-via-api)
+    - [20. **check_run** - Check Run Events](#20-check_run---check-run-events)
+    - [21. **check_suite** - Check Suite Events](#21-check_suite---check-suite-events)
+    - [22. **pull_request_review** - PR Review Events](#22-pull_request_review---pr-review-events)
+    - [23. **pull_request_review_comment** - PR Review Comment Events](#23-pull_request_review_comment---pr-review-comment-events)
     - [24. **member** - Collaborator Events](#24-member---collaborator-events)
-    - [25. **team\_add** - Team Added Event](#25-team_add---team-added-event)
-    - [26. **push\_protected\_branch** - Protected Branch Push](#26-push_protected_branch---protected-branch-push)
+    - [25. **team_add** - Team Added Event](#25-team_add---team-added-event)
+    - [26. **push_protected_branch** - Protected Branch Push](#26-push_protected_branch---protected-branch-push)
     - [Complete Example: All Event Types](#complete-example-all-event-types)
     - [Event Availability Summary](#event-availability-summary)
   - [Creating and Using Custom Environment Variables](#creating-and-using-custom-environment-variables)
@@ -123,15 +123,15 @@
       - [Using runner Context](#using-runner-context)
       - [Using Matrix Context](#using-matrix-context)
     - [6. **Creating Dynamic Environment Variables from Step Outputs**](#6-creating-dynamic-environment-variables-from-step-outputs)
-      - [Using GITHUB\_OUTPUT](#using-github_output)
+      - [Using GITHUB_OUTPUT](#using-github_output)
       - [Multiline Environment Variables](#multiline-environment-variables)
     - [7. **Using environment Variables from Previous Jobs**](#7-using-environment-variables-from-previous-jobs)
     - [8. **Environment Variables with Default Values**](#8-environment-variables-with-default-values)
       - [Using Variable Expansion](#using-variable-expansion)
     - [9. **Special Environment Variables**](#9-special-environment-variables)
       - [Special GitHub Environment Variables](#special-github-environment-variables)
-      - [GITHUB\_STEP\_SUMMARY — Job Summary Reports](#github_step_summary--job-summary-reports)
-      - [RUNNER\_TOOL\_CACHE — Preinstalled Software](#runner_tool_cache--preinstalled-software)
+      - [GITHUB_STEP_SUMMARY — Job Summary Reports](#github_step_summary--job-summary-reports)
+      - [RUNNER_TOOL_CACHE — Preinstalled Software](#runner_tool_cache--preinstalled-software)
     - [10. **Best Practices for Environment Variables**](#10-best-practices-for-environment-variables)
       - [✓ Do's](#-dos)
       - [✗ Don'ts](#-donts)
@@ -278,6 +278,7 @@
       - [Creating an Organization Starter Workflow](#creating-an-organization-starter-workflow)
       - [Template Placeholder Variables](#template-placeholder-variables)
       - [Organizational Workflow Templates vs GitHub-Provided Starter Workflows](#organizational-workflow-templates-vs-github-provided-starter-workflows)
+      - [Access and Permission Model for Non-Public Org Templates](#access-and-permission-model-for-non-public-org-templates)
       - [Disabling vs Deleting a Workflow](#disabling-vs-deleting-a-workflow)
     - [7. **Workflow Status Badges**](#7-workflow-status-badges)
   - [Workflow Debugging](#workflow-debugging)
@@ -288,8 +289,8 @@
       - [Accessing Workflow Logs](#accessing-workflow-logs)
       - [Environment Information in Logs](#environment-information-in-logs)
     - [2. **Enabling Debug Logging**](#2-enabling-debug-logging)
-      - [RUNNER\_DEBUG Variable](#runner_debug-variable)
-      - [Output with RUNNER\_DEBUG](#output-with-runner_debug)
+      - [RUNNER_DEBUG Variable](#runner_debug-variable)
+      - [Output with RUNNER_DEBUG](#output-with-runner_debug)
     - [3. **Using Workflow Commands**](#3-using-workflow-commands)
       - [Add Diagnostic Markers](#add-diagnostic-markers)
       - [Output Variables for Debugging](#output-variables-for-debugging)
@@ -323,7 +324,7 @@
       - [Query Parameters:](#query-parameters)
     - [4. **Get Workflow Run Details**](#4-get-workflow-run-details)
       - [Complete Python Example](#complete-python-example)
-    - [5. **Trigger Workflow (workflow\_dispatch)**](#5-trigger-workflow-workflow_dispatch)
+    - [5. **Trigger Workflow (workflow_dispatch)**](#5-trigger-workflow-workflow_dispatch)
       - [Workflow with Inputs](#workflow-with-inputs)
       - [Python Example: Trigger Deployment](#python-example-trigger-deployment)
     - [6. **Re-run Workflow**](#6-re-run-workflow)
@@ -419,7 +420,7 @@
       - [Streaming Audit Logs (Enterprise Cloud)](#streaming-audit-logs-enterprise-cloud)
   - [Security and Optimization](#security-and-optimization)
     - [Overview](#overview-1)
-    - [1. **GITHUB\_TOKEN — Lifecycle, Permissions, and Granular Scopes**](#1-github_token--lifecycle-permissions-and-granular-scopes)
+    - [1. **GITHUB_TOKEN — Lifecycle, Permissions, and Granular Scopes**](#1-github_token--lifecycle-permissions-and-granular-scopes)
     - [2. **OIDC Token for Cloud Federation**](#2-oidc-token-for-cloud-federation)
       - [GCP Workload Identity Federation Example](#gcp-workload-identity-federation-example)
       - [Azure Federated Credentials Setup (Detailed)](#azure-federated-credentials-setup-detailed)
@@ -6306,6 +6307,66 @@ jobs:
 3. Click on a template to create a copy
 4. The template is copied into `.github/workflows/` of that repository (fully independent)
 5. Customize as needed
+
+#### Access and Permission Model for Non-Public Org Templates
+
+Understanding who can see and use non-public (private/internal) org workflow templates is important for governance.
+
+**Visibility of the `.github` repository:**
+
+| `.github` repo visibility                | Who sees org templates in "New workflow" UI                          |
+| ---------------------------------------- | -------------------------------------------------------------------- |
+| **Public**                               | All GitHub users (not just org members)                              |
+| **Private**                              | Only org members with at least **Read** access to the `.github` repo |
+| **Internal** _(GitHub Enterprise Cloud)_ | All members of the enterprise (across orgs)                          |
+
+**Key rules:**
+
+- The `.github` repository controls access to all templates stored inside it
+- By default, organization members have **Read** access to repos in the org if the org's base permission is `Read` or higher — this applies to `.github` as well
+- If the `.github` repo is **private** and a member has no explicit access, they will **not see the org's templates** in the new-workflow UI
+- Owners and admins can restrict the base permission of the org to `None`, which means the `.github` repo must have explicit collaborator or team access granted for members to see the templates
+
+**Granting access to non-public templates:**
+
+```
+Organization Settings → Member privileges → Base permissions
+  └─ Set to "Read" so all members can see the .github repo templates
+
+  OR (more granular):
+
+Organization Settings → Teams → [team-name] → Repositories
+  └─ Add the .github repo with Read access for that team only
+```
+
+**Repository-level permission requirements to copy a template:**
+
+A user can discover and **initiate** a template copy if they can see the `.github` repo. To actually save the copied workflow file, they need **Write** (or higher) access to the **target repository** where they are creating the new workflow — standard repository write permission applies.
+
+**Enterprise considerations:**
+
+On **GitHub Enterprise Cloud**, setting the `.github` repo visibility to **Internal** is the recommended approach for org-wide templates that all enterprise members should access without making them fully public:
+
+```
+.github repo visibility: Internal
+→ Visible to all enterprise members regardless of org membership
+→ Not visible to external collaborators or the public
+→ Templates appear in "New workflow" for any enterprise repo
+```
+
+On **GitHub Enterprise Server**, the same internal visibility model applies within the server instance.
+
+**Restricting which repos can use certain templates (workaround):**
+
+GitHub does not natively restrict which target repos can copy a specific template (all or nothing per `.github` repo visibility). For fine-grained control, split templates across separate template repositories and apply access controls per repository. A common pattern:
+
+```
+{org}/.github                    → public templates (base scaffold)
+{org}/.github-internal           → internal/compliance templates (restricted team access)
+{org}/.github-security           → security team templates (security team only)
+```
+
+> **Note:** Only the special `.github` repository name triggers the "workflow templates" feature. Alternative repositories (`-internal`, `-security` etc.) will not show their templates in the new-workflow UI — they must be accessed and copied manually.
 
 **Sync Pattern for Org Templates** (if you want changes to propagate):
 
