@@ -275,6 +275,7 @@
       - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-3)
     - [6. **Starter Workflows**](#6-starter-workflows)
       - [Creating an Organization Starter Workflow](#creating-an-organization-starter-workflow)
+      - [Template Placeholder Variables](#template-placeholder-variables)
       - [Organizational Workflow Templates vs GitHub-Provided Starter Workflows](#organizational-workflow-templates-vs-github-provided-starter-workflows)
       - [Disabling vs Deleting a Workflow](#disabling-vs-deleting-a-workflow)
     - [7. **Workflow Status Badges**](#7-workflow-status-badges)
@@ -382,6 +383,12 @@
     - [5. **Best Practices for Actions**](#5-best-practices-for-actions)
       - [✓ Recommended Practices](#-recommended-practices-7)
       - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-7)
+    - [6. **Debugging and Troubleshooting Actions**](#6-debugging-and-troubleshooting-actions)
+      - [Enabling Debug Logging](#enabling-debug-logging-1)
+      - [Debugging JavaScript Actions](#debugging-javascript-actions)
+      - [Debugging Docker Container Actions](#debugging-docker-container-actions)
+      - [Debugging Composite Actions](#debugging-composite-actions)
+      - [Common Action Failure Patterns](#common-action-failure-patterns)
   - [Managing Runners](#managing-runners)
     - [What are Runners?](#what-are-runners)
     - [Why Manage Runners?](#why-manage-runners)
@@ -405,6 +412,10 @@
     - [5. **Preinstalled Software on GitHub-Hosted Runners**](#5-preinstalled-software-on-github-hosted-runners)
     - [6. **Secrets and Variables at Organization, Repository, and Environment Levels**](#6-secrets-and-variables-at-organization-repository-and-environment-levels)
       - [Comprehensive REST API CRUD Examples for Secrets \& Variables](#comprehensive-rest-api-crud-examples-for-secrets--variables)
+    - [7. **Audit Logging for Actions Events**](#7-audit-logging-for-actions-events)
+      - [Accessing the Audit Log](#accessing-the-audit-log)
+      - [Key Actions Audit Log Event Types](#key-actions-audit-log-event-types)
+      - [Streaming Audit Logs (Enterprise Cloud)](#streaming-audit-logs-enterprise-cloud)
   - [Security and Optimization](#security-and-optimization)
     - [Overview](#overview-1)
     - [1. **GITHUB_TOKEN — Lifecycle, Permissions, and Granular Scopes**](#1-github_token--lifecycle-permissions-and-granular-scopes)
@@ -466,15 +477,19 @@
     - [10. **Performance Issues**](#10-performance-issues)
       - [Problem: Workflows run slowly](#problem-workflows-run-slowly)
       - [Causes:](#causes-9)
-      - [Solutions:](#solutions-9)
+      - [Solutions: Parallelization](#solutions-parallelization)
+      - [Solutions: Dependency Caching](#solutions-dependency-caching)
+      - [Solutions: Matrix Sizing and Concurrency Control](#solutions-matrix-sizing-and-concurrency-control)
+      - [Solutions: Identifying Bottlenecks](#solutions-identifying-bottlenecks)
+      - [Solutions: Cost Optimization](#solutions-cost-optimization)
     - [11. **Docker and Container Issues**](#11-docker-and-container-issues)
       - [Problem: Docker image push fails](#problem-docker-image-push-fails)
       - [Causes:](#causes-10)
-      - [Solutions:](#solutions-10)
+      - [Solutions:](#solutions-9)
     - [12. **Notification and Rollback Issues**](#12-notification-and-rollback-issues)
       - [Problem: Notifications fail silently](#problem-notifications-fail-silently)
       - [Causes:](#causes-11)
-      - [Solutions:](#solutions-11)
+      - [Solutions:](#solutions-10)
     - [13. **Quick Troubleshooting Checklist**](#13-quick-troubleshooting-checklist)
   - [Additional Resources](#additional-resources)
 
@@ -2180,6 +2195,7 @@ jobs:
 | `string`      | Text input         | `version: "1.0.0"`    |
 | `choice`      | Dropdown selection | Environment selection |
 | `boolean`     | Checkbox           | `true` or `false`     |
+| `number`      | Numeric input      | `timeout: 30`         |
 | `environment` | Select environment | Production, staging   |
 
 ---
@@ -6024,6 +6040,16 @@ jobs:
 
 > For **public** repositories, starter workflows are visible to all GitHub users. For organization repositories, they are visible only to members with repository access.
 
+#### Template Placeholder Variables
+
+Starter workflow files support a small set of placeholder variables that GitHub replaces automatically when a user copies the template into their repository:
+
+| Placeholder       | Replaced With                                                  |
+| ----------------- | -------------------------------------------------------------- |
+| `$default-branch` | The repository's default branch name (e.g. `main` or `master`) |
+
+> **Note:** `$default-branch` is the only officially supported placeholder in workflow template YAML files. Additional metadata lives in the companion `.properties.json` file (fields: `name`, `description`, `iconName`, `categories`) and is not substituted into the YAML.
+
 #### Organizational Workflow Templates vs GitHub-Provided Starter Workflows
 
 **GitHub-Provided Starter Workflows** (on Marketplace):
@@ -8712,6 +8738,102 @@ uses: owner/action@v1
 
 ---
 
+### 6. **Debugging and Troubleshooting Actions**
+
+#### Enabling Debug Logging
+
+GitHub Actions provides two repository secrets that enable verbose diagnostic output:
+
+| Secret                        | Effect                                                            |
+| ----------------------------- | ----------------------------------------------------------------- |
+| `ACTIONS_STEP_DEBUG = true`   | Shows `core.debug()` output and detailed step-level traces        |
+| `ACTIONS_RUNNER_DEBUG = true` | Enables runner-level diagnostic logs (agent and environment info) |
+
+Set these in **Repository Settings → Secrets → Actions** or enable debug logging when re-running a failed job via the **"Enable debug logging"** checkbox in the UI.
+
+#### Debugging JavaScript Actions
+
+```javascript
+const core = require("@actions/core");
+
+// Only visible in logs when ACTIONS_STEP_DEBUG=true
+core.debug("Entering deployment phase with config: " + JSON.stringify(config));
+
+// Always visible
+core.info("Step starting");
+core.warning("Non-fatal issue — proceeding with defaults");
+core.error("Critical error encountered"); // marks the step as failed
+
+async function run() {
+  try {
+    const value = core.getInput("my-input", { required: true });
+    // ... logic
+    core.setOutput("result", value);
+  } catch (error) {
+    core.setFailed(`Action failed: ${error.message}`);
+  }
+}
+
+run();
+```
+
+> **Common issue:** `Cannot find module '@actions/core'` — `node_modules` were not bundled into `dist/`.
+> Fix: run `npx @vercel/ncc build index.js -o dist` and commit the generated `dist/` directory.
+
+#### Debugging Docker Container Actions
+
+```bash
+# Pull and inspect the action image locally before using in CI
+docker pull ghcr.io/owner/my-docker-action:v1
+docker run --rm -it --entrypoint /bin/sh ghcr.io/owner/my-docker-action:v1
+# Inside the container, manually run the entrypoint to observe behavior
+```
+
+```yaml
+# Pass a DEBUG env var — many Docker actions check this
+- uses: my-org/my-docker-action@v1
+  env:
+    DEBUG: "1"
+```
+
+> Add `set -x` at the top of your entrypoint shell script to emit a full execution trace in the runner log.
+
+#### Debugging Composite Actions
+
+```yaml
+steps:
+  - name: Debug inputs
+    shell: bash
+    run: |
+      echo "environment=${{ inputs.environment }}"
+      echo "version=${{ inputs.version }}"
+      echo "pwd=$(pwd)"
+
+  - name: Your step
+    id: main
+    shell: bash
+    run: ./deploy.sh
+    continue-on-error: true  # Prevent early exit so the diagnosis step below runs
+
+  - name: Debug outcome
+    if: always()
+    shell: bash
+    run: echo "Step outcome: ${{ steps.main.outcome }}"
+```
+
+#### Common Action Failure Patterns
+
+| Symptom                              | Likely Cause                                   | Resolution                                           |
+| ------------------------------------ | ---------------------------------------------- | ---------------------------------------------------- |
+| `Error: Required input missing`      | `with:` block in caller omits a required input | Add the missing input in the calling workflow        |
+| `Cannot find module '@actions/core'` | `node_modules` not committed / bundled         | Run `ncc build` and commit `dist/`                   |
+| Docker action exits with code 1      | Entrypoint script error                        | Add `set -x` in entrypoint for full trace            |
+| Composite step silently skipped      | `if:` condition evaluates false                | Check step `if:` expressions and prior step outcomes |
+| Output not available to caller       | Step is missing an `id:`                       | Add `id:` to the output-producing step               |
+| Dependency version conflict          | `package-lock.json` mismatch                   | Delete `node_modules`, run `npm ci`, rebuild `dist/` |
+
+---
+
 ## Managing Runners
 
 ### What are Runners?
@@ -9454,6 +9576,75 @@ curl -X DELETE \
   -H "Authorization: Bearer $TOKEN" \
   https://api.github.com/orgs/ORG/actions/variables/ORG_REGISTRY
 ```
+
+---
+
+### 7. **Audit Logging for Actions Events**
+
+GitHub's audit log records Actions-related events for organization administrators, providing visibility into who triggered workflows, which actions were permitted or blocked, and what policy changes were made.
+
+#### Accessing the Audit Log
+
+**Via the GitHub UI:**
+
+1. Navigate to **Organization Settings → Audit log**
+2. Filter by category **Actions** to see workflow and policy events
+
+**Via the REST API:**
+
+```bash
+# Query the audit log for Actions events (org admin token required)
+curl -H "Authorization: Bearer $TOKEN" \
+  "https://api.github.com/orgs/ORG/audit-log?phrase=action:workflows&per_page=50" \
+  | jq '.[] | {action, actor, repo, created_at}'
+```
+
+**Via GraphQL (for richer structured filtering):**
+
+```graphql
+query {
+  organization(login: "my-org") {
+    auditLog(first: 20, query: "action:workflows.approved_workflow_run") {
+      nodes {
+        ... on WorkflowsApprovedWorkflowRunAuditEntry {
+          action
+          actor {
+            login
+          }
+          createdAt
+          repository {
+            nameWithOwner
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+#### Key Actions Audit Log Event Types
+
+| Event                              | Description                                                  |
+| ---------------------------------- | ------------------------------------------------------------ |
+| `workflows.approved_workflow_run`  | A maintainer approved a pending run (first-time contributor) |
+| `workflows.cancelled_workflow_run` | A workflow run was cancelled                                 |
+| `org.actions_permission_updated`   | Organization's allowed-actions policy was changed            |
+| `org.runner_group_created`         | A runner group was created                                   |
+| `org.runner_group_deleted`         | A runner group was deleted                                   |
+| `org.runner_group_updated`         | A runner group's visibility or access was changed            |
+| `repo.actions_enabled`             | Actions were enabled or disabled for a repository            |
+
+#### Streaming Audit Logs (Enterprise Cloud)
+
+Enterprise Cloud organizations can stream audit log events to external systems in real time via **Organization Settings → Audit log → Log streaming**. Supported destinations:
+
+- Amazon S3
+- Azure Blob Storage
+- Google Cloud Storage
+- Datadog
+- Splunk
+
+This enables continuous compliance monitoring without polling the API.
 
 ---
 
@@ -10375,7 +10566,7 @@ Invalid workflow file at .github/workflows/main.yml: mapping values are not allo
 ```yaml
 # ❌ WRONG - Tabs instead of spaces
 jobs:
-	build:
+  build:
 
 # ✅ CORRECT - 2 spaces
 jobs:
@@ -10612,46 +10803,115 @@ Workflow taking 30+ minutes for simple tasks
 - Jobs running sequentially unnecessarily
 - Large dependencies being installed repeatedly
 - No caching strategy
+- Overly large matrix configurations
+- Redundant workflow runs not cancelled when new commits push
 
-#### Solutions:
+#### Solutions: Parallelization
 
-**Use job dependencies efficiently:**
+**Use a fan-out / fan-in pattern to maximize parallel execution:**
 
 ```yaml
 jobs:
   build:
     runs-on: ubuntu-latest
+    # ... build once
 
   test-unit:
-    needs: build # Parallel okay
+    needs: build # starts immediately after build
     runs-on: ubuntu-latest
 
   test-integration:
-    needs: build # Also parallel okay
+    needs: build # also parallel with test-unit
+    runs-on: ubuntu-latest
+
+  deploy:
+    needs: [test-unit, test-integration] # waits for both to pass
     runs-on: ubuntu-latest
 ```
 
-**Implement caching:**
+#### Solutions: Dependency Caching
+
+**Cache dependencies to skip reinstallation on every run:**
 
 ```yaml
-- name: Setup Node.js
-  uses: actions/setup-node@v3
+- name: Setup Node.js with npm cache
+  uses: actions/setup-node@v4
   with:
-    node-version: 18
-    cache: npm # Cache node_modules
+    node-version: 20
+    cache: npm # automatically caches ~/.npm
 
-- name: Setup Gradle cache
-  uses: gradle/gradle-build-action@v2 # Includes caching
+- name: Setup Python with pip cache
+  uses: actions/setup-python@v5
+  with:
+    python-version: "3.12"
+    cache: pip
+
+- name: Manual Maven cache
+  uses: actions/cache@v4
+  with:
+    path: ~/.m2/repository
+    key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+    restore-keys: |
+      ${{ runner.os }}-maven-
 ```
 
-**Limit concurrency:**
+#### Solutions: Matrix Sizing and Concurrency Control
 
 ```yaml
 strategy:
   matrix:
-    # Keep matrix size reasonable
-    node-version: [18, 20]
-  max-parallel: 2 # Limit parallel runs
+    node-version: [18, 20, 22]
+  max-parallel: 2 # run at most 2 matrix jobs simultaneously
+  fail-fast: false # don't cancel other matrix jobs on one failure
+
+# Cancel in-progress runs for the same branch when a new commit pushes
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+```
+
+#### Solutions: Identifying Bottlenecks
+
+**Measure step execution time inline:**
+
+```yaml
+- name: Timed build
+  run: |
+    START=$(date +%s)
+    npm run build
+    END=$(date +%s)
+    echo "Build took $((END - START)) seconds"
+```
+
+**Query billable timing across runs via the API:**
+
+```bash
+# Get per-job billable milliseconds for a specific run
+curl -H "Authorization: Bearer $TOKEN" \
+  "https://api.github.com/repos/OWNER/REPO/actions/runs/RUN_ID/timing" \
+  | jq '.billable'
+```
+
+#### Solutions: Cost Optimization
+
+| Strategy                    | Impact                                        |
+| --------------------------- | --------------------------------------------- |
+| Use `ubuntu-latest` runners | Cheapest GitHub-hosted runner per minute      |
+| Cache dependencies          | Fewer minutes spent downloading packages      |
+| `cancel-in-progress: true`  | Avoid burning minutes on superseded runs      |
+| `paths-ignore:` filters     | Skip CI when only docs or configs change      |
+| Minimize matrix dimensions  | Each cell = a separate job = separate billing |
+| Self-hosted runners         | No per-minute charge                          |
+
+```yaml
+# Skip CI entirely for documentation-only changes
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".github/ISSUE_TEMPLATE/**"
 ```
 
 ---
