@@ -371,150 +371,6 @@
     - [3. **Creating a Composite Action**](#3-creating-a-composite-action)
     - [4. **Publishing Action to Marketplace**](#4-publishing-action-to-marketplace)
       - [README.md Template](#readmemd-template)
-  - [Inputs](#inputs)
-  - [Outputs](#outputs-1)
-  - [Example](#example-1)
-  - [License](#license)
-    - [4. **Action Versioning \& Release Strategies**](#4-action-versioning--release-strategies)
-      - [Semantic Versioning for Actions](#semantic-versioning-for-actions)
-      - [Major Version Tag Strategy](#major-version-tag-strategy)
-      - [Release Checklist](#release-checklist)
-      - [Deprecation and Migration Guide](#deprecation-and-migration-guide)
-    - [After (v2)](#after-v2)
-  - [Support Timeline](#support-timeline)
-    - [Publishing Release Notes](#publishing-release-notes)
-    - [4.5 **Action Distribution Models**](#45-action-distribution-models)
-      - [Distribution Models Comparison](#distribution-models-comparison)
-      - [Public Repository Model](#public-repository-model)
-      - [Private Repository Model](#private-repository-model)
-      - [GitHub Marketplace Model](#github-marketplace-model)
-      - [Private Marketplace Model (Enterprise)](#private-marketplace-model-enterprise)
-      - [Comparison: When to Use Each Model](#comparison-when-to-use-each-model)
-      - [Migration Path Example](#migration-path-example)
-    - [5. **Best Practices for Actions**](#5-best-practices-for-actions)
-      - [✓ Recommended Practices](#-recommended-practices-3)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-3)
-    - [6. **Debugging and Troubleshooting Actions**](#6-debugging-and-troubleshooting-actions)
-      - [Enabling Debug Logging](#enabling-debug-logging-1)
-      - [Debugging JavaScript Actions](#debugging-javascript-actions)
-      - [Debugging Docker Container Actions](#debugging-docker-container-actions)
-      - [Debugging Composite Actions](#debugging-composite-actions)
-      - [Common Action Failure Patterns](#common-action-failure-patterns)
-    - [7. **Using Workflow Commands Inside Custom Actions**](#7-using-workflow-commands-inside-custom-actions)
-      - [Workflow Command Reference](#workflow-command-reference)
-      - [Using Workflow Commands in Composite Actions](#using-workflow-commands-in-composite-actions)
-      - [Using Workflow Commands in JavaScript Actions](#using-workflow-commands-in-javascript-actions)
-      - [Accessing Action Outputs in the Calling Workflow](#accessing-action-outputs-in-the-calling-workflow)
-  - [Managing Runners](#managing-runners)
-    - [What are Runners?](#what-are-runners)
-    - [Why Manage Runners?](#why-manage-runners)
-    - [How Runners Work](#how-runners-work)
-    - [1. **Understanding Hosted Runners**](#1-understanding-hosted-runners)
-    - [2. **Setting Up Self-Hosted Runners**](#2-setting-up-self-hosted-runners)
-    - [3. **Using Self-Hosted Runners in Workflows**](#3-using-self-hosted-runners-in-workflows)
-    - [4. **Managing Self-Hosted Runners via API**](#4-managing-self-hosted-runners-via-api)
-    - [5. **Runner Labels and Organization**](#5-runner-labels-and-organization)
-    - [6. **Scaling and Monitoring Runners**](#6-scaling-and-monitoring-runners)
-    - [7. **Runner Maintenance and Updates**](#7-runner-maintenance-and-updates)
-    - [8. **Best Practices for Runner Management**](#8-best-practices-for-runner-management)
-      - [✓ Recommended Practices](#-recommended-practices-4)
-      - [✗ Anti-Patterns to Avoid](#-anti-patterns-to-avoid-4)
-  - [GitHub Actions for the Enterprise](#github-actions-for-the-enterprise)
-    - [Overview](#overview)
-    - [1. **Organizational Use Policies**](#1-organizational-use-policies)
-    - [2. **Controlling Access to Actions and Workflows Within an Enterprise**](#2-controlling-access-to-actions-and-workflows-within-an-enterprise)
-      - [Fork-Specific Workflow Policies](#fork-specific-workflow-policies)
-    - [3. **Runner Groups**](#3-runner-groups)
-    - [4. **IP Allow Lists**](#4-ip-allow-lists)
-    - [5. **Preinstalled Software on GitHub-Hosted Runners**](#5-preinstalled-software-on-github-hosted-runners)
-    - [6. **Secrets and Variables at Organization, Repository, and Environment Levels**](#6-secrets-and-variables-at-organization-repository-and-environment-levels)
-      - [Comprehensive REST API CRUD Examples for Secrets \& Variables](#comprehensive-rest-api-crud-examples-for-secrets--variables)
-    - [7. **Audit Logging for Actions Events**](#7-audit-logging-for-actions-events)
-      - [Accessing the Audit Log](#accessing-the-audit-log)
-      - [Key Actions Audit Log Event Types](#key-actions-audit-log-event-types)
-      - [Streaming Audit Logs (Enterprise Cloud)](#streaming-audit-logs-enterprise-cloud)
-  - [Security and Optimization](#security-and-optimization)
-    - [Overview](#overview-1)
-    - [1. **GITHUB_TOKEN — Lifecycle, Permissions, and Granular Scopes**](#1-github_token--lifecycle-permissions-and-granular-scopes)
-    - [2. **OIDC Token for Cloud Federation**](#2-oidc-token-for-cloud-federation)
-      - [GCP Workload Identity Federation Example](#gcp-workload-identity-federation-example)
-      - [Azure Federated Credentials Setup (Detailed)](#azure-federated-credentials-setup-detailed)
-      - [OIDC Subject Claim (sub) Specification](#oidc-subject-claim-sub-specification)
-    - [3. **Pinning Actions to Full Commit SHAs**](#3-pinning-actions-to-full-commit-shas)
-      - [Action Registry Sources](#action-registry-sources)
-    - [4. **Script Injection Mitigation**](#4-script-injection-mitigation)
-      - [Shell-Specific Quoting Rules](#shell-specific-quoting-rules)
-      - [Advanced Pattern: Sanitization Functions](#advanced-pattern-sanitization-functions)
-      - [Common Injection Payloads to Test Against](#common-injection-payloads-to-test-against)
-    - [5. **Identifying Trustworthy Marketplace Actions**](#5-identifying-trustworthy-marketplace-actions)
-      - [Action Trust Assessment Framework](#action-trust-assessment-framework)
-      - [Comprehensive Trust Checklist](#comprehensive-trust-checklist)
-      - [Trust Assessment Workflow](#trust-assessment-workflow)
-      - [Real-World Assessment Example](#real-world-assessment-example)
-      - [Trustworthy Action Examples](#trustworthy-action-examples)
-      - [Alternative: Custom Action Policy](#alternative-custom-action-policy)
-      - [Pinning Strategy by Trust Tier](#pinning-strategy-by-trust-tier)
-    - [6. **Artifact Attestations and SLSA Provenance**](#6-artifact-attestations-and-slsa-provenance)
-    - [7. **Dependency Policy: Caching and Artifact Retention**](#7-dependency-policy-caching-and-artifact-retention)
-  - [Common Failures and Troubleshooting](#common-failures-and-troubleshooting)
-    - [1. **Authentication Errors**](#1-authentication-errors)
-      - [Problem: Permission Denied](#problem-permission-denied)
-      - [Causes — Authentication Errors](#causes--authentication-errors)
-      - [Solutions — Authentication Errors](#solutions--authentication-errors)
-    - [2. **Dependency Installation Failures**](#2-dependency-installation-failures)
-      - [Problem: `npm ci` fails with version conflicts](#problem-npm-ci-fails-with-version-conflicts)
-      - [Causes — Dependency Installation](#causes--dependency-installation)
-      - [Solutions — Dependency Installation](#solutions--dependency-installation)
-    - [3. **Timeout Errors**](#3-timeout-errors)
-      - [Problem: Job times out](#problem-job-times-out)
-      - [Causes — Job Timeout](#causes--job-timeout)
-      - [Solutions — Job Timeout](#solutions--job-timeout)
-    - [4. **Workflow File Syntax Errors**](#4-workflow-file-syntax-errors)
-      - [Problem: Workflow doesn't trigger or shows validation error](#problem-workflow-doesnt-trigger-or-shows-validation-error)
-      - [Causes — Workflow Syntax Errors](#causes--workflow-syntax-errors)
-      - [Solutions — Workflow Syntax Errors](#solutions--workflow-syntax-errors)
-    - [5. **Runner Issues**](#5-runner-issues)
-      - [Problem: `ubuntu-latest` runner has outdated software](#problem-ubuntu-latest-runner-has-outdated-software)
-      - [Causes — Runner Outdated Software](#causes--runner-outdated-software)
-      - [Solutions — Runner Outdated Software](#solutions--runner-outdated-software)
-      - [Problem: Self-hosted runner is offline or not picking up jobs](#problem-self-hosted-runner-is-offline-or-not-picking-up-jobs)
-      - [Problem: Jobs are queued but no runner picks them up (label mismatch)](#problem-jobs-are-queued-but-no-runner-picks-them-up-label-mismatch)
-      - [Problem: Self-hosted runner fails with permission errors or environment issues](#problem-self-hosted-runner-fails-with-permission-errors-or-environment-issues)
-    - [6. **Artifact and Caching Issues**](#6-artifact-and-caching-issues)
-      - [Problem: Artifact not found when downloading](#problem-artifact-not-found-when-downloading)
-      - [Causes — Artifact Download](#causes--artifact-download)
-      - [Solutions — Artifact Download](#solutions--artifact-download)
-    - [7. **Matrix Build Failures**](#7-matrix-build-failures)
-      - [Problem: One matrix combination fails and stops all others](#problem-one-matrix-combination-fails-and-stops-all-others)
-      - [Causes — Matrix Build](#causes--matrix-build)
-      - [Solutions — Matrix Build](#solutions--matrix-build)
-    - [8. **Secret Management Issues**](#8-secret-management-issues)
-      - [Problem: Secret is redacted/not available](#problem-secret-is-redactednot-available)
-      - [Causes — Secret Management](#causes--secret-management)
-      - [Solutions — Secret Management](#solutions--secret-management)
-    - [9. **Step Output Issues**](#9-step-output-issues)
-      - [Problem: Cannot reference step output in next step](#problem-cannot-reference-step-output-in-next-step)
-      - [Causes — Step Output](#causes--step-output)
-      - [Solutions — Step Output](#solutions--step-output)
-    - [10. **Performance Issues**](#10-performance-issues)
-      - [Problem: Workflows run slowly](#problem-workflows-run-slowly)
-      - [Causes — Performance](#causes--performance)
-      - [Solutions — Performance](#solutions--performance)
-      - [Solutions: Dependency Caching](#solutions-dependency-caching)
-      - [Solutions: Matrix Sizing and Concurrency Control](#solutions-matrix-sizing-and-concurrency-control)
-      - [Solutions: Identifying Bottlenecks](#solutions-identifying-bottlenecks)
-      - [Solutions: Cost Optimization](#solutions-cost-optimization)
-      - [Recommended Strategies for Scaling and Optimizing Workflows](#recommended-strategies-for-scaling-and-optimizing-workflows)
-    - [11. **Docker and Container Issues**](#11-docker-and-container-issues)
-      - [Problem: Docker image push fails](#problem-docker-image-push-fails)
-      - [Causes — Docker Push](#causes--docker-push)
-      - [Solutions — Docker Push](#solutions--docker-push)
-    - [12. **Notification and Rollback Issues**](#12-notification-and-rollback-issues)
-      - [Problem: Notifications fail silently](#problem-notifications-fail-silently)
-      - [Causes — Notification Failure](#causes--notification-failure)
-      - [Solutions — Notification Failure](#solutions--notification-failure)
-    - [13. **Quick Troubleshooting Checklist**](#13-quick-troubleshooting-checklist)
-  - [Additional Resources](#additional-resources)
 
 ---
 
@@ -8481,7 +8337,7 @@ runs:
 
 #### README.md Template
 
-````markdown
+`````markdown
 # Deploy App Action
 
 [![GitHub Actions](https://img.shields.io/badge/GitHub-Actions-blue)](https://github.com/features/actions)
@@ -8506,7 +8362,6 @@ runs:
     environment: production
     version: 1.0.0
 ```
-````
 
 ## Inputs
 
@@ -8689,7 +8544,6 @@ inputs:
     docker-user: myuser
     docker-tag: v1.0
 ```
-````
 
 ### After (v2)
 
@@ -11991,3 +11845,17 @@ Workflow succeeds but no Slack message sent
 - [GitHub Actions Marketplace](https://github.com/marketplace?type=actions)
 
 ---
+
+```
+
+```
+
+```
+
+```
+````
+`````
+
+```
+
+```
