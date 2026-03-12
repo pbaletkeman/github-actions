@@ -6,8 +6,27 @@ Generate exam-like multiple-choice questions for the GH-200 certification using 
 
 ## Input Files
 
-- `exam-overview.md` — GH-200 exam skill domain breakdown and weights
-- `GitHub-Workflows-Guide.md` — Comprehensive reference material
+- Comprehensive reference material:
+    - 01-GitHub-Actions-VS-Code-Extension.md
+    - Contextual-Information.md
+    - 03-Context-Availability-Reference.md
+    - 04-Workflow-File-Structure.md
+    - 05-Workflow-Trigger-Events.md
+    - 06-Custom-Environment-Variables.md
+    - 07-Default-Environment-Variables.md
+    - 08-Environment-Protection-Rules.md
+    - 09-Workflow-Artifacts.md
+    - 10-Workflow-Caching.md
+    - 11-Workflow-Sharing.md
+    - 12-Workflow-Debugging.md
+    - 13-Workflows-REST-API.md
+    - 14-Reviewing-Deployments.md
+    - 15-Creating-Publishing-Actions.md
+    - 16-Managing-Runners.md
+    - 17-GitHub-Actions-Enterprise.md
+    - 18-Security-and-Optimization.md
+    - 19-Common-Failures-Troubleshooting.md
+
 - `gh-200.md` — Existing question database (for deduplication)
 
 ## Output Requirements
@@ -18,14 +37,9 @@ Generate exam-like multiple-choice questions for the GH-200 certification using 
 
 ## Question Specifications
 
-### Quantity & Coverage
+### Quantity
 
-- Generate **90-100 questions** distributed across exam domains proportional to their weights:
-  - Author/manage workflows: 20–25% (18–25 questions)
-  - Consume/troubleshoot workflows: 15–20% (14–20 questions)
-  - Author/maintain actions: 15–20% (14–25 questions)
-  - Manage for enterprise: 20–25% (18–25 questions)
-  - Secure/optimize automation: 10–15% (9–15 questions)
+8 - 10 questions per a 100 lines of referance material.
 
 ### Difficulty & Depth
 
