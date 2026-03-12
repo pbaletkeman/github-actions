@@ -20,12 +20,12 @@ Generate exam-like multiple-choice questions for the GH-200 certification using 
 
 ### Quantity & Coverage
 
-- Generate **70-80 questions** distributed across exam domains proportional to their weights:
-  - Author/manage workflows: 20–25% (14–20 questions)
-  - Consume/troubleshoot workflows: 15–20% (9–14 questions)
-  - Author/maintain actions: 15–20% (12–14 questions)
-  - Manage for enterprise: 20–25% (14–20 questions)
-  - Secure/optimize automation: 10–15% (7–12 questions)
+- Generate **90-100 questions** distributed across exam domains proportional to their weights:
+  - Author/manage workflows: 20–25% (18–25 questions)
+  - Consume/troubleshoot workflows: 15–20% (14–20 questions)
+  - Author/maintain actions: 15–20% (14–25 questions)
+  - Manage for enterprise: 20–25% (18–25 questions)
+  - Secure/optimize automation: 10–15% (9–15 questions)
 
 ### Difficulty & Depth
 
