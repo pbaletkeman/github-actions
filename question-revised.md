@@ -58,6 +58,7 @@ Generate exam-like multiple-choice questions for the GH-200 certification using 
 
 - **Deduplication**: Check `gh-200.md` for semantic duplicates; do not repeat concepts
 - **Clarity**: Each question should be unambiguous; avoid double negatives
+- **Wording**: Use exam type wording anf phrasing
 - **Plausibility**: All distractors should be realistically chosen by someone with partial knowledge
 - **Exam alignment**: Mirror exam language and focus areas
 
