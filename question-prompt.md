@@ -23,7 +23,7 @@ Generate 150–175 multiple-choice certification exam questions that follows `ex
 
 ### Primary Reference Files (19 topics)
 
-All files located in: `c:\Users\Pete\Desktop\github-actions\`
+All files located in: `github-actions\`
 
 1. `01-GitHub-Actions-VS-Code-Extension.md` — Extension features, validation, local development
 2. `02-Contextual-Information.md` — GitHub, env, secrets, job, runner, steps, matrix, inputs, needs, strategy contexts
@@ -62,7 +62,7 @@ All files located in: `c:\Users\Pete\Desktop\github-actions\`
 ### Distribution by Topic (Recommended)
 
 | Topic # | Topic Name | Questions | Rationale |
-|---------|-----------|-----------|-----------|
+| ------- | ---------- | --------- | --------- |
 | 1 | VS Code Extension | 5 | Tools & features (foundational) |
 | 2 | Contextual Information | 11 | Core knowledge; 10 context types |
 | 3 | Context Availability | 8 | Static vs. runtime; advanced concept |
@@ -91,7 +91,7 @@ All files located in: `c:\Users\Pete\Desktop\github-actions\`
 ### Distribution by Difficulty
 
 | Difficulty | % | Count | Cognitive Level | Example Focus |
-|-----------|-----|-------|-----------------|----------------|
+| ---------- | --- | ----- | --------------- | -------------- |
 | **Easy** | 20% | 19 | Recall + Comprehension | "What does this context contain?" |
 | **Medium** | 60% | 103 | Application + Analysis | "Which trigger event should you use for...?" |
 | **Hard** | 20% | 40 | Synthesis + Evaluation | "Identify the scenario where this approach fails..." |
@@ -111,7 +111,7 @@ All files located in: `c:\Users\Pete\Desktop\github-actions\`
 Distribute answer types across the 162 questions:
 
 | Answer Type | % of 162 | Count | Definition |
-|-------------|----------|-------|----------|
+| ----------- | -------- | ----- | --------- |
 | `one` | 55% | 89 | Exactly one correct answer |
 | `many` | 26% | 42 | Multiple correct answers (2–4) |
 | `all` | 12% | 19 | All options are correct (rare but valid) |
@@ -138,7 +138,7 @@ Distribute answer types across the 162 questions:
 ### Distractor Strategy
 
 | Distractor Type | Example | When to Use |
-|-----------------|---------|-------------|
+| --------------- | ------- | ----------- |
 | **Partial knowledge** | Correct concept, wrong context | Most common |
 | **Common misconception** | "Secrets are always available" | Security topics |
 | **Off-by-one / precedence error** | Wrong behavior order | Workflow structure |
@@ -217,7 +217,7 @@ Distribute answer types across the 162 questions:
 ### Exam Language & Phrasing
 
 | ✓ Recommended | ✗ Avoid |
-|--------------|---------|
+| ------------- | ------- |
 | "You are required to..." | "You should..." |
 | "Which is the best practice?" | "Which might be the best?" |
 | "True or False: [Statement]" | "How true is...?" |
@@ -233,6 +233,7 @@ Distribute answer types across the 162 questions:
 ### Plausibility Check
 
 For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
+
 - If yes → keep it
 - If no → make it more plausible or replace
 
@@ -241,6 +242,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 ## 10. Domain-Specific Focus Areas
 
 ### Security & Tokenization (Topics 18, 6–7)
+
 - GITHUB_TOKEN lifecycle: when available, scope, redaction
 - OIDC token usage: cloud federation, subject claims, setup
 - SHA pinning: why immutable commits matter; semver vs. SHA
@@ -248,9 +250,10 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Secret leakage: environment variables vs. hardcoding; masking limitations
 - Trustworthy actions: assessment framework, pinning strategy
 
-**Minimum 18 questions on security topics**
+#### Minimum 18 questions on security topics
 
 ### Enterprise & Governance (Topics 17, 8, 14)
+
 - Runner groups: permission model, scaling, cost optimization
 - IP allow lists: use cases, configuration
 - Secrets hierarchy: org vs. repo vs. environment scope
@@ -258,9 +261,10 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Environment protection rules: required reviewers, wait timers, custom rules
 - Deployment review workflows: pause, approve, monitor
 
-**Minimum 15 questions on enterprise topics**
+#### Minimum 15 questions on enterprise topics**
 
 ### Real-World Scenarios (Topics 5, 9–12, 19)
+
 - Workflow design: trigger selection, event payload
 - Matrix builds: combinations, fail-fast, job indexing
 - Artifact workflows: upload from build, download in another job
@@ -268,41 +272,47 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Debugging: log streaming, RUNNER_DEBUG, slow step identification
 - Troubleshooting: common errors, root cause, solutions
 
-**Minimum 60 questions scenario-based**
+#### Minimum 60 questions scenario-based**
 
 ### Advanced & Synthesis (All topics)
+
 - Trade-off decisions: "You need X, Y, Z. Which approach is best?"
 - Architecture decisions: "Design a workflow that..."
 - Optimization: "How can you reduce execution time?"
 - Error recovery: "An artifact upload fails midway; what happens?"
 
-**Minimum 23 questions requiring synthesis/evaluation**
+#### Minimum 23 questions requiring synthesis/evaluation**
 
 ---
 
 ## 11. Special Instructions & Rules
 
 ### SHA Pinning & Immutability
+
 - **Include at least 2–3 questions** on pinning actions to full commit SHAs
 - Focus on: why, when, trade-offs between SHA and semver
 - Test understanding of: `@v2` vs. `@abc123def` vs. `@refs/tags/v2.0.0`
 
 ### Script Injection & Security
+
 - **Include at least 2–3 questions** on identifying/preventing script injection
 - Scenarios: environment variable manipulation, dynamic step selection, user input
 - Test: proper quoting, sanitization functions, risk assessment
 
 ### Matrix & Job Dependencies
+
 - **Include at least 2–3 questions** on matrix combinations and fail-fast behavior
 - Scenarios: 3×2×2 matrix → job counts; conditional matrix values; job indices
 - Test: `strategy.job-index`, `strategy.job-total`, fail-fast implications
 
 ### OIDC & Cloud Federation
+
 - **Include at least 1–2 questions** on OIDC token setup and usage
 - Focus on: AWS, Azure, GCP federation; subject claims; trust relationships
 - Test: when to use OIDC vs. secrets; benefits (no long-lived secrets)
 
 ### REST API Automation
+
 - **Include at least 1–2 questions** on API-driven workflows
 - Scenarios: trigger workflow via API, list failed runs, re-run selectively
 - Test: API rate limits, authentication, pagination
@@ -326,7 +336,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 ### By Complexity & Scenario Depth
 
 | Question Type | % | Example | Difficulty |
-|---------------|---|---------|-----------|
+| ------------- | - | ------- | ---------- |
 | Single concept | 20% | "What does `runner.os` contain?" | Easy |
 | Scenario + decision | 50% | "Your build has 3 stages; which trigger should...?" | Medium |
 | Multi-concept + trade-off | 25% | "Compare: caching vs. artifacts; when use each?" | Hard |
@@ -343,12 +353,13 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 ## 13. Output File Specification
 
 ### File Name
+
 - **Primary**: `gh-200-new.md`
 - **Alternative** (if appending): Append to `gh-200.md` with date marker and "NEW QUESTIONS (Generated [DATE])" section
 
 ### File Structure
 
-```
+```plaintext
 # GH-200 Certification Exam — Practice Questions
 
 ## Questions (162 total — Iteration [N])
@@ -389,36 +400,42 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 ## 14. Process Workflow (For Implementation)
 
 1. **Preparation**
+
    - Load all 19 topic files
    - Load `gh-200.md` (if exists) for deduplication
    - Load/read ITERATION_NUMBER (default: 1) for question variation
    - Organize by topic; target 8–9 questions per topic
 
 2. **Generation Pass 1: Easy (32 questions)**
+
    - Generate recall/comprehension questions
    - Direct from guide content
    - Distribute across topics
    - Vary scenarios by iteration number (seed RNG with iteration)
 
 3. **Generation Pass 2: Medium (97 questions)**
+
    - Scenario-based; application/analysis
    - Mix of decision-making, bug-finding, best-practice selection
    - Prioritize enterprise, security, and real-world patterns
    - Randomize distractor order by iteration (shuffle wrong answers)
 
 4. **Generation Pass 3: Hard (33 questions)**
+
    - Synthesis, evaluation, trade-offs
    - Multi-concept combinations
    - Edge cases and error recovery
    - Vary edge cases tested by iteration
 
 5. **Quality Review**
+
    - Check clarity, grammar, ambiguity
    - Verify options are plausible
    - Confirm answer key matches options
    - Confirm no semantic duplication with previous iterations
 
 6. **Finalization**
+
    - Balance answer distribution (A/B/C/D)
    - Verify percentages (55% one, 26% many, etc.)
    - Generate statistics block
@@ -430,7 +447,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 ## 15. Defaults Applied & Assumptions
 
 | Item | Default | Rationale |
-|------|---------|-----------|
+| ---- | ------- | --------- |
 | **Total Questions** | 162 (target 150–175) | Extended practice set; ~3 hours exam simulation; can adjust within range |
 | **Options per Question** | 4 (up to 5) | Standard format; reduces cognitive load |
 | **Difficulty Split** | 20/60/20 | Typical exam distribution |
@@ -453,8 +470,6 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 
 ---
 
----
-
 ## 17. Iteration & Randomization Strategy
 
 ### Purpose
@@ -464,6 +479,7 @@ Enable **regeneration of different question sets** while maintaining exam qualit
 ### Iteration Mechanics
 
 **Iteration Number** (passed as parameter or read from file):
+
 - **Iteration 1**: Initial generation; baseline questions
 - **Iteration 2+**: Different questions using same topic coverage and difficulty splits
 
@@ -525,13 +541,15 @@ def generate_questions(iteration_number=1):
 ### Output File Strategy
 
 **Option A: Separate Files Per Iteration** (Recommended)
+
 - `gh-200-iteration-1.md` (first run)
 - `gh-200-iteration-2.md` (second run)
 - `gh-200-iteration-3.md` (third run)
 - Pros: Easy comparison; clear versioning; no duplicates
 - Cons: Multiple files
 
-**Option B: Single Append File**
+#### Option B: Single Append File
+
 - `gh-200-all-iterations.md` (combined)
 - Format: `---` delimiter between iterations; metadata header for each iteration
 - Pros: All questions in one place

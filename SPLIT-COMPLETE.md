@@ -12,7 +12,7 @@ The comprehensive **GitHub Workflows Guide** has been successfully split into **
 Each file has been extracted from the original guide and split by topic:
 
 | # | File | Topic |
-|---|------|-------|
+| - | ---- | ----- |
 | 1 | `01-GitHub-Actions-VS-Code-Extension.md` | GitHub Actions VS Code Extension & Tooling |
 | 2 | `02-Contextual-Information.md` | Contextual Information in GitHub Workflows |
 | 3 | `03-Context-Availability-Reference.md` | Context Availability Reference |
@@ -42,6 +42,7 @@ Each file has been extracted from the original guide and split by topic:
 ### ✓ Navigation Links
 
 Each file includes:
+
 - **Header**: Link back to the main INDEX
 - **Footer**: Previous/Next navigation links for sequential reading
 - **Cross-references**: Internal links to related topics
@@ -51,27 +52,35 @@ Each file includes:
 Files are organized in a logical learning flow:
 
 **Fundamentals** (1-5):
+
 - Start here to understand the basics of GitHub Actions
 
 **Configuration** (6-8):
+
 - Learn about environment variables and protection rules
 
 **Features** (9-12):
+
 - Explore artifacts, caching, sharing, and debugging
 
 **Advanced** (13-19):
+
 - Deep dive into API, deployments, custom actions, runners, enterprise features, security, and troubleshooting
 
 ## How to Use
 
 ### Option 1: Topic-Based
+
 Click on any topic link in [INDEX.md](INDEX.md) to jump directly to that topic.
 
 ### Option 2: Sequential Reading
+
 Start with file 01 and use the navigation links at the bottom to move to the next topic.
 
 ### Option 3: Quick Paths
+
 Use the quick navigation paths in [INDEX.md](INDEX.md):
+
 - I want to write my first workflow
 - I want to debug a failing workflow
 - I want to optimize performance
@@ -81,16 +90,19 @@ Use the quick navigation paths in [INDEX.md](INDEX.md):
 ## Technical Details
 
 ### File Format
+
 - All files are in **Markdown** (.md) format
 - UTF-8 encoding with proper line breaks
 - Compatible with GitHub, VS Code, and most markdown editors
 
 ### Navigation
+
 - Each file has links to the INDEX
 - Sequential files link to previous/next files
 - All links are relative paths for portability
 
 ### Content Preservation
+
 - All original content from GitHub-Workflows-Guide.md is preserved
 - Code blocks, tables, and formatting are maintained
 - Line references are preserved for backtracking
@@ -98,11 +110,13 @@ Use the quick navigation paths in [INDEX.md](INDEX.md):
 ## File Locations
 
 All files are located in:
-```
+
+```shell
 github-actions\
 ```
 
-### Files Created:
+### Files Created
+
 - ✓ 19 topic files (01-19-*.md)
 - ✓ 1 index file (INDEX.md)
 - ✓ Original guide (GitHub-Workflows-Guide.md) - kept for reference
