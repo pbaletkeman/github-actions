@@ -99,7 +99,7 @@ Use the quick navigation paths in [INDEX.md](INDEX.md):
 
 All files are located in:
 ```
-c:\Users\Pete\Desktop\github-actions\
+github-actions\
 ```
 
 ### Files Created:
