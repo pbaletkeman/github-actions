@@ -2,13 +2,13 @@
 
 ## Executive Summary
 
-This prompt guides generation of **150–175 high-quality exam-style questions** for the GitHub Actions GH-200 certification. Questions will be scenario-based, cognitively rigorous, and aligned with the 19 topic files from the split GitHub Workflows Guide. **The prompt supports iteration**: run it multiple times to generate different question sets with varied scenarios and distractors.
+This prompt guides generation of **400 high-quality exam-style questions** for the GitHub Actions GH-200 certification. Questions will be scenario-based, cognitively rigorous, and aligned with the 19 topic files from the split GitHub Workflows Guide. **The prompt supports iteration**: run it multiple times to generate different question sets with varied scenarios and distractors.
 
 ---
 
 ## 1. Objective
 
-Generate 150–175 multiple-choice certification exam questions that follows `exam-overview.md` GH-200 exam skill domain breakdown and weights
+Generate 400 multiple-choice certification exam questions that follows `exam-overview.md` GH-200 exam skill domain breakdown and weights
 
 - Test practical knowledge of GitHub Actions workflows, runners, security, and enterprise features
 - Avoid pure recall; emphasize application, analysis, and decision-making
@@ -47,7 +47,7 @@ All files located in: `github-actions\`
 
 ### Deduplication Database
 
-- **File**: `gh-200.md` (if exists in workspace; else skip deduplication check)
+- **File**: `quiz\gh-200.md` (if exists in workspace; else skip deduplication check)
 - **Purpose**: Avoid semantic duplication of previously generated questions
 
 ---
@@ -56,33 +56,33 @@ All files located in: `github-actions\`
 
 ### Total Output
 
-- **Total Questions**: 162 questions (middle target within 150–175 range; can be adjusted 150–175 based on generation pass)
-- **Distribution**: ~8–9 questions per topic file (allows for variable coverage by domain importance)
+- **Total Questions**: 400 questions
+- **Distribution**: ~21 questions per topic file (allows for variable coverage by domain importance)
 
 ### Distribution by Topic (Recommended)
 
 | Topic # | Topic Name | Questions | Rationale |
 | ------- | ---------- | --------- | --------- |
-| 1 | VS Code Extension | 5 | Tools & features (foundational) |
-| 2 | Contextual Information | 11 | Core knowledge; 10 context types |
-| 3 | Context Availability | 8 | Static vs. runtime; advanced concept |
-| 4 | Workflow File Structure | 12 | Fundamental; many properties to test |
-| 5 | Trigger Events | 12 | 26+ events; common exam focus |
-| 6 | Custom Env Vars | 9 | Practical, scenario-heavy |
-| 7 | Default Env Vars | 8 | Reference knowledge; practical use |
-| 8 | Environment Protection | 9 | Enterprise/security focus |
-| 9 | Artifacts | 11 | Practical; common workflows |
-| 10 | Caching | 9 | Performance optimization; strategy |
-| 11 | Workflow Sharing | 8 | Reusability; marketplace |
-| 12 | Debugging | 9 | Troubleshooting; real-world scenarios |
-| 13 | REST API | 8 | Automation; advanced use |
-| 14 | Deployment Review | 6 | Enterprise/governance |
-| 15 | Creating/Publishing Actions | 9 | Advanced; marketplace |
-| 16 | Managing Runners | 9 | Operational; enterprise focus |
-| 17 | Enterprise Features | 11 | Policy, groups, audit; high exam weight |
-| 18 | Security & Optimization | 12 | OIDC, script injection, SHA pinning; critical |
-| 19 | Troubleshooting | 9 | Problem-solving; real scenarios |
-| **TOTAL** | | **162** | |
+| 1 | VS Code Extension | 12 | Tools & features (foundational) |
+| 2 | Contextual Information | 26 | Core knowledge; 10 context types |
+| 3 | Context Availability | 19 | Static vs. runtime; advanced concept |
+| 4 | Workflow File Structure | 30 | Fundamental; many properties to test |
+| 5 | Trigger Events | 30 | 26+ events; common exam focus |
+| 6 | Custom Env Vars | 22 | Practical, scenario-heavy |
+| 7 | Default Env Vars | 19 | Reference knowledge; practical use |
+| 8 | Environment Protection | 22 | Enterprise/security focus |
+| 9 | Artifacts | 26 | Practical; common workflows |
+| 10 | Caching | 22 | Performance optimization; strategy |
+| 11 | Workflow Sharing | 19 | Reusability; marketplace |
+| 12 | Debugging | 21 | Troubleshooting; real-world scenarios |
+| 13 | REST API | 19 | Automation; advanced use |
+| 14 | Deployment Review | 15 | Enterprise/governance |
+| 15 | Creating/Publishing Actions | 21 | Advanced; marketplace |
+| 16 | Managing Runners | 21 | Operational; enterprise focus |
+| 17 | Enterprise Features | 26 | Policy, groups, audit; high exam weight |
+| 18 | Security & Optimization | 29 | OIDC, script injection, SHA pinning; critical |
+| 19 | Troubleshooting | 21 | Problem-solving; real scenarios |
+| **TOTAL** | | **400** | |
 
 ---
 
@@ -92,9 +92,9 @@ All files located in: `github-actions\`
 
 | Difficulty | % | Count | Cognitive Level | Example Focus |
 | ---------- | --- | ----- | --------------- | -------------- |
-| **Easy** | 20% | 19 | Recall + Comprehension | "What does this context contain?" |
-| **Medium** | 60% | 103 | Application + Analysis | "Which trigger event should you use for...?" |
-| **Hard** | 20% | 40 | Synthesis + Evaluation | "Identify the scenario where this approach fails..." |
+| **Easy** | 20% | 80 | Recall + Comprehension | "What does this context contain?" |
+| **Medium** | 60% | 240 | Application + Analysis | "Which trigger event should you use for...?" |
+| **Hard** | 20% | 80 | Synthesis + Evaluation | "Identify the scenario where this approach fails..." |
 
 ### Cognitive Level Definitions
 
@@ -108,14 +108,14 @@ All files located in: `github-actions\`
 
 ## 5. Answer Type Distribution
 
-Distribute answer types across the 162 questions:
+Distribute answer types across the 400 questions:
 
-| Answer Type | % of 162 | Count | Definition |
+| Answer Type | % of 400 | Count | Definition |
 | ----------- | -------- | ----- | --------- |
-| `one` | 55% | 89 | Exactly one correct answer |
-| `many` | 26% | 42 | Multiple correct answers (2–4) |
-| `all` | 12% | 19 | All options are correct (rare but valid) |
-| `none` | 7% | 11 | "Which is NOT true...?" or no correct answer |
+| `one` | 55% | 220 | Exactly one correct answer |
+| `many` | 26% | 104 | Multiple correct answers (2–4) |
+| `all` | 12% | 48 | All options are correct (rare but valid) |
+| `none` | 7% | 28 | "Which is NOT true...?" or no correct answer |
 
 ### Implementation Notes
 
@@ -226,7 +226,7 @@ Distribute answer types across the 162 questions:
 
 ### Deduplication
 
-- **Check against `gh-200.md`** (if exists): Identify semantically similar questions
+- **Check against `quiz\gh-200.md`** (if exists): Identify semantically similar questions
 - **Avoid repeating** the same scenario structure more than 2–3 times
 - **Vary the focus**: If one question tests "when to use matrix", next shouldn't repeat that exact concept
 
@@ -402,7 +402,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 1. **Preparation**
 
    - Load all 19 topic files
-   - Load `gh-200.md` (if exists) for deduplication
+   - Load `quiz\gh-200.md` (if exists) for deduplication
    - Load/read ITERATION_NUMBER (default: 1) for question variation
    - Organize by topic; target 8–9 questions per topic
 
@@ -439,7 +439,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
    - Balance answer distribution (A/B/C/D)
    - Verify percentages (55% one, 26% many, etc.)
    - Generate statistics block
-   - Append to `gh-200-all-iterations.md` OR export to `gh-200-iteration-[N].md`
+   - Append to `quiz\gh-200-all-iterations.md` OR export to `quiz\gh-200-iteration-[N].md`
    - Document iteration number and generation timestamp
 
 ---
@@ -463,7 +463,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 ## 16. Known Constraints & Limitations
 
 - **Time**: Generation may take significant effort; quality over speed
-- **Deduplication**: Manual if `gh-200.md` doesn't exist in standard format
+- **Deduplication**: Manual if `quiz\gh-200.md` doesn't exist in standard format
 - **Scenario Complexity**: Some scenarios may require long setups; balance with clarity
 - **Answer Key Brevity**: Keep explanations concise (2–3 sentences) but complete
 - **Topic Imbalance**: Topics 2, 4, 5, 18 naturally have more exam weight; adjust distribution as needed
@@ -542,15 +542,15 @@ def generate_questions(iteration_number=1):
 
 **Option A: Separate Files Per Iteration** (Recommended)
 
-- `gh-200-iteration-1.md` (first run)
-- `gh-200-iteration-2.md` (second run)
-- `gh-200-iteration-3.md` (third run)
+- `quiz\gh-200-iteration-1.md` (first run)
+- `quiz\gh-200-iteration-2.md` (second run)
+- `quiz\gh-200-iteration-3.md` (third run)
 - Pros: Easy comparison; clear versioning; no duplicates
 - Cons: Multiple files
 
 #### Option B: Single Append File
 
-- `gh-200-all-iterations.md` (combined)
+- `quiz\gh-200-all-iterations.md` (combined)
 - Format: `---` delimiter between iterations; metadata header for each iteration
 - Pros: All questions in one place
 - Cons: Harder to track which iteration a question came from
@@ -559,7 +559,7 @@ def generate_questions(iteration_number=1):
 
 ### Deduplication Across Iterations
 
-- **Before generating new iteration**: Check all previous `gh-200-iteration-*.md` files
+- **Before generating new iteration**: Check all previous `quiz\gh-200-iteration-*.md` files
 - **Semantic comparison**: Avoid identical scenario structures
   - Example: "Your matrix is 3×2; how many jobs?" shouldn't repeat if Iteration 1 asked it
 - **Variation measurement**: Spot-check 5–10 questions across iterations; confirm they're materially different
@@ -568,7 +568,7 @@ def generate_questions(iteration_number=1):
 
 1. **Increment iteration number**: `ITERATION_NUMBER += 1`
 2. **Run generation process** with new iteration number
-3. **Output to**: `gh-200-iteration-[N].md` (where N = iteration number)
+3. **Output to**: `quiz\gh-200-iteration-[N].md` (where N = iteration number)
 4. **Verify differences**: Spot-check Q1, Q50, Q100+ across iterations for variation
 5. **Archive previous**: Keep all iterations for test bank expansion
 
@@ -624,5 +624,5 @@ def generate_questions(iteration_number=1):
 2. Generate questions in **3 passes** (Easy → Medium → Hard) for better pacing
 3. **Validate each question** against the template before finalizing
 4. **Spot-check distractor plausibility** with a peer or test group
-5. **Run deduplication** against `gh-200.md` before output
+5. **Run deduplication** against `quiz\gh-200.md` before output
 6. **Export statistics** automatically if possible (count by difficulty, answer type, etc.)
