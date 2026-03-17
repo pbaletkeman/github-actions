@@ -250,7 +250,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Secret leakage: environment variables vs. hardcoding; masking limitations
 - Trustworthy actions: assessment framework, pinning strategy
 
-#### Minimum 18 questions on security topics
+#### Minimum 45 questions on security topics
 
 ### Enterprise & Governance (Topics 17, 8, 14)
 
@@ -261,7 +261,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Environment protection rules: required reviewers, wait timers, custom rules
 - Deployment review workflows: pause, approve, monitor
 
-#### Minimum 15 questions on enterprise topics**
+#### Minimum 36 questions on enterprise topics**
 
 ### Real-World Scenarios (Topics 5, 9–12, 19)
 
@@ -272,7 +272,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Debugging: log streaming, RUNNER_DEBUG, slow step identification
 - Troubleshooting: common errors, root cause, solutions
 
-#### Minimum 60 questions scenario-based**
+#### Minimum 147 questions scenario-based**
 
 ### Advanced & Synthesis (All topics)
 
@@ -281,7 +281,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Optimization: "How can you reduce execution time?"
 - Error recovery: "An artifact upload fails midway; what happens?"
 
-#### Minimum 23 questions requiring synthesis/evaluation**
+#### Minimum 56 questions requiring synthesis/evaluation**
 
 ---
 
@@ -354,15 +354,15 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 
 ### File Name
 
-- **Primary**: `gh-200-new.md`
-- **Alternative** (if appending): Append to `gh-200.md` with date marker and "NEW QUESTIONS (Generated [DATE])" section
+- **Primary**: `quiz\gh-200-new.md`
+- **Alternative** (if appending): Append to `quiz\gh-200.md` with date marker and "NEW QUESTIONS (Generated [DATE])" section
 
 ### File Structure
 
 ```plaintext
 # GH-200 Certification Exam — Practice Questions
 
-## Questions (162 total — Iteration [N])
+## Questions (400 total — Iteration [N])
 
 ### Question 1 — [Domain]
 [Full question with options]
@@ -383,13 +383,13 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 
 ## Statistics
 
-- **Total Questions**: 162 (within target 150–175 range)
+- **Total Questions**: 400
 - **Iteration Number**: [N] (1 for first run; increment for different question sets)
-- **Difficulty Distribution**: 32 Easy, 97 Medium, 33 Hard
-- **Answer Type Distribution**: 89 one, 42 many, 19 all, 11 none
+- **Difficulty Distribution**: 80 Easy, 240 Medium, 80 Hard
+- **Answer Type Distribution**: 220 one, 104 many, 48 all, 28 none
 - **Generation Date**: [Date]
 - **Topics Covered**: All 19
-- **Scenario-Based**: ~114 questions (70%+)
+- **Scenario-Based**: ~280 questions (70%+)
 - **Average Question Length**: [X] words
 - **Deduplication**: Checked against all previous iterations
 
@@ -404,23 +404,23 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
    - Load all 19 topic files
    - Load `quiz\gh-200.md` (if exists) for deduplication
    - Load/read ITERATION_NUMBER (default: 1) for question variation
-   - Organize by topic; target 8–9 questions per topic
+   - Organize by topic; target ~21 questions per topic
 
-2. **Generation Pass 1: Easy (32 questions)**
+2. **Generation Pass 1: Easy (80 questions)**
 
    - Generate recall/comprehension questions
    - Direct from guide content
    - Distribute across topics
    - Vary scenarios by iteration number (seed RNG with iteration)
 
-3. **Generation Pass 2: Medium (97 questions)**
+3. **Generation Pass 2: Medium (240 questions)**
 
    - Scenario-based; application/analysis
    - Mix of decision-making, bug-finding, best-practice selection
    - Prioritize enterprise, security, and real-world patterns
    - Randomize distractor order by iteration (shuffle wrong answers)
 
-4. **Generation Pass 3: Hard (33 questions)**
+4. **Generation Pass 3: Hard (80 questions)**
 
    - Synthesis, evaluation, trade-offs
    - Multi-concept combinations
@@ -448,7 +448,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 
 | Item | Default | Rationale |
 | ---- | ------- | --------- |
-| **Total Questions** | 162 (target 150–175) | Extended practice set; ~3 hours exam simulation; can adjust within range |
+| **Total Questions** | 400 | Extended practice set; comprehensive exam coverage |
 | **Options per Question** | 4 (up to 5) | Standard format; reduces cognitive load |
 | **Difficulty Split** | 20/60/20 | Typical exam distribution |
 | **Answer Types** | 55/26/12/7 | Realistic mix; mostly `one`, some `many`, rare `all`/`none` |
@@ -575,24 +575,24 @@ def generate_questions(iteration_number=1):
 ### Quality Assurance for Iterations
 
 - **No semantic duplication**: Each iteration is meaningfully different
-- **Difficulty distribution maintained**: Still 32 Easy / 97 Medium / 33 Hard per iteration
+- **Difficulty distribution maintained**: Still 80 Easy / 240 Medium / 80 Hard per iteration
 - **Answer type distribution maintained**: Still 55% one, 26% many, etc.
-- **Topic coverage maintained**: Still 5–12 questions per topic
-- **Focus area minimums met**: Still 18+ security, 15+ enterprise, 60+ scenarios
+- **Topic coverage maintained**: Still ~15–30 questions per topic
+- **Focus area minimums met**: Still 45+ security, 36+ enterprise, 147+ scenarios
 
 ---
 
 ## 18. Success Criteria
 
-✓ 162 questions generated per iteration (within 150–175 range)
+✓ 400 questions generated per iteration
 ✓ 0 duplicates within iteration; deduplication tracked across iterations
 ✓ 70%+ scenario-based (not pure recall)
 ✓ All questions answerable from guide alone
 ✓ Clear, unambiguous wording
 ✓ Plausible distractors for each question
-✓ Balanced answer distribution (A/B/C/D ~40–41 each)
+✓ Balanced answer distribution (A/B/C/D ~100 each)
 ✓ Proper answer key with explanations
-✓ Focus areas met (security: 18+, enterprise: 15+, scenarios: 60+, synthesis: 23+)
+✓ Focus areas met (security: 45+, enterprise: 36+, scenarios: 147+, synthesis: 56+)
 ✓ Statistics block complete with iteration number
 ✓ Different questions generated on subsequent iterations (verified by spot check of 5–10 questions)
 ✓ Iteration number stored and documented in output file
@@ -626,3 +626,378 @@ def generate_questions(iteration_number=1):
 4. **Spot-check distractor plausibility** with a peer or test group
 5. **Run deduplication** against `quiz\gh-200.md` before output
 6. **Export statistics** automatically if possible (count by difficulty, answer type, etc.)
+
+---
+
+## 20. Sample Questions (By Difficulty & Type)
+
+### Easy Example (Recall/Comprehension)
+
+**Question 1** — Contextual Information
+
+**Difficulty**: Easy | **Answer Type**: one | **Topic**: GitHub context contents
+
+**Question**: Which of the following is contained in the `github` context?
+
+- A) The current step execution time
+- B) The workflow run ID and repository information
+- C) The runner's operating system details
+- D) The matrix strategy configuration
+
+**Answer**: B | **Explanation**: The `github` context contains workflow run metadata including run ID, SHA, ref, repository, actor, and other GitHub-specific info. The runner OS is in `runner` context, step timing in `job`, and matrix in `strategy`.
+
+---
+
+### Medium Example (Application/Analysis)
+
+**Question 2** — Workflow Trigger Events
+
+**Difficulty**: Medium | **Answer Type**: one | **Topic**: Event trigger selection
+
+**Scenario**: Your team needs to run a deployment workflow only when code is merged to `main`, not on pull requests. The deployment requires approval from a designated environment first.
+
+**Question**: Which trigger event should you use, combined with environment protection rules?
+
+- A) `pull_request` with environment filters
+- B) `push` to the `main` branch with environment protection rules
+- C) `workflow_dispatch` triggered manually
+- D) `schedule` on a cron expression
+
+**Answer**: B | **Explanation**: The `push` event triggers on merges to `main`. Environment protection rules then enforce required reviewers and approvals before deployment proceeds. `pull_request` wouldn't work (it's on PR, not merge), `workflow_dispatch` is manual, and `schedule` is time-based.
+
+---
+
+### Hard Example (Synthesis/Evaluation)
+
+**Question 3** — Security & OIDC
+
+**Difficulty**: Hard | **Answer Type**: many | **Topic**: Token strategy trade-offs
+
+**Scenario**: Your organization currently uses long-lived PAT tokens stored as secrets for AWS deployments. You're evaluating OIDC for better security posture. (Select all that apply)
+
+**Question**: Which statements accurately reflect advantages of OIDC over long-lived secrets?
+
+- A) OIDC tokens are automatically rotated with each workflow run
+- B) OIDC eliminates the need to store credentials in GitHub; AWS validates the OIDC token directly
+- C) OIDC supports fine-grained subject claims (repo, branch, environment) for access control
+- D) OIDC allows deploying to multiple cloud providers (AWS, Azure, GCP) with the same configuration
+- E) OIDC has no risk of token leakage because tokens are never stored
+
+**Answer**: A, B, C | **Explanation**: OIDC uses short-lived tokens automatically issued per run (A); AWS validates the token directly without needing stored credentials (B); subject claims enable precise access control (C). (D) is partially true but setup varies per cloud. (E) is false—token leakage risk still exists but is mitigated by short lifetime.
+
+---
+
+## 21. Topic-Specific Guidance & Common Misconceptions
+
+### Topic 1: VS Code Extension (12 questions)
+
+**Key Concepts to Prioritize**:
+- Local workflow validation without running
+- Extension marketplace vs. local authoring
+- YAML linting and context intelligence
+
+**Common Misconceptions**:
+- The extension runs workflows locally (it doesn't; it validates syntax)
+- The extension replaces the need for `act` or container-based testing
+- All GitHub Actions documentation is built into the extension
+
+**Scenario Patterns**:
+- Validation before commit
+- Troubleshooting YAML syntax in IDE
+- Using extension for local development workflow
+
+---
+
+### Topic 2: Contextual Information (26 questions)
+
+**Key Concepts to Prioritize**:
+- All 10 context types and their relationships
+- Runtime vs. static context evaluation
+- Context scope by workflow key
+
+**Common Misconceptions**:
+- All contexts are available at all times (they're not; scope is restricted)
+- `secrets` context can be used outside of expressions
+- `env` context is global across all jobs
+
+**Scenario Patterns**:
+- Accessing nested context properties
+- Debugging context availability issues
+- Combining multiple contexts in expressions
+
+---
+
+### Topic 5: Trigger Events (30 questions)
+
+**Key Concepts to Prioritize**:
+- 26+ events and their trigger conditions
+- Event payload structure and availability
+- Filtering by branch, tag, path
+
+**Common Misconceptions**:
+- `push` is the same as `pull_request` (different events, different payloads)
+- All trigger events support `paths` filtering (some don't)
+- Scheduled jobs can access git commit info (they can't; it's synthetic)
+
+**Scenario Patterns**:
+- Conditional workflow logic based on event type
+- Matrix builds triggered by specific events
+- Complex filtering (branch + path combinations)
+
+---
+
+### Topic 18: Security & Optimization (29 questions)
+
+**Key Concepts to Prioritize**:
+- GITHUB_TOKEN permissions and lifecycle
+- OIDC federation and subject claims
+- Script injection vectors and mitigation
+- SHA pinning vs. semver trade-offs
+- Trustworthy actions assessment
+
+**Common Misconceptions**:
+- GITHUB_TOKEN is always available with full permissions (false; scoped by default)
+- SHA pinning prevents all supply chain attacks (false; provides integrity, not behavior verification)
+- Using `@latest` is equivalent to `@main` (false; different refs, different guarantees)
+- Secrets are never logged (false; they can leak in certain error scenarios)
+
+**Scenario Patterns**:
+- Identifying script injection vulnerabilities
+- Designing least-privilege token scopes
+- Evaluating action trustworthiness
+- Balancing security with maintainability
+
+---
+
+## 22. Scenario Repository & Pool
+
+### Sample Scenario Variants by Topic
+
+**Topic 5: Trigger Events**
+
+| Scenario | Description | Question Focus |
+| --- | --- | --- |
+| **Push to main** | Code merged to main branch | Deployment readiness |
+| **PR on feature branch** | Pull request opened from feature | Testing/validation gate |
+| **Release tag** | Git tag created matching semver pattern | Release automation |
+| **Manual workflow dispatch** | User triggers workflow from UI | Ad-hoc testing, hotfixes |
+| **Scheduled nightly** | Cron-scheduled job at 2 AM UTC | Background maintenance |
+
+**Topic 18: Security & Tokenization**
+
+| Scenario | Description | Question Focus |
+| --- | --- | --- |
+| **OIDC to AWS** | Using OIDC to assume AWS role | Token federation setup |
+| **Third-party action with secrets** | Popular GitHub action needs API key | Trustworthiness assessment |
+| **User input in shell command** | Workflow receives untrusted user input | Script injection risk |
+| **Matrix with env vars** | Dynamic matrix values from environment | Scope & availability |
+| **Container job with secrets** | Secrets in container-based job context | Context scope rules |
+
+---
+
+## 23. Distractor Bank & Quality Examples
+
+### Good Distractors (Plausible, ~50% knowledge)
+
+```
+Question: Which context is available in a reusable workflow called by another workflow?
+
+Correct: github (workflow-level info like sha, ref is available)
+
+Good Distractors:
+- A) env (partially correct but limited scope; local vars only, not calling workflow's)
+- B) secrets (plausible misconception; often assumed available but aren't accessible by default in reusable workflows)
+- C) runner (plausible but runner info is only for the current executor)
+```
+
+### Bad Distractors (Not Plausible)
+
+```
+Avoid:
+- "The flibbertigibbet context"  ← Obviously fake
+- "RUNNER_COLOR environment variable contains hex color codes"  ← Too obscure/unrelated
+- "Use github.workflow_run_id"  ← Close to real property but clearly wrong
+```
+
+---
+
+## 24. Common Pitfalls & Anti-Patterns in Question Generation
+
+### Pitfalls to Avoid
+
+| Pitfall | Example | Fix |
+| --- | --- | --- |
+| **Two-part questions** | "Does X happen, and if so, when?" | Split into two separate questions |
+| **Negation stacking** | "Which is NOT not available?" | Rephrase with positive logic |
+| **Ambiguous scenario** | "A workflow runs successfully" (need: in what context?) | Add specific details |
+| **Distractor that's actually correct** | QA team reviews both distractors and finds one is defensible | Validate against guide; rewrite |
+| **Testing recall instead of application** | "What does github.event.number mean?" | Upgrade: "You need job index; which context?" |
+| **Over-long scenario** | 8 sentences of setup (candidate gets lost) | Trim to 2–3 key details |
+
+---
+
+## 25. Answer Distribution & Topic Breakdown
+
+### Recommended Distribution by Topic & Answer Type
+
+| Topic # | Total | `one` | `many` | `all` | `none` |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 12 | 7 | 3 | 1 | 1 |
+| 2 | 26 | 14 | 7 | 3 | 2 |
+| 3 | 19 | 10 | 5 | 2 | 2 |
+| 4 | 30 | 17 | 8 | 3 | 2 |
+| 5 | 30 | 17 | 8 | 3 | 2 |
+| 6 | 22 | 12 | 6 | 2 | 2 |
+| 7 | 19 | 10 | 5 | 2 | 2 |
+| 8 | 22 | 12 | 6 | 2 | 2 |
+| 9 | 26 | 14 | 7 | 3 | 2 |
+| 10 | 22 | 12 | 6 | 2 | 2 |
+| 11 | 19 | 10 | 5 | 2 | 2 |
+| 12 | 21 | 11 | 6 | 2 | 2 |
+| 13 | 19 | 10 | 5 | 2 | 2 |
+| 14 | 15 | 8 | 4 | 1 | 2 |
+| 15 | 21 | 11 | 6 | 2 | 2 |
+| 16 | 21 | 11 | 6 | 2 | 2 |
+| 17 | 26 | 14 | 7 | 3 | 2 |
+| 18 | 29 | 16 | 8 | 3 | 2 |
+| 19 | 21 | 11 | 6 | 2 | 2 |
+| **TOTAL** | **400** | **220** | **104** | **48** | **28** |
+
+---
+
+## 26. Glossary & Key Terminology
+
+| Term | Definition |
+| --- | --- |
+| **Semantic Duplication** | Two questions that test the same concept/skill, even if worded differently. Example: "What's GITHUB_TOKEN default scope?" vs. "Which permissions does GITHUB_TOKEN have by default?" |
+| **Cognitive Level** | Bloom's taxonomy tier: Recall < Comprehension < Application < Analysis < Synthesis < Evaluation |
+| **Plausibility** | The degree to which a distractor would fool someone with partial knowledge. Ideal: 40–60% of novices pick the distractor. |
+| **Context Scope** | Which workflow constructs can access a given context. Example: `job` context is available to steps in the job; `needs` is available to jobs that declare dependency. |
+| **Script Injection** | Unvalidated user input interpolated into shell commands, allowing attacker to execute arbitrary commands. |
+| **SHA Pinning** | Using full commit SHA (`@abc123def`) instead of semver tag (`@v2.0.0`) to lock action to immutable version. |
+| **OIDC** | OpenID Connect: protocol for exchanging GitHub-issued tokens for cloud provider credentials without storing long-lived secrets. |
+| **Hotspot Topic** | Topic with disproportionate exam weight; prioritize for high-quality questions. Topics 2, 5, 18 are hotspots. |
+| **Edge Case** | Boundary condition or unusual scenario; critical for hard questions. Example: "What happens if two jobs write the same artifact?" |
+| **Distractor Pool** | Set of 3–5 plausible wrong answers for each question; rotate by iteration to vary question sets. |
+
+---
+
+## 27. Customization & Adjustment Guide
+
+### Scaling to Different Question Counts
+
+| Target | Simple Adjustments | Rationale |
+| --- | --- | --- |
+| **600 questions** | +50% per topic; keep 20/60/20 split | 1.5× difficulty: 120/360/120 |
+| **250 questions** | –37.5% per topic; keep ratios | Focus on hotspots (T2, T5, T18 less reduction) |
+| **300 questions** | –25% per topic; easy reduction | Remove lowest-impact scenarios |
+
+### Adjusting Difficulty Distribution
+
+**Use case**: Organization prefers harder questions for advanced practitioners.
+
+- **Default**: 20% Easy / 60% Medium / 20% Hard
+- **Advanced Variant**: 10% Easy / 50% Medium / 40% Hard (shift 50 questions up one tier)
+
+### Adjusting Answer Type Distribution
+
+**Use case**: Learner platform only supports single-answer questions.
+
+- **Default**: 55% one, 26% many, 12% all, 7% none
+- **Single-Answer Variant**: 100% one (eliminate many/all/none; simplify "Select all that apply" to "Which is most correct?")
+
+---
+
+## 28. Feedback & Refinement Loop
+
+### User Feedback Integration
+
+**Collect Feedback On**:
+- Question clarity (was it ambiguous?)
+- Difficulty accuracy (was it harder/easier than labeled?)
+- Distractor plausibility (did wrong answers feel realistic?)
+- Answer key correctness (was explanation accurate?)
+
+**Feedback Integration Process**:
+
+1. **Identify Recurring Issues**: If >5% of candidates report same question as "ambiguous", flag for revision.
+2. **Update Distractor Pool**: If distractor is consistently ignored, replace with more plausible alternative.
+3. **Adjust Difficulty Labels**: If "Easy" questions average 65% pass rate, relabel to Medium.
+4. **Document Changes**: Log refinements with rationale; use for future iterations.
+
+### Incorporation Timeline
+
+- **Immediate**: Fix factual errors (wrong answer key)
+- **Next Iteration**: Update distractors based on candidate performance
+- **Quarterly**: Holistic review; adjust topic weights if exam domain shifts
+
+---
+
+## 29. Integration & Workflow Connection
+
+### Downstream Use Cases
+
+**1. Exam Platform Integration**
+
+```
+Quiz → Export → LMS (Canvas, Moodle) → Scoring/Analytics
+  ↓
+Question metadata (topic, difficulty, answer type) → Platform dashboard
+  ↓
+Candidate performance by topic → Identify knowledge gaps → Recommend remediation
+```
+
+**2. Learning Path Mapping**
+
+- Easy questions → Onboarding learners (Week 1–2)
+- Medium questions → Intermediate labs (Week 3–4)
+- Hard questions → Capstone project (Week 5–6)
+
+**3. Pre-Assessment & Diagnostic**
+
+- Run 20-question subset (random mix) → Quick readiness assessment
+- If <50% pass: recommend foundational course first
+- If >80% pass: skip to advanced topics
+
+**4. Performance Analytics**
+
+```
+Per-Topic Metrics:
+- Pass rate by difficulty (identify weak areas)
+- Average time-to-answer (complex topics take longer)
+- Distractor pick frequency (which misconceptions persist?)
+```
+
+### Version Control & Archival
+
+**File Naming Strategy**:
+```
+quiz/gh-200-iteration-1.md         (Initial generation)
+quiz/gh-200-iteration-2.md         (Second run, different questions)
+quiz/gh-200-iteration-2-refined.md (After feedback refinement)
+quiz/gh-200-live-v1.0.md           (Production release)
+```
+
+**Archive & Audit Trail**:
+- Keep all iterations for historical reference
+- Document when questions were added/removed and why
+- Maintain copy of exam-overview.md used for generation (in case spec changes)
+
+---
+
+## 30. Maintenance & Evolution
+
+### Ongoing Maintenance Schedule
+
+| Frequency | Task | Owner |
+| --- | --- | --- |
+| **Monthly** | Monitor candidate performance metrics; identify outlier questions | QA Lead |
+| **Quarterly** | Update questions for new GitHub Actions features; retire outdated scenarios | Content SME |
+| **Semi-annually** | Full review; incorporate user feedback; generate new iteration | Exam Committee |
+| **Annually** | Validate against updated `exam-overview.md`; confirm topic weights still accurate | Certification Board |
+
+### Deprecation & Sunset
+
+- Questions become stale when feature changes significantly (e.g., OIDC becomes default, old secret-based scenarios obsolete)
+- Mark questions with `deprecated: true` tag; exclude from live exams but keep for reference
+- Replacement questions created before sunset date
