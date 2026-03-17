@@ -692,16 +692,19 @@ def generate_questions(iteration_number=1):
 ### Topic 1: VS Code Extension (12 questions)
 
 **Key Concepts to Prioritize**:
+
 - Local workflow validation without running
 - Extension marketplace vs. local authoring
 - YAML linting and context intelligence
 
 **Common Misconceptions**:
+
 - The extension runs workflows locally (it doesn't; it validates syntax)
 - The extension replaces the need for `act` or container-based testing
 - All GitHub Actions documentation is built into the extension
 
 **Scenario Patterns**:
+
 - Validation before commit
 - Troubleshooting YAML syntax in IDE
 - Using extension for local development workflow
@@ -711,16 +714,19 @@ def generate_questions(iteration_number=1):
 ### Topic 2: Contextual Information (26 questions)
 
 **Key Concepts to Prioritize**:
+
 - All 10 context types and their relationships
 - Runtime vs. static context evaluation
 - Context scope by workflow key
 
 **Common Misconceptions**:
+
 - All contexts are available at all times (they're not; scope is restricted)
 - `secrets` context can be used outside of expressions
 - `env` context is global across all jobs
 
 **Scenario Patterns**:
+
 - Accessing nested context properties
 - Debugging context availability issues
 - Combining multiple contexts in expressions
@@ -730,16 +736,19 @@ def generate_questions(iteration_number=1):
 ### Topic 5: Trigger Events (30 questions)
 
 **Key Concepts to Prioritize**:
+
 - 26+ events and their trigger conditions
 - Event payload structure and availability
 - Filtering by branch, tag, path
 
 **Common Misconceptions**:
+
 - `push` is the same as `pull_request` (different events, different payloads)
 - All trigger events support `paths` filtering (some don't)
 - Scheduled jobs can access git commit info (they can't; it's synthetic)
 
 **Scenario Patterns**:
+
 - Conditional workflow logic based on event type
 - Matrix builds triggered by specific events
 - Complex filtering (branch + path combinations)
@@ -749,6 +758,7 @@ def generate_questions(iteration_number=1):
 ### Topic 18: Security & Optimization (29 questions)
 
 **Key Concepts to Prioritize**:
+
 - GITHUB_TOKEN permissions and lifecycle
 - OIDC federation and subject claims
 - Script injection vectors and mitigation
@@ -756,12 +766,14 @@ def generate_questions(iteration_number=1):
 - Trustworthy actions assessment
 
 **Common Misconceptions**:
+
 - GITHUB_TOKEN is always available with full permissions (false; scoped by default)
 - SHA pinning prevents all supply chain attacks (false; provides integrity, not behavior verification)
 - Using `@latest` is equivalent to `@main` (false; different refs, different guarantees)
 - Secrets are never logged (false; they can leak in certain error scenarios)
 
 **Scenario Patterns**:
+
 - Identifying script injection vulnerabilities
 - Designing least-privilege token scopes
 - Evaluating action trustworthiness
@@ -913,6 +925,7 @@ Avoid:
 ### User Feedback Integration
 
 **Collect Feedback On**:
+
 - Question clarity (was it ambiguous?)
 - Difficulty accuracy (was it harder/easier than labeled?)
 - Distractor plausibility (did wrong answers feel realistic?)
@@ -979,6 +992,7 @@ quiz/gh-200-live-v1.0.md           (Production release)
 ```
 
 **Archive & Audit Trail**:
+
 - Keep all iterations for historical reference
 - Document when questions were added/removed and why
 - Maintain copy of exam-overview.md used for generation (in case spec changes)
