@@ -9,7 +9,7 @@ This prompt guides generation of **100 high-quality exam-style questions** for t
 ## Quick Reference
 
 | Parameter | Value |
-|-----------|-------|
+| --------- | ----- |
 | **Total Questions** | 100 per iteration |
 | **Topics** | 19 |
 | **Difficulty Split** | 20% Easy / 60% Medium / 20% Hard |
@@ -80,7 +80,7 @@ All files located in: `github-actions\`
 
 ### Distribution by Topic (Recommended)
 
-> **Note**: Scaled down from 400 to 100 questions per topic for focused practice sets. Total exactly 100.
+Total exactly 100.
 
 | Topic # | Topic Name | Questions | Rationale |
 | ------- | ---------- | --------- | --------- |
@@ -459,7 +459,7 @@ At least **5 questions** must combine concepts from two or more topic files. The
 **Recommended Topic Combinations**:
 
 | Topics | Example Focus |
-|--------|---------------|
+| ------ | ------------- |
 | 2 + 18 (Context + Security) | Which context expression leaks a secret value into workflow logs? |
 | 5 + 8 (Triggers + Environments) | Which trigger event bypasses environment protection rules? |
 | 9 + 10 (Artifacts + Caching) | When should you prefer a cache over an artifact for build output? |
@@ -648,7 +648,7 @@ At least **5 questions** must combine concepts from two or more topic files. The
 This file is the **core generation spec**. Two companion files contain supplementary material:
 
 | File | Purpose | When to Attach |
-|------|---------|----------------|
+| ---- | ------- | -------------- |
 | `question-prompt-examples.md` | Sample questions (Easy/Medium/Hard), distractor bank, common pitfalls, topic misconceptions | Attach when starting a generation session for format guidance |
 | `question-prompt-reference.md` | Iteration strategy, scenario pool, answer distribution table, glossary, customization guide, maintenance schedule | Attach when fine-tuning, scaling, or maintaining the question bank |
 
