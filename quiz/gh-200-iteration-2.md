@@ -1523,7 +1523,7 @@ A CI pipeline builds a Docker image, uploads the image digest as an artifact, an
 | 10 | B | 30 | B | 50 | B | 70 | C | 90 | B |
 | 11 | B | 31 | B | 51 | C | 71 | C | 91 | B |
 | 12 | B | 32 | A, C | 52 | B | 72 | B | 92 | B |
-| 13 | A, B, C, D, E | 33 | B | 53 | A, B, C | 73 | A, C | 93 | A, B |
+| 13 | A, B, C, D, E | 33 | B | 53 | A, B, C | 73 | A, C | 93 | A, B, D |
 | 14 | B | 34 | B | 54 | B | 74 | B | 94 | C |
 | 15 | A, B, C, D, E | 35 | B | 55 | B | 75 | C | 95 | A |
 | 16 | B | 36 | B | 56 | B | 76 | B | 96 | A, B |
@@ -1817,8 +1817,8 @@ When `continue-on-error: true` is set on a step, a step failure becomes a warnin
 ### Q92 — B
 Reusable workflow outputs are declared under `on.workflow_call.outputs:`. Each output entry references a job-level output via `value: ${{ jobs.<job-id>.outputs.<key> }}`.
 
-### Q93 — A, B
-Required workflows run even if the repository has Actions disabled (A) and appear in the PR checks list (B). Repository owners cannot skip required workflows (C is false). Required workflows operate independently of branch protection rules (D — this statement is true for enterprise required workflows).
+### Q93 — A, B, D
+Required workflows run even if the repository has Actions disabled (A), appear in the PR checks list alongside the repository's own workflow results (B), and are enforced for all matching repositories regardless of those repositories' branch protection rules (D). Repository owners cannot skip required workflows using `workflow_dispatch` (C is false).
 
 ### Q94 — C
 The per-artifact `retention-days: 7` is honored when it is within the organization's allowed range (≤ 90 days here). The most specific value (per-artifact) wins when it is within policy bounds.
