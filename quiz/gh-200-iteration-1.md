@@ -513,7 +513,7 @@ An external CI system needs to trigger a GitHub Actions workflow programmaticall
 **Question**:
 Which trigger event is designed for this use case?
 
-- A) `workflow_dispatch` (cannot be triggered via API)
+- A) `workflow_dispatch` — designed for manual/human-initiated runs; also supports API triggering but requires specifying a `ref` and optional typed inputs
 - B) `push` with a script that commits a file to trigger the workflow
 - C) `repository_dispatch` with a custom event type sent to the GitHub API
 - D) `schedule` polling the external system at regular intervals
