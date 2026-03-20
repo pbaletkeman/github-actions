@@ -2,7 +2,9 @@
 
 ## Executive Summary
 
-This prompt guides generation of **100 high-quality exam-style questions** for the GitHub Actions GH-200 certification. Questions will be scenario-based, cognitively rigorous, and aligned with the 19 topic files from the split GitHub Workflows Guide. **The prompt supports iteration**: run it multiple times to generate different question sets with varied scenarios and distractors.
+This prompt guides generation of **100 high-quality exam-style questions** for the GitHub Actions GH-200 certification.
+Questions will be scenario-based, cognitively rigorous, and aligned with the 19 topic files from the split GitHub Workflows Guide.
+**The prompt supports iteration**: run it multiple times to generate different question sets with varied scenarios and distractors.
 
 ---
 
