@@ -803,10 +803,10 @@ A reusable workflow author is designing the `on.workflow_call.inputs:` section. 
 
 A reusable workflow needs to expose an output value so the calling workflow can use it in a downstream job. The value originates in a step (`id: compute`) within the reusable workflow's job (`job_id: build`). Tracing the complete output chain, which declarations are required in the correct order?
 
-**A.** Step writes to `$GITHUB_OUTPUT` â†’ job declares `outputs.version: ${{ steps.compute.outputs.value }}` â†’ `on.workflow_call.outputs.version: value: ${{ jobs.build.outputs.version }}`
-**B.** Step writes to `$GITHUB_OUTPUT` â†’ the caller accesses it directly via `needs.<job_id>.steps.compute.outputs.value`
-**C.** Step writes to `$GITHUB_ENV` â†’ job exports it â†’ caller reads it via `env.version`
-**D.** Step writes to `$GITHUB_OUTPUT` â†’ the reusable workflow exposes it via `outputs.version: ${{ steps.compute.outputs.value }}` (no job intermediary needed)
+**A.** Step writes to `$GITHUB_OUTPUT` → job declares `outputs.version: ${{ steps.compute.outputs.value }}` → `on.workflow_call.outputs.version: value: ${{ jobs.build.outputs.version }}`
+**B.** Step writes to `$GITHUB_OUTPUT` → the caller accesses it directly via `needs.<job_id>.steps.compute.outputs.value`
+**C.** Step writes to `$GITHUB_ENV` → job exports it → caller reads it via `env.version`
+**D.** Step writes to `$GITHUB_OUTPUT` → the reusable workflow exposes it via `outputs.version: ${{ steps.compute.outputs.value }}` (no job intermediary needed)
 
 ---
 
@@ -1120,10 +1120,10 @@ A developer writes `action.yml` for a new custom GitHub Action and specifies a `
 
 A self-hosted runner machine loses network connectivity and goes offline. Where in the GitHub UI does an admin check the runner's current online/offline status?
 
-**A.** `Repository â†’ Actions â†’ Workflows â†’ Runner Status`
-**B.** `Repository â†’ Settings â†’ Actions â†’ Runners`
-**C.** `Repository â†’ Insights â†’ Actions â†’ Runner Health`
-**D.** `Organization â†’ Billing â†’ Actions Minutes â†’ Runner Status`
+**A.** `Repository → Actions → Workflows → Runner Status`
+**B.** `Repository → Settings → Actions → Runners`
+**C.** `Repository → Insights → Actions → Runner Health`
+**D.** `Organization → Billing → Actions Minutes → Runner Status`
 
 ---
 

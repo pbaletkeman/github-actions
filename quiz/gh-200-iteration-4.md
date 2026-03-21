@@ -574,7 +574,7 @@ A reusable workflow in a public repository is called by external organizations w
 
 A developer wants to enable debug logging for all workflow runs without modifying the workflow file. What is the correct approach?
 
-**A.** Set a repository setting: Settings â†’ Actions â†’ Enable debug logging
+**A.** Set a repository setting: Settings → Actions → Enable debug logging
 **B.** Create a repository secret named `ACTIONS_STEP_DEBUG` with value `true`
 **C.** Append `?debug=true` to the workflow URL
 **D.** Use the `gh` CLI: `gh workflow run <workflow> --debug`
@@ -1133,10 +1133,10 @@ A team registers a self-hosted runner with custom labels. The runner is offline 
 
 Where does an enterprise admin configure required workflows that must run on all repositories in specific organizations?
 
-**A.** Organization Settings â†’ Actions â†’ Required Workflows
-**B.** Repository Settings â†’ Branches â†’ Protection Rules
-**C.** Enterprise Settings â†’ Policies â†’ Required Workflows
-**D.** GitHub Settings â†’ Security â†’ Compliance Workflows
+**A.** Organization Settings → Actions → Required Workflows
+**B.** Repository Settings → Branches → Protection Rules
+**C.** Enterprise Settings → Policies → Required Workflows
+**D.** GitHub Settings → Security → Compliance Workflows
 
 ---
 
@@ -1413,7 +1413,7 @@ Environment variable precedence in GitHub Actions follows a hierarchy. Which ord
 How are artifacts typically accessed by end-users (developers) within a GitHub repository?
 
 **A.** Via the GitHub CLI: `gh run download <run-id>`
-**B.** Via the Actions tab in the GitHub UI â†’ workflow run â†’ artifacts
+**B.** Via the Actions tab in the GitHub UI → workflow run → artifacts
 **C.** By querying the REST API: `/repos/{owner}/{repo}/actions/runs/{id}/artifacts`
 **D.** All of the above
 

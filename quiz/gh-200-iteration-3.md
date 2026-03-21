@@ -943,7 +943,7 @@ But NOT on PR comments or wiki updates.
 
 **Question**: Where can you view the full logs for a completed workflow run?
 
-- A) Actions tab â†’ select the workflow run â†’ click "View logs"
+- A) Actions tab → select the workflow run → click "View logs"
 - B) Repository API endpoint `/repos/{owner}/{repo}/actions/runs/{run_id}/logs`
 - C) Both A and B
 - D) Logs are only available locally on the runner
@@ -1050,7 +1050,7 @@ But NOT on PR comments or wiki updates.
 
 **Question**: What is the best approach?
 
-- A) `GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/download` â†’ follows redirect to download URL
+- A) `GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/download` → follows redirect to download URL
 - B) List artifacts with `GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`, then download each via URL
 - C) Artifacts can only be downloaded via the GitHub UI or the `actions/download-artifact` action
 - D) Both A and B are valid
@@ -1067,10 +1067,10 @@ But NOT on PR comments or wiki updates.
 
 **Question**: Where are environments configured?
 
-- A) Repository Settings â†’ Environments
+- A) Repository Settings → Environments
 - B) `.github/environments.yml` in the repository
-- C) Organization Settings â†’ Environments
-- D) Workflows â†’ Environment Configuration
+- C) Organization Settings → Environments
+- D) Workflows → Environment Configuration
 
 ---
 
@@ -1082,7 +1082,7 @@ But NOT on PR comments or wiki updates.
 
 **Question** (Select all that apply): Where can you find this information?
 
-- A) Repository â†’ Deployments tab
+- A) Repository → Deployments tab
 - B) REST API: `GET /repos/{owner}/{repo}/deployments`
 - C) GitHub Actions run logs
 - D) Environment protection rules history
@@ -1443,7 +1443,7 @@ ces
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Performance
 
-**Scenario**: Your workflow has 4 sequential jobs: checkout â†’ build â†’ test â†’ deploy. Each takes ~5 minutes. Total runtime is 20 minutes. You want to minimize runtime.
+**Scenario**: Your workflow has 4 sequential jobs: checkout → build → test → deploy. Each takes ~5 minutes. Total runtime is 20 minutes. You want to minimize runtime.
 
 **Question**: What is the best optimization?
 
@@ -1607,7 +1607,7 @@ ces
 | 67 | A, B, C, D | All query parameters are supported. | Topic 13 | Medium |
 | 68 | B | POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel is the correct endpoint. | Topic 13 | Medium |
 | 69 | D | Both list-then-download and direct download endpoints are valid. | Topic 13 | Hard |
-| 70 | A | Environments are configured in Repository Settings â†’ Environments. | Topic 14 | Medium |
+| 70 | A | Environments are configured in Repository Settings → Environments. | Topic 14 | Medium |
 | 71 | A, B, C | Deployment history is available in UI, API, and workflow logs. | Topic 14 | Medium |
 | 72 | A | After the 2nd approval, the deployment is approved and continues immediately. | Topic 14 | Hard |
 | 73 | A | Environment-scoped secrets and variables are available if the job specifies environment. | Topic 14 | Medium |
@@ -1643,14 +1643,14 @@ ces
 
 ## Coverage Summary
 
-âœ… **Total Questions**: 100
-âœ… **Scenario-Based**: 73 (73%)
-âœ… **Security Focus**: 12 questions
-âœ… **Enterprise Focus**: 9 questions
-âœ… **Easy**: 20 questions (20%)
-âœ… **Medium**: 60 questions (60%)
-âœ… **Hard**: 20 questions (20%)
-âœ… **Answer Type Distribution**: one (55), many (26), all (12), none (7)
+✓ **Total Questions**: 100
+✓ **Scenario-Based**: 73 (73%)
+✓ **Security Focus**: 12 questions
+✓ **Enterprise Focus**: 9 questions
+✓ **Easy**: 20 questions (20%)
+✓ **Medium**: 60 questions (60%)
+✓ **Hard**: 20 questions (20%)
+✓ **Answer Type Distribution**: one (55), many (26), all (12), none (7)
 
 ---
 

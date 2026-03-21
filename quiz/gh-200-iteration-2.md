@@ -1306,7 +1306,7 @@ A Node.js workflow fails with `npm ERR! code ERESOLVE`. Without understanding th
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 19
 
-A self-hosted runner shows `offline` status in Repository Settings â†’ Actions â†’ Runners. Which of the following are valid troubleshooting steps? *(Select all that apply.)*
+A self-hosted runner shows `offline` status in Repository Settings → Actions → Runners. Which of the following are valid troubleshooting steps? *(Select all that apply.)*
 
 **A.** Verify the runner process is running on the host machine (`ps aux | grep Runner.Listener`).
 **B.** Check outbound connectivity from the runner to `github.com` and `api.github.com`.
@@ -1385,7 +1385,7 @@ A workflow configured with `on: schedule` uses `cron: '0 */6 * * *'`. How often 
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 11
 
-A reusable workflow needs to output the version string built during its execution back to the caller. The three-layer chain is: step output â†’ job output â†’ workflow output. In the reusable workflow file, which key under `on.workflow_call` is used to declare this output?
+A reusable workflow needs to output the version string built during its execution back to the caller. The three-layer chain is: step output → job output → workflow output. In the reusable workflow file, which key under `on.workflow_call` is used to declare this output?
 
 **A.** `returns:`
 **B.** `outputs:`
@@ -1605,7 +1605,7 @@ GitHub provides a "Re-run failed jobs" option in the workflow run UI that re-run
 Branch filters use a list under `branches:`. The single-quoted wildcard pattern `'release/**'` matches branches like `release/1.0`, `release/hotfix`, etc.
 
 ### Q24 – A
-Cron format: `minute hour day month day-of-week`. `0 9 * * 1` means minute 0, hour 9, any day, any month, day-of-week 1 (Monday) â†’ every Monday at 9:00 AM UTC.
+Cron format: `minute hour day month day-of-week`. `0 9 * * 1` means minute 0, hour 9, any day, any month, day-of-week 1 (Monday) → every Monday at 9:00 AM UTC.
 
 ### Q25 – B
 By default, `pull_request` workflows from forks always run with a read-only `GITHUB_TOKEN`. This is a security boundary to prevent untrusted code from using write credentials.
@@ -1692,7 +1692,7 @@ A reusable workflow must have `on: workflow_call` to be callable from another wo
 `secrets: inherit` passes all secrets available to the calling workflow to the called workflow automatically, under the same names. No explicit declaration in the called workflow's `secrets:` block is required.
 
 ### Q53 – A, B, C
-Reusable workflow outputs must reference job outputs (A). The caller accesses them via `needs.<calling-job-id>.outputs.<output-name>` (B). The chain is: `$GITHUB_OUTPUT` â†’ job `outputs:` â†’ `on.workflow_call.outputs:` (C). They are not in the `inputs` context (D is false).
+Reusable workflow outputs must reference job outputs (A). The caller accesses them via `needs.<calling-job-id>.outputs.<output-name>` (B). The chain is: `$GITHUB_OUTPUT` → job `outputs:` → `on.workflow_call.outputs:` (C). They are not in the `inputs` context (D is false).
 
 ### Q54 – B
 For public/shared workflows used by external teams, explicit mapping is safer because only specifically named secrets flow to the called workflow, preventing unintended credential disclosure.
@@ -1811,7 +1811,7 @@ Missing/mismatched runner labels (A), concurrency group blocking (B), pending en
 When `continue-on-error: true` is set on a step, a step failure becomes a warning. The job continues executing subsequent steps and is reported as passed if no other step fails without `continue-on-error`.
 
 ### Q91 – B
-`0 */6 * * *` means: minute 0, every 6th hour (`*/6`), any day, any month, any weekday â†’ runs at 00:00, 06:00, 12:00, and 18:00 UTC – i.e., every 6 hours.
+`0 */6 * * *` means: minute 0, every 6th hour (`*/6`), any day, any month, any weekday → runs at 00:00, 06:00, 12:00, and 18:00 UTC – i.e., every 6 hours.
 
 ### Q92 – B
 Reusable workflow outputs are declared under `on.workflow_call.outputs:`. Each output entry references a job-level output via `value: ${{ jobs.<job-id>.outputs.<key> }}`.
