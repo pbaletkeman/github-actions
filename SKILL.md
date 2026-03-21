@@ -60,27 +60,32 @@ Systematically generate, review, and optimize high-quality multiple-choice certi
    - Ensure security/enterprise minimums are met
    - Verify cross-topic requirements
 
-3. **Generate & Validate Each Question**
+3. **Generate & Validate Each Question** (No Inline Answers)
    - Write scenario (if applicable; ~2–3 sentences)
    - Compose clear, unambiguous question
-   - Create 4–5 plausible options
-   - Mark correct answer(s)
+   - Create 4–5 plausible options (A, B, C, D, [E])
+   - **DO NOT include inline answer markers** — answers go only in the centralized Answer Key section at EOF
    - Apply distractor strategy (see section below)
    - Verify against quality checklist
+   - Save correct answer(s) separately for Step 5 (Answer Key generation)
 
 4. **Deduplication Check** _(optional but recommended)_
    - If existing question bank exists, compare for semantic duplication
    - Refactor or retire redundant questions
    - Vary scenarios and answer positions to maximize diversity
 
-5. **Generate Answer Key**
-   - Create markdown table format
+5. **Generate Answer Key at EOF** (Always at End of File)
+   - After all N questions are listed, add `---` section divider
+   - Create `## Answer Key` section at end of file
+   - Use markdown table format (see Answer Key Format below)
    - Write 2–3 sentence explanations per question
    - Include source file reference and difficulty rating
+   - Ensure NO answers appear inline in question blocks above
 
 6. **Output & Package**
    - Save as `[exam-name]-iteration-[N].md`
-   - Include executive summary (parameters, totals, distribution)
+   - Verify structure: Questions section (Q1–QN with options only) → `---` divider → `## Answer Key` section at EOF
+   - Include executive summary (parameters, totals, distribution) at top
    - Document any deviations from plan
 
 ---
@@ -118,10 +123,13 @@ Systematically generate, review, and optimize high-quality multiple-choice certi
    - Find hard questions that are too obscure (refocus on core concepts)
    - Rewrite to match target distribution
 
-5. **Finalize Answer Key**
+5. **Consolidate Answers to EOF Answer Key**
+   - Remove any inline answer markers from questions (search for `**Answer**:` or similar)
+   - Move all answers to centralized `## Answer Key` section at EOF
    - Ensure explanations cite specific source sections
    - Verify no contradictions between questions
    - Add rationale for why distractors are wrong
+   - Verify Answer Key is positioned at END OF FILE after all questions
 
 6. **Package & Archive**
    - Rename to `[exam]-iteration-[N]-reviewed.md` (increment N)
@@ -195,12 +203,15 @@ Special Requirements:
 [Clear, unambiguous phrasing; avoid "choose the best", "sometimes", "usually"]
 
 - A) [Plausible option]
-- B) [Correct or correct option]
+- B) [Plausible option or correct answer — marked only in Answer Key]
 - C) [Plausible distractor]
 - D) [Plausible distractor]
+- E) [Optional fifth distractor]
 
 ---
 ```
+
+**⚠️ Important:** Do NOT include `**Answer**: [X]` or `**Explanation**:` inline. All answers go in the `## Answer Key` section at EOF.
 
 ### Key Template Rules
 
@@ -240,6 +251,7 @@ Create wrong answers that capture **realistic misconceptions**, not obvious mist
 - [ ] **Answer Type Distribution**: On track for target percentages
 - [ ] **Deduplication**: No semantic overlap with previously generated questions
 - [ ] **Formatting**: Consistent heading levels, code block syntax, spacing
+- [ ] **Answer Placement**: NO inline answers in question blocks; all answers centralized in `## Answer Key` section at EOF ✅
 
 ---
 
@@ -256,9 +268,15 @@ Align questions to cognitive demand:
 
 ---
 
-## Answer Key Format
+## Answer Key Format (Always at EOF)
+
+**Position**: The `## Answer Key` section must always appear at the END of the file, after all questions and a `---` divider.
+
+**Structure**:
 
 ```markdown
+---
+
 ## Answer Key
 
 | Q# | Answer(s) | Explanation | Source | Difficulty |
