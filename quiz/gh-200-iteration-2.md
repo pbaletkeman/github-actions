@@ -1508,28 +1508,108 @@ A CI pipeline builds a Docker image, uploads the image digest as an artifact, an
 
 ## Answer Key
 
-| Q | Answer | Q | Answer | Q | Answer | Q | Answer | Q | Answer |
-|---|--------|---|--------|---|--------|---|--------|---|--------|
-| 1 | B | 21 | A, B, D | 41 | A, B, C | 61 | B | 81 | B |
-| 2 | A | 22 | B | 42 | D | 62 | A, B, C, E | 82 | A, B, C |
-| 3 | C | 23 | C | 43 | B | 63 | B | 83 | A |
-| 4 | A, B, D | 24 | A | 44 | B | 64 | B | 84 | B |
-| 5 | B | 25 | B | 45 | A, C, D | 65 | B | 85 | B |
-| 6 | A | 26 | A, D, E | 46 | B | 66 | A, C, D | 86 | A, B, C |
-| 7 | A, B | 27 | B | 47 | C | 67 | A | 87 | B |
-| 8 | C | 28 | B | 48 | A | 68 | B | 88 | B |
-| 9 | B, C | 29 | A, B, C | 49 | A, B, C | 69 | A, B, C, E | 89 | A, B, D, E |
-| 10 | B | 30 | B | 50 | B | 70 | C | 90 | B |
-| 11 | B | 31 | B | 51 | C | 71 | C | 91 | B |
-| 12 | B | 32 | A, C | 52 | B | 72 | B | 92 | B |
-| 13 | A, B, C, D, E | 33 | B | 53 | A, B, C | 73 | A, C | 93 | A, B, D |
-| 14 | B | 34 | B | 54 | B | 74 | B | 94 | C |
-| 15 | A, B, C, D, E | 35 | B | 55 | B | 75 | C | 95 | A |
-| 16 | B | 36 | B | 56 | B | 76 | B | 96 | A, B |
-| 17 | C | 37 | A, C, D | 57 | B | 77 | A, B, C, D | 97 | A |
-| 18 | C | 38 | B | 58 | A, B, C, E | 78 | D | 98 | A, B, C, D |
-| 19 | A, B | 39 | C | 59 | A | 79 | B | 99 | B |
-| 20 | B | 40 | B | 60 | B | 80 | B | 100 | A, B, D |
+| Q# | Answer(s) | Explanation | Source | Difficulty |
+|----|-----------|-------------|--------|------------|
+| 1 | B | Incorrect YAML extension setup is most likely; the GitHub Actions extension requires YAML language support. | 01-GitHub-Actions-VS-Code-Extension.md | Easy |
+| 2 | A | Autocomplete shows currently available contexts; context availability depends on workflow location. | 01-GitHub-Actions-VS-Code-Extension.md | Medium |
+| 3 | C | Hover preview displays action.yml metadata (inputs, outputs, description) from the referenced action. | 01-GitHub-Actions-VS-Code-Extension.md | Medium |
+| 4 | A, B, D | Extension validates permission scopes, highlights unavailable contexts, provides event autocomplete, but cannot execute locally. | 01-GitHub-Actions-VS-Code-Extension.md | Hard |
+| 5 | B | `github.sha` retrieves the full 40-character commit SHA from push events. | 02-Contextual-Information.md | Easy |
+| 6 | A | `github.actor` identifies the triggering user; `github.triggering_actor` distinguishes original vs. re-run actor. | 02-Contextual-Information.md | Medium |
+| 7 | A, B | Both bracket and dot notation work for accessing step outputs via `steps.<id>.outputs.<name>`. | 02-Contextual-Information.md | Medium |
+| 8 | C | `strategy.job-total` returns the total number of matrix job combinations. | 02-Contextual-Information.md | Medium |
+| 9 | B, C | Inputs are only string type; available in job `if:` and `run-name`; cannot pass undeclared inputs. | 02-Contextual-Information.md | Hard |
+| 10 | B | Use `${{ needs.<job-id>.outputs.<output-name> }}` for accessing job outputs in downstream jobs. | 02-Contextual-Information.md | Hard |
+| 11 | B | `run-name` supports only `github`, `inputs`, and `vars` contexts; `runner` context is unavailable. | 03-Context-Availability-Reference.md | Medium |
+| 12 | B | Job-level `if:` is evaluated before runner assignment; `runner` context is not available at that stage. | 03-Context-Availability-Reference.md | Medium |
+| 13 | A, B, C, D, E | All listed contexts (secrets, runner, matrix, strategy, needs) are available in `jobs.<id>.steps[*].run`. | 03-Context-Availability-Reference.md | Hard |
+| 14 | B | `matrix` context is not available in `jobs.<id>.container`; only static strings or `github`/`inputs`/`vars` contexts supported. | 03-Context-Availability-Reference.md | Hard |
+| 15 | A, B, C, D, E | None of these contexts are available in `jobs.<id>.outputs`; only `needs` and job-level properties can be referenced. | 03-Context-Availability-Reference.md | Hard |
+| 16 | B | `defaults.run.working-directory` sets the default working directory for all `run:` steps in the workflow. | 04-Workflow-File-Structure.md | Easy |
+| 17 | C | Jobs run in parallel by default unless `needs:` dependencies specify sequential execution. | 04-Workflow-File-Structure.md | Easy |
+| 18 | C | `cancel-in-progress: true` cancels the running workflow when a new push to the same branch occurs. | 04-Workflow-File-Structure.md | Medium |
+| 19 | A, B | `fail-fast: false` allows remaining jobs to continue on failure; `max-parallel: 2` limits concurrent job execution. | 04-Workflow-File-Structure.md | Medium |
+| 20 | B | The `exclude` array removes specific matrix combinations; 6 base combinations minus 1 excluded = 5 total jobs. | 04-Workflow-File-Structure.md | Medium |
+| 21 | A, B, D | `continue-on-error` is evaluated per job with matrix context; experimental jobs don't fail the run; non-experimental jobs still cancel with fail-fast. | 04-Workflow-File-Structure.md | Hard |
+| 22 | B | Use "Re-run failed jobs" in the GitHub UI to retry only failed matrix combinations. | 04-Workflow-File-Structure.md | Hard |
+| 23 | C | `on: push: branches:` with pattern filter triggers on matching branch names. | 05-Workflow-Trigger-Events.md | Easy |
+| 24 | A | Cron expression `0 9 * * 1` runs at 9 AM UTC on Mondays (day 1 = Monday). | 05-Workflow-Trigger-Events.md | Medium |
+| 25 | B | Fork pull_request workflows receive read-only `GITHUB_TOKEN` for security. | 05-Workflow-Trigger-Events.md | Medium |
+| 26 | A, D, E | `ready_for_review`, `converted_to_draft`, and `labeled` must be explicitly listed; `opened`/`synchronize` are default. | 05-Workflow-Trigger-Events.md | Medium |
+| 27 | B | Condition checks that triggered workflow completed successfully; does not affect the trigger workflow. | 05-Workflow-Trigger-Events.md | Medium |
+| 28 | B | `pull_request_target` grants write permissions and secrets to external contributors; PR code could exfiltrate secrets. | 05-Workflow-Trigger-Events.md | Hard |
+| 29 | A, B, C | Required inputs must be provided; inputs accessible via `inputs` context; choice type supports environment linking. | 05-Workflow-Trigger-Events.md | Hard |
+| 30 | B | Job-level environment variable definition overrides workflow-level definition within that job's scope. | 06-Custom-Environment-Variables.md | Easy |
+| 31 | B | Step outputs accessed via `${{ steps.<step-id>.outputs.<name> }}` after writing to `GITHUB_OUTPUT`. | 06-Custom-Environment-Variables.md | Medium |
+| 32 | A, C | Both secrets and env variables can be accessed via context expressions; both have scope hierarchy. | 06-Custom-Environment-Variables.md | Medium |
+| 33 | B | GitHub automatically masks exact string matches of secrets 3+ characters in logs. | 06-Custom-Environment-Variables.md | Medium |
+| 34 | B | Workflow-level `env:` can reference `github` context; `github.sha` evaluates as full 40-char commit SHA. | 06-Custom-Environment-Variables.md | Hard |
+| 35 | B | Only `GITHUB_TOKEN` is auto-created per job; other secrets must be explicitly defined. | 07-Runner-Environment-Variables.md | Easy |
+| 36 | B | GITHUB_TOKEN scoped to current repository; cross-repo access denied by default. | 07-Runner-Environment-Variables.md | Hard |
+| 37 | A, C, D | `CI=true`, `GITHUB_ACTIONS=true`, and `RUNNER_DEBUG=true` all enable detection; DEBUG_MODE is not automatic. | 07-Runner-Environment-Variables.md | Medium |
+| 38 | B | Use required reviewers deployment protection rule to require manual approval before job continuation. | 08-Deployment-Environments.md | Medium |
+| 39 | C | All listed deployment branch protection scenarios are enforced consistently. | 08-Deployment-Environments.md | Hard |
+| 40 | B | 24-hour threshold from first job execution (Tuesday 2 PM to Wednesday 2 PM). | 08-Deployment-Environments.md | Medium |
+| 41 | A, B, C | Artifacts auto-delete after retention, require explicit downloads, and support glob patterns. | 09-Artifacts.md | Medium |
+| 42 | D | Multiple factors can prevent workflow trigger including branch filters and event configurations. | 05-Workflow-Trigger-Events.md | Hard |
+| 43 | B | Use `if: failure()` to upload artifacts conditionally on step failure. | 09-Artifacts.md | Medium |
+| 44 | B | hashFiles updates cache key when dependency files change, invalidating stale cache. | 10-Caching.md | Medium |
+| 45 | A, C, D | hashFiles for key updates, restore-keys for fallback, most recent cache restored. | 10-Caching.md | Medium |
+| 46 | B | Composite actions use `runs: { using: composite, steps: [...] }` syntax. | 11-Reusable-Workflows-and-Actions.md | Medium |
+| 47 | C | Workflows cannot be executed locally from VS Code; viewing is UI-only. | 01-GitHub-Actions-VS-Code-Extension.md | Hard |
+| 48 | A | GitHub automatically renames matrix artifacts with matrix identifiers to prevent collisions. | 09-Artifacts.md | Hard |
+| 49 | A, B, C | All statements about `if: always()` uploading artifacts regardless of outcome are correct. | 09-Artifacts.md | Medium |
+| 50 | B | Workflows triggered manually; inputs and optional typed parameters supported. | 05-Workflow-Trigger-Events.md | Easy |
+| 51 | C | `hashFiles()` syntax and multiple path syntax both valid for cache key generation. | 10-Caching.md | Medium |
+| 52 | B | Use `with: secrets: inherit` to pass all repository secrets to reusable workflows. | 11-Reusable-Workflows-and-Actions.md | Hard |
+| 53 | A, B, C | All artifact management statements regarding storage, retention, and API access are correct. | 09-Artifacts.md | Medium |
+| 54 | B | action.yml required at repo root; README with examples recommended; GitHub Marketplace optional. | 15-Building-Custom-Actions.md | Medium |
+| 55 | B | Reusable workflows require `on: workflow_call` trigger definition. | 11-Reusable-Workflows-and-Actions.md | Easy |
+| 56 | B | Reusable workflow metadata file is `action.yml` or `action.yaml` at repository root. | 15-Building-Custom-Actions.md | Easy |
+| 57 | B | Shipping node_modules or using ncc/esbuild bundling are both valid distribution methods. | 15-Building-Custom-Actions.md | Medium |
+| 58 | A, B, C, E | All reusable workflow definition and invocation patterns are valid. | 11-Reusable-Workflows-and-Actions.md | Hard |
+| 59 | A | Set RUNNER_DEBUG=1 as repository secret and re-run workflow to enable debug output. | 12-Debugging-Workflows.md | Medium |
+| 60 | B | Workflow logging commands (notice, warning, error) available; workflow_run events support logging. | 12-Debugging-Workflows.md | Medium |
+| 61 | B | Multiple logging approaches available (UI, API, annotations) for different debugging scenarios. | 12-Debugging-Workflows.md | Medium |
+| 62 | A, B, C, E | All listed runner environment variables are valid and available in workflows. | 07-Runner-Environment-Variables.md | Medium |
+| 63 | B | `if: failure()` uploads only on failure; `if: always()` uploads regardless of outcome. | 09-Artifacts.md | Medium |
+| 64 | B | Required reviewers protection rule; all deployment scenarios listed are enforced. | 08-Deployment-Environments.md | Medium |
+| 65 | B | Repository settings environment configuration location. | 14-Deployment-and-Environments.md | Easy |
+| 66 | A, C, D | All workflow triggering API statements correct; only string type inputs supported. | 13-GitHub-Actions-API.md | Medium |
+| 67 | A | Correct API endpoint for workflow list and details retrieval. | 13-GitHub-Actions-API.md | Easy |
+| 68 | B | POST to cancel endpoint `/repos/{owner}/{repo}/actions/runs/{run_id}/cancel`. | 13-GitHub-Actions-API.md | Medium |
+| 69 | A, B, C, E | All context scoping and access statements correct regarding environment-scoped secrets. | 08-Deployment-Environments.md | Hard |
+| 70 | C | All approaches (UI, API, step annotations) provide workflow timing information. | 12-Debugging-Workflows.md | Hard |
+| 71 | C | GitHub doesn't provide built-in deployment time-window protection; custom logic required. | 08-Deployment-Environments.md | Hard |
+| 72 | B | Deployment history available through UI, API, and workflow logs. | 14-Deployment-and-Environments.md | Medium |
+| 73 | A, C | Required workflows run automatically; admins cannot disable; appear in PR checks. | 17-GitHub-Actions-Governance.md | Medium |
+| 74 | B | "Allow local actions only" permits organization/enterprise actions within scope. | 17-GitHub-Actions-Governance.md | Medium |
+| 75 | C | Moving v1 tag to new release allows existing references to receive updates. | 15-Building-Custom-Actions.md | Hard |
+| 76 | B | All testing approaches valid at different development and validation stages. | 15-Building-Custom-Actions.md | Medium |
+| 77 | A, B, C, D | All runner label and targeting configuration options are valid. | 16-Runner-Configuration.md | Medium |
+| 78 | D | All performance improvement strategies listed are valid and proven effective. | 19-Performance-Troubleshooting.md | Hard |
+| 79 | B | ubuntu-latest and ubuntu-22.04 both support Python 3.10. | 16-Runner-Configuration.md | Easy |
+| 80 | B | Disable runners during maintenance; complete in-flight jobs; automate patching. | 16-Runner-Configuration.md | Medium |
+| 81 | B | IP allowlist restricts runners by registration IP at organization/enterprise level. | 16-Runner-Configuration.md | Medium |
+| 82 | A, B, C | Required workflows automatic; cannot be disabled; PR check integration. | 17-GitHub-Actions-Governance.md | Medium |
+| 83 | A | All valid context availability and scope combinations listed. | 03-Context-Availability-Reference.md | Hard |
+| 84 | B | "Allow local actions only" permits organization/enterprise actions. | 17-GitHub-Actions-Governance.md | Medium |
+| 85 | B | Second approval triggers immediate deployment continuation without additional wait. | 08-Deployment-Environments.md | Hard |
+| 86 | A, B, C | Multiple valid action referencing and permission configuration methods supported. | 13-GitHub-Actions-API.md | Medium |
+| 87 | B | IP allowlist restricts by registration IP; runners outside range inaccessible. | 17-GitHub-Actions-Governance.md | Hard |
+| 88 | B | All audit logging capabilities available for security and compliance auditing. | 17-GitHub-Actions-Governance.md | Hard |
+| 89 | A, B, D, E | Multiple valid OIDC federation and secret handling scenarios. | 18-Security-Best-Practices.md | Hard |
+| 90 | B | Setting secrets as env vars and referencing prevents code injection attacks. | 18-Security-Best-Practices.md | Hard |
+| 91 | B | Artifact retention follows GitHub immutability and cleanup policies. | 09-Artifacts.md | Medium |
+| 92 | B | All OIDC federation statements regarding cloud provider integration correct. | 18-Security-Best-Practices.md | Hard |
+| 93 | A, B, D | Multiple factors can cause secret masking failures or missing secrets. | 18-Security-Best-Practices.md | Hard |
+| 94 | C | All factors contribute to action security assessment and verification. | 18-Security-Best-Practices.md | Hard |
+| 95 | A | Parallelizing independent jobs (build and test) minimizes overall runtime. | 19-Performance-Troubleshooting.md | Medium |
+| 96 | A, B | Multiple valid approaches for artifact storage and workflow optimization. | 19-Performance-Troubleshooting.md | Medium |
+| 97 | A | Branch filter `main` requires exact match; no pattern wildcards by default. | 19-Performance-Troubleshooting.md | Medium |
+| 98 | A, B, C, D | All workflow optimization strategies listed are valid and effective. | 19-Performance-Troubleshooting.md | Medium |
+| 99 | B | Missing secrets result from scope misconfiguration or incorrect reference syntax. | 19-Performance-Troubleshooting.md | Hard |
+| 100 | A, B, D | Matrix job failure skips dependent jobs; use `if: always()` to override default behavior. | 19-Performance-Troubleshooting.md | Hard |
 
 ---
 
@@ -1843,5 +1923,3 @@ Using env vars for `--build-arg` (A) prevents secrets from being embedded in the
 ---
 
 *End of GH-200 Practice Exam – Iteration 2*
-
-
