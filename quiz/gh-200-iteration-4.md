@@ -1,13 +1,13 @@
-﻿# GitHub Actions GH-200 Certification Exam â€” Question Bank (Iteration 4)
+﻿# GitHub Actions GH-200 Certification Exam – Question Bank (Iteration 4)
 
 **Total Questions:** 100
-**Difficulty Distribution:** 20 Easy Â· 60 Medium Â· 20 Hard
-**Answer Types:** 55 one Â· 26 many Â· 12 all Â· 7 none
+**Difficulty Distribution:** 20 Easy · 60 Medium · 20 Hard
+**Answer Types:** 55 one · 26 many · 12 all · 7 none
 **Passing Score:** 70% (70/100)
 
 ---
 
-### Question 1 â€” Topic 01: GitHub Actions VS Code Extension
+### Question 1 – Topic 01: GitHub Actions VS Code Extension
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 01
 
@@ -20,7 +20,7 @@ A developer opens a `.github/workflows/build.yml` file in VS Code. What feature 
 
 ---
 
-### Question 2 â€” Topic 01: GitHub Actions VS Code Extension
+### Question 2 – Topic 01: GitHub Actions VS Code Extension
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 01
 
@@ -33,7 +33,7 @@ When a developer hovers over `actions/checkout@v4` in a workflow, what does the 
 
 ---
 
-### Question 3 â€” Topic 01: GitHub Actions VS Code Extension
+### Question 3 – Topic 01: GitHub Actions VS Code Extension
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 01
 
@@ -47,7 +47,7 @@ Which of the following are capabilities provided by the GitHub Actions VS Code e
 
 ---
 
-### Question 4 â€” Topic 01: GitHub Actions VS Code Extension
+### Question 4 – Topic 01: GitHub Actions VS Code Extension
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 01
 
@@ -60,7 +60,7 @@ A team enables autocomplete in VS Code for GitHub Actions workflows. When a deve
 
 ---
 
-### Question 5 â€” Topic 02: Contextual Information
+### Question 5 – Topic 02: Contextual Information
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 02
 
@@ -73,7 +73,7 @@ A workflow is triggered by a `push` event to the `main` branch. Which expression
 
 ---
 
-### Question 6 â€” Topic 02: Contextual Information
+### Question 6 – Topic 02: Contextual Information
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 02
 
@@ -86,7 +86,7 @@ During a pull request workflow, a step needs to reference the base branch name (
 
 ---
 
-### Question 7 â€” Topic 02: Contextual Information
+### Question 7 – Topic 02: Contextual Information
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 02
 
@@ -99,7 +99,7 @@ A step in a workflow needs to access output values from a previous step with `id
 
 ---
 
-### Question 8 â€” Topic 02: Contextual Information
+### Question 8 – Topic 02: Contextual Information
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 02
 
@@ -112,7 +112,7 @@ A workflow uses a matrix strategy with properties `node-version: [16, 18, 20]`. 
 
 ---
 
-### Question 9 â€” Topic 03: Context Availability Reference
+### Question 9 – Topic 03: Context Availability Reference
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 03
 
@@ -126,7 +126,7 @@ At which locations in a workflow file is the `secrets` context available? *(Sele
 
 ---
 
-### Question 10 â€” Topic 03: Context Availability Reference
+### Question 10 – Topic 03: Context Availability Reference
 
 **Difficulty:** Hard | **Answer Type:** all | **Topic:** 03
 
@@ -152,7 +152,7 @@ Which statements about this workflow are correct? *(Select all that apply.)*
 
 ---
 
-### Question 11 â€” Topic 04: Workflow File Structure
+### Question 11 – Topic 04: Workflow File Structure
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 04
 
@@ -165,7 +165,7 @@ What YAML structure option allows you to trigger a workflow on either `push` eve
 
 ---
 
-### Question 12 â€” Topic 04: Workflow File Structure
+### Question 12 – Topic 04: Workflow File Structure
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 04
 
@@ -194,7 +194,7 @@ If a developer pushes to the `develop` branch, what happens?
 
 ---
 
-### Question 13 â€” Topic 04: Workflow File Structure
+### Question 13 – Topic 04: Workflow File Structure
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 04
 
@@ -208,7 +208,7 @@ A team refactors their workflow to use `env:` variables at the workflow level. W
 
 ---
 
-### Question 14 â€” Topic 05: Workflow Trigger Events
+### Question 14 – Topic 05: Workflow Trigger Events
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 05
 
@@ -221,7 +221,7 @@ Which trigger event fires whenever a commit is pushed to any branch in the repos
 
 ---
 
-### Question 15 â€” Topic 05: Workflow Trigger Events
+### Question 15 – Topic 05: Workflow Trigger Events
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 05
 
@@ -234,7 +234,7 @@ A workflow needs to run every Monday at 9:00 AM UTC. Which trigger event and cro
 
 ---
 
-### Question 16 â€” Topic 05: Workflow Trigger Events
+### Question 16 – Topic 05: Workflow Trigger Events
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 05
 
@@ -248,7 +248,7 @@ A development team wants to trigger a workflow manually from the GitHub UI. Whic
 
 ---
 
-### Question 17 â€” Topic 05: Workflow Trigger Events
+### Question 17 – Topic 05: Workflow Trigger Events
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 05
 
@@ -261,7 +261,7 @@ A public repository uses `pull_request_target` to run workflows triggered by PRs
 
 ---
 
-### Question 18 â€” Topic 06: Custom Environment Variables
+### Question 18 – Topic 06: Custom Environment Variables
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 06
 
@@ -274,7 +274,7 @@ How do you reference a custom environment variable named `DEPLOY_ENV` in a workf
 
 ---
 
-### Question 19 â€” Topic 06: Custom Environment Variables
+### Question 19 – Topic 06: Custom Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 06
 
@@ -301,7 +301,7 @@ What is printed by the step?
 
 ---
 
-### Question 20 â€” Topic 06: Custom Environment Variables
+### Question 20 – Topic 06: Custom Environment Variables
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 06
 
@@ -315,7 +315,7 @@ A development team uses custom environment variables to control deployment behav
 
 ---
 
-### Question 21 â€” Topic 07: Default Environment Variables
+### Question 21 – Topic 07: Default Environment Variables
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 07
 
@@ -328,7 +328,7 @@ GitHub automatically provides which default environment variable containing the 
 
 ---
 
-### Question 22 â€” Topic 07: Default Environment Variables
+### Question 22 – Topic 07: Default Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 07
 
@@ -341,21 +341,21 @@ What is the purpose of the `GITHUB_STEP_SUMMARY` default environment variable?
 
 ---
 
-### Question 23 â€” Topic 07: Default Environment Variables
+### Question 23 – Topic 07: Default Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 07
 
 A workflow developer checks GitHub's official documentation to identify which default environment variables are actually provisioned by GitHub and available to steps. Which of the following are documented as standard default variables? *(Select all that apply.)*
 
-**A.** `GITHUB_EVENT_PATH` â€” path to the full event payload JSON file
-**B.** `RUNNER_OS` â€” the operating system of the runner
-**C.** `GITHUB_STEP_EXECUTION_TIME` â€” milliseconds elapsed since the step started execution
-**D.** `RUNNER_TEMP` â€” temporary directory on the runner for temporary files
-**E.** `GITHUB_SHA` â€” the commit SHA that triggered the workflow
+**A.** `GITHUB_EVENT_PATH` – path to the full event payload JSON file
+**B.** `RUNNER_OS` – the operating system of the runner
+**C.** `GITHUB_STEP_EXECUTION_TIME` – milliseconds elapsed since the step started execution
+**D.** `RUNNER_TEMP` – temporary directory on the runner for temporary files
+**E.** `GITHUB_SHA` – the commit SHA that triggered the workflow
 
 ---
 
-### Question 24 â€” Topic 07: Default Environment Variables
+### Question 24 – Topic 07: Default Environment Variables
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 07
 
@@ -368,7 +368,7 @@ A workflow step writes output to `$GITHUB_OUTPUT` (the modern approach). On a su
 
 ---
 
-### Question 25 â€” Topic 08: Environment Protection Rules
+### Question 25 – Topic 08: Environment Protection Rules
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 08
 
@@ -381,7 +381,7 @@ An organization wants to require approval before any workflow deployment to prod
 
 ---
 
-### Question 26 â€” Topic 08: Environment Protection Rules
+### Question 26 – Topic 08: Environment Protection Rules
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 08
 
@@ -394,7 +394,7 @@ A deployment environment `production` is configured with environment protection 
 
 ---
 
-### Question 27 â€” Topic 08: Environment Protection Rules
+### Question 27 – Topic 08: Environment Protection Rules
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 08
 
@@ -414,7 +414,7 @@ When a workflow on the `feature/new-feature` branch attempts to deploy to `stagi
 
 ---
 
-### Question 28 â€” Topic 09: Workflow Artifacts
+### Question 28 – Topic 09: Workflow Artifacts
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 09
 
@@ -427,7 +427,7 @@ Which action is used to upload files produced by a workflow as artifacts?
 
 ---
 
-### Question 29 â€” Topic 09: Workflow Artifacts
+### Question 29 – Topic 09: Workflow Artifacts
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 09
 
@@ -440,7 +440,7 @@ An artifact uploaded with `retention-days: 5` is set to be automatically deleted
 
 ---
 
-### Question 30 â€” Topic 09: Workflow Artifacts
+### Question 30 – Topic 09: Workflow Artifacts
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 09
 
@@ -454,7 +454,7 @@ A workflow uploads a build artifact and needs to share it with a downstream job 
 
 ---
 
-### Question 31 â€” Topic 09: Workflow Artifacts
+### Question 31 – Topic 09: Workflow Artifacts
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 09
 
@@ -467,7 +467,7 @@ A GitHub organization enforces an artifact retention policy maximum of 30 days. 
 
 ---
 
-### Question 32 â€” Topic 10: Workflow Caching
+### Question 32 – Topic 10: Workflow Caching
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 10
 
@@ -480,7 +480,7 @@ What does the `actions/cache` action primarily do?
 
 ---
 
-### Question 33 â€” Topic 10: Workflow Caching
+### Question 33 – Topic 10: Workflow Caching
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 10
 
@@ -501,7 +501,7 @@ When `requirements.txt` changes (hash changes), what is the cache behavior?
 
 ---
 
-### Question 34 â€” Topic 10: Workflow Caching
+### Question 34 – Topic 10: Workflow Caching
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 10
 
@@ -515,7 +515,7 @@ A cache is restored from a partial match using `restore-keys:`. Which statements
 
 ---
 
-### Question 35 â€” Topic 11: Workflow Sharing
+### Question 35 – Topic 11: Workflow Sharing
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 11
 
@@ -528,7 +528,7 @@ Which built-in workflow trigger event allows a workflow to be called from anothe
 
 ---
 
-### Question 36 â€” Topic 11: Workflow Sharing
+### Question 36 – Topic 11: Workflow Sharing
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 11
 
@@ -541,7 +541,7 @@ When a calling workflow uses `secrets: inherit`, what is passed to the reusable 
 
 ---
 
-### Question 37 â€” Topic 11: Workflow Sharing
+### Question 37 – Topic 11: Workflow Sharing
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 11
 
@@ -555,7 +555,7 @@ A reusable workflow declares outputs and a calling workflow wants to access them
 
 ---
 
-### Question 38 â€” Topic 11: Workflow Sharing
+### Question 38 – Topic 11: Workflow Sharing
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 11
 
@@ -568,7 +568,7 @@ A reusable workflow in a public repository is called by external organizations w
 
 ---
 
-### Question 39 â€” Topic 12: Workflow Debugging
+### Question 39 – Topic 12: Workflow Debugging
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 12
 
@@ -581,7 +581,7 @@ A developer wants to enable debug logging for all workflow runs without modifyin
 
 ---
 
-### Question 40 â€” Topic 12: Workflow Debugging
+### Question 40 – Topic 12: Workflow Debugging
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 12
 
@@ -600,21 +600,21 @@ Where does this warning appear in the GitHub UI?
 
 ---
 
-### Question 41 â€” Topic 12: Workflow Debugging
+### Question 41 – Topic 12: Workflow Debugging
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 12
 
 Which workflow commands can be used in a `run:` step to structure log output and provide debugging information? *(Select all that apply.)*
 
-**A.** `echo "::group::Log Section Name"` â€” begin a collapsible log group
-**B.** `echo "::endgroup::"` â€” end a collapsible log group
-**C.** `echo "::debug::Debug message"` â€” emit a debug-level annotation
-**D.** `echo "::set-output name=var::value"` â€” modern way to set step outputs
-**E.** `echo "::error::Error occurred"` â€” emit an error-level annotation
+**A.** `echo "::group::Log Section Name"` – begin a collapsible log group
+**B.** `echo "::endgroup::"` – end a collapsible log group
+**C.** `echo "::debug::Debug message"` – emit a debug-level annotation
+**D.** `echo "::set-output name=var::value"` – modern way to set step outputs
+**E.** `echo "::error::Error occurred"` – emit an error-level annotation
 
 ---
 
-### Question 42 â€” Topic 13: Workflows REST API
+### Question 42 – Topic 13: Workflows REST API
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 13
 
@@ -627,7 +627,7 @@ Which REST API endpoint triggers a `workflow_dispatch` workflow manually?
 
 ---
 
-### Question 43 â€” Topic 13: Workflows REST API
+### Question 43 – Topic 13: Workflows REST API
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 13
 
@@ -646,21 +646,21 @@ What does this query return?
 
 ---
 
-### Question 44 â€” Topic 13: Workflows REST API
+### Question 44 – Topic 13: Workflows REST API
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 13
 
 A workflow run API response includes which properties? *(Select all that apply.)*
 
-**A.** `status` â€” current state of the workflow run (queued, in_progress, completed)
-**B.** `conclusion` â€” outcome of the workflow run (success, failure, neutral, cancelled, etc.)
-**C.** `run_number` â€” sequence number of this workflow run within the repository
-**D.** `job_details` â€” array of nested job objects with step-by-step information
-**E.** `head_branch` â€” the branch that triggered the workflow run
+**A.** `status` – current state of the workflow run (queued, in_progress, completed)
+**B.** `conclusion` – outcome of the workflow run (success, failure, neutral, cancelled, etc.)
+**C.** `run_number` – sequence number of this workflow run within the repository
+**D.** `job_details` – array of nested job objects with step-by-step information
+**E.** `head_branch` – the branch that triggered the workflow run
 
 ---
 
-### Question 45 â€” Topic 14: Reviewing Deployments
+### Question 45 – Topic 14: Reviewing Deployments
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 14
 
@@ -673,7 +673,7 @@ An environment named `production` is configured with required reviewers. When a 
 
 ---
 
-### Question 46 â€” Topic 14: Reviewing Deployments
+### Question 46 – Topic 14: Reviewing Deployments
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 14
 
@@ -686,7 +686,7 @@ An enterprise uses deployment environment protection rules with a 30-minute wait
 
 ---
 
-### Question 47 â€” Topic 14: Reviewing Deployments
+### Question 47 – Topic 14: Reviewing Deployments
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 14
 
@@ -706,7 +706,7 @@ Analyze each scenario and determine which result in blocked, failed, or delayed 
 
 ---
 
-### Question 48 â€” Topic 15: Creating and Publishing Actions
+### Question 48 – Topic 15: Creating and Publishing Actions
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 15
 
@@ -719,7 +719,7 @@ What file must be present in a custom action repository to define the action's i
 
 ---
 
-### Question 49 â€” Topic 15: Creating and Publishing Actions
+### Question 49 – Topic 15: Creating and Publishing Actions
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 15
 
@@ -732,7 +732,7 @@ A custom action is created with `runs: using: javascript` (or `node20`) and `run
 
 ---
 
-### Question 50 â€” Topic 15: Creating and Publishing Actions
+### Question 50 – Topic 15: Creating and Publishing Actions
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 15
 
@@ -746,7 +746,7 @@ Which values are valid for `runs.using:` in an action.yml file? *(Select all tha
 
 ---
 
-### Question 51 â€” Topic 16: Managing Runners
+### Question 51 – Topic 16: Managing Runners
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 16
 
@@ -759,7 +759,7 @@ A self-hosted runner needs to be targeted by a workflow. The runner has the labe
 
 ---
 
-### Question 52 â€” Topic 16: Managing Runners
+### Question 52 – Topic 16: Managing Runners
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 16
 
@@ -778,7 +778,7 @@ What is the behavior?
 
 ---
 
-### Question 53 â€” Topic 16: Managing Runners
+### Question 53 – Topic 16: Managing Runners
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 16
 
@@ -792,7 +792,7 @@ A self-hosted runner stops responding mid-job execution. Which of the following 
 
 ---
 
-### Question 54 â€” Topic 17: GitHub Actions Enterprise
+### Question 54 – Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 17
 
@@ -805,7 +805,7 @@ An enterprise admin wants to prevent workflows from using unapproved third-party
 
 ---
 
-### Question 55 â€” Topic 17: GitHub Actions Enterprise
+### Question 55 – Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 17
 
@@ -818,7 +818,7 @@ An organization's action policy is set to "Allow only local actions". A workflow
 
 ---
 
-### Question 56 â€” Topic 17: GitHub Actions Enterprise
+### Question 56 – Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 17
 
@@ -832,7 +832,7 @@ Enterprise-level features for GitHub Actions governance include which of the fol
 
 ---
 
-### Question 57 â€” Topic 17: GitHub Actions Enterprise
+### Question 57 – Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 17
 
@@ -845,7 +845,7 @@ GitHub Enterprise Cloud customers enable the "GitHub Actions" entry in the organ
 
 ---
 
-### Question 58 â€” Topic 18: Security and Optimization
+### Question 58 – Topic 18: Security and Optimization
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 18
 
@@ -858,7 +858,7 @@ What is the primary security advantage of using OIDC-based cloud authentication 
 
 ---
 
-### Question 59 â€” Topic 18: Security and Optimization
+### Question 59 – Topic 18: Security and Optimization
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 18
 
@@ -871,7 +871,7 @@ A workflow uses a GitHub Action stored in a public repository. The best practice
 
 ---
 
-### Question 60 â€” Topic 18: Security and Optimization
+### Question 60 – Topic 18: Security and Optimization
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 18
 
@@ -885,7 +885,7 @@ A development team has implemented secure GitHub Actions practices. Which statem
 
 ---
 
-### Question 61 â€” Topic 18: Security and Optimization
+### Question 61 – Topic 18: Security and Optimization
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 18
 
@@ -904,7 +904,7 @@ What is the security vulnerability and recommended mitigation?
 
 ---
 
-### Question 62 â€” Topic 18: Security and Optimization
+### Question 62 – Topic 18: Security and Optimization
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 18
 
@@ -918,7 +918,7 @@ Which statements about `GITHUB_TOKEN` and security are accurate? *(Select all th
 
 ---
 
-### Question 63 â€” Topic 19: Common Failures and Troubleshooting
+### Question 63 – Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 19
 
@@ -937,7 +937,7 @@ What is the most likely cause?
 
 ---
 
-### Question 64 â€” Topic 19: Common Failures and Troubleshooting
+### Question 64 – Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 19
 
@@ -957,7 +957,7 @@ What is a quick diagnostic and temporary workaround?
 
 ---
 
-### Question 65 â€” Topic 19: Common Failures and Troubleshooting
+### Question 65 – Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 19
 
@@ -971,7 +971,7 @@ A self-hosted runner appears online in GitHub but jobs assigned to it remain que
 
 ---
 
-### Question 66 â€” Topic 19: Common Failures and Troubleshooting
+### Question 66 – Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 19
 
@@ -984,7 +984,7 @@ A build fails after `actions/setup-node@v3` with Node.js 18.16.0, but locally th
 
 ---
 
-### Question 67 â€” Topic 02: Contextual Information
+### Question 67 – Topic 02: Contextual Information
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 02
 
@@ -997,7 +997,7 @@ A workflow needs to identify the user who originally triggered a workflow run. W
 
 ---
 
-### Question 68 â€” Topic 05: Workflow Trigger Events
+### Question 68 – Topic 05: Workflow Trigger Events
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 05
 
@@ -1010,7 +1010,7 @@ A workflow uses `on: workflow_run:` with `types: [completed]`. What does this ac
 
 ---
 
-### Question 69 â€” Topic 06: Custom Environment Variables
+### Question 69 – Topic 06: Custom Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 06
 
@@ -1023,7 +1023,7 @@ A workflow defines a matrix strategy with `node-version: [16, 18]`. A step needs
 
 ---
 
-### Question 70 â€” Topic 09: Workflow Artifacts
+### Question 70 – Topic 09: Workflow Artifacts
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 09
 
@@ -1036,7 +1036,7 @@ A workflow uploads multiple artifacts in separate steps. Each uses `actions/uplo
 
 ---
 
-### Question 71 â€” Topic 10: Workflow Caching
+### Question 71 – Topic 10: Workflow Caching
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 10
 
@@ -1049,7 +1049,7 @@ A workflow uses `actions/cache` to cache dependencies. On a cache hit, which out
 
 ---
 
-### Question 72 â€” Topic 11: Workflow Sharing
+### Question 72 – Topic 11: Workflow Sharing
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 11
 
@@ -1062,7 +1062,7 @@ A reusable workflow requires certain inputs to be defined. How does a calling wo
 
 ---
 
-### Question 73 â€” Topic 12: Workflow Debugging
+### Question 73 – Topic 12: Workflow Debugging
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 12
 
@@ -1075,7 +1075,7 @@ What does the `ACTIONS_RUNNER_DEBUG` secret (or `RUNNER_DEBUG=1` env var) enable
 
 ---
 
-### Question 74 â€” Topic 13: Workflows REST API
+### Question 74 – Topic 13: Workflows REST API
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 13
 
@@ -1088,7 +1088,7 @@ An API client calls `POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel`. W
 
 ---
 
-### Question 75 â€” Topic 14: Reviewing Deployments
+### Question 75 – Topic 14: Reviewing Deployments
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 14
 
@@ -1101,7 +1101,7 @@ A workflow job references `environment: production` with required reviewers conf
 
 ---
 
-### Question 76 â€” Topic 15: Creating and Publishing Actions
+### Question 76 – Topic 15: Creating and Publishing Actions
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 15
 
@@ -1114,7 +1114,7 @@ A custom JavaScript action uses `@actions/core` library to set an output. Which 
 
 ---
 
-### Question 77 â€” Topic 16: Managing Runners
+### Question 77 – Topic 16: Managing Runners
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 16
 
@@ -1127,7 +1127,7 @@ A team registers a self-hosted runner with custom labels. The runner is offline 
 
 ---
 
-### Question 78 â€” Topic 17: GitHub Actions Enterprise
+### Question 78 – Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 17
 
@@ -1140,7 +1140,7 @@ Where does an enterprise admin configure required workflows that must run on all
 
 ---
 
-### Question 79 â€” Topic 18: Security and Optimization
+### Question 79 – Topic 18: Security and Optimization
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 18
 
@@ -1153,7 +1153,7 @@ A workflow requests an OIDC token for AWS authentication. The `id-token: write` 
 
 ---
 
-### Question 80 â€” Topic 19: Common Failures and Troubleshooting
+### Question 80 – Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 19
 
@@ -1166,7 +1166,7 @@ A scheduled workflow (cron-triggered) does not run at the expected time. What is
 
 ---
 
-### Question 81 â€” Topic 03: Context Availability Reference
+### Question 81 – Topic 03: Context Availability Reference
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 03
 
@@ -1179,7 +1179,7 @@ At workflow-level (outside any job), which of the following contexts are availab
 
 ---
 
-### Question 82 â€” Topic 04: Workflow File Structure
+### Question 82 – Topic 04: Workflow File Structure
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 04
 
@@ -1192,7 +1192,7 @@ A workflow is defined with `concurrency: group-name`. When a new run is triggere
 
 ---
 
-### Question 83 â€” Topic 07: Default Environment Variables
+### Question 83 – Topic 07: Default Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 07
 
@@ -1205,7 +1205,7 @@ A workflow step needs to write output that will appear in the workflow's run sum
 
 ---
 
-### Question 84 â€” Topic 08: Environment Protection Rules
+### Question 84 – Topic 08: Environment Protection Rules
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 08
 
@@ -1218,7 +1218,7 @@ An environment has protection rules with required reviewers. A workflow attempts
 
 ---
 
-### Question 85 â€” Topic 09: Workflow Artifacts
+### Question 85 – Topic 09: Workflow Artifacts
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 09
 
@@ -1231,7 +1231,7 @@ A workflow uploads an artifact named `build-output` with `retention-days: 7`. An
 
 ---
 
-### Question 86 â€” Topic 10: Workflow Caching
+### Question 86 – Topic 10: Workflow Caching
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 10
 
@@ -1245,7 +1245,7 @@ A cache is restored from a partial match using `restore-keys`, then the job modi
 
 ---
 
-### Question 87 â€” Topic 11: Workflow Sharing
+### Question 87 – Topic 11: Workflow Sharing
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 11
 
@@ -1258,7 +1258,7 @@ A reusable workflow is configured to run only on the `main` branch. When called 
 
 ---
 
-### Question 88 â€” Topic 12: Workflow Debugging
+### Question 88 – Topic 12: Workflow Debugging
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 12
 
@@ -1271,7 +1271,7 @@ A step prints sensitive information to stdout. What is GitHub's default behavior
 
 ---
 
-### Question 89 â€” Topic 13: Workflows REST API
+### Question 89 – Topic 13: Workflows REST API
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 13
 
@@ -1285,7 +1285,7 @@ When querying the REST API for workflow runs, which filtering capabilities are a
 
 ---
 
-### Question 90 â€” Topic 15: Creating and Publishing Actions
+### Question 90 – Topic 15: Creating and Publishing Actions
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 15
 
@@ -1298,7 +1298,7 @@ A custom action requires a specific version of Node.js (e.g., 20.x). How is this
 
 ---
 
-### Question 91 â€” Topic 16: Managing Runners
+### Question 91 – Topic 16: Managing Runners
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 16
 
@@ -1311,7 +1311,7 @@ A self-hosted runner is accidentally deleted from the organization. A workflow j
 
 ---
 
-### Question 92 â€” Topic 17: GitHub Actions Enterprise
+### Question 92 – Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 17
 
@@ -1325,7 +1325,7 @@ An enterprise configures action policies with "Allow select actions" and publish
 
 ---
 
-### Question 93 â€” Topic 18: Security and Optimization
+### Question 93 – Topic 18: Security and Optimization
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 18
 
@@ -1338,7 +1338,7 @@ A GitHub Actions workflow runs in a private repository with credentials stored a
 
 ---
 
-### Question 94 â€” Topic 01: GitHub Actions VS Code Extension
+### Question 94 – Topic 01: GitHub Actions VS Code Extension
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 01
 
@@ -1352,11 +1352,11 @@ A developer creates a new workflow file in `.github/workflows/` and begins typin
 
 ---
 
-### Question 95 â€” Topic 19: Common Failures and Troubleshooting
+### Question 95 – Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 19
 
-A workflow run exhibits flaky behaviorâ€”sometimes passes, sometimes fails with inconsistent errors. Which are reasonable troubleshooting approaches for this scenario? *(Select all that apply.)*
+A workflow run exhibits flaky behavior–sometimes passes, sometimes fails with inconsistent errors. Which are reasonable troubleshooting approaches for this scenario? *(Select all that apply.)*
 
 **A.** Check for race conditions in test setup/teardown (order-dependent failures)
 **B.** Verify that external service dependencies (APIs, databases) are responding consistently
@@ -1366,7 +1366,7 @@ A workflow run exhibits flaky behaviorâ€”sometimes passes, sometimes fails 
 
 ---
 
-### Question 96 â€” Topic 02: Contextual Information
+### Question 96 – Topic 02: Contextual Information
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 02
 
@@ -1379,7 +1379,7 @@ A workflow accesses `${{ github.event.number }}`. In which trigger event context
 
 ---
 
-### Question 97 â€” Topic 05: Workflow Trigger Events
+### Question 97 – Topic 05: Workflow Trigger Events
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 05
 
@@ -1392,7 +1392,7 @@ A `pull_request` workflow references `${{ github.event.action }}`. When a PR is 
 
 ---
 
-### Question 98 â€” Topic 06: Custom Environment Variables
+### Question 98 – Topic 06: Custom Environment Variables
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 06
 
@@ -1406,7 +1406,7 @@ Environment variable precedence in GitHub Actions follows a hierarchy. Which ord
 
 ---
 
-### Question 99 â€” Topic 09: Workflow Artifacts
+### Question 99 – Topic 09: Workflow Artifacts
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 09
 
@@ -1419,7 +1419,7 @@ How are artifacts typically accessed by end-users (developers) within a GitHub r
 
 ---
 
-### Question 100 â€” Topic 03: Context Availability Reference
+### Question 100 – Topic 03: Context Availability Reference
 
 **Difficulty:** Hard | **Answer Type:** all | **Topic:** 03
 
@@ -1433,106 +1433,29 @@ A workflow step attempts to access various contexts. Which statements about cont
 
 ---
 
-## Answers
+## Answer Key
 
-**Q1**: B
-**Q2**: B
-**Q3**: A, B, D, E
-**Q4**: B, C
-**Q5**: B
-**Q6**: B
-**Q7**: A, B
-**Q8**: C
-**Q9**: C, E
-**Q10**: A, B, D
-**Q11**: B
-**Q12**: B
-**Q13**: A, C, E
-**Q14**: A
-**Q15**: A
-**Q16**: A, B, E
-**Q17**: B
-**Q18**: D
-**Q19**: B
-**Q20**: A, B, C, D
-**Q21**: A
-**Q22**: B
-**Q23**: A, B, D, E
-**Q24**: B
-**Q25**: B
-**Q26**: C
-**Q27**: A, C
-**Q28**: A
-**Q29**: B
-**Q30**: A, D
-**Q31**: B
-**Q32**: B
-**Q33**: D
-**Q34**: A, B, D, E
-**Q35**: B
-**Q36**: B
-**Q37**: A, B, C, D
-**Q38**: A
-**Q39**: B
-**Q40**: B
-**Q41**: A, B, C, E
-**Q42**: B
-**Q43**: B
-**Q44**: A, B, C, E
-**Q45**: B
-**Q46**: C
-**Q47**: A, B, D
-**Q48**: B
-**Q49**: B
-**Q50**: A, B, C
-**Q51**: B
-**Q52**: C
-**Q53**: A, D, E
-**Q54**: B
-**Q55**: B
-**Q56**: A, B, C, E
-**Q57**: A
-**Q58**: B
-**Q59**: C
-**Q60**: B, C, D, E
-**Q61**: B
-**Q62**: A, B, C, E
-**Q63**: B
-**Q64**: C
-**Q65**: A, B, C, D
-**Q66**: B
-**Q67**: A
-**Q68**: A
-**Q69**: A
-**Q70**: B
-**Q71**: A
-**Q72**: A
-**Q73**: A
-**Q74**: A
-**Q75**: B
-**Q76**: B
-**Q77**: B
-**Q78**: C
-**Q79**: A
-**Q80**: B
-**Q81**: A
-**Q82**: B
-**Q83**: B
-**Q84**: B
-**Q85**: A
-**Q86**: A, C, E
-**Q87**: C
-**Q88**: A
-**Q89**: A, B, C, D
-**Q90**: A
-**Q91**: A
-**Q92**: A, B, E
-**Q93**: B
-**Q94**: A, B, C, D
-**Q95**: A, B, C, D
-**Q96**: B
-**Q97**: B
-**Q98**: A, C, E
-**Q99**: D
-**Q100**: A, B, C, D, E
+| Q | Answer | Q | Answer | Q | Answer | Q | Answer | Q | Answer |
+|---|--------|---|--------|---|--------|---|--------|---|--------|
+| 1 | B | 21 | A | 41 | A, B, C, E | 61 | B | 81 | A |
+| 2 | B | 22 | B | 42 | B | 62 | A, B, C, E | 82 | B |
+| 3 | A, B, D, E | 23 | A, B, D, E | 43 | B | 63 | B | 83 | B |
+| 4 | B, C | 24 | B | 44 | A, B, C, E | 64 | C | 84 | B |
+| 5 | B | 25 | B | 45 | B | 65 | A, B, C, D | 85 | A |
+| 6 | B | 26 | C | 46 | C | 66 | B | 86 | A, C, E |
+| 7 | A, B | 27 | A, C | 47 | A, B, D | 67 | A | 87 | C |
+| 8 | C | 28 | A | 48 | B | 68 | A | 88 | A |
+| 9 | C, E | 29 | B | 49 | B | 69 | A | 89 | A, B, C, D |
+| 10 | A, B, D | 30 | A, D | 50 | A, B, C | 70 | B | 90 | A |
+| 11 | B | 31 | B | 51 | B | 71 | A | 91 | A |
+| 12 | B | 32 | B | 52 | C | 72 | A | 92 | A, B, E |
+| 13 | A, C, E | 33 | D | 53 | A, D, E | 73 | A | 93 | B |
+| 14 | A | 34 | A, B, D, E | 54 | B | 74 | A | 94 | A, B, C, D |
+| 15 | A | 35 | B | 55 | B | 75 | B | 95 | A, B, C, D |
+| 16 | A, B, E | 36 | B | 56 | A, B, C, E | 76 | B | 96 | B |
+| 17 | B | 37 | A, B, C, D | 57 | A | 77 | B | 97 | B |
+| 18 | D | 38 | A | 58 | B | 78 | C | 98 | A, C, E |
+| 19 | B | 39 | B | 59 | C | 79 | A | 99 | D |
+| 20 | A, B, C, D | 40 | B | 60 | B, C, D, E | 80 | B | 100 | A, B, C, D, E |
+
 
