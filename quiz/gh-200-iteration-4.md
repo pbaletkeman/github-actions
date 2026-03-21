@@ -1435,27 +1435,105 @@ A workflow step attempts to access various contexts. Which statements about cont
 
 ## Answer Key
 
-| Q | Answer | Q | Answer | Q | Answer | Q | Answer | Q | Answer |
-|---|--------|---|--------|---|--------|---|--------|---|--------|
-| 1 | B | 21 | A | 41 | A, B, C, E | 61 | B | 81 | A |
-| 2 | B | 22 | B | 42 | B | 62 | A, B, C, E | 82 | B |
-| 3 | A, B, D, E | 23 | A, B, D, E | 43 | B | 63 | B | 83 | B |
-| 4 | B, C | 24 | B | 44 | A, B, C, E | 64 | C | 84 | B |
-| 5 | B | 25 | B | 45 | B | 65 | A, B, C, D | 85 | A |
-| 6 | B | 26 | C | 46 | C | 66 | B | 86 | A, C, E |
-| 7 | A, B | 27 | A, C | 47 | A, B, D | 67 | A | 87 | C |
-| 8 | C | 28 | A | 48 | B | 68 | A | 88 | A |
-| 9 | C, E | 29 | B | 49 | B | 69 | A | 89 | A, B, C, D |
-| 10 | A, B, D | 30 | A, D | 50 | A, B, C | 70 | B | 90 | A |
-| 11 | B | 31 | B | 51 | B | 71 | A | 91 | A |
-| 12 | B | 32 | B | 52 | C | 72 | A | 92 | A, B, E |
-| 13 | A, C, E | 33 | D | 53 | A, D, E | 73 | A | 93 | B |
-| 14 | A | 34 | A, B, D, E | 54 | B | 74 | A | 94 | A, B, C, D |
-| 15 | A | 35 | B | 55 | B | 75 | B | 95 | A, B, C, D |
-| 16 | A, B, E | 36 | B | 56 | A, B, C, E | 76 | B | 96 | B |
-| 17 | B | 37 | A, B, C, D | 57 | A | 77 | B | 97 | B |
-| 18 | D | 38 | A | 58 | B | 78 | C | 98 | A, C, E |
-| 19 | B | 39 | B | 59 | C | 79 | A | 99 | D |
-| 20 | A, B, C, D | 40 | B | 60 | B, C, D, E | 80 | B | 100 | A, B, C, D, E |
-
-
+| Q | Answer | Explanation | Topic | Difficulty |
+|---|--------|---|---|---|
+| 1 | B | An autocomplete list appears when typing `${{` to suggest available contexts. | Topic 01 | Easy |
+| 2 | B | The extension's hover tooltip displays action.yml metadata (inputs, outputs, description). | Topic 01 | Medium |
+| 3 | A, B, D, E | All are correct; C is incorrect (workflows run on GitHub, not locally from editor). | Topic 01 | Medium |
+| 4 | B, C | Only B and C are correct autocomplete behaviors; A and D are not guaranteed. | Topic 01 | Hard |
+| 5 | B | `${{ github.sha }}` retrieves the full Git commit SHA. | Topic 02 | Easy |
+| 6 | B | `github.base_ref` contains the target/base branch name in pull request workflows. | Topic 02 | Medium |
+| 7 | A, B | Both bracket notation and dot notation work for accessing step outputs. | Topic 02 | Medium |
+| 8 | C | `strategy.job-total` returns the total count of jobs in the matrix expansion. | Topic 02 | Hard |
+| 9 | C, E | Secrets context is available in steps' `run:` commands and action `with:` sections. | Topic 03 | Medium |
+| 10 | A, B, D, E | All statements are correct except C; secrets cannot be used in workflow-level `env:`. | Topic 03 | Hard |
+| 11 | B | `on: [push, schedule]` with both sections allows multiple trigger types. | Topic 04 | Easy |
+| 12 | B | Without branch filters, `push:` triggers on all branches; B is incorrect about `main` being required. | Topic 04 | Medium |
+| 13 | A, C, E | Workflow-level env vars are available everywhere; job/step levels override them. | Topic 04 | Hard |
+| 14 | A | `on: push` fires on all commits pushed to any branch. | Topic 05 | Easy |
+| 15 | A | Cron syntax `0 9 * * 1` represents 9:00 AM UTC on Monday (day 1). | Topic 05 | Medium |
+| 16 | A, B, E | `workflow_dispatch` enables manual triggering; E is correct (push workflows can be re-run). | Topic 05 | Medium |
+| 17 | B | `pull_request_target` grants write access and secrets, creating a security risk if workflow is modified. | Topic 05 | Hard |
+| 18 | D | Both `${{ env.DEPLOY_ENV }}` and shell expansion `$DEPLOY_ENV` work for referencing env vars. | Topic 06 | Easy |
+| 19 | B | Job-level `env:` overrides workflow-level `env:`. | Topic 06 | Medium |
+| 20 | A, B, C, D | All are correct uses of the `env` context. | Topic 06 | Medium |
+| 21 | B | A is incorrect; B is correct on all counts. | Topic 06 | Hard |
+| 22 | A | GITHUB_TOKEN is automatically created at job start. | Topic 07 | Easy |
+| 23 | A, B, D, E | All listed variables are valid; C (RUNNER_LABEL) is not standard. | Topic 07 | Medium |
+| 24 | B | GITHUB_WORKSPACE provides the absolute path to repository root. | Topic 07 | Medium |
+| 25 | B | Multiple detection methods exist; all are valid for CI/debugging scenarios. | Topic 07 | Hard |
+| 26 | A, B | GITHUB_TOKEN is repo-scoped; cross-repo access requires additional credentials. | Topic 07 | Hard |
+| 27 | C | Environment-scoped secrets override repository secrets when job specifies environment. | Topic 08 | Medium |
+| 28 | B | Required reviewers trigger deployment UI wait for manual approval. | Topic 08 | Medium |
+| 29 | A, B, C, D | All deployment branch protection scenarios apply across listed conditions. | Topic 08 | Medium |
+| 30 | A, D | Artifacts auto-delete after retention; use separate download actions. | Topic 09 | Medium |
+| 31 | A, B, C | Glob patterns work; matrix artifacts auto-rename to avoid collisions. | Topic 09 | Medium |
+| 32 | C | Both glob patterns work; path specification supports multiple formats. | Topic 09 | Medium |
+| 33 | A, D, E | Artifacts inherit repo permissions; expire after retention; accessible within run. | Topic 09 | Medium |
+| 34 | A, B, D, E | hashFiles updates cache when files change; restore-keys provides fallback paths. | Topic 10 | Medium |
+| 35 | B | Reusable workflows need `on: workflow_call`. | Topic 11 | Easy |
+| 36 | A, B, C, E | Accessible org workflow by name/version/SHA; repo must be public/accessible. | Topic 11 | Medium |
+| 37 | A | Inputs required if marked so; outputs by job ID; only string type supported. | Topic 11 | Medium |
+| 38 | B | Use `with: secrets: inherit` to pass all secrets to reusable workflow. | Topic 11 | Hard |
+| 39 | C | action.yml required; repo public; README recommended; tagging optional. | Topic 11 | Medium |
+| 40 | B | Set RUNNER_DEBUG=1 as repository secret; re-run workflow to enable. | Topic 12 | Medium |
+| 41 | A, B, C, D | All workflow logging commands are available. | Topic 12 | Medium |
+| 42 | C | Both UI and API provide access to logs. | Topic 12 | Easy |
+| 43 | B | `if: failure()` uploads artifacts only on step failure. | Topic 12 | Medium |
+| 44 | C | UI interface provides primary timing information access. | Topic 12 | Hard |
+| 45 | A | Correct endpoint: `/repos/{owner}/{repo}/actions/workflows`. | Topic 13 | Medium |
+| 46 | B | Trigger via API with correct parameters; all options are accurate. | Topic 13 | Medium |
+| 47 | A | All query parameters apply to workflow run queries. | Topic 13 | Medium |
+| 48 | A | POST endpoint with `/cancel` cancels a running workflow. | Topic 13 | Medium |
+| 49 | A | Both list-then-download and direct download endpoints valid. | Topic 13 | Hard |
+| 50 | B | Configure environments in Repository Settings → Environments. | Topic 14 | Medium |
+| 51 | A | Deployment history available in UI, API, and workflow logs. | Topic 14 | Medium |
+| 52 | A | Second approval triggers immediate deployment continuation. | Topic 14 | Hard |
+| 53 | A | Environment-scoped secrets/variables available when job specifies environment. | Topic 14 | Medium |
+| 54 | A | Metadata file is action.yml/.yaml at repo root. | Topic 15 | Medium |
+| 55 | B | Both node_modules shipping and bundling with ncc/esbuild valid. | Topic 15 | Medium |
+| 56 | B | Composite actions use `runs: { using: composite, steps: [...] }`. | Topic 15 | Medium |
+| 57 | B | Moving v1 tag allows existing references to receive updates. | Topic 15 | Hard |
+| 58 | C | All testing approaches valid at different development stages. | Topic 15 | Medium |
+| 59 | C | Both ubuntu-latest and ubuntu-22.04 support Python 3.10. | Topic 16 | Easy |
+| 60 | B, C, D, E | All runner label and targeting statements correct. | Topic 16 | Medium |
+| 61 | B | Organizations support IP allowlists for runner groups. | Topic 16 | Medium |
+| 62 | A, B, C, E | Use third-party tools or hosted runners; no built-in autoscaling. | Topic 16 | Hard |
+| 63 | B | Disable during maintenance; complete in-flight; automate patches. | Topic 16 | Medium |
+| 64 | B | "Allow local actions only" permits organization/enterprise actions. | Topic 17 | Medium |
+| 65 | A, C | Required workflows run automatically; admins cannot disable. | Topic 17 | Medium |
+| 66 | A, C, E | IP allowlists restrict by registration IP; runners outside range inaccessible. | Topic 17 | Hard |
+| 67 | A, D | Repository secrets take precedence; most specific scope wins. | Topic 17 | Medium |
+| 68 | A | All audit logging capabilities available for compliance. | Topic 17 | Hard |
+| 69 | B, D | Use explicit minimal permissions; avoid read-all scope. | Topic 18 | Medium |
+| 70 | C | Setting secret as env variable and referencing prevents injection attacks. | Topic 18 | Hard |
+| 71 | B | Pin to full SHA; validate verified creators for supply chain security. | Topic 18 | Medium |
+| 72 | A, B, E | All OIDC federation statements correct regarding cloud provider integration. | Topic 18 | Hard |
+| 73 | B | Secret masking can fail from multiple contributing factors. | Topic 18 | Hard |
+| 74 | B | Verify creator credentials; check update frequency; assess follower count. | Topic 18 | Hard |
+| 75 | A | Parallelize independent jobs (build and test) to minimize runtime. | Topic 18 | Medium |
+| 76 | B | Reduce artifact size; split jobs; increase timeout; consider larger runners. | Topic 19 | Medium |
+| 77 | B | Multiple factors can prevent workflow trigger; `main` matches exactly. | Topic 19 | Medium |
+| 78 | A, C, E | Incremental builds; caching; larger runners all improve performance. | Topic 19 | Medium |
+| 79 | D | Missing secrets can result from multiple causes in workflow. | Topic 19 | Hard |
+| 80 | A, B, C, D, E | Matrix job failure causes skip unless `if: always()` used. | Topic 19 | Hard |
+| 81 | A | Extension provides real-time YAML schema validation. | Topic 01 | Easy |
+| 82 | B | The extension highlights context variables outside their scope. | Topic 01 | Medium |
+| 83 | B | Extension validates permission scope names correctly. | Topic 01 | Medium |
+| 84 | B | The extension is not capable of running workflows locally. | Topic 01 | Hard |
+| 85 | A | Yes, the extension detects scope violations automatically. | Topic 01 | Hard |
+| 86 | B | Shells scripts execute in GitHub Actions environment by default. | Topic 02 | Medium |
+| 87 | C | `github.event.pull_request.head.ref` retrieves source branch name. | Topic 02 | Medium |
+| 88 | A | All runner variables are accessible in workflow context. | Topic 02 | Medium |
+| 89 | A, B, C, D | All context properties available; none are restricted. | Topic 02 | Hard |
+| 90 | A | Context values interpolate correctly in env blocks. | Topic 02 | Medium |
+| 91 | A | Secrets context only available to job/step scopes. | Topic 03 | Easy |
+| 92 | A, B, E | Multiple secure transmission methods available for actions. | Topic 03 | Medium |
+| 93 | B | Event data properly referenced using `github.event` context. | Topic 03 | Medium |
+| 94 | A, B, C, D | All valid context availability scenarios listed. | Topic 03 | Hard |
+| 95 | A, B, C, D | Full range of event filtering options supported. | Topic 03 | Medium |
+| 96 | B | Artifact retention follows GitHub default policies. | Topic 09 | Medium |
+| 97 | B | Cache restoration with keys provides fallback options. | Topic 10 | Medium |
+| 98 | A, C, E | Multiple valid action referencing methods supported. | Topic 15 | Medium |
+| 99 | D | All factors contribute to performance requirements. | Topic 19 | Hard |
+| 100 | A, B, C, D, E | All performance optimization strategies are valid. | Topic 19 | Hard |
