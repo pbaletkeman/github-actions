@@ -1,5 +1,4 @@
-# GH-200: GitHub Actions — Practice Exam
-## Iteration 2
+# GitHub Actions GH-200 Certification Exam — Question Bank (Iteration 2)
 
 **Total Questions:** 100
 **Difficulty Distribution:** 20 Easy · 60 Medium · 20 Hard
@@ -838,7 +837,7 @@ A calling workflow uses `secrets: inherit` when calling a reusable workflow. Wha
 
 ### Question 53 — Topic 11: Workflow Sharing
 
-**Difficulty:** Medium | **Answer Type:** many | **Topic:** 53
+**Difficulty:** Medium | **Answer Type:** many | **Topic:** 11
 
 A reusable workflow declares outputs under `on.workflow_call.outputs`. Which of the following statements about exposing outputs from a reusable workflow to the caller are correct? *(Select all that apply.)*
 
@@ -871,7 +870,7 @@ An organization manages a **public** shared workflow repository used by external
 
 ### Question 55 — Topic 11: Workflow Sharing
 
-**Difficulty:** Medium | **Answer Type:** one | **Topic:** 55
+**Difficulty:** Medium | **Answer Type:** one | **Topic:** 11
 
 A workflow badge URL follows the format: `https://github.com/<owner>/<repo>/workflows/<workflow-name>/badge.svg`. What does this badge display?
 

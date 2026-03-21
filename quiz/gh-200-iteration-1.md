@@ -1,4 +1,4 @@
-# GH-200 GitHub Actions Certification — Practice Exam
+# GitHub Actions GH-200 Certification Exam — Question Bank (Iteration 1)
 
 **Iteration**: 1
 **Generated**: 2026-03-19
