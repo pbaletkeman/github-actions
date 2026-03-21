@@ -1,13 +1,13 @@
-# GitHub Actions GH-200 Certification Exam — Question Bank (Iteration 2)
+﻿# GitHub Actions GH-200 Certification Exam â€” Question Bank (Iteration 2)
 
 **Total Questions:** 100
-**Difficulty Distribution:** 20 Easy · 60 Medium · 20 Hard
-**Answer Types:** 55 one · 26 many · 12 all · 7 none
+**Difficulty Distribution:** 20 Easy Â· 60 Medium Â· 20 Hard
+**Answer Types:** 55 one Â· 26 many Â· 12 all Â· 7 none
 **Passing Score:** 70% (70/100)
 
 ---
 
-## Question 1 — Topic 01: GitHub Actions VS Code Extension
+### Question 1 â€” Topic 01: GitHub Actions VS Code Extension
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 01
 
@@ -20,7 +20,7 @@ A developer opens a workflow YAML file in VS Code and notices no syntax validati
 
 ---
 
-## Question 2 — Topic 01: GitHub Actions VS Code Extension
+### Question 2 â€” Topic 01: GitHub Actions VS Code Extension
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 01
 
@@ -33,7 +33,7 @@ A developer types `${{` in the `env:` section of a workflow step and the VS Code
 
 ---
 
-## Question 3 — Topic 01: GitHub Actions VS Code Extension
+### Question 3 â€” Topic 01: GitHub Actions VS Code Extension
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 01
 
@@ -46,7 +46,7 @@ A team member hovers over `uses: actions/setup-node@v4` in their workflow file u
 
 ---
 
-## Question 4 — Topic 01: GitHub Actions VS Code Extension
+### Question 4 â€” Topic 01: GitHub Actions VS Code Extension
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 01
 
@@ -60,7 +60,7 @@ Which of the following capabilities does the VS Code GitHub Actions extension pr
 
 ---
 
-## Question 5 — Topic 02: Contextual Information
+### Question 5 â€” Topic 02: Contextual Information
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 02
 
@@ -73,7 +73,7 @@ A workflow is triggered by a `push` event. Which expression correctly retrieves 
 
 ---
 
-## Question 6 — Topic 02: Contextual Information
+### Question 6 â€” Topic 02: Contextual Information
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 02
 
@@ -86,7 +86,7 @@ A workflow step needs to determine who originally triggered the workflow run ver
 
 ---
 
-## Question 7 — Topic 02: Contextual Information
+### Question 7 â€” Topic 02: Contextual Information
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 02
 
@@ -99,7 +99,7 @@ A step needs to reference output values produced by a previous step in the same 
 
 ---
 
-## Question 8 — Topic 02: Contextual Information
+### Question 8 â€” Topic 02: Contextual Information
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 02
 
@@ -112,7 +112,7 @@ The `strategy` context is available inside jobs that define a `strategy:` block.
 
 ---
 
-## Question 9 — Topic 02: Contextual Information
+### Question 9 â€” Topic 02: Contextual Information
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 02
 
@@ -125,7 +125,7 @@ A workflow uses `workflow_call` and receives several inputs from the calling wor
 
 ---
 
-## Question 10 — Topic 02: Contextual Information
+### Question 10 â€” Topic 02: Contextual Information
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 02
 
@@ -145,20 +145,20 @@ A downstream job that depends on this job via `needs: release` wants to referenc
 
 ---
 
-## Question 11 — Topic 03: Context Availability Reference
+### Question 11 â€” Topic 03: Context Availability Reference
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 03
 
 A workflow engineer wants to set `run-name` dynamically to show the branch that triggered the run. Which expression is valid in the `run-name` key?
 
 **A.** `${{ runner.os }} run on ${{ github.ref_name }}`
-**B.** `${{ github.ref_name }} — ${{ github.workflow }}`
+**B.** `${{ github.ref_name }} â€” ${{ github.workflow }}`
 **C.** `${{ secrets.DEPLOY_ENV }} deployment`
 **D.** `${{ matrix.os }} run`
 
 ---
 
-## Question 12 — Topic 03: Context Availability Reference
+### Question 12 â€” Topic 03: Context Availability Reference
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 03
 
@@ -179,7 +179,7 @@ What happens when this workflow is evaluated?
 
 ---
 
-## Question 13 — Topic 03: Context Availability Reference
+### Question 13 â€” Topic 03: Context Availability Reference
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 03
 
@@ -193,7 +193,7 @@ Which of the following contexts are available in `jobs.<id>.steps[*].run`? *(Sel
 
 ---
 
-## Question 14 — Topic 03: Context Availability Reference
+### Question 14 â€” Topic 03: Context Availability Reference
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 03
 
@@ -211,14 +211,14 @@ jobs:
 
 Is the `matrix` context available in `jobs.<id>.container`?
 
-**A.** Yes — `matrix` context is available everywhere inside a job definition.
-**B.** No — `jobs.<id>.container` only supports `github`, `inputs`, and `vars` contexts; `matrix` is not available there.
-**C.** Yes — but only when `fail-fast: false` is set in the strategy.
-**D.** No — container images must be hardcoded strings; no expression evaluation is supported.
+**A.** Yes â€” `matrix` context is available everywhere inside a job definition.
+**B.** No â€” `jobs.<id>.container` only supports `github`, `inputs`, and `vars` contexts; `matrix` is not available there.
+**C.** Yes â€” but only when `fail-fast: false` is set in the strategy.
+**D.** No â€” container images must be hardcoded strings; no expression evaluation is supported.
 
 ---
 
-## Question 15 — Topic 03: Context Availability Reference
+### Question 15 â€” Topic 03: Context Availability Reference
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 03
 
@@ -232,7 +232,7 @@ Which of the following contexts are **not** available in `jobs.<id>.outputs`? *(
 
 ---
 
-## Question 16 — Topic 04: Workflow File Structure
+### Question 16 â€” Topic 04: Workflow File Structure
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 04
 
@@ -245,7 +245,7 @@ What is the purpose of `defaults.run.working-directory` at the workflow level?
 
 ---
 
-## Question 17 — Topic 04: Workflow File Structure
+### Question 17 â€” Topic 04: Workflow File Structure
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 04
 
@@ -258,7 +258,7 @@ By default, jobs in a workflow run in which manner?
 
 ---
 
-## Question 18 — Topic 04: Workflow File Structure
+### Question 18 â€” Topic 04: Workflow File Structure
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 04
 
@@ -279,7 +279,7 @@ What happens when a new push is made to `main` while a workflow triggered by the
 
 ---
 
-## Question 19 — Topic 04: Workflow File Structure
+### Question 19 â€” Topic 04: Workflow File Structure
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 04
 
@@ -303,7 +303,7 @@ Which of the following statements are accurate? *(Select all that apply.)*
 
 ---
 
-## Question 20 — Topic 04: Workflow File Structure
+### Question 20 â€” Topic 04: Workflow File Structure
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 04
 
@@ -327,7 +327,7 @@ How many total job instances will be created?
 
 ---
 
-## Question 21 — Topic 04: Workflow File Structure
+### Question 21 â€” Topic 04: Workflow File Structure
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 04
 
@@ -340,7 +340,7 @@ A job is configured with `continue-on-error: ${{ matrix.experimental == true }}`
 
 ---
 
-## Question 22 — Topic 04: Workflow File Structure
+### Question 22 â€” Topic 04: Workflow File Structure
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 04
 
@@ -353,7 +353,7 @@ A developer wants to re-run only the failed matrix combinations after a partial 
 
 ---
 
-## Question 23 — Topic 05: Workflow Trigger Events
+### Question 23 â€” Topic 05: Workflow Trigger Events
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 05
 
@@ -388,7 +388,7 @@ on:
 
 ---
 
-## Question 24 — Topic 05: Workflow Trigger Events
+### Question 24 â€” Topic 05: Workflow Trigger Events
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 05
 
@@ -401,20 +401,20 @@ A developer wants a workflow to run every Monday at 9 AM UTC. Which cron express
 
 ---
 
-## Question 25 — Topic 05: Workflow Trigger Events
+### Question 25 â€” Topic 05: Workflow Trigger Events
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 05
 
 A workflow uses `pull_request` and targets the `main` branch. A fork contributor opens a PR. By default, what permissions does the `GITHUB_TOKEN` have in this workflow run?
 
-**A.** Write access — the same as any internal contributor's workflow run.
-**B.** Read-only — fork `pull_request` workflows always receive a read-only token.
-**C.** No token is provisioned — external fork runs cannot access `GITHUB_TOKEN`.
+**A.** Write access â€” the same as any internal contributor's workflow run.
+**B.** Read-only â€” fork `pull_request` workflows always receive a read-only token.
+**C.** No token is provisioned â€” external fork runs cannot access `GITHUB_TOKEN`.
 **D.** Read-only on code but write access on issues and pull requests.
 
 ---
 
-## Question 26 — Topic 05: Workflow Trigger Events
+### Question 26 â€” Topic 05: Workflow Trigger Events
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 05
 
@@ -428,7 +428,7 @@ Which of the following `pull_request` activity types must be explicitly listed u
 
 ---
 
-## Question 27 — Topic 05: Workflow Trigger Events
+### Question 27 â€” Topic 05: Workflow Trigger Events
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 05
 
@@ -446,12 +446,12 @@ The job inside this workflow contains `if: github.event.workflow_run.conclusion 
 
 **A.** It causes the job to run regardless of whether the "Build" workflow succeeded or failed.
 **B.** It ensures this job only runs when the "Build" workflow completed with a success conclusion.
-**C.** It is invalid syntax — `workflow_run.conclusion` is not a valid property.
+**C.** It is invalid syntax â€” `workflow_run.conclusion` is not a valid property.
 **D.** It causes GitHub to cancel the "Build" workflow if it failed.
 
 ---
 
-## Question 28 — Topic 05: Workflow Trigger Events
+### Question 28 â€” Topic 05: Workflow Trigger Events
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 05
 
@@ -464,7 +464,7 @@ A public repository uses `pull_request_target` to run CI when external contribut
 
 ---
 
-## Question 29 — Topic 05: Workflow Trigger Events
+### Question 29 â€” Topic 05: Workflow Trigger Events
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 05
 
@@ -477,7 +477,7 @@ A `workflow_dispatch` input is declared with `type: choice` and a list of option
 
 ---
 
-## Question 30 — Topic 06: Custom Environment Variables
+### Question 30 â€” Topic 06: Custom Environment Variables
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 06
 
@@ -490,7 +490,7 @@ A developer defines a variable at both the workflow level and the job level with
 
 ---
 
-## Question 31 — Topic 06: Custom Environment Variables
+### Question 31 â€” Topic 06: Custom Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 06
 
@@ -509,7 +509,7 @@ How does a subsequent step in the same job access this value?
 
 ---
 
-## Question 32 — Topic 06: Custom Environment Variables
+### Question 32 â€” Topic 06: Custom Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 06
 
@@ -522,7 +522,7 @@ Which of the following are valid methods to make an environment variable availab
 
 ---
 
-## Question 33 — Topic 06: Custom Environment Variables
+### Question 33 â€” Topic 06: Custom Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 06
 
@@ -542,7 +542,7 @@ What does the `||` operator achieve in this expression?
 
 ---
 
-## Question 34 — Topic 06: Custom Environment Variables
+### Question 34 â€” Topic 06: Custom Environment Variables
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 06
 
@@ -554,14 +554,14 @@ run: ./deploy.sh ${{ secrets.DEPLOY_TOKEN }}
 
 What security risk does this pattern introduce?
 
-**A.** No risk — GitHub encrypts all secrets before they reach the runner.
+**A.** No risk â€” GitHub encrypts all secrets before they reach the runner.
 **B.** The secret value is script-injected into the shell command, potentially exposing it through process listings or shell history.
 **C.** The step will fail because `secrets` context is unavailable in `run:` steps.
 **D.** Only a risk when using Windows runners; Linux runners handle secret injection safely.
 
 ---
 
-## Question 35 — Topic 07: Default Environment Variables
+### Question 35 â€” Topic 07: Default Environment Variables
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 07
 
@@ -574,7 +574,7 @@ Which default environment variable always evaluates to `true` in every GitHub Ac
 
 ---
 
-## Question 36 — Topic 07: Default Environment Variables
+### Question 36 â€” Topic 07: Default Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 07
 
@@ -587,7 +587,7 @@ A step needs the full Git ref of the current run (e.g., `refs/heads/main`). Whic
 
 ---
 
-## Question 37 — Topic 07: Default Environment Variables
+### Question 37 â€” Topic 07: Default Environment Variables
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 07
 
@@ -601,7 +601,7 @@ Which of the following default environment variables are available in every GitH
 
 ---
 
-## Question 38 — Topic 07: Default Environment Variables
+### Question 38 â€” Topic 07: Default Environment Variables
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 07
 
@@ -614,20 +614,20 @@ A step uses `$GITHUB_STEP_SUMMARY` to write a markdown table. Where does this co
 
 ---
 
-## Question 39 — Topic 08: Environment Protection Rules
+### Question 39 â€” Topic 08: Environment Protection Rules
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 08
 
 An organization wants all deployments to the `production` environment to pause and wait for approval from a senior engineer before proceeding. Which environment protection rule achieves this?
 
-**A.** Deployment branches — restrict deployments to protected branches only.
-**B.** Wait timer — set a 60-minute delay before the deployment job starts.
-**C.** Required reviewers — specify the senior engineer's GitHub account as a reviewer.
-**D.** IP allow list — restrict the runner IPs that can deploy to production.
+**A.** Deployment branches â€” restrict deployments to protected branches only.
+**B.** Wait timer â€” set a 60-minute delay before the deployment job starts.
+**C.** Required reviewers â€” specify the senior engineer's GitHub account as a reviewer.
+**D.** IP allow list â€” restrict the runner IPs that can deploy to production.
 
 ---
 
-## Question 40 — Topic 08: Environment Protection Rules
+### Question 40 â€” Topic 08: Environment Protection Rules
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 08
 
@@ -640,7 +640,7 @@ A `production` environment is configured with `Required reviewers`. A deployment
 
 ---
 
-## Question 41 — Topic 08: Environment Protection Rules
+### Question 41 â€” Topic 08: Environment Protection Rules
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 08
 
@@ -654,20 +654,20 @@ Which of the following are valid settings under "Deployment branches" for a GitH
 
 ---
 
-## Question 42 — Topic 08: Environment Protection Rules
+### Question 42 â€” Topic 08: Environment Protection Rules
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 08
 
 An environment's wait timer is set to 30 minutes. A deployment job targeting that environment is triggered at 10:00 AM. When can a reviewer approve the deployment?
 
-**A.** Immediately — the wait timer only applies after approval.
+**A.** Immediately â€” the wait timer only applies after approval.
 **B.** A reviewer can click "Approve" at any point, but the job won't actually start until 10:30 AM.
 **C.** No reviewer action is needed; the job automatically proceeds at 10:30 AM without approval.
-**D.** Not until 10:30 AM — the approval prompt does not appear until the wait timer expires.
+**D.** Not until 10:30 AM â€” the approval prompt does not appear until the wait timer expires.
 
 ---
 
-## Question 43 — Topic 09: Workflow Artifacts
+### Question 43 â€” Topic 09: Workflow Artifacts
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 09
 
@@ -680,7 +680,7 @@ A build job uploads a compiled binary using `actions/upload-artifact`. A separat
 
 ---
 
-## Question 44 — Topic 09: Workflow Artifacts
+### Question 44 â€” Topic 09: Workflow Artifacts
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 09
 
@@ -693,7 +693,7 @@ By default, how long are GitHub Actions artifacts retained before being automati
 
 ---
 
-## Question 45 — Topic 09: Workflow Artifacts
+### Question 45 â€” Topic 09: Workflow Artifacts
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 09
 
@@ -718,7 +718,7 @@ Which of the following statements about this upload are correct? *(Select all th
 
 ---
 
-## Question 46 — Topic 09: Workflow Artifacts
+### Question 46 â€” Topic 09: Workflow Artifacts
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 09
 
@@ -741,7 +741,7 @@ Which of the following is required for this cross-run download to succeed?
 
 ---
 
-## Question 47 — Topic 10: Workflow Caching
+### Question 47 â€” Topic 10: Workflow Caching
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 10
 
@@ -762,7 +762,7 @@ If the exact key is not found, what happens next?
 
 ---
 
-## Question 48 — Topic 10: Workflow Caching
+### Question 48 â€” Topic 10: Workflow Caching
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 10
 
@@ -775,7 +775,7 @@ A team notices that their npm cache is not being reused across pull requests fro
 
 ---
 
-## Question 49 — Topic 10: Workflow Caching
+### Question 49 â€” Topic 10: Workflow Caching
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 10
 
@@ -788,7 +788,7 @@ Which of the following statements about GitHub Actions cache behavior are correc
 
 ---
 
-## Question 50 — Topic 10: Workflow Caching
+### Question 50 â€” Topic 10: Workflow Caching
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 10
 
@@ -809,7 +809,7 @@ A developer adds a new package to `requirements.txt`. What happens on the next r
 
 ---
 
-## Question 51 — Topic 11: Workflow Sharing
+### Question 51 â€” Topic 11: Workflow Sharing
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 11
 
@@ -822,7 +822,7 @@ What trigger event must a reusable workflow file declare in order to be callable
 
 ---
 
-## Question 52 — Topic 11: Workflow Sharing
+### Question 52 â€” Topic 11: Workflow Sharing
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 11
 
@@ -835,7 +835,7 @@ A calling workflow uses `secrets: inherit` when calling a reusable workflow. Wha
 
 ---
 
-## Question 53 — Topic 11: Workflow Sharing
+### Question 53 â€” Topic 11: Workflow Sharing
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 11
 
@@ -848,7 +848,7 @@ A reusable workflow declares outputs under `on.workflow_call.outputs`. Which of 
 
 ---
 
-## Question 54 — Topic 11: Workflow Sharing
+### Question 54 â€” Topic 11: Workflow Sharing
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 54
 
@@ -861,14 +861,14 @@ Two reusable workflow secret-passing strategies are compared:
 
 An organization manages a **public** shared workflow repository used by external teams. Which strategy is recommended and why?
 
-**A.** `secrets: inherit` — because it minimizes boilerplate and all public repos should share secrets freely.
-**B.** Explicit mapping — because only named secrets flow to the called workflow, reducing unintended credential exposure.
-**C.** Explicit mapping — because `secrets: inherit` is only supported for workflows in private repositories.
-**D.** `secrets: inherit` — because explicit mapping requires the called workflow to re-declare each secret, which is not possible in public workflows.
+**A.** `secrets: inherit` â€” because it minimizes boilerplate and all public repos should share secrets freely.
+**B.** Explicit mapping â€” because only named secrets flow to the called workflow, reducing unintended credential exposure.
+**C.** Explicit mapping â€” because `secrets: inherit` is only supported for workflows in private repositories.
+**D.** `secrets: inherit` â€” because explicit mapping requires the called workflow to re-declare each secret, which is not possible in public workflows.
 
 ---
 
-## Question 55 — Topic 11: Workflow Sharing
+### Question 55 â€” Topic 11: Workflow Sharing
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 11
 
@@ -881,7 +881,7 @@ A workflow badge URL follows the format: `https://github.com/<owner>/<repo>/work
 
 ---
 
-## Question 56 — Topic 12: Workflow Debugging
+### Question 56 â€” Topic 12: Workflow Debugging
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 12
 
@@ -894,7 +894,7 @@ A developer wants to enable verbose debug logging for all steps in a workflow ru
 
 ---
 
-## Question 57 — Topic 12: Workflow Debugging
+### Question 57 â€” Topic 12: Workflow Debugging
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 12
 
@@ -913,21 +913,21 @@ Where does this warning appear?
 
 ---
 
-## Question 58 — Topic 12: Workflow Debugging
+### Question 58 â€” Topic 12: Workflow Debugging
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 12
 
 Which workflow commands can be used within a `run:` step to structure log output? *(Select all that apply.)*
 
-**A.** `echo "::group::My Group Name"` — starts a collapsible log group
-**B.** `echo "::endgroup::"` — closes a collapsible log group
-**C.** `echo "::debug::My debug message"` — emits a debug-level log entry
-**D.** `echo "::set-output name=myvar::myvalue"` — the recommended modern way to set step outputs
-**E.** `echo "::notice::Something important happened"` — creates a notice annotation
+**A.** `echo "::group::My Group Name"` â€” starts a collapsible log group
+**B.** `echo "::endgroup::"` â€” closes a collapsible log group
+**C.** `echo "::debug::My debug message"` â€” emits a debug-level log entry
+**D.** `echo "::set-output name=myvar::myvalue"` â€” the recommended modern way to set step outputs
+**E.** `echo "::notice::Something important happened"` â€” creates a notice annotation
 
 ---
 
-## Question 59 — Topic 12: Workflow Debugging
+### Question 59 â€” Topic 12: Workflow Debugging
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 12
 
@@ -950,7 +950,7 @@ What limitation must the developer be aware of?
 
 ---
 
-## Question 60 — Topic 13: Workflows REST API
+### Question 60 â€” Topic 13: Workflows REST API
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 13
 
@@ -963,7 +963,7 @@ A script needs to trigger a `workflow_dispatch` workflow via the REST API. Which
 
 ---
 
-## Question 61 — Topic 13: Workflows REST API
+### Question 61 â€” Topic 13: Workflows REST API
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 13
 
@@ -976,21 +976,21 @@ An external system needs to list only the failed workflow runs for a repository.
 
 ---
 
-## Question 62 — Topic 13: Workflows REST API
+### Question 62 â€” Topic 13: Workflows REST API
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 13
 
 A developer calls `GET /repos/{owner}/{repo}/actions/runs/{run_id}`. Which of the following fields are included in the response? *(Select all that apply.)*
 
-**A.** `status` — indicates whether the run is queued, in_progress, or completed
-**B.** `conclusion` — indicates the final result (success, failure, cancelled, etc.)
-**C.** `head_branch` — the branch that triggered the run
-**D.** `workflow_steps` — an inline list of all step names and their results
-**E.** `run_number` — a sequential counter for this workflow's runs
+**A.** `status` â€” indicates whether the run is queued, in_progress, or completed
+**B.** `conclusion` â€” indicates the final result (success, failure, cancelled, etc.)
+**C.** `head_branch` â€” the branch that triggered the run
+**D.** `workflow_steps` â€” an inline list of all step names and their results
+**E.** `run_number` â€” a sequential counter for this workflow's runs
 
 ---
 
-## Question 63 — Topic 13: Workflows REST API
+### Question 63 â€” Topic 13: Workflows REST API
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 13
 
@@ -1003,7 +1003,7 @@ A CI/CD platform wants to cancel a running workflow via the REST API. Which endp
 
 ---
 
-## Question 64 — Topic 14: Reviewing Deployments
+### Question 64 â€” Topic 14: Reviewing Deployments
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 64
 
@@ -1016,7 +1016,7 @@ When a deployment reviewer **rejects** a pending deployment in the GitHub Action
 
 ---
 
-## Question 65 — Topic 14: Reviewing Deployments
+### Question 65 â€” Topic 14: Reviewing Deployments
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 65
 
@@ -1029,7 +1029,7 @@ A deployment review workflow has multiple downstream jobs that depend on the pro
 
 ---
 
-## Question 66 — Topic 14: Reviewing Deployments
+### Question 66 â€” Topic 14: Reviewing Deployments
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 66
 
@@ -1042,7 +1042,7 @@ When configuring deployment reviewers in GitHub environment settings, which of t
 
 ---
 
-## Question 67 — Topic 15: Creating and Publishing Actions
+### Question 67 â€” Topic 15: Creating and Publishing Actions
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 15
 
@@ -1055,7 +1055,7 @@ A developer wants to reference a custom action stored in the **same repository**
 
 ---
 
-## Question 68 — Topic 15: Creating and Publishing Actions
+### Question 68 â€” Topic 15: Creating and Publishing Actions
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 15
 
@@ -1068,7 +1068,7 @@ What file is required in the root of a custom action repository to define its in
 
 ---
 
-## Question 69 — Topic 15: Creating and Publishing Actions
+### Question 69 â€” Topic 15: Creating and Publishing Actions
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 15
 
@@ -1082,7 +1082,7 @@ Which of the following are valid action types supported by the `runs.using` key 
 
 ---
 
-## Question 70 — Topic 15: Creating and Publishing Actions
+### Question 70 â€” Topic 15: Creating and Publishing Actions
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 15
 
@@ -1095,7 +1095,7 @@ A JavaScript action uses `@actions/core` to set a step output. Which method call
 
 ---
 
-## Question 71 — Topic 16: Managing Runners
+### Question 71 â€” Topic 16: Managing Runners
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 16
 
@@ -1108,7 +1108,7 @@ A workflow needs to run on a self-hosted runner that has a label `gpu`. Which `r
 
 ---
 
-## Question 72 — Topic 16: Managing Runners
+### Question 72 â€” Topic 16: Managing Runners
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 16
 
@@ -1121,7 +1121,7 @@ A self-hosted runner shows status `online` but `busy: false` in the API, yet job
 
 ---
 
-## Question 73 — Topic 16: Managing Runners
+### Question 73 â€” Topic 16: Managing Runners
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 16
 
@@ -1134,7 +1134,7 @@ Which of the following are security risks associated with using self-hosted runn
 
 ---
 
-## Question 74 — Topic 16: Managing Runners
+### Question 74 â€” Topic 16: Managing Runners
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 16
 
@@ -1147,7 +1147,7 @@ A self-hosted runner needs to be restarted because it crashed mid-job. After the
 
 ---
 
-## Question 75 — Topic 17: GitHub Actions Enterprise
+### Question 75 â€” Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 17
 
@@ -1160,7 +1160,7 @@ At what level can an enterprise administrator enforce that a specific compliance
 
 ---
 
-## Question 76 — Topic 17: GitHub Actions Enterprise
+### Question 76 â€” Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 17
 
@@ -1173,7 +1173,7 @@ An organization policy is set to "Allow select actions and reusable workflows." 
 
 ---
 
-## Question 77 — Topic 17: GitHub Actions Enterprise
+### Question 77 â€” Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 17
 
@@ -1186,7 +1186,7 @@ Which of the following statements about runner groups in a GitHub organization a
 
 ---
 
-## Question 78 — Topic 17: GitHub Actions Enterprise
+### Question 78 â€” Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 17
 
@@ -1199,7 +1199,7 @@ An enterprise has GitHub-hosted runner IP ranges that change frequently. Service
 
 ---
 
-## Question 79 — Topic 18: Security and Optimization
+### Question 79 â€” Topic 18: Security and Optimization
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 18
 
@@ -1212,7 +1212,7 @@ A workflow needs to upload Docker images to Amazon ECR without storing long-live
 
 ---
 
-## Question 80 — Topic 18: Security and Optimization
+### Question 80 â€” Topic 18: Security and Optimization
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 18
 
@@ -1231,20 +1231,20 @@ What security benefit does this provide compared to `actions/checkout@v4`?
 
 ---
 
-## Question 81 — Topic 18: Security and Optimization
+### Question 81 â€” Topic 18: Security and Optimization
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 18
 
 A workflow step directly interpolates `${{ github.event.pull_request.title }}` into a `run:` shell script. An attacker submits a pull request with a title containing shell metacharacters. What is the attack vector and correct mitigation?
 
 **A.** Attack: The expression evaluates in the YAML parser before reaching the shell; mitigation: wrap in double quotes in YAML.
-**B.** Attack: Script injection — the PR title value is substituted into the shell command, potentially being interpreted as shell commands; mitigation: assign to an environment variable and reference it as `$ENV_VAR` in the script.
+**B.** Attack: Script injection â€” the PR title value is substituted into the shell command, potentially being interpreted as shell commands; mitigation: assign to an environment variable and reference it as `$ENV_VAR` in the script.
 **C.** Attack: The expression triggers YAML deserialization of arbitrary code; mitigation: use `fromJSON()` to safely parse the value.
-**D.** Attack: None — GitHub sanitizes all `github.event` context values before they reach the runner.
+**D.** Attack: None â€” GitHub sanitizes all `github.event` context values before they reach the runner.
 
 ---
 
-## Question 82 — Topic 18: Security and Optimization
+### Question 82 â€” Topic 18: Security and Optimization
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 18
 
@@ -1257,7 +1257,7 @@ Which of the following are accurate statements about the `GITHUB_TOKEN`? *(Selec
 
 ---
 
-## Question 83 — Topic 18: Security and Optimization
+### Question 83 â€” Topic 18: Security and Optimization
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 18
 
@@ -1270,7 +1270,7 @@ The OIDC subject claim for a workflow running in a deployment to the `production
 
 ---
 
-## Question 84 — Topic 19: Common Failures and Troubleshooting
+### Question 84 â€” Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Easy | **Answer Type:** one | **Topic:** 19
 
@@ -1289,7 +1289,7 @@ What is the most likely cause?
 
 ---
 
-## Question 85 — Topic 19: Common Failures and Troubleshooting
+### Question 85 â€” Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 19
 
@@ -1302,11 +1302,11 @@ A Node.js workflow fails with `npm ERR! code ERESOLVE`. Without understanding th
 
 ---
 
-## Question 86 — Topic 19: Common Failures and Troubleshooting
+### Question 86 â€” Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Medium | **Answer Type:** many | **Topic:** 19
 
-A self-hosted runner shows `offline` status in Repository Settings → Actions → Runners. Which of the following are valid troubleshooting steps? *(Select all that apply.)*
+A self-hosted runner shows `offline` status in Repository Settings â†’ Actions â†’ Runners. Which of the following are valid troubleshooting steps? *(Select all that apply.)*
 
 **A.** Verify the runner process is running on the host machine (`ps aux | grep Runner.Listener`).
 **B.** Check outbound connectivity from the runner to `github.com` and `api.github.com`.
@@ -1315,33 +1315,33 @@ A self-hosted runner shows `offline` status in Repository Settings → Actions �
 
 ---
 
-## Question 87 — Topic 19: Common Failures and Troubleshooting
+### Question 87 â€” Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 19
 
 A matrix workflow has 12 job combinations. One combination fails after 45 minutes. `fail-fast` is set to `true` (the default). How many of the remaining in-progress or queued jobs are affected?
 
-**A.** None — `fail-fast` only cancels queued jobs, not in-progress jobs.
+**A.** None â€” `fail-fast` only cancels queued jobs, not in-progress jobs.
 **B.** All remaining in-progress and queued matrix jobs are cancelled.
 **C.** Only jobs that have not yet started are cancelled; in-progress jobs run to completion.
 **D.** The next 5 jobs are cancelled; the rest continue to run.
 
 ---
 
-## Question 88 — Topic 19: Common Failures and Troubleshooting
+### Question 88 â€” Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 19
 
 A secret named `API_KEY` is available in the repository but when a step prints `echo "Key: $API_KEY"` to the log, the output shows `Key: ***`. What does this behavior indicate?
 
 **A.** The secret is not set and GitHub replaces missing secret values with `***`.
-**B.** GitHub's automatic secret masking is working correctly — the actual value is redacted in the log.
+**B.** GitHub's automatic secret masking is working correctly â€” the actual value is redacted in the log.
 **C.** The step does not have permission to access `API_KEY` and GitHub masks missing values.
 **D.** The secret was rotated; the `***` indicates an expired value.
 
 ---
 
-## Question 89 — Topic 19: Common Failures and Troubleshooting
+### Question 89 â€” Topic 19: Common Failures and Troubleshooting
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 19
 
@@ -1355,7 +1355,7 @@ A job is stuck in "queued" status and never starts. Which of the following are p
 
 ---
 
-## Question 90 — Topic 04: Workflow File Structure
+### Question 90 â€” Topic 04: Workflow File Structure
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 04
 
@@ -1368,7 +1368,7 @@ A step uses `continue-on-error: true`. The step fails. What is the behavior of t
 
 ---
 
-## Question 91 — Topic 05: Workflow Trigger Events
+### Question 91 â€” Topic 05: Workflow Trigger Events
 
 **Difficulty:** Medium | **Answer Type:** one | **Topic:** 05
 
@@ -1381,11 +1381,11 @@ A workflow configured with `on: schedule` uses `cron: '0 */6 * * *'`. How often 
 
 ---
 
-## Question 92 — Topic 11: Workflow Sharing
+### Question 92 â€” Topic 11: Workflow Sharing
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 11
 
-A reusable workflow needs to output the version string built during its execution back to the caller. The three-layer chain is: step output → job output → workflow output. In the reusable workflow file, which key under `on.workflow_call` is used to declare this output?
+A reusable workflow needs to output the version string built during its execution back to the caller. The three-layer chain is: step output â†’ job output â†’ workflow output. In the reusable workflow file, which key under `on.workflow_call` is used to declare this output?
 
 **A.** `returns:`
 **B.** `outputs:`
@@ -1394,7 +1394,7 @@ A reusable workflow needs to output the version string built during its executio
 
 ---
 
-## Question 93 — Topic 17: GitHub Actions Enterprise
+### Question 93 â€” Topic 17: GitHub Actions Enterprise
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 17
 
@@ -1407,20 +1407,20 @@ Which of the following are accurate behaviors of GitHub-required workflows at th
 
 ---
 
-## Question 94 — Topic 09: Workflow Artifacts
+### Question 94 â€” Topic 09: Workflow Artifacts
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 09
 
 A workflow uploads an artifact with `retention-days: 7`. The repository-level default retention is 30 days and the organization policy sets a maximum of 90 days. Which value actually applies?
 
-**A.** 90 days — organization maximum always wins.
-**B.** 30 days — repository default overrides per-artifact settings.
-**C.** 7 days — the per-artifact `retention-days` value is honored when it is less than the organization maximum.
-**D.** 1 day — when multiple retention policies conflict, GitHub uses the most restrictive value.
+**A.** 90 days â€” organization maximum always wins.
+**B.** 30 days â€” repository default overrides per-artifact settings.
+**C.** 7 days â€” the per-artifact `retention-days` value is honored when it is less than the organization maximum.
+**D.** 1 day â€” when multiple retention policies conflict, GitHub uses the most restrictive value.
 
 ---
 
-## Question 95 — Topic 18: Security and Optimization
+### Question 95 â€” Topic 18: Security and Optimization
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 18
 
@@ -1433,7 +1433,7 @@ A `permissions:` block at the **workflow level** sets `contents: read`. A job in
 
 ---
 
-## Question 96 — Topic 08 + 17: Cross-Topic — Environment Rules and Enterprise
+### Question 96 â€” Topic 08 + 17: Cross-Topic â€” Environment Rules and Enterprise
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 08+17
 
@@ -1446,7 +1446,7 @@ An enterprise security team wants to ensure that no production deployment can ha
 
 ---
 
-## Question 97 — Topic 05 + 18: Cross-Topic — Triggers and Security
+### Question 97 â€” Topic 05 + 18: Cross-Topic â€” Triggers and Security
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 05+18
 
@@ -1467,7 +1467,7 @@ and then runs `npm run test`. Why is this configuration dangerous and what shoul
 
 ---
 
-## Question 98 — Topic 04 + 11: Cross-Topic — Workflow Structure and Sharing
+### Question 98 â€” Topic 04 + 11: Cross-Topic â€” Workflow Structure and Sharing
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 04+11
 
@@ -1480,7 +1480,7 @@ A reusable workflow declares three inputs and one output. A calling workflow job
 
 ---
 
-## Question 99 — Topic 10 + 16: Cross-Topic — Caching and Runners
+### Question 99 â€” Topic 10 + 16: Cross-Topic â€” Caching and Runners
 
 **Difficulty:** Hard | **Answer Type:** one | **Topic:** 10+16
 
@@ -1493,7 +1493,7 @@ A team uses self-hosted runners for their CI pipeline. They configure `actions/c
 
 ---
 
-## Question 100 — Topic 06 + 09 + 18: Cross-Topic — Env Vars, Artifacts, and Security
+### Question 100 â€” Topic 06 + 09 + 18: Cross-Topic â€” Env Vars, Artifacts, and Security
 
 **Difficulty:** Hard | **Answer Type:** many | **Topic:** 06+09+18
 
@@ -1533,183 +1533,183 @@ A CI pipeline builds a Docker image, uploads the image digest as an artifact, an
 
 ---
 
-## Answer Explanations
+## Answers
 
-### Q1 — B
+### Q1 â€” B
 The VS Code GitHub Actions extension requires the YAML language extension to handle `.yml`/`.yaml` files. Without it, the extension cannot parse the file and provide syntax validation or autocomplete.
 
-### Q2 — A
+### Q2 â€” A
 Context IntelliSense is context-aware; it shows only contexts available at that specific YAML key. In `steps[*].env`, the available contexts include `github`, `env`, `secrets`, `inputs`, `vars`, `needs`, `job`, `runner`, `strategy`, `matrix`, and `steps`.
 
-### Q3 — C
-Hovering over an action reference shows metadata from the action's `action.yml` file — inputs, outputs, and description — not live logs or CVE data.
+### Q3 â€” C
+Hovering over an action reference shows metadata from the action's `action.yml` file â€” inputs, outputs, and description â€” not live logs or CVE data.
 
-### Q4 — A, B, D
+### Q4 â€” A, B, D
 The extension validates permission scope names, highlights context availability violations, and provides trigger event autocomplete. It does not run workflows locally (C) or display CI badges in the gutter (E).
 
-### Q5 — B
+### Q5 â€” B
 `github.sha` contains the full 40-character Git SHA of the commit that triggered the run. `run_id` is a numeric identifier for the workflow run, not a Git SHA.
 
-### Q6 — A
+### Q6 â€” A
 `github.actor` is the account that triggered the original run. `github.triggering_actor` is the account that triggered the re-run (if different). Both are properties on the `github` context.
 
-### Q7 — A, B
+### Q7 â€” A, B
 Both dot-notation `steps.build-step.outputs.artifact-name` and bracket-notation `steps['build-step'].outputs['artifact-name']` are valid GitHub Actions expression syntax. C and D are incorrect syntax.
 
-### Q8 — C
+### Q8 â€” C
 `strategy.job-total` contains the total number of jobs in the matrix expansion. `strategy.job-index` is the zero-based index of the current job.
 
-### Q9 — B, C
+### Q9 â€” B, C
 `inputs` context is available in `jobs.<id>.if` (B) and in `run-name` (C). Booleans are natively typed in expression evaluation, not coerced to strings (A is false). Undeclared inputs are not forwarded (D is false).
 
-### Q10 — B
+### Q10 â€” B
 Downstream jobs access upstream job outputs via `needs.<job-id>.outputs.<output-name>`. The job-id in this case is `release`.
 
-### Q11 — B
+### Q11 â€” B
 Only `github`, `inputs`, and `vars` contexts are available in `run-name`. `runner` (A) and `secrets` (C) are not available there. `matrix` (D) is also not available.
 
-### Q12 — B
+### Q12 â€” B
 The `runner` context is not available at `jobs.<id>.if`. Job conditionals can use `github`, `secrets`, `inputs`, `vars`, and `needs` contexts plus status functions. Using `runner` there causes a validation/evaluation failure.
 
-### Q13 — A, B, C, D, E
+### Q13 â€” A, B, C, D, E
 `jobs.<id>.steps[*].run` has full context availability including all listed contexts: `secrets`, `runner`, `matrix`, `strategy`, and `needs`.
 
-### Q14 — B
+### Q14 â€” B
 `jobs.<id>.container` only supports `github`, `inputs`, and `vars` contexts. The `matrix` context is not available at this key, making this configuration invalid.
 
-### Q15 — A, B, C, D, E
+### Q15 â€” A, B, C, D, E
 `jobs.<id>.outputs` only supports `github`, `inputs`, `vars`, `needs`, and `steps`. Secrets (A), runner (B), job (C), strategy (D), and matrix (E) are all unavailable at `jobs.<id>.outputs`.
 
-### Q16 — B
+### Q16 â€” B
 `defaults.run.working-directory` sets the default working directory for all `run:` steps. It is overridden by step-level `working-directory`. It does not set the shell (that is `shell:`).
 
-### Q17 — C
+### Q17 â€” C
 Jobs run in parallel by default. Adding `needs:` creates a dependency that forces sequential execution between specific jobs.
 
-### Q18 — C
+### Q18 â€” C
 With `cancel-in-progress: true`, when a new workflow run targeting the same concurrency group starts, any currently running workflow in that group is cancelled.
 
-### Q19 — A, B
-`fail-fast: false` allows all combinations to continue (A). `max-parallel: 2` limits simultaneous jobs to 2 (B). The total jobs is 3×2=6, not 5 (C is false). `fail-fast: false` does not cause retries (D is false).
+### Q19 â€” A, B
+`fail-fast: false` allows all combinations to continue (A). `max-parallel: 2` limits simultaneous jobs to 2 (B). The total jobs is 3Ã—2=6, not 5 (C is false). `fail-fast: false` does not cause retries (D is false).
 
-### Q20 — B
-6 total combinations (3×2=6) minus 1 excluded (windows-latest × node:18) = **5** jobs.
+### Q20 â€” B
+6 total combinations (3Ã—2=6) minus 1 excluded (windows-latest Ã— node:18) = **5** jobs.
 
-### Q21 — A, B, D
+### Q21 â€” A, B, D
 `continue-on-error: true` for the experimental job means its failure won't fail the overall run (A). With `fail-fast: true`, a failing non-experimental job can still cancel other non-experimental jobs (B). `continue-on-error` does not trigger auto-retry (C is false). The expression is evaluated per-job using that combination's matrix values (D).
 
-### Q22 — B
+### Q22 â€” B
 GitHub provides a "Re-run failed jobs" option in the workflow run UI that re-runs only the failed matrix variants, preserving the results of successful combinations.
 
-### Q23 — C
+### Q23 â€” C
 Branch filters use a list under `branches:`. The single-quoted wildcard pattern `'release/**'` matches branches like `release/1.0`, `release/hotfix`, etc.
 
-### Q24 — A
-Cron format: `minute hour day month day-of-week`. `0 9 * * 1` means minute 0, hour 9, any day, any month, day-of-week 1 (Monday) → every Monday at 9:00 AM UTC.
+### Q24 â€” A
+Cron format: `minute hour day month day-of-week`. `0 9 * * 1` means minute 0, hour 9, any day, any month, day-of-week 1 (Monday) â†’ every Monday at 9:00 AM UTC.
 
-### Q25 — B
+### Q25 â€” B
 By default, `pull_request` workflows from forks always run with a read-only `GITHUB_TOKEN`. This is a security boundary to prevent untrusted code from using write credentials.
 
-### Q26 — A, D, E
+### Q26 â€” A, D, E
 The default `pull_request` activity types are `opened`, `reopened`, and `synchronize`. To trigger on `ready_for_review` (A), `converted_to_draft` (D), or `labeled` (E), these must be explicitly listed under `types:`.
 
-### Q27 — B
+### Q27 â€” B
 The `if:` condition `github.event.workflow_run.conclusion == 'success'` filters the job to only run when the upstream workflow completed successfully.
 
-### Q28 — B
+### Q28 â€” B
 `pull_request_target` runs with write-token access and secrets even for fork PRs. If the workflow checks out and runs the fork's code, attackers can exfiltrate secrets.
 
-### Q29 — A, B, C
+### Q29 â€” A, B, C
 Required inputs must be provided (A). Inputs are accessible via the `inputs` context (B). The `environment` type automatically applies that environment's protection rules (C). `workflow_dispatch` can be triggered via the REST API (D is false).
 
-### Q30 — B
+### Q30 â€” B
 Variable precedence is step-level > job-level > workflow-level. A job-level `env:` overrides the same-named workflow-level `env:` within that job.
 
-### Q31 — B
+### Q31 â€” B
 Values written to `$GITHUB_OUTPUT` are accessible in subsequent steps of the same job using `${{ steps.<step-id>.outputs.<key> }}`.
 
-### Q32 — A, C
+### Q32 â€” A, C
 Defining under `jobs.<job-id>.env:` (A) scopes it to that job. Writing to `$GITHUB_ENV` in a step (C) makes the variable available to all subsequent steps **in the same job**. Option B makes it available globally. Option D is not a supported mechanism.
 
-### Q33 — B
+### Q33 â€” B
 The `||` operator in GitHub Actions expressions returns the right-hand value if the left-hand value is falsy (empty, null, or false). Most commonly used for default value fallbacks.
 
-### Q34 — B
+### Q34 â€” B
 Directly interpolating a secret via `${{ secrets.* }}` into a shell command means the value appears in the process's command line, which may be visible in shell history or process listings. The safe pattern is to assign to an env var.
 
-### Q35 — B
+### Q35 â€” B
 The `CI` environment variable is set to `true` in every GitHub Actions run. `GITHUB_ACTIONS` is also set to `true` but is specifically for GitHub Actions, while `CI` is the universal CI environment signal.
 
-### Q36 — B
+### Q36 â€” B
 `GITHUB_REF` contains the full ref such as `refs/heads/main` or `refs/tags/v1.0.0`. `GITHUB_REF_NAME` contains only the short name (`main` or `v1.0.0`).
 
-### Q37 — A, C, D
+### Q37 â€” A, C, D
 `GITHUB_REPOSITORY`, `GITHUB_RUN_ID`, and `GITHUB_SHA` are available in all runs. `GITHUB_BASE_REF` and `GITHUB_HEAD_REF` are only available on `pull_request`/`pull_request_target` events.
 
-### Q38 — B
+### Q38 â€” B
 Content written to `$GITHUB_STEP_SUMMARY` is rendered as markdown on the workflow run summary page in the GitHub Actions UI.
 
-### Q39 — C
+### Q39 â€” C
 Required Reviewers is the protection rule that designates specific users or teams who must approve a deployment before it proceeds.
 
-### Q40 — B
+### Q40 â€” B
 When a required reviewer environment is reached, only that specific job pauses for approval. The reviewer receives a notification and the job waits until approved or rejected.
 
-### Q41 — A, B, C
+### Q41 â€” A, B, C
 Valid "Deployment branches" settings include: All branches, Protected branches only, and Selected branches. Options D and E are not valid settings.
 
-### Q42 — D
-The wait timer holds the approval prompt — reviewers cannot approve and the job cannot start until the timer expires. The timer determines when the deployment becomes eligible to proceed.
+### Q42 â€” D
+The wait timer holds the approval prompt â€” reviewers cannot approve and the job cannot start until the timer expires. The timer determines when the deployment becomes eligible to proceed.
 
-### Q43 — B
+### Q43 â€” B
 To use an artifact from a previous job: (1) declare `needs: build` so the deploy job runs after the build job, and (2) use `actions/download-artifact` with the artifact name to fetch the binary.
 
-### Q44 — B
+### Q44 â€” B
 The default artifact retention period is **5 days**. The `retention-days` parameter can be used to set a custom period between 5 and 90 days, or whatever the organization maximum allows.
 
-### Q45 — A, C, D
+### Q45 â€” A, C, D
 The `!` prefix excludes matching files (A). The `coverage/` directory is included (C). The artifact is named `test-results` (D). B is false because `!reports/**/temp-*.xml` excludes those files.
 
-### Q46 — B
+### Q46 â€” B
 Cross-run artifact download requires: the artifact exists in the specified run, the token has `actions: read` (or the GITHUB_TOKEN's default), and the artifact has not expired.
 
-### Q47 — C
+### Q47 â€” C
 When the exact cache key is not found, GitHub falls back to the `restore-keys` list and restores the most recent cache whose key starts with the prefix. This is a partial cache hit.
 
-### Q48 — A
+### Q48 â€” A
 Cache scope is restricted by branch. A cache created on branch `feature/x` is accessible to runs on `feature/x` and on the default branch. Other branches cannot access it unless they access the default branch's cache.
 
-### Q49 — A, B, C
+### Q49 â€” A, B, C
 Caches are evicted after 7 days without access (A). The 5 GB limit per repo triggers eviction of oldest entries (B). `cache-hit: "true"` is the output of a cache hit (C). Caches are NOT shared across repositories by default (D is false).
 
-### Q50 — B
+### Q50 â€” B
 When `requirements.txt` changes, the hash changes, so the exact key is a miss. The `restore-keys` prefix matches the previous cache. That partial cache is restored. pip installs only the new package. A new cache entry is saved under the new exact key.
 
-### Q51 — C
+### Q51 â€” C
 A reusable workflow must have `on: workflow_call` to be callable from another workflow. `workflow_dispatch` is for manual/API triggers, not for caller-workflow invocations.
 
-### Q52 — B
+### Q52 â€” B
 `secrets: inherit` passes all secrets available to the calling workflow to the called workflow automatically, under the same names. No explicit declaration in the called workflow's `secrets:` block is required.
 
-### Q53 — A, B, C
-Reusable workflow outputs must reference job outputs (A). The caller accesses them via `needs.<calling-job-id>.outputs.<output-name>` (B). The chain is: `$GITHUB_OUTPUT` → job `outputs:` → `on.workflow_call.outputs:` (C). They are not in the `inputs` context (D is false).
+### Q53 â€” A, B, C
+Reusable workflow outputs must reference job outputs (A). The caller accesses them via `needs.<calling-job-id>.outputs.<output-name>` (B). The chain is: `$GITHUB_OUTPUT` â†’ job `outputs:` â†’ `on.workflow_call.outputs:` (C). They are not in the `inputs` context (D is false).
 
-### Q54 — B
+### Q54 â€” B
 For public/shared workflows used by external teams, explicit mapping is safer because only specifically named secrets flow to the called workflow, preventing unintended credential disclosure.
 
-### Q55 — B
+### Q55 â€” B
 Workflow status badges display the pass/fail result of the most recent run for the specified workflow. They are commonly embedded in README files.
 
-### Q56 — B
+### Q56 â€” B
 Creating a repository secret named `ACTIONS_STEP_DEBUG` with value `true` enables debug logging for all steps in subsequent workflow runs without modifying the workflow file.
 
-### Q57 — B
+### Q57 â€” B
 `::warning::` workflow commands produce warning annotations that appear in the run log with special formatting and may appear as annotations on the associated commit or PR diff.
 
-### Q58 — A, B, C, E
+### Q58 â€” A, B, C, E
 `::group::` (A) and `::endgroup::` (B) create collapsible log sections. `::debug::` (C) emits debug-level messages. `::notice::` (E) creates notice annotations. Option D shows the **deprecated** `::set-output` syntax; the modern approach is `$GITHUB_OUTPUT`.
 
-### Q59 — A
+### Q59 â€” A
 Multi-line step output values require the heredoc syntax when writing to `$GITHUB_OUTPUT`:
 ```bash
 echo "key<<EOF" >> $GITHUB_OUTPUT
@@ -1717,129 +1717,129 @@ echo "line1" >> $GITHUB_OUTPUT
 echo "EOF" >> $GITHUB_OUTPUT
 ```
 
-### Q60 — B
+### Q60 â€” B
 Triggering a `workflow_dispatch` workflow via the REST API uses `POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches`.
 
-### Q61 — B
+### Q61 â€” B
 The `status` query parameter filters runs by status. Use `?status=failure` to return only runs with a failure status/conclusion.
 
-### Q62 — A, B, C, E
-A run response includes `status`, `conclusion`, `head_branch`, and `run_number`. Individual step details are not inlined in the runs endpoint — they require a separate jobs/steps API call (D is false).
+### Q62 â€” A, B, C, E
+A run response includes `status`, `conclusion`, `head_branch`, and `run_number`. Individual step details are not inlined in the runs endpoint â€” they require a separate jobs/steps API call (D is false).
 
-### Q63 — B
+### Q63 â€” B
 `POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel` cancels a running workflow run. The `DELETE` endpoint deletes a run's record, not cancels it.
 
-### Q64 — B
+### Q64 â€” B
 When a reviewer rejects a pending deployment, the workflow stops and the deployment does not proceed. The run is marked as failed/rejected.
 
-### Q65 — B
+### Q65 â€” B
 Downstream jobs with `needs:` pointing to the environment job proceed normally after the protected environment job successfully completes following reviewer approval.
 
-### Q66 — A, C, D
-Both users and teams can be reviewers (A). Up to 6 reviewers can be configured (C). Reviewers receive notifications (D). The workflow actor cannot approve their own deployment (B is false — this is a restriction GitHub enforces).
+### Q66 â€” A, C, D
+Both users and teams can be reviewers (A). Up to 6 reviewers can be configured (C). Reviewers receive notifications (D). The workflow actor cannot approve their own deployment (B is false â€” this is a restriction GitHub enforces).
 
-### Q67 — A
+### Q67 â€” A
 `uses: ./my-custom-action` references an action in a subdirectory named `my-custom-action` relative to the workspace root of the **same** repository. This is the correct local action syntax.
 
-### Q68 — B
+### Q68 â€” B
 Every custom action requires an `action.yml` (or `action.yaml`) file in the action's root directory. This file defines the action's name, description, inputs, outputs, and runtime.
 
-### Q69 — A, B, C, E
-Valid `runs.using` values include `node20`, `node16`, `docker`, and `composite`. `python3` is not a supported value — Python actions must use Docker or composite steps.
+### Q69 â€” A, B, C, E
+Valid `runs.using` values include `node20`, `node16`, `docker`, and `composite`. `python3` is not a supported value â€” Python actions must use Docker or composite steps.
 
-### Q70 — C
+### Q70 â€” C
 `core.setOutput('output-name', value)` from the `@actions/core` package sets a step output. `setEnv` is for environment variables, `exportVariable` is an alias for setting env vars, and `setSecret` masks a value in logs.
 
-### Q71 — C
+### Q71 â€” C
 Self-hosted runners are targeted using a label array that includes `self-hosted` plus any custom labels. `runs-on: [self-hosted, gpu]` targets a runner that has both labels.
 
-### Q72 — B
+### Q72 â€” B
 If `runs-on` specifies labels that don't all match any single runner, the job waits indefinitely. An `online` but `busy: false` runner that doesn't pick up jobs typically has a label mismatch.
 
-### Q73 — A, C
+### Q73 â€” A, C
 Fork-triggered workflows can run malicious code on self-hosted runners (A). A non-ephemeral runner may retain files/env from previous jobs (C). Self-hosted runners are not internet-accessible by default (B is false). GITHUB_TOKEN permissions can be restricted (D is false).
 
-### Q74 — B
+### Q74 â€” B
 If a self-hosted runner crashes mid-job, the job is marked as failed. The in-progress state is not checkpointed; the entire job must be re-run.
 
-### Q75 — C
+### Q75 â€” C
 Required Workflows is an enterprise-level policy feature that enforces specific workflow runs across all matching repositories, overriding repository-level configurations.
 
-### Q76 — B
+### Q76 â€” B
 When an organization's action policy is set to "Allow select actions" and a workflow references an unlisted action, that step fails at runtime with a policy violation error.
 
-### Q77 — A, B, C, D
+### Q77 â€” A, B, C, D
 All four statements are correct: a runner belongs to one group (A); groups can restrict repository access (B); enterprise groups span organizations (C); workflows can specify a group in `runs-on:` (D).
 
-### Q78 — D
+### Q78 â€” D
 GitHub Enterprise Cloud customers can enable the "GitHub Actions" entry in the organization's IP allow list, which automatically syncs with GitHub's current runner IP ranges without manual maintenance.
 
-### Q79 — B
+### Q79 â€” B
 OIDC federation via `aws-actions/configure-aws-credentials` with `role-to-assume` is the recommended approach for cloud authentication without storing long-lived credentials. It requires `id-token: write` permission and an IAM role with a trust policy for GitHub's OIDC provider.
 
-### Q80 — B
+### Q80 â€” B
 Pinning to a full commit SHA guarantees the exact same immutable code runs every time. Mutable tags like `@v4` can be reassigned to different commits, introducing risk of supply chain attacks or unintended changes.
 
-### Q81 — B
+### Q81 â€” B
 Script injection occurs when user-controlled values like PR titles are interpolated directly into shell commands via `${{ }}` expressions. The safe mitigation is to assign the value to an environment variable and reference it as `$ENV_VAR`, which prevents shell interpretation of special characters.
 
-### Q82 — A, B, C
-`GITHUB_TOKEN` is provisioned per-job (A). It cannot trigger new workflow runs (B). Default permissions can be set to read-only at org level (C). D is false — `GITHUB_TOKEN` cannot trigger `workflow_dispatch` in the same repo (that would be a new run, which is blocked to prevent loops).
+### Q82 â€” A, B, C
+`GITHUB_TOKEN` is provisioned per-job (A). It cannot trigger new workflow runs (B). Default permissions can be set to read-only at org level (C). D is false â€” `GITHUB_TOKEN` cannot trigger `workflow_dispatch` in the same repo (that would be a new run, which is blocked to prevent loops).
 
-### Q83 — A
+### Q83 â€” A
 The OIDC subject claim format for environment deployments is `repo:ORG/REPO:environment:ENV_NAME`. This allows trust policies to be scoped to specific environments.
 
-### Q84 — B
+### Q84 â€” B
 The error indicates Git tried to authenticate but failed. This typically means the `actions/checkout` step is missing, or the token wasn't provided. Without proper checkout authentication, Git cannot clone the private repository.
 
-### Q85 — B
+### Q85 â€” B
 Replacing `npm ci` with `npm install --legacy-peer-deps` works around peer dependency resolution conflicts, which is the most common cause of `ERESOLVE` errors. This is a quick diagnostic and temporary fix.
 
-### Q86 — A, B, C
+### Q86 â€” A, B, C
 Checking the process (A), verifying network connectivity (B), and re-registering with a new token (C) are all valid troubleshooting steps. `timeout-minutes` (D) is irrelevant to an offline runner.
 
-### Q87 — B
+### Q87 â€” B
 With `fail-fast: true` (the default), GitHub cancels all remaining in-progress and queued matrix jobs when any single job fails. This is the behavior the default `fail-fast` setting enforces.
 
-### Q88 — B
-GitHub's automatic secret masking replaces the actual secret value with `***` in log output. This is expected, correct behavior — the secret is present and working, just safely redacted.
+### Q88 â€” B
+GitHub's automatic secret masking replaces the actual secret value with `***` in log output. This is expected, correct behavior â€” the secret is present and working, just safely redacted.
 
-### Q89 — A, B, D, E
+### Q89 â€” A, B, D, E
 Missing/mismatched runner labels (A), concurrency group blocking (B), pending environment review (D), and billing limits (E) all can cause jobs to remain queued. A false `if:` condition (C) would cause the job to be skipped entirely, not remain queued.
 
-### Q90 — B
+### Q90 â€” B
 When `continue-on-error: true` is set on a step, a step failure becomes a warning. The job continues executing subsequent steps and is reported as passed if no other step fails without `continue-on-error`.
 
-### Q91 — B
-`0 */6 * * *` means: minute 0, every 6th hour (`*/6`), any day, any month, any weekday → runs at 00:00, 06:00, 12:00, and 18:00 UTC — i.e., every 6 hours.
+### Q91 â€” B
+`0 */6 * * *` means: minute 0, every 6th hour (`*/6`), any day, any month, any weekday â†’ runs at 00:00, 06:00, 12:00, and 18:00 UTC â€” i.e., every 6 hours.
 
-### Q92 — B
+### Q92 â€” B
 Reusable workflow outputs are declared under `on.workflow_call.outputs:`. Each output entry references a job-level output via `value: ${{ jobs.<job-id>.outputs.<key> }}`.
 
-### Q93 — A, B, D
+### Q93 â€” A, B, D
 Required workflows run even if the repository has Actions disabled (A), appear in the PR checks list alongside the repository's own workflow results (B), and are enforced for all matching repositories regardless of those repositories' branch protection rules (D). Repository owners cannot skip required workflows using `workflow_dispatch` (C is false).
 
-### Q94 — C
-The per-artifact `retention-days: 7` is honored when it is within the organization's allowed range (≤ 90 days here). The most specific value (per-artifact) wins when it is within policy bounds.
+### Q94 â€” C
+The per-artifact `retention-days: 7` is honored when it is within the organization's allowed range (â‰¤ 90 days here). The most specific value (per-artifact) wins when it is within policy bounds.
 
-### Q95 — A
+### Q95 â€” A
 A `permissions:` block at the workflow level applies to all jobs that do not declare their own `permissions:` block. Those jobs inherit the workflow-level restrictions.
 
-### Q96 — A, B
+### Q96 â€” A, B
 Restricting deployment branches to `main` (A) and requiring the `senior-engineers` team as reviewers (B) together achieve the described policy. Option C is an alternative but not the direct mechanism. Option D is unrelated.
 
-### Q97 — A
+### Q97 â€” A
 Running `pull_request_target` workflows that check out and execute fork code is a critical security risk because the workflow runs with write access and secrets. Safe mitigations include never executing untrusted code or using a label-based approval gate.
 
-### Q98 — A, B, C, D
+### Q98 â€” A, B, C, D
 The complete chain requires: step output promoted via `$GITHUB_OUTPUT` to job output (A), job output referenced in `on.workflow_call.outputs` (B), downstream job declares `needs:` the calling job (C), and accesses it via `needs.<calling-job-id>.outputs.<output-name>` (D).
 
-### Q99 — B
+### Q99 â€” B
 `actions/cache` works with self-hosted runners, but the cache key includes `${{ runner.os }}`. If the self-hosted runner reports a different OS identifier than when the cache was first saved, the key won't match, causing permanent cache misses.
 
-### Q100 — A, B, D
-Using env vars for `--build-arg` (A) prevents secrets from being embedded in the image layer. SHA pinning for actions (B) prevents supply chain attacks. Least-privilege `permissions:` (D) limits token scope. C is false — `GITHUB_TOKEN` cannot authenticate to AWS ECR.
+### Q100 â€” A, B, D
+Using env vars for `--build-arg` (A) prevents secrets from being embedded in the image layer. SHA pinning for actions (B) prevents supply chain attacks. Least-privilege `permissions:` (D) limits token scope. C is false â€” `GITHUB_TOKEN` cannot authenticate to AWS ECR.
 
 ---
 
-*End of GH-200 Practice Exam — Iteration 2*
+*End of GH-200 Practice Exam â€” Iteration 2*

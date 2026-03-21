@@ -1,4 +1,4 @@
-# GitHub Actions GH-200 Certification Exam — Question Bank (Iteration 3)
+﻿# GitHub Actions GH-200 Certification Exam â€” Question Bank (Iteration 3)
 
 **Generated**: March 20, 2026
 **Total Questions**: 100
@@ -12,7 +12,7 @@
 
 ## Topic 1: GitHub Actions VS Code Extension (4 Questions)
 
-**Question 1** — VS Code Extension Features
+### Question 1 â€” VS Code Extension Features
 
 **Difficulty**: Easy | **Answer Type**: one | **Topic**: Extension IntelliSense and Validation
 
@@ -25,7 +25,7 @@
 
 ---
 
-**Question 2** — Extension Context IntelliSense
+### Question 2 â€” Extension Context IntelliSense
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Context Completion and Autocomplete
 
@@ -33,14 +33,14 @@
 
 **Question** (Select all that apply): Which contexts would be suggested by the extension's IntelliSense?
 
-- A) `github.actor` — username of the user who triggered the workflow
-- B) `github.database` — direct access to GitHub's database
-- C) `github.run_id` — unique workflow run identifier
-- D) `github.event_name` — the trigger event that started the workflow
+- A) `github.actor` â€” username of the user who triggered the workflow
+- B) `github.database` â€” direct access to GitHub's database
+- C) `github.run_id` â€” unique workflow run identifier
+- D) `github.event_name` â€” the trigger event that started the workflow
 
 ---
 
-**Question 3** — Troubleshooting Extension Validation
+### Question 3 â€” Troubleshooting Extension Validation
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Extension Configuration and Troubleshooting
 
@@ -55,7 +55,7 @@
 
 ---
 
-**Question 4** — Extension Warnings for SHA Pinning
+### Question 4 â€” Extension Warnings for SHA Pinning
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Action Pinning and Security Recommendations
 
@@ -72,7 +72,7 @@
 
 ## Topic 2: Contextual Information (6 Questions)
 
-**Question 5** — github Context Variables
+### Question 5 â€” github Context Variables
 
 **Difficulty**: Easy | **Answer Type**: one | **Topic**: github Context Structure
 
@@ -85,7 +85,7 @@
 
 ---
 
-**Question 6** — Multi-Context Usage in Workflows
+### Question 6 â€” Multi-Context Usage in Workflows
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Context Availability and Scope
 
@@ -93,14 +93,14 @@
 
 **Question** (Select all that apply): Which context expressions would work for this use case?
 
-- A) `${{ github.ref_name }}` — branch or tag name without `refs/heads/` prefix
-- B) `${{ github.run_number }}` — unique number for each workflow run
-- C) `${{ runner.name }}` — the name of the GitHub runner
-- D) `${{ github.run_id }}` — a unique identifier for the workflow run
+- A) `${{ github.ref_name }}` â€” branch or tag name without `refs/heads/` prefix
+- B) `${{ github.run_number }}` â€” unique number for each workflow run
+- C) `${{ runner.name }}` â€” the name of the GitHub runner
+- D) `${{ github.run_id }}` â€” a unique identifier for the workflow run
 
 ---
 
-**Question 7** — Event Payload Context
+### Question 7 â€” Event Payload Context
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: github.event Context
 
@@ -115,7 +115,7 @@
 
 ---
 
-**Question 8** — Secrets Context and Masking
+### Question 8 â€” Secrets Context and Masking
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Secrets Context Availability and Redaction
 
@@ -130,7 +130,7 @@
 
 ---
 
-**Question 9** — Environment and Secrets Context Hierarchy
+### Question 9 â€” Environment and Secrets Context Hierarchy
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Context Scope and Precedence
 
@@ -145,7 +145,7 @@
 
 ---
 
-**Question 10** — Matrix Context Variables
+### Question 10 â€” Matrix Context Variables
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Matrix Strategy Context
 
@@ -162,7 +162,7 @@
 
 ## Topic 3: Context Availability Reference (5 Questions)
 
-**Question 11** — Context Availability at Different Workflow Keys
+### Question 11 â€” Context Availability at Different Workflow Keys
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Static vs. Runtime Context Evaluation
 
@@ -177,7 +177,7 @@
 
 ---
 
-**Question 12** — self Context in Job Conditions
+### Question 12 â€” self Context in Job Conditions
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Context Scope by Workflow Key
 
@@ -192,7 +192,7 @@
 
 ---
 
-**Question 13** — Context Leakage and Secret Redaction
+### Question 13 â€” Context Leakage and Secret Redaction
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Secret Leakage Prevention
 
@@ -207,7 +207,7 @@
 
 ---
 
-**Question 14** — Matrix Context in Reusable Workflows
+### Question 14 â€” Matrix Context in Reusable Workflows
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Context Scope in Called Workflows
 
@@ -222,7 +222,7 @@
 
 ---
 
-**Question 15** — Actions Context in Composite Actions
+### Question 15 â€” Actions Context in Composite Actions
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Composite Action Context Scope
 
@@ -239,7 +239,7 @@
 
 ## Topic 4: Workflow File Structure (7 Questions)
 
-**Question 16** — Workflow File Naming and Location
+### Question 16 â€” Workflow File Naming and Location
 
 **Difficulty**: Easy | **Answer Type**: one | **Topic**: Workflow File Location and Discovery
 
@@ -252,7 +252,7 @@
 
 ---
 
-**Question 17** — Job Dependencies and Needs
+### Question 17 â€” Job Dependencies and Needs
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Job Ordering and Dependencies
 
@@ -267,7 +267,7 @@
 
 ---
 
-**Question 18** — Permissions Block Structure
+### Question 18 â€” Permissions Block Structure
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Fine-Grained Permission Scopes
 
@@ -282,7 +282,7 @@
 
 ---
 
-**Question 19** — Container and Services Definition
+### Question 19 â€” Container and Services Definition
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Container Jobs and Service Containers
 
@@ -297,7 +297,7 @@
 
 ---
 
-**Question 20** — YAML Anchors and Aliases
+### Question 20 â€” YAML Anchors and Aliases
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: DRY Principles with YAML Anchors
 
@@ -312,7 +312,7 @@
 
 ---
 
-**Question 21** — Conditional Step Execution
+### Question 21 â€” Conditional Step Execution
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: if Conditions and Status Checks
 
@@ -327,7 +327,7 @@
 
 ---
 
-**Question 22** — Matrix Strategy with Exclude
+### Question 22 â€” Matrix Strategy with Exclude
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Matrix Strategy Configuration
 
@@ -344,7 +344,7 @@
 
 ## Topic 5: Workflow Trigger Events (7 Questions)
 
-**Question 23** — push Trigger with Path Filters
+### Question 23 â€” push Trigger with Path Filters
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Path-Based Trigger Filtering
 
@@ -359,7 +359,7 @@
 
 ---
 
-**Question 24** — pull_request_target vs pull_request
+### Question 24 â€” pull_request_target vs pull_request
 
 **Difficulty**: Hard | **Answer Type**: many | **Topic**: Fork PR Security and Token Access
 
@@ -374,7 +374,7 @@
 
 ---
 
-**Question 25** — Scheduled Event (cron) Limitations
+### Question 25 â€” Scheduled Event (cron) Limitations
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: schedule Event Behavior
 
@@ -389,7 +389,7 @@
 
 ---
 
-**Question 26** — workflow_dispatch Inputs
+### Question 26 â€” workflow_dispatch Inputs
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Manual Trigger with Inputs
 
@@ -404,7 +404,7 @@
 
 ---
 
-**Question 27** — Trigger on Multiple Events with Different Conditions
+### Question 27 â€” Trigger on Multiple Events with Different Conditions
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Complex Event Filtering
 
@@ -423,7 +423,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 28** — workflow_run Event for Cross-Workflow Automation
+### Question 28 â€” workflow_run Event for Cross-Workflow Automation
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Workflow Run Event
 
@@ -438,7 +438,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 29** — Event Payload Context Filtering
+### Question 29 â€” Event Payload Context Filtering
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Conditional Trigger Logic
 
@@ -455,7 +455,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 6: Custom Environment Variables (5 Questions)
 
-**Question 30** — Workflow-Level env Variable Scope
+### Question 30 â€” Workflow-Level env Variable Scope
 
 **Difficulty**: Easy | **Answer Type**: one | **Topic**: Environment Variable Scoping
 
@@ -468,7 +468,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 31** — Job and Step-Level env Override
+### Question 31 â€” Job and Step-Level env Override
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Environment Variable Precedence
 
@@ -483,7 +483,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 32** — GITHUB_OUTPUT for Inter-Step Communication
+### Question 32 â€” GITHUB_OUTPUT for Inter-Step Communication
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Step Outputs and GITHUB_OUTPUT
 
@@ -498,7 +498,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 33** — Secrets in Environment Variables
+### Question 33 â€” Secrets in Environment Variables
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Secrets Management and Masking
 
@@ -513,7 +513,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 34** — Dynamic Environment Variables with Contexts
+### Question 34 â€” Dynamic Environment Variables with Contexts
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Context Interpolation in env Blocks
 
@@ -530,7 +530,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 7: Default Environment Variables (5 Questions)
 
-**Question 35** — GITHUB_TOKEN Automatic Provisioning
+### Question 35 â€” GITHUB_TOKEN Automatic Provisioning
 
 **Difficulty**: Easy | **Answer Type**: one | **Topic**: Default Token Availability
 
@@ -543,7 +543,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 36** — Runner Environment Variables
+### Question 36 â€” Runner Environment Variables
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Runner Context
 
@@ -551,14 +551,14 @@ But NOT on PR comments or wiki updates.
 
 **Question** (Select all that apply): Which default env variables provide runner information?
 
-- A) `RUNNER_NAME` — hostname or configured name of the runner
-- B) `RUNNER_OS` — operating system (Linux, Windows, macOS)
-- C) `RUNNER_ARCH` — processor architecture (x64, ARM64, etc.)
-- D) `RUNNER_TEMP` — temporary directory path for the job
+- A) `RUNNER_NAME` â€” hostname or configured name of the runner
+- B) `RUNNER_OS` â€” operating system (Linux, Windows, macOS)
+- C) `RUNNER_ARCH` â€” processor architecture (x64, ARM64, etc.)
+- D) `RUNNER_TEMP` â€” temporary directory path for the job
 
 ---
 
-**Question 37** — GITHUB_WORKSPACE Path
+### Question 37 â€” GITHUB_WORKSPACE Path
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Default Paths and Directory Structure
 
@@ -571,7 +571,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 38** — CI Flag and Debugging Variables
+### Question 38 â€” CI Flag and Debugging Variables
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: CI Detection and Debug Logging
 
@@ -579,14 +579,14 @@ But NOT on PR comments or wiki updates.
 
 **Question** (Select all that apply): Which default env variables help with this?
 
-- A) `CI=true` — set by GitHub to indicate a CI environment
-- B) `GITHUB_ACTIONS=true` — set by GitHub to indicate GitHub Actions specifically
-- C) `RUNNER_DEBUG=true` — enables additional diagnostic logs when explicitly set
-- D) `DEBUG_MODE` — automatically set by GitHub in all workflows
+- A) `CI=true` â€” set by GitHub to indicate a CI environment
+- B) `GITHUB_ACTIONS=true` â€” set by GitHub to indicate GitHub Actions specifically
+- C) `RUNNER_DEBUG=true` â€” enables additional diagnostic logs when explicitly set
+- D) `DEBUG_MODE` â€” automatically set by GitHub in all workflows
 
 ---
 
-**Question 39** — API Token Availability and Scope
+### Question 39 â€” API Token Availability and Scope
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: GITHUB_TOKEN Scope and Limitations
 
@@ -603,7 +603,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 8: Environment Protection Rules (5 Questions)
 
-**Question 40** — Required Reviewers for Deployments
+### Question 40 â€” Required Reviewers for Deployments
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Deployment Protection and Review
 
@@ -618,7 +618,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 41** — Deployment Branches Protection
+### Question 41 â€” Deployment Branches Protection
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Branch-Based Deployment Rules
 
@@ -633,7 +633,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 42** — Wait Timer Before Deployment
+### Question 42 â€” Wait Timer Before Deployment
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Deployment Delay Rules
 
@@ -648,7 +648,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 43** — Custom Deployment Protection Rules
+### Question 43 â€” Custom Deployment Protection Rules
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Environment Rules Configuration
 
@@ -663,7 +663,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 44** — Environment Variables Specific to Deployment
+### Question 44 â€” Environment Variables Specific to Deployment
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Environment Configuration
 
@@ -680,7 +680,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 9: Workflow Artifacts (5 Questions)
 
-**Question 45** — Artifact Upload and Retention
+### Question 45 â€” Artifact Upload and Retention
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Artifact Storage and Retention
 
@@ -693,7 +693,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 46** — Artifacts Between Jobs
+### Question 46 â€” Artifacts Between Jobs
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Inter-Job Artifact Sharing
 
@@ -708,7 +708,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 47** — Artifact Paths and Glob Patterns
+### Question 47 â€” Artifact Paths and Glob Patterns
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Artifact Path Specification
 
@@ -723,7 +723,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 48** — Artifact Name Collisions
+### Question 48 â€” Artifact Name Collisions
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Artifact Naming and Uniqueness
 
@@ -738,7 +738,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 49** — Artifact Permissions and Access
+### Question 49 â€” Artifact Permissions and Access
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Artifact Access Controls
 
@@ -755,7 +755,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 10: Workflow Caching (5 Questions)
 
-**Question 50** — Cache Key Strategy
+### Question 50 â€” Cache Key Strategy
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Cache Key Generation
 
@@ -770,7 +770,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 51** — Restore Keys and Path Fallback
+### Question 51 â€” Restore Keys and Path Fallback
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Cache Restoration Strategy
 
@@ -785,7 +785,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 52** — Multiple Paths in Cache Action
+### Question 52 â€” Multiple Paths in Cache Action
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Multi-Path Caching
 
@@ -800,7 +800,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 53** — Cache Hit Output Variable
+### Question 53 â€” Cache Hit Output Variable
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Cache Hit Detection
 
@@ -815,7 +815,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 54** — Cache Size Limits and Performance
+### Question 54 â€” Cache Size Limits and Performance
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Cache Limits and Eviction
 
@@ -832,7 +832,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 11: Workflow Sharing (5 Questions)
 
-**Question 55** — Reusable Workflow Basics
+### Question 55 â€” Reusable Workflow Basics
 
 **Difficulty**: Easy | **Answer Type**: one | **Topic**: Reusable Workflow Definition
 
@@ -845,7 +845,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 56** — Calling Reusable Workflows
+### Question 56 â€” Calling Reusable Workflows
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Reusable Workflow Invocation
 
@@ -860,7 +860,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 57** — Reusable Workflow Inputs and Outputs
+### Question 57 â€” Reusable Workflow Inputs and Outputs
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Workflow Input/Output Contracts
 
@@ -875,7 +875,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 58** — Secrets Inheritance in Reusable Workflows
+### Question 58 â€” Secrets Inheritance in Reusable Workflows
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Secret Propagation
 
@@ -890,7 +890,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 59** — Marketplace Action Publishing
+### Question 59 â€” Marketplace Action Publishing
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Action Marketplace and Distribution
 
@@ -907,7 +907,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 12: Workflow Debugging (5 Questions)
 
-**Question 60** — Enabling Runner Debug Mode
+### Question 60 â€” Enabling Runner Debug Mode
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Runner Debug Logging
 
@@ -922,7 +922,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 61** — Workflow Logging Commands
+### Question 61 â€” Workflow Logging Commands
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Workflow Output and Grouping
 
@@ -937,20 +937,20 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 62** — Accessing Workflow Logs
+### Question 62 â€” Accessing Workflow Logs
 
 **Difficulty**: Easy | **Answer Type**: one | **Topic**: Log Retrieval and Access
 
 **Question**: Where can you view the full logs for a completed workflow run?
 
-- A) Actions tab → select the workflow run → click "View logs"
+- A) Actions tab â†’ select the workflow run â†’ click "View logs"
 - B) Repository API endpoint `/repos/{owner}/{repo}/actions/runs/{run_id}/logs`
 - C) Both A and B
 - D) Logs are only available locally on the runner
 
 ---
 
-**Question 63** — Debugging with Intermediate Artifacts
+### Question 63 â€” Debugging with Intermediate Artifacts
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Debugging via Artifact Upload
 
@@ -965,7 +965,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 64** — Performance Profiling a Slow Step
+### Question 64 â€” Performance Profiling a Slow Step
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Timing and Duration Analysis
 
@@ -982,7 +982,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 13: Workflows REST API (5 Questions)
 
-**Question 65** — Listing Workflows
+### Question 65 â€” Listing Workflows
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: API Basics
 
@@ -997,7 +997,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 66** — Triggering a Workflow Run via API
+### Question 66 â€” Triggering a Workflow Run via API
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Remote Trigger via REST API
 
@@ -1012,7 +1012,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 67** — Listing Workflow Runs and Filtering
+### Question 67 â€” Listing Workflow Runs and Filtering
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Run Retrieval and Filtering
 
@@ -1027,7 +1027,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 68** — Canceling a Workflow Run
+### Question 68 â€” Canceling a Workflow Run
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Run Control
 
@@ -1042,7 +1042,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 69** — Downloading Artifacts via API
+### Question 69 â€” Downloading Artifacts via API
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Artifact Retrieval
 
@@ -1050,7 +1050,7 @@ But NOT on PR comments or wiki updates.
 
 **Question**: What is the best approach?
 
-- A) `GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/download` → follows redirect to download URL
+- A) `GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/download` â†’ follows redirect to download URL
 - B) List artifacts with `GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`, then download each via URL
 - C) Artifacts can only be downloaded via the GitHub UI or the `actions/download-artifact` action
 - D) Both A and B are valid
@@ -1059,7 +1059,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 14: Reviewing Deployments (4 Questions)
 
-**Question 70** — Environment Configuration
+### Question 70 â€” Environment Configuration
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Deployment Environment Setup
 
@@ -1067,14 +1067,14 @@ But NOT on PR comments or wiki updates.
 
 **Question**: Where are environments configured?
 
-- A) Repository Settings → Environments
+- A) Repository Settings â†’ Environments
 - B) `.github/environments.yml` in the repository
-- C) Organization Settings → Environments
-- D) Workflows → Environment Configuration
+- C) Organization Settings â†’ Environments
+- D) Workflows â†’ Environment Configuration
 
 ---
 
-**Question 71** — Deployment Status and History
+### Question 71 â€” Deployment Status and History
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Deployment Tracking
 
@@ -1082,14 +1082,14 @@ But NOT on PR comments or wiki updates.
 
 **Question** (Select all that apply): Where can you find this information?
 
-- A) Repository → Deployments tab
+- A) Repository â†’ Deployments tab
 - B) REST API: `GET /repos/{owner}/{repo}/deployments`
 - C) GitHub Actions run logs
 - D) Environment protection rules history
 
 ---
 
-**Question 72** — Deployment Review Workflow
+### Question 72 â€” Deployment Review Workflow
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Review Process
 
@@ -1104,7 +1104,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 73** — Environment Secrets and Variables in Deployment
+### Question 73 â€” Environment Secrets and Variables in Deployment
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Environment-Scoped Configuration
 
@@ -1121,7 +1121,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 15: Creating and Publishing Actions (5 Questions)
 
-**Question 74** — Action Metadata File
+### Question 74 â€” Action Metadata File
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: action.yml File Structure
 
@@ -1134,7 +1134,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 75** — JavaScript Action with Dependencies
+### Question 75 â€” JavaScript Action with Dependencies
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: JavaScript Action Development
 
@@ -1149,7 +1149,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 76** — Composite Action Structure
+### Question 76 â€” Composite Action Structure
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Composite Action Implementation
 
@@ -1164,7 +1164,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 77** — Action Versioning and Tags
+### Question 77 â€” Action Versioning and Tags
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Version Management
 
@@ -1179,7 +1179,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 78** — Testing Custom Actions Locally
+### Question 78 â€” Testing Custom Actions Locally
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Action Development and Testing
 
@@ -1196,7 +1196,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 16: Managing Runners (5 Questions)
 
-**Question 79** — Hosted Runner Selection
+### Question 79 â€” Hosted Runner Selection
 
 **Difficulty**: Easy | **Answer Type**: one | **Topic**: Choosing Hosted Runners
 
@@ -1209,7 +1209,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 80** — Self-Hosted Runner Labels
+### Question 80 â€” Self-Hosted Runner Labels
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Runner Organization and Targeting
 
@@ -1224,7 +1224,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 81** — Runner Groups in Enterprise
+### Question 81 â€” Runner Groups in Enterprise
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Enterprise Runner Organization
 
@@ -1239,7 +1239,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 82** — Self-Hosted Runner Scalability
+### Question 82 â€” Self-Hosted Runner Scalability
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Runner Capacity and Autoscaling
 
@@ -1254,7 +1254,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 83** — Runner Maintenance and Updates
+### Question 83 â€” Runner Maintenance and Updates
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Self-Hosted Runner Hygiene
 
@@ -1271,7 +1271,7 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 17: GitHub Actions Enterprise (5 Questions)
 
-**Question 84** — Organizational Action Policies
+### Question 84 â€” Organizational Action Policies
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Action Allowlisting
 
@@ -1286,7 +1286,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 85** — Required Workflows at Enterprise Level
+### Question 85 â€” Required Workflows at Enterprise Level
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Enforced Workflows
 
@@ -1301,7 +1301,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 86** — IP Allowlists for Self-Hosted Runners
+### Question 86 â€” IP Allowlists for Self-Hosted Runners
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Network Isolation
 
@@ -1316,7 +1316,7 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-**Question 87** — Secrets Hierarchy in Enterprise
+### Question 87 â€” Secrets Hierarchy in Enterprise
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Scope and Precedence
 
@@ -1332,7 +1332,7 @@ ces
 
 ---
 
-**Question 88** — Audit Logging for Compliance
+### Question 88 â€” Audit Logging for Compliance
 
 **Difficulty**: Hard | **Answer Type**: many | **Topic**: Enterprise Auditing
 
@@ -1349,7 +1349,7 @@ ces
 
 ## Topic 18: Security and Optimization (7 Questions)
 
-**Question 89** — GITHUB_TOKEN Permissions and Best Practices
+### Question 89 â€” GITHUB_TOKEN Permissions and Best Practices
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Token Scope Management (SECURITY)
 
@@ -1364,7 +1364,7 @@ ces
 
 ---
 
-**Question 90** — Script Injection Prevention
+### Question 90 â€” Script Injection Prevention
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Command Injection (SECURITY)
 
@@ -1379,7 +1379,7 @@ ces
 
 ---
 
-**Question 91** — SHA Pinning for Actions
+### Question 91 â€” SHA Pinning for Actions
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Supply Chain Security (SECURITY)
 
@@ -1394,7 +1394,7 @@ ces
 
 ---
 
-**Question 92** — OIDC Token for Cloud Federation
+### Question 92 â€” OIDC Token for Cloud Federation
 
 **Difficulty**: Hard | **Answer Type**: many | **Topic**: Cloud Credential Exchange (SECURITY)
 
@@ -1409,7 +1409,7 @@ ces
 
 ---
 
-**Question 93** — Secret Masking Limitations
+### Question 93 â€” Secret Masking Limitations
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Secret Redaction (SECURITY)
 
@@ -1424,7 +1424,7 @@ ces
 
 ---
 
-**Question 94** — Action Attestation and Supply Chain Risk
+### Question 94 â€” Action Attestation and Supply Chain Risk
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Trustworthy Actions (SECURITY)
 
@@ -1439,11 +1439,11 @@ ces
 
 ---
 
-**Question 95** — Optimization: Job Parallelization
+### Question 95 â€” Optimization: Job Parallelization
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Performance
 
-**Scenario**: Your workflow has 4 sequential jobs: checkout → build → test → deploy. Each takes ~5 minutes. Total runtime is 20 minutes. You want to minimize runtime.
+**Scenario**: Your workflow has 4 sequential jobs: checkout â†’ build â†’ test â†’ deploy. Each takes ~5 minutes. Total runtime is 20 minutes. You want to minimize runtime.
 
 **Question**: What is the best optimization?
 
@@ -1456,7 +1456,7 @@ ces
 
 ## Topic 19: Common Failures and Troubleshooting (5 Questions)
 
-**Question 96** — Artifact Download Timeout
+### Question 96 â€” Artifact Download Timeout
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Troubleshooting
 
@@ -1471,7 +1471,7 @@ ces
 
 ---
 
-**Question 97** — Workflow Not Triggering on Push
+### Question 97 â€” Workflow Not Triggering on Push
 
 **Difficulty**: Medium | **Answer Type**: many | **Topic**: Trigger Debugging
 
@@ -1487,7 +1487,7 @@ ces
 
 ---
 
-**Question 98** — out of Memory During Build
+### Question 98 â€” out of Memory During Build
 
 **Difficulty**: Medium | **Answer Type**: one | **Topic**: Resource Constraints
 
@@ -1502,7 +1502,7 @@ ces
 
 ---
 
-**Question 99** — Permission Denied on Secret Access
+### Question 99 â€” Permission Denied on Secret Access
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Secret Scope Issues
 
@@ -1517,7 +1517,7 @@ ces
 
 ---
 
-**Question 100** — Matrix Job Failure Cascading to Dependent Jobs
+### Question 100 â€” Matrix Job Failure Cascading to Dependent Jobs
 
 **Difficulty**: Hard | **Answer Type**: one | **Topic**: Matrix Strategy and Dependencies (SCENARIO)
 
@@ -1547,7 +1547,7 @@ ces
 | 7 | A | github.event.pull_request.base.ref contains the base (target) branch of a PR. github.base_ref is a shorthand alias. | Topic 2 | Medium |
 | 8 | B | GitHub automatically redacts secrets from logs if they are 3+ characters long. Output statements echo the masking is automatic. | Topic 2 | Medium |
 | 9 | A | At the workflow level, env context takes precedence. Workflow-level env.API_KEY is used, not secrets.API_KEY. | Topic 2 | Hard |
-| 10 | B | The matrix creates 6 jobs (3 node versions × 2 OS values). Each job receives one specific combination value as matrix.node-version. | Topic 2 | Hard |
+| 10 | B | The matrix creates 6 jobs (3 node versions Ã— 2 OS values). Each job receives one specific combination value as matrix.node-version. | Topic 2 | Hard |
 | 11 | B | Context is evaluated at parse time in workflow-level env, so ${{ secrets.* }} is not evaluated; the literal string is used. | Topic 3 | Medium |
 | 12 | A, B, C, D | All statements are correct about needs context availability, scope, and usage. | Topic 3 | Medium |
 | 13 | B | GitHub masks exact string matches. If the secret is transformed (encoded, formatted, etc.), masking may fail for that variant. | Topic 3 | Hard |
@@ -1607,7 +1607,7 @@ ces
 | 67 | A, B, C, D | All query parameters are supported. | Topic 13 | Medium |
 | 68 | B | POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel is the correct endpoint. | Topic 13 | Medium |
 | 69 | D | Both list-then-download and direct download endpoints are valid. | Topic 13 | Hard |
-| 70 | A | Environments are configured in Repository Settings → Environments. | Topic 14 | Medium |
+| 70 | A | Environments are configured in Repository Settings â†’ Environments. | Topic 14 | Medium |
 | 71 | A, B, C | Deployment history is available in UI, API, and workflow logs. | Topic 14 | Medium |
 | 72 | A | After the 2nd approval, the deployment is approved and continues immediately. | Topic 14 | Hard |
 | 73 | A | Environment-scoped secrets and variables are available if the job specifies environment. | Topic 14 | Medium |
@@ -1643,14 +1643,14 @@ ces
 
 ## Coverage Summary
 
-✅ **Total Questions**: 100
-✅ **Scenario-Based**: 73 (73%)
-✅ **Security Focus**: 12 questions
-✅ **Enterprise Focus**: 9 questions
-✅ **Easy**: 20 questions (20%)
-✅ **Medium**: 60 questions (60%)
-✅ **Hard**: 20 questions (20%)
-✅ **Answer Type Distribution**: one (55), many (26), all (12), none (7)
+âœ… **Total Questions**: 100
+âœ… **Scenario-Based**: 73 (73%)
+âœ… **Security Focus**: 12 questions
+âœ… **Enterprise Focus**: 9 questions
+âœ… **Easy**: 20 questions (20%)
+âœ… **Medium**: 60 questions (60%)
+âœ… **Hard**: 20 questions (20%)
+âœ… **Answer Type Distribution**: one (55), many (26), all (12), none (7)
 
 ---
 
@@ -1661,3 +1661,6 @@ ces
 3. **Weak Area Analysis**: Group questions by topic and difficulty; focus on low-success topics
 4. **Peer Discussion**: Discuss complex questions (especially Hard / synthesis questions) with colleagues
 5. **Continuous Iteration**: Use this bank repeatedly; difficulty increases with familiarity
+
+
+
