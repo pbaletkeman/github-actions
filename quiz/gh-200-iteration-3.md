@@ -23,8 +23,6 @@
 - C) Direct execution of workflows on your local machine
 - D) Automatic generation of GitHub Actions templates
 
-**Answer**: B
-
 ---
 
 **Question 2** — Extension Context IntelliSense
@@ -39,8 +37,6 @@
 - B) `github.database` — direct access to GitHub's database
 - C) `github.run_id` — unique workflow run identifier
 - D) `github.event_name` — the trigger event that started the workflow
-
-**Answer**: A, C, D
 
 ---
 
@@ -57,8 +53,6 @@
 - C) Downgrade to an older version of the GitHub Actions extension
 - D) Convert the workflow file to JSON format
 
-**Answer**: A
-
 ---
 
 **Question 4** — Extension Warnings for SHA Pinning
@@ -73,8 +67,6 @@
 - B) Semver tags can be retagged or deleted, introducing supply chain risk
 - C) SHA pinning reduces the size of the workflow file in storage
 - D) GitHub automatically requires SHA pinning for all public repositories
-
-**Answer**: B
 
 ---
 
@@ -91,8 +83,6 @@
 - C) `${{ github.username }}`
 - D) `${{ github.user.login }}`
 
-**Answer**: B
-
 ---
 
 **Question 6** — Multi-Context Usage in Workflows
@@ -107,8 +97,6 @@
 - B) `${{ github.run_number }}` — unique number for each workflow run
 - C) `${{ runner.name }}` — the name of the GitHub runner
 - D) `${{ github.run_id }}` — a unique identifier for the workflow run
-
-**Answer**: A, B, D
 
 ---
 
@@ -125,8 +113,6 @@
 - C) `${{ github.base_ref }}`
 - D) `${{ github.event.target }}`
 
-**Answer**: A
-
 ---
 
 **Question 8** — Secrets Context and Masking
@@ -141,8 +127,6 @@
 - B) GitHub automatically redacts the secret from logs if it's 3+ characters
 - C) You can echo the secret value to stdout; GitHub will mask it automatically
 - D) If a step failure reveals the secret, GitHub allows manual log deletion
-
-**Answer**: B
 
 ---
 
@@ -159,8 +143,6 @@
 - C) Undefined (context types cannot overlap)
 - D) The value depends on which was defined most recently in the file
 
-**Answer**: A
-
 ---
 
 **Question 10** — Matrix Context Variables
@@ -175,8 +157,6 @@
 - B) 6 jobs total; `matrix.node-version` contains one of the 3 values per job
 - C) 3 jobs total; `matrix.node-version` contains an array of all 3 values
 - D) 2 jobs total; `matrix.node-version` always evaluates to 16
-
-**Answer**: B
 
 ---
 
@@ -195,8 +175,6 @@
 - C) GitHub throws a validation error preventing the workflow from being saved
 - D) The secret is evaluated but marked as masked in all downstream logs
 
-**Answer**: B
-
 ---
 
 **Question 12** — self Context in Job Conditions
@@ -211,8 +189,6 @@
 - B) `needs` context references outputs from explicitly declared dependent jobs
 - C) `needs` is only available if your job has `needs: [previous-job]` declared
 - D) `needs.job-id.outputs.variable_name` retrieves output from a specific job
-
-**Answer**: A, B, C, D
 
 ---
 
@@ -229,8 +205,6 @@
 - C) The value is redacted only if the substring appears 3+ times in the logs
 - D) GitHub prevents the workflow from running if a secret is referenced in a print statement
 
-**Answer**: B
-
 ---
 
 **Question 14** — Matrix Context in Reusable Workflows
@@ -245,8 +219,6 @@
 - B) Each matrix combination is a separate job that independently calls the reusable workflow, passing its specific matrix value
 - C) The reusable workflow receives an array of all matrix values and must iterate
 - D) Matrix context is unavailable in called workflows; only scalar inputs are permitted
-
-**Answer**: B
 
 ---
 
@@ -263,8 +235,6 @@
 - C) Yes, but only if the composite action explicitly declares its inputs/outputs first
 - D) No, composite actions must use `inputs.*` instead of context variables
 
-**Answer**: A
-
 ---
 
 ## Topic 4: Workflow File Structure (7 Questions)
@@ -279,8 +249,6 @@
 - B) `/workflows/` or `/actions/workflows/`
 - C) `/.workflows/` (hidden directory)
 - D) `/actions/` (no subdirectory required)
-
-**Answer**: A
 
 ---
 
@@ -297,8 +265,6 @@
 - C) Listing `needs: [build, test]` in deploy is explicit and recommended for clarity
 - D) Both (A) and (B) are valid; (A) is recommended for explicit clarity
 
-**Answer**: A, C, D
-
 ---
 
 **Question 18** — Permissions Block Structure
@@ -313,8 +279,6 @@
 - B) `permissions: { releases: write, pull-requests: read, issues: false }`
 - C) `permissions: [releases: write, pull-requests: read, -issues: write]`
 - D) Both A and B are equivalent
-
-**Answer**: A
 
 ---
 
@@ -331,8 +295,6 @@
 - C) Both container and services use the same networking; service hostname is the service name
 - D) You can configure environment variables separately for the container and each service
 
-**Answer**: B, C, D
-
 ---
 
 **Question 20** — YAML Anchors and Aliases
@@ -347,8 +309,6 @@
 - B) Both jobs share the same object reference; modifications in one job affect the other at runtime
 - C) The workflow fails because anchor aliases cannot be reused across jobs
 - D) YAML anchors are resolved at workflow parse time; each job gets the defined values at its declaration point
-
-**Answer**: D
 
 ---
 
@@ -365,8 +325,6 @@
 - C) `if: !cancelled()`
 - D) `if: success() || failure()`
 
-**Answer**: A
-
 ---
 
 **Question 22** — Matrix Strategy with Exclude
@@ -381,8 +339,6 @@
 - B) `strategy: { matrix: { node: [16, 18, 20], os: [ubuntu-latest], include: [{node: 20, os: ubuntu-latest}] } }`
 - C) `strategy: { matrix: { node: [16, 18], os: [ubuntu-latest, macos-latest], include: [{node: 20}] } }`
 - D) Both A and B are valid
-
-**Answer**: A
 
 ---
 
@@ -401,8 +357,6 @@
 - C) `on: { push: { include: [src/**], exclude: [docs/**] } }`
 - D) `on: { push: { branches: [main], paths: [src/**] } }`
 
-**Answer**: B
-
 ---
 
 **Question 24** — pull_request_target vs pull_request
@@ -417,8 +371,6 @@
 - B) `pull_request_target` runs with repo write token and secrets available (risky; requires code review)
 - C) `pull_request_target` checkout uses the PR's code; you must manually review before using secrets
 - D) Both events trigger; use `pull_request` for builds and `pull_request_target` for deployments
-
-**Answer**: A, B, C
 
 ---
 
@@ -435,8 +387,6 @@
 - C) The cron syntax is incorrect; you need to use a different format
 - D) Repository inactivity doesn't prevent schedules; the workflow should have run (check GitHub status)
 
-**Answer**: A
-
 ---
 
 **Question 26** — workflow_dispatch Inputs
@@ -451,8 +401,6 @@
 - B) Access the selected input in steps via `${{ github.event.inputs.environment }}`
 - C) Use `workflow_run` instead of `workflow_dispatch` to allow manual triggering
 - D) Set the input as required so the user must provide a value before running
-
-**Answer**: A, B
 
 ---
 
@@ -473,8 +421,6 @@ But NOT on PR comments or wiki updates.
 - C) `on: [push, pull_request, workflow_dispatch]` (filter by branch in the job condition)
 - D) `on: { push: {branches: [main], types: [opened, synchronize] }, pull_request: {branches: [main]}, workflow_dispatch }`
 
-**Answer**: B
-
 ---
 
 **Question 28** — workflow_run Event for Cross-Workflow Automation
@@ -489,8 +435,6 @@ But NOT on PR comments or wiki updates.
 - B) `on: { workflow: [CI completed] }`
 - C) `on: { trigger: { workflow_name: CI, status: any } }`
 - D) `on: [workflow_completion]`
-
-**Answer**: A
 
 ---
 
@@ -507,8 +451,6 @@ But NOT on PR comments or wiki updates.
 - C) Split workflows by branch; use branches filter and manual workflow_dispatch
 - D) Configure a webhook with custom logic outside GitHub
 
-**Answer**: B
-
 ---
 
 ## Topic 6: Custom Environment Variables (5 Questions)
@@ -523,8 +465,6 @@ But NOT on PR comments or wiki updates.
 - B) All jobs and all steps in the workflow
 - C) Only steps that explicitly redefine the variable
 - D) Only the job-level env block
-
-**Answer**: B
 
 ---
 
@@ -541,8 +481,6 @@ But NOT on PR comments or wiki updates.
 - C) Both values are accessible; the step must choose which one to use
 - D) Undefined (overlapping env vars cause an error)
 
-**Answer**: B
-
 ---
 
 **Question 32** — GITHUB_OUTPUT for Inter-Step Communication
@@ -557,8 +495,6 @@ But NOT on PR comments or wiki updates.
 - B) Set step 1 `id: version-step` and retrieve output via `${{ steps.version-step.outputs.VERSION }}`
 - C) Write to a temporary file and read it in the next step via `${{ env }}` context
 - D) Define `outputs:` section in step 1 and reference via `${{ steps.version-step.outputs.VERSION }}`
-
-**Answer**: A, B
 
 ---
 
@@ -575,8 +511,6 @@ But NOT on PR comments or wiki updates.
 - C) A redaction error; GitHub prevents this pattern from running
 - D) The literal string `${{ secrets.DB_PASSWORD }}` (not interpolated)
 
-**Answer**: B
-
 ---
 
 **Question 34** — Dynamic Environment Variables with Contexts
@@ -591,8 +525,6 @@ But NOT on PR comments or wiki updates.
 - B) The full commit SHA (40 characters)
 - C) Undefined (contexts cannot be used in workflow-level env)
 - D) The literal string `${{ github.sha }}`
-
-**Answer**: B
 
 ---
 
@@ -609,8 +541,6 @@ But NOT on PR comments or wiki updates.
 - C) Once per workflow run
 - D) When explicitly referenced in a step
 
-**Answer**: A
-
 ---
 
 **Question 36** — Runner Environment Variables
@@ -626,8 +556,6 @@ But NOT on PR comments or wiki updates.
 - C) `RUNNER_ARCH` — processor architecture (x64, ARM64, etc.)
 - D) `RUNNER_TEMP` — temporary directory path for the job
 
-**Answer**: A, B, C, D
-
 ---
 
 **Question 37** — GITHUB_WORKSPACE Path
@@ -640,8 +568,6 @@ But NOT on PR comments or wiki updates.
 - B) `GITHUB_REPOSITORY_PATH`
 - C) `RUNNER_WORKSPACE`
 - D) `GITHUB_HOME`
-
-**Answer**: A
 
 ---
 
@@ -658,8 +584,6 @@ But NOT on PR comments or wiki updates.
 - C) `RUNNER_DEBUG=true` — enables additional diagnostic logs when explicitly set
 - D) `DEBUG_MODE` — automatically set by GitHub in all workflows
 
-**Answer**: A, B, C
-
 ---
 
 **Question 39** — API Token Availability and Scope
@@ -674,8 +598,6 @@ But NOT on PR comments or wiki updates.
 - B) The API call fails; GITHUB_TOKEN is scoped to the current repository only
 - C) The API call succeeds, but the new PR is marked as "suspicious"
 - D) GitHub prompts for additional authentication before proceeding
-
-**Answer**: B
 
 ---
 
@@ -694,8 +616,6 @@ But NOT on PR comments or wiki updates.
 - C) The workflow proceeds without waiting; reviewers receive a notification afterward
 - D) The protection rule is bypassed for automated workflows
 
-**Answer**: B
-
 ---
 
 **Question 41** — Deployment Branches Protection
@@ -710,8 +630,6 @@ But NOT on PR comments or wiki updates.
 - B) A workflow on `release/v1.2.0` attempts to deploy to prod; it is allowed
 - C) A manual workflow_dispatch on `main` triggers a prod deployment; it is allowed
 - D) A pull request rebase on `main` triggers a prod deployment; it is allowed
-
-**Answer**: A, B, C, D
 
 ---
 
@@ -728,8 +646,6 @@ But NOT on PR comments or wiki updates.
 - C) At the next scheduled maintenance window
 - D) After one review approval (wait timer and approval are sequential)
 
-**Answer**: B
-
 ---
 
 **Question 43** — Custom Deployment Protection Rules
@@ -744,8 +660,6 @@ But NOT on PR comments or wiki updates.
 - B) GitHub does not offer time-based protection rules; use a custom third-party app or workflow condition
 - C) Set a wait timer for off-hours and manually remove it during business hours
 - D) Configure a required review that checks the time before approving
-
-**Answer**: B
 
 ---
 
@@ -762,8 +676,6 @@ But NOT on PR comments or wiki updates.
 - C) Environment variables can override workflow and job-level variables
 - D) Secrets scoped to an environment are available to jobs targeting that environment
 
-**Answer**: B, C, D
-
 ---
 
 ## Topic 9: Workflow Artifacts (5 Questions)
@@ -778,8 +690,6 @@ But NOT on PR comments or wiki updates.
 - B) The artifact persists indefinitely (retention-days is advisory only)
 - C) GitHub sends a warning but keeps the artifact until manually deleted
 - D) The artifact is archived to cold storage but remains accessible
-
-**Answer**: A
 
 ---
 
@@ -796,8 +706,6 @@ But NOT on PR comments or wiki updates.
 - C) Artifacts are automatically available to dependent jobs without explicit download
 - D) The artifact is scoped to the workflow run; other workflows cannot access it
 
-**Answer**: A, B, D
-
 ---
 
 **Question 47** — Artifact Paths and Glob Patterns
@@ -812,8 +720,6 @@ But NOT on PR comments or wiki updates.
 - B) `path: |` followed by `dist/**/*.js` and `dist/**/*.css` (multi-line)
 - C) Both A and B work
 - D) `path: dist/!(*.map)`
-
-**Answer**: C
 
 ---
 
@@ -830,8 +736,6 @@ But NOT on PR comments or wiki updates.
 - C) GitHub automatically renames them to include matrix identifiers (e.g., `test-results-[node:16,os:ubuntu]`)
 - D) The workflow fails because artifact names must be unique within a run
 
-**Answer**: C
-
 ---
 
 **Question 49** — Artifact Permissions and Access
@@ -846,8 +750,6 @@ But NOT on PR comments or wiki updates.
 - B) Artifacts are always accessible within the workflow run regardless of repository permissions
 - C) You can share artifacts with public URLs if explicitly configured in environment variables
 - D) Artifacts expire after the retention period regardless of access level
-
-**Answer**: A, B, D
 
 ---
 
@@ -866,8 +768,6 @@ But NOT on PR comments or wiki updates.
 - C) Yes; but only on the first run after the change
 - D) No; `hashFiles` doesn't support package manager files
 
-**Answer**: A
-
 ---
 
 **Question 51** — Restore Keys and Path Fallback
@@ -882,8 +782,6 @@ But NOT on PR comments or wiki updates.
 - B) The job fails because the exact cache key doesn't match
 - C) GitHub restores a cache from a different OS if no Ubuntu match exists
 - D) The job proceeds without cache; the restore-keys provides a fallback mechanism
-
-**Answer**: A, D
 
 ---
 
@@ -900,8 +798,6 @@ But NOT on PR comments or wiki updates.
 - C) Both A and B
 - D) Multiple paths require separate cache actions
 
-**Answer**: C
-
 ---
 
 **Question 53** — Cache Hit Output Variable
@@ -916,8 +812,6 @@ But NOT on PR comments or wiki updates.
 - B) `if: ${{ steps.npm-cache.outputs.cache_hit == 'true' }}`
 - C) Both A and B (syntax variations)
 - D) Use `if: ! failure()` after the cache step
-
-**Answer**: B
 
 ---
 
@@ -934,8 +828,6 @@ But NOT on PR comments or wiki updates.
 - C) Split caches by job/workflow to keep only necessary ones
 - D) All of the above; start with B/C, escalate to A if needed
 
-**Answer**: D
-
 ---
 
 ## Topic 11: Workflow Sharing (5 Questions)
@@ -950,8 +842,6 @@ But NOT on PR comments or wiki updates.
 - B) `on: workflow_reuse`
 - C) `on: [push, pull_request]` (standard triggers)
 - D) Reusable workflows don't require a trigger event
-
-**Answer**: A
 
 ---
 
@@ -968,8 +858,6 @@ But NOT on PR comments or wiki updates.
 - C) Use `uses: ./.github/workflows/ci.yml@main` (cross-repo reference)
 - D) The called workflow repository must be public or you must have explicit access
 
-**Answer**: A, B, D
-
 ---
 
 **Question 57** — Reusable Workflow Inputs and Outputs
@@ -984,8 +872,6 @@ But NOT on PR comments or wiki updates.
 - B) The caller can access the status output via `${{ jobs.call-id.outputs.status }}`
 - C) Reusable workflows support only string inputs; no other types
 - D) Outputs must be defined in the reusable workflow; the caller can reference them
-
-**Answer**: A, B, D
 
 ---
 
@@ -1002,8 +888,6 @@ But NOT on PR comments or wiki updates.
 - C) The caller must explicitly pass each secret as an input
 - D) Reusable workflows cannot access repository secrets; use OIDC instead
 
-**Answer**: B
-
 ---
 
 **Question 59** — Marketplace Action Publishing
@@ -1018,8 +902,6 @@ But NOT on PR comments or wiki updates.
 - B) Repository must be public
 - C) Add a descriptive `README.md` with usage examples
 - D) Tag the repository with a Marketplace Publisher account
-
-**Answer**: A, B, C
 
 ---
 
@@ -1038,8 +920,6 @@ But NOT on PR comments or wiki updates.
 - C) Enable debug mode in individual steps via `run: set -x`
 - D) Both A and C are valid; B is not supported
 
-**Answer**: A
-
 ---
 
 **Question 61** — Workflow Logging Commands
@@ -1055,8 +935,6 @@ But NOT on PR comments or wiki updates.
 - C) `echo "::error::Error message"`
 - D) `echo "::debug::Debug message"`
 
-**Answer**: A, B, C, D
-
 ---
 
 **Question 62** — Accessing Workflow Logs
@@ -1069,8 +947,6 @@ But NOT on PR comments or wiki updates.
 - B) Repository API endpoint `/repos/{owner}/{repo}/actions/runs/{run_id}/logs`
 - C) Both A and B
 - D) Logs are only available locally on the runner
-
-**Answer**: C
 
 ---
 
@@ -1087,8 +963,6 @@ But NOT on PR comments or wiki updates.
 - C) Both A and B are valid depending on your use case
 - D) Artifacts cannot be uploaded from failed jobs; use debug mode instead
 
-**Answer**: C
-
 ---
 
 **Question 64** — Performance Profiling a Slow Step
@@ -1103,8 +977,6 @@ But NOT on PR comments or wiki updates.
 - B) Enable RUNNER_DEBUG and look for timing information in logs
 - C) GitHub Actions automatically reports step duration in the UI; check the logs
 - D) All of the above; C is primary, A/B are supplementary
-
-**Answer**: D
 
 ---
 
@@ -1123,8 +995,6 @@ But NOT on PR comments or wiki updates.
 - C) `GET /repos/{owner}/{repo}/actions`
 - D) `GET /{owner}/{repo}/workflows`
 
-**Answer**: A
-
 ---
 
 **Question 66** — Triggering a Workflow Run via API
@@ -1139,8 +1009,6 @@ But NOT on PR comments or wiki updates.
 - B) Include `inputs` object in the request body with input names and values
 - C) The request requires authentication (PAT or GITHUB_TOKEN)
 - D) workflow_id can be the workflow filename (e.g., `ci.yml`) or the numeric ID
-
-**Answer**: A, B, C, D
 
 ---
 
@@ -1157,8 +1025,6 @@ But NOT on PR comments or wiki updates.
 - C) `branch`: Filter runs by branch name
 - D) `limit`: Limit results to N runs
 
-**Answer**: A, B, C, D
-
 ---
 
 **Question 68** — Canceling a Workflow Run
@@ -1174,8 +1040,6 @@ But NOT on PR comments or wiki updates.
 - C) `PATCH /repos/{owner}/{repo}/actions/runs/12345?status=cancelled`
 - D) Both A and B
 
-**Answer**: B
-
 ---
 
 **Question 69** — Downloading Artifacts via API
@@ -1190,8 +1054,6 @@ But NOT on PR comments or wiki updates.
 - B) List artifacts with `GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`, then download each via URL
 - C) Artifacts can only be downloaded via the GitHub UI or the `actions/download-artifact` action
 - D) Both A and B are valid
-
-**Answer**: D
 
 ---
 
@@ -1210,8 +1072,6 @@ But NOT on PR comments or wiki updates.
 - C) Organization Settings → Environments
 - D) Workflows → Environment Configuration
 
-**Answer**: A
-
 ---
 
 **Question 71** — Deployment Status and History
@@ -1226,8 +1086,6 @@ But NOT on PR comments or wiki updates.
 - B) REST API: `GET /repos/{owner}/{repo}/deployments`
 - C) GitHub Actions run logs
 - D) Environment protection rules history
-
-**Answer**: A, B, C
 
 ---
 
@@ -1244,8 +1102,6 @@ But NOT on PR comments or wiki updates.
 - C) Sent back to the first reviewer for confirmation
 - D) Auto-rejected if more than 1 hour passes
 
-**Answer**: A
-
 ---
 
 **Question 73** — Environment Secrets and Variables in Deployment
@@ -1260,8 +1116,6 @@ But NOT on PR comments or wiki updates.
 - B) Yes, only secrets are environment-scoped; variables are global
 - C) No, environment secrets/variables are only used for protection rules
 - D) Only if the job has explicit `with:` parameters
-
-**Answer**: A
 
 ---
 
@@ -1278,8 +1132,6 @@ But NOT on PR comments or wiki updates.
 - C) Must include `inputs` and `outputs` sections
 - D) All of the above except C (inputs/outputs are optional)
 
-**Answer**: A
-
 ---
 
 **Question 75** — JavaScript Action with Dependencies
@@ -1294,8 +1146,6 @@ But NOT on PR comments or wiki updates.
 - B) Use a tool like `ncc` (vercel/ncc) or `esbuild` to bundle dependencies into a single file
 - C) Rely on npm install during action execution (slower but smaller repo)
 - D) List dependencies in the action.yml `requirements` section
-
-**Answer**: A, B
 
 ---
 
@@ -1312,8 +1162,6 @@ But NOT on PR comments or wiki updates.
 - C) `runs: { using: docker, image: node:16 }`
 - D) No `runs` section needed for composite actions
 
-**Answer**: B
-
 ---
 
 **Question 77** — Action Versioning and Tags
@@ -1328,8 +1176,6 @@ But NOT on PR comments or wiki updates.
 - B) Always require users to update to the explicit version; don't move version tags
 - C) Use `v1.1.0` for patch, `v2` for major releases
 - D) Marketplace automatically routes `v1` to the latest `v1.x.x` release
-
-**Answer**: A
 
 ---
 
@@ -1346,8 +1192,6 @@ But NOT on PR comments or wiki updates.
 - C) Push to a test branch and reference via `owner/repo/.github/workflows/action@branch-name`
 - D) All of the above are valid depending on the testing stage
 
-**Answer**: D
-
 ---
 
 ## Topic 16: Managing Runners (5 Questions)
@@ -1362,8 +1206,6 @@ But NOT on PR comments or wiki updates.
 - B) `ubuntu-22.04`
 - C) Both A and B support Python 3.10
 - D) Neither; recommend GitHub Enterprise Runners
-
-**Answer**: C
 
 ---
 
@@ -1380,8 +1222,6 @@ But NOT on PR comments or wiki updates.
 - C) Use `runs-on: ["self-hosted", "linux", "performance-testing"]`
 - D) All groups of self-hosted runners automatically get OS labels (linux, windows, macos)
 
-**Answer**: A, B, C, D
-
 ---
 
 **Question 81** — Runner Groups in Enterprise
@@ -1396,8 +1236,6 @@ But NOT on PR comments or wiki updates.
 - B) Organizations within the enterprise can assign policies to runner groups
 - C) Runner groups support IP allowlists for runners in restricted networks
 - D) Runner groups inherit access policies from organization settings
-
-**Answer**: A, B, C
 
 ---
 
@@ -1414,8 +1252,6 @@ But NOT on PR comments or wiki updates.
 - C) Use GitHub's Hosted Runners for peak workloads; reserve self-hosted for standby
 - D) Both B and C are practical; A is not available
 
-**Answer**: D
-
 ---
 
 **Question 83** — Runner Maintenance and Updates
@@ -1430,8 +1266,6 @@ But NOT on PR comments or wiki updates.
 - B) Use `grace-period` configuration to allow in-flight jobs to complete before shutdown
 - C) Automate patching via cron or configuration management tools
 - D) Remove runners from rotation (remove labels) during updates
-
-**Answer**: B, C, D
 
 ---
 
@@ -1450,8 +1284,6 @@ But NOT on PR comments or wiki updates.
 - C) Workflows can use public actions from the GitHub Marketplace
 - D) The policy blocks all third-party actions unless explicitly added to an allowlist
 
-**Answer**: A
-
 ---
 
 **Question 85** — Required Workflows at Enterprise Level
@@ -1467,8 +1299,6 @@ But NOT on PR comments or wiki updates.
 - C) Required workflows appear in PR checks and run status alongside standard workflows
 - D) Required workflows bypass the normal trigger events; they always run on push/PR
 
-**Answer**: A, C
-
 ---
 
 **Question 86** — IP Allowlists for Self-Hosted Runners
@@ -1483,8 +1313,6 @@ But NOT on PR comments or wiki updates.
 - B) Workflows can only make API/HTTP requests to services within `10.0.1.0/24`
 - C) Runners with IPs outside the allowlist cannot be registered or used
 - D) Both A and C; runners must have allowlisted IPs to participate
-
-**Answer**: D
 
 ---
 
@@ -1502,8 +1330,6 @@ ces
 - C) Organization secret overrides enterprise secret; repository secret overrides organization
 - D) The most specific scope (repository) takes precedence over broader scopes
 
-**Answer**: A, D
-
 ---
 
 **Question 88** — Audit Logging for Compliance
@@ -1518,8 +1344,6 @@ ces
 - B) Audit logs track who approves deployments in protected environments
 - C) Audit logs record modifications to actions/secrets policies
 - D) Audit logs can be exported via API or streamed to Splunk/Datadog
-
-**Answer**: A, B, C, D
 
 ---
 
@@ -1538,8 +1362,6 @@ ces
 - C) Don't set permissions; use the organization default
 - D) `permissions: { contents: read }` (minimum required)
 
-**Answer**: B, D
-
 ---
 
 **Question 90** — Script Injection Prevention
@@ -1554,8 +1376,6 @@ ces
 - B) `run: echo "${{ github.event.inputs.user_comment }}"` (double quotes)
 - C) `env: { COMMENT: ${{ github.event.inputs.user_comment }} }` then `run: echo "$COMMENT"`
 - D) `run: echo "${{ toJSON(github.event.inputs.user_comment) }}" | jq -r`
-
-**Answer**: C
 
 ---
 
@@ -1572,8 +1392,6 @@ ces
 - C) Pin to short SHA: `actions/checkout@e2f00e4a5` (7 chars)
 - D) Use GitHub's verified creator badge to validate actions before use
 
-**Answer**: B, D
-
 ---
 
 **Question 92** — OIDC Token for Cloud Federation
@@ -1588,8 +1406,6 @@ ces
 - B) Azure/GCP/AWS trust your GitHub organization via OIDC discovery endpoint
 - C) The OIDC token subject claims include repository, branch, and actor information
 - D) OIDC tokens expire in seconds; they cannot be cached long-term
-
-**Answer**: A, B, C, D
 
 ---
 
@@ -1606,8 +1422,6 @@ ces
 - C) Secrets are only masked if they're referenced via `${{ secrets.* }}`; if passed via env/context, no masking occurs
 - D) All of the above are factors
 
-**Answer**: D
-
 ---
 
 **Question 94** — Action Attestation and Supply Chain Risk
@@ -1623,8 +1437,6 @@ ces
 - C) All popular actions are safe; GitHub Marketplace vets all submissions
 - D) Risk is negligible if the action has a clear README and usage examples
 
-**Answer**: B
-
 ---
 
 **Question 95** — Optimization: Job Parallelization
@@ -1639,8 +1451,6 @@ ces
 - B) Run all jobs in parallel with no dependencies
 - C) Run on a faster runner
 - D) Implement caching to speed up each step
-
-**Answer**: A
 
 ---
 
@@ -1659,8 +1469,6 @@ ces
 - C) Use a faster runner (download speed depends on runner location)
 - D) Switch to direct file paths instead of artifacts
 
-**Answer**: B
-
 ---
 
 **Question 97** — Workflow Not Triggering on Push
@@ -1677,8 +1485,6 @@ ces
 - D) Push was rejected due to branch protection; GitHub Actions never runs on failed pushes
 - E) The `.github/workflows/` directory doesn't exist yet or file isn't committed
 
-**Answer**: B, C, D, E
-
 ---
 
 **Question 98** — out of Memory During Build
@@ -1693,8 +1499,6 @@ ces
 - B) Switch to a larger hosted runner (if available) or self-hosted runner with more memory
 - C) Use caching aggressively to reduce rebuild overhead
 - D) All of the above; start with C/A, escalate to B if needed
-
-**Answer**: D
 
 ---
 
@@ -1711,8 +1515,6 @@ ces
 - C) The environment where the secret is defined doesn't match the job's environment
 - D) Any of the above
 
-**Answer**: D
-
 ---
 
 **Question 100** — Matrix Job Failure Cascading to Dependent Jobs
@@ -1728,13 +1530,11 @@ ces
 - C) `deploy` runs only if all matrix combinations succeed (use `if: always()` to override)
 - D) `deploy` waits indefinitely for the failed job to retry
 
-**Answer**: C
-
 ---
 
 ---
 
-## Answer Key
+## Answers
 
 | Q# | Answer(s) | Explanation | Source | Difficulty |
 |----|-----------|-------------|--------|------------|
