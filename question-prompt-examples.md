@@ -23,8 +23,6 @@ The following three examples demonstrate the expected quality, format depth, and
 - C) The runner's operating system details
 - D) The matrix strategy configuration
 
-**Answer**: B | **Explanation**: The `github` context contains workflow run metadata including run ID, SHA, ref, repository, actor, and other GitHub-specific info. The runner OS is in `runner` context, step timing in `job`, and matrix in `strategy`.
-
 ---
 
 ### Medium Example (Application/Analysis)
@@ -41,8 +39,6 @@ The following three examples demonstrate the expected quality, format depth, and
 - B) `push` to the `main` branch with environment protection rules
 - C) `workflow_dispatch` triggered manually
 - D) `schedule` on a cron expression
-
-**Answer**: B | **Explanation**: The `push` event triggers on merges to `main`. Environment protection rules then enforce required reviewers and approvals before deployment proceeds. `pull_request` wouldn't work (it's on PR, not merge), `workflow_dispatch` is manual, and `schedule` is time-based.
 
 ---
 
@@ -62,8 +58,6 @@ Which actions would improve artifact reliability between jobs?
 - C) Set `retention-days: 90` to prevent early expiration during long-running pipelines
 - D) Replace `path: .` with a specific glob pattern targeting only required output files
 
-**Answer**: B, D | **Explanation**: Pinning to matching versions prevents API compatibility issues; a precise glob avoids uploading unnecessary files that can cause partial or inconsistent downloads. `if: always()` aids debugging but does not fix reliability when the build itself fails. `retention-days` controls expiry, not mid-run consistency.
-
 ---
 
 ### Hard Example (Synthesis/Evaluation)
@@ -81,8 +75,6 @@ Which actions would improve artifact reliability between jobs?
 - C) OIDC supports fine-grained subject claims (repo, branch, environment) for access control
 - D) OIDC allows deploying to multiple cloud providers (AWS, Azure, GCP) with the same configuration
 - E) OIDC has no risk of token leakage because tokens are never stored
-
-**Answer**: A, B, C | **Explanation**: OIDC uses short-lived tokens automatically issued per run (A); AWS validates the token directly without needing stored credentials (B); subject claims enable precise access control (C). (D) is partially true but setup varies per cloud. (E) is false—token leakage risk still exists but is mitigated by short lifetime.
 
 ---
 
@@ -109,8 +101,6 @@ Which mitigation correctly prevents script injection without disabling the step?
 - B) Use `${{ toJson(github.event.pull_request.title) }}` to JSON-encode the value inline
 - C) Set the title as an environment variable and reference it as `$PR_TITLE` in the shell command
 - D) Add `permissions: read-all` to the job to restrict token scope
-
-**Answer**: C — Assigning the untrusted value to an environment variable (`PR_TITLE: ${{ github.event.pull_request.title }}`) and referencing `$PR_TITLE` in the shell prevents injection because the value is passed as data, never interpolated into the command string. A (single quotes) prevents variable expansion entirely. B (`toJson`) adds JSON encoding but does not prevent shell interpretation. D (permissions) limits the token scope but has no effect on command injection.
 
 ---
 
@@ -273,3 +263,17 @@ For each distractor, verify:
 | "What is `github.sha`?" | "Your workflow needs the commit SHA on PR head. Where do you get it?" |
 | "What trigger fires on schedule?" | "Which trigger cannot access `github.event` payload data?" |
 | "What does RUNNER_DEBUG do?" | "A build step fails silently. Which approach reveals the most diagnostic detail?" |
+
+---
+
+## Answers
+
+**Q1**: B | **Explanation**: The `github` context contains workflow run metadata including run ID, SHA, ref, repository, actor, and other GitHub-specific info. The runner OS is in `runner` context, step timing in `job`, and matrix in `strategy`.
+
+**Q2**: B | **Explanation**: The `push` event triggers on merges to `main`. Environment protection rules then enforce required reviewers and approvals before deployment proceeds. `pull_request` wouldn't work (it's on PR, not merge), `workflow_dispatch` is manual, and `schedule` is time-based.
+
+**Q3**: B, D | **Explanation**: Pinning to matching versions prevents API compatibility issues; a precise glob avoids uploading unnecessary files that can cause partial or inconsistent downloads. `if: always()` aids debugging but does not fix reliability when the build itself fails. `retention-days` controls expiry, not mid-run consistency.
+
+**Q4**: A, B, C | **Explanation**: OIDC uses short-lived tokens automatically issued per run (A); AWS validates the token directly without needing stored credentials (B); subject claims enable precise access control (C). (D) is partially true but setup varies per cloud. (E) is false—token leakage risk still exists but is mitigated by short lifetime.
+
+**Q5**: C — Assigning the untrusted value to an environment variable (`PR_TITLE: ${{ github.event.pull_request.title }}`) and referencing `$PR_TITLE` in the shell prevents injection because the value is passed as data, never interpolated into the command string. A (single quotes) prevents variable expansion entirely. B (`toJson`) adds JSON encoding but does not prevent shell interpretation. D (permissions) limits the token scope but has no effect on command injection.
