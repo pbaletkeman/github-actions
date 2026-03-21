@@ -266,14 +266,12 @@ For each distractor, verify:
 
 ---
 
-## Answers
+## Answer Key
 
-**Q1**: B | **Explanation**: The `github` context contains workflow run metadata including run ID, SHA, ref, repository, actor, and other GitHub-specific info. The runner OS is in `runner` context, step timing in `job`, and matrix in `strategy`.
-
-**Q2**: B | **Explanation**: The `push` event triggers on merges to `main`. Environment protection rules then enforce required reviewers and approvals before deployment proceeds. `pull_request` wouldn't work (it's on PR, not merge), `workflow_dispatch` is manual, and `schedule` is time-based.
-
-**Q3**: B, D | **Explanation**: Pinning to matching versions prevents API compatibility issues; a precise glob avoids uploading unnecessary files that can cause partial or inconsistent downloads. `if: always()` aids debugging but does not fix reliability when the build itself fails. `retention-days` controls expiry, not mid-run consistency.
-
-**Q4**: A, B, C | **Explanation**: OIDC uses short-lived tokens automatically issued per run (A); AWS validates the token directly without needing stored credentials (B); subject claims enable precise access control (C). (D) is partially true but setup varies per cloud. (E) is false—token leakage risk still exists but is mitigated by short lifetime.
-
-**Q5**: C — Assigning the untrusted value to an environment variable (`PR_TITLE: ${{ github.event.pull_request.title }}`) and referencing `$PR_TITLE` in the shell prevents injection because the value is passed as data, never interpolated into the command string. A (single quotes) prevents variable expansion entirely. B (`toJson`) adds JSON encoding but does not prevent shell interpretation. D (permissions) limits the token scope but has no effect on command injection.
+| Q# | Answer(s) | Explanation | Source | Difficulty |
+|----|-----------|-------------|--------|------------|
+| 1 | B | The `github` context contains workflow run metadata including run ID, SHA, ref, repository, actor, and other GitHub-specific info. The runner OS is in `runner` context, step timing in `job`, and matrix in `strategy`. | 02-Contextual-Information.md | Easy |
+| 2 | B | The `push` event triggers on merges to `main`. Environment protection rules then enforce required reviewers and approvals before deployment proceeds. `pull_request` wouldn't work (it's on PR, not merge), `workflow_dispatch` is manual, and `schedule` is time-based. | 05-Workflow-Trigger-Events.md | Medium |
+| 3 | B, D | Pinning to matching versions prevents API compatibility issues; a precise glob avoids uploading unnecessary files that can cause partial or inconsistent downloads. `if: always()` aids debugging but does not fix reliability when the build itself fails. `retention-days` controls expiry, not mid-run consistency. | 09-Artifacts.md | Medium |
+| 4 | A, B, C | OIDC uses short-lived tokens automatically issued per run (A); AWS validates the token directly without needing stored credentials (B); subject claims enable precise access control (C). (D) is partially true but setup varies per cloud. (E) is false—token leakage risk still exists but is mitigated by short lifetime. | 18-Security-Best-Practices.md | Hard |
+| 5 | C | Assigning the untrusted value to an environment variable (`PR_TITLE: ${{ github.event.pull_request.title }}`) and referencing `$PR_TITLE` in the shell prevents injection because the value is passed as data, never interpolated into the command string. A (single quotes) prevents variable expansion entirely. B (`toJson`) adds JSON encoding but does not prevent shell interpretation. D (permissions) limits the token scope but has no effect on command injection. | 18-Security-Best-Practices.md | Hard |
