@@ -10,13 +10,20 @@
 
 ---
 
+## Questions
+
+---
+
 ## Topic 1: GitHub Actions VS Code Extension (4 Questions)
 
-### Question 1 – VS Code Extension Features
+### Question 1 — VS Code Extension Features
 
-**Difficulty**: Easy | **Answer Type**: one | **Topic**: Extension IntelliSense and Validation
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: Extension IntelliSense and Validation
 
-**Question**: Which of the following capabilities does the GitHub Actions VS Code extension provide?
+**Question**:
+Which of the following capabilities does the GitHub Actions VS Code extension provide?
 
 - A) Automatic deployment to production on file save
 - B) Real-time YAML schema validation and context IntelliSense
@@ -25,11 +32,14 @@
 
 ---
 
-### Question 2 – Extension Context IntelliSense
+### Question 2 — Extension Context IntelliSense
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Context Completion and Autocomplete
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Context Completion and Autocomplete
 
-**Scenario**: You're authoring a workflow and type `${{ github.` in your step. The extension's IntelliSense appears with suggestions.
+**Scenario**:
+You're authoring a workflow and type `${{ github.` in your step. The extension's IntelliSense appears with suggestions.
 
 **Question** (Select all that apply): Which contexts would be suggested by the extension's IntelliSense?
 
@@ -40,13 +50,17 @@
 
 ---
 
-### Question 3 – Troubleshooting Extension Validation
+### Question 3 — Troubleshooting Extension Validation
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Extension Configuration and Troubleshooting
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Extension Configuration and Troubleshooting
 
-**Scenario**: Your workflow file in `.github/workflows/ci.yml` shows red squiggly lines, but your colleague's extension validates the same file correctly. You've restarted VS Code and confirmed the GitHub Actions extension is installed.
+**Scenario**:
+Your workflow file in `.github/workflows/ci.yml` shows red squiggly lines, but your colleague's extension validates the same file correctly. You've restarted VS Code and confirmed the GitHub Actions extension is installed.
 
-**Question**: What diagnostic step would most likely resolve the issue?
+**Question**:
+What diagnostic step would most likely resolve the issue?
 
 - A) Uninstall and reinstall the YAML extension (often a dependency)
 - B) Delete your VS Code settings and reset defaults
@@ -55,13 +69,17 @@
 
 ---
 
-### Question 4 – Extension Warnings for SHA Pinning
+### Question 4 — Extension Warnings for SHA Pinning
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Action Pinning and Security Recommendations
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Action Pinning and Security Recommendations
 
-**Scenario**: The extension shows a warning under `actions/checkout@main`. Your team currently uses semver pinning (e.g., `@v3`) in all workflows, citing ease of maintenance over security.
+**Scenario**:
+The extension shows a warning under `actions/checkout@main`. Your team currently uses semver pinning (e.g., `@v3`) in all workflows, citing ease of maintenance over security.
 
-**Question**: Why would the extension recommend SHA pinning (`@abc123def...`) rather than semver tags?
+**Question**:
+Why would the extension recommend SHA pinning (`@abc123def...`) rather than semver tags?
 
 - A) SHA references are faster to execute than tag-based references
 - B) Semver tags can be retagged or deleted, introducing supply chain risk
@@ -72,11 +90,14 @@
 
 ## Topic 2: Contextual Information (6 Questions)
 
-### Question 5 – github Context Variables
+### Question 5 — github Context Variables
 
-**Difficulty**: Easy | **Answer Type**: one | **Topic**: github Context Structure
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: github Context Structure
 
-**Question**: Which expression correctly retrieves the login username of the user who triggered the workflow?
+**Question**:
+Which expression correctly retrieves the login username of the user who triggered the workflow?
 
 - A) `${{ github.user_name }}`
 - B) `${{ github.actor }}`
@@ -85,11 +106,14 @@
 
 ---
 
-### Question 6 – Multi-Context Usage in Workflows
+### Question 6 — Multi-Context Usage in Workflows
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Context Availability and Scope
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Context Availability and Scope
 
-**Scenario**: Your workflow uploads a build artifact and needs to tag it with both the branch name and run number for traceability. You plan to construct this tag dynamically.
+**Scenario**:
+Your workflow uploads a build artifact and needs to tag it with both the branch name and run number for traceability. You plan to construct this tag dynamically.
 
 **Question** (Select all that apply): Which context expressions would work for this use case?
 
@@ -100,13 +124,17 @@
 
 ---
 
-### Question 7 – Event Payload Context
+### Question 7 — Event Payload Context
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: github.event Context
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: github.event Context
 
-**Scenario**: Your workflow is triggered by a pull request. You need to access the base branch (target branch) of the PR in a step.
+**Scenario**:
+Your workflow is triggered by a pull request. You need to access the base branch (target branch) of the PR in a step.
 
-**Question**: Which expression retrieves the base branch name?
+**Question**:
+Which expression retrieves the base branch name?
 
 - A) `${{ github.event.pull_request.base.ref }}`
 - B) `${{ github.event.base_branch }}`
@@ -115,11 +143,14 @@
 
 ---
 
-### Question 8 – Secrets Context and Masking
+### Question 8 — Secrets Context and Masking
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Secrets Context Availability and Redaction
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Secrets Context Availability and Redaction
 
-**Scenario**: You have a secret named `DB_PASSWORD` defined in your repository. You reference it in a workflow step: `echo "Password is ${{ secrets.DB_PASSWORD }}"`.
+**Scenario**:
+You have a secret named `DB_PASSWORD` defined in your repository. You reference it in a workflow step: `echo "Password is ${{ secrets.DB_PASSWORD }}"`.
 
 **Question** (Select all that apply): Which statements are true about secret handling?
 
@@ -130,13 +161,17 @@
 
 ---
 
-### Question 9 – Environment and Secrets Context Hierarchy
+### Question 9 — Environment and Secrets Context Hierarchy
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Context Scope and Precedence
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Context Scope and Precedence
 
-**Scenario**: Your workflow defines `env.API_KEY` at the workflow level and also sets `secrets.API_KEY` in the repository secrets. A step accesses `${{ env.API_KEY }}`.
+**Scenario**:
+Your workflow defines `env.API_KEY` at the workflow level and also sets `secrets.API_KEY` in the repository secrets. A step accesses `${{ env.API_KEY }}`.
 
-**Question**: Which value does the step receive?
+**Question**:
+Which value does the step receive?
 
 - A) The workflow-level `env.API_KEY` value
 - B) The repository secret value
@@ -145,13 +180,17 @@
 
 ---
 
-### Question 10 – Matrix Context Variables
+### Question 10 — Matrix Context Variables
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Matrix Strategy Context
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Matrix Strategy Context
 
-**Scenario**: Your matrix strategy is: `{ node-version: [16, 18, 20], os: [ubuntu-latest, windows-latest] }`. A step tries to access `${{ matrix.node-version }}`.
+**Scenario**:
+Your matrix strategy is: `{ node-version: [16, 18, 20], os: [ubuntu-latest, windows-latest] }`. A step tries to access `${{ matrix.node-version }}`.
 
-**Question**: What is the job matrix cardinality (total number of jobs), and what does `matrix.node-version` evaluate to within each job?
+**Question**:
+What is the job matrix cardinality (total number of jobs), and what does `matrix.node-version` evaluate to within each job?
 
 - A) 3 jobs total; `matrix.node-version` would be undefined
 - B) 6 jobs total; `matrix.node-version` contains one of the 3 values per job
@@ -162,13 +201,17 @@
 
 ## Topic 3: Context Availability Reference (5 Questions)
 
-### Question 11 – Context Availability at Different Workflow Keys
+### Question 11 — Context Availability at Different Workflow Keys
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Static vs. Runtime Context Evaluation
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Static vs. Runtime Context Evaluation
 
-**Scenario**: You attempt to use `${{ secrets.DEPLOY_KEY }}` in the `env` block at the workflow level (not inside a job or step).
+**Scenario**:
+You attempt to use `${{ secrets.DEPLOY_KEY }}` in the `env` block at the workflow level (not inside a job or step).
 
-**Question**: What happens?
+**Question**:
+What happens?
 
 - A) The secret is available and properly interpolated
 - B) The secret is not evaluated; the literal string `${{ secrets.DEPLOY_KEY }}` is used
@@ -177,11 +220,14 @@
 
 ---
 
-### Question 12 – self Context in Job Conditions
+### Question 12 — self Context in Job Conditions
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Context Scope by Workflow Key
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Context Scope by Workflow Key
 
-**Scenario**: Your workflow needs to conditionally run a job based on the job's outputs. You're designing a `needs` expression to reference previous job data.
+**Scenario**:
+Your workflow needs to conditionally run a job based on the job's outputs. You're designing a `needs` expression to reference previous job data.
 
 **Question** (Select all that apply): Which statements about `needs` context availability are correct?
 
@@ -192,13 +238,17 @@
 
 ---
 
-### Question 13 – Context Leakage and Secret Redaction
+### Question 13 — Context Leakage and Secret Redaction
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Secret Leakage Prevention
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Secret Leakage Prevention
 
-**Scenario**: A workflow accidentally logs a secret value via `echo "${{ secrets.API_KEY }}"`. Later, you realize the value was a 16-character hex string. You check the logs expecting it to be redacted.
+**Scenario**:
+A workflow accidentally logs a secret value via `echo "${{ secrets.API_KEY }}"`. Later, you realize the value was a 16-character hex string. You check the logs expecting it to be redacted.
 
-**Question**: What is the most likely outcome?
+**Question**:
+What is the most likely outcome?
 
 - A) The value is fully redacted (replaced with `***`)
 - B) The value might not be redacted if it matches other known patterns in the log
@@ -207,13 +257,17 @@
 
 ---
 
-### Question 14 – Matrix Context in Reusable Workflows
+### Question 14 — Matrix Context in Reusable Workflows
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Context Scope in Called Workflows
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Context Scope in Called Workflows
 
-**Scenario**: Your caller workflow uses a matrix strategy. It calls a reusable workflow using `jobs.build.strategy.matrix.node-version` as an input parameter.
+**Scenario**:
+Your caller workflow uses a matrix strategy. It calls a reusable workflow using `jobs.build.strategy.matrix.node-version` as an input parameter.
 
-**Question**: How is the matrix context handled in the reusable workflow?
+**Question**:
+How is the matrix context handled in the reusable workflow?
 
 - A) The reusable workflow receives the full matrix and creates independent jobs for each combination
 - B) Each matrix combination is a separate job that independently calls the reusable workflow, passing its specific matrix value
@@ -222,13 +276,17 @@
 
 ---
 
-### Question 15 – Actions Context in Composite Actions
+### Question 15 — Actions Context in Composite Actions
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Composite Action Context Scope
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Composite Action Context Scope
 
-**Scenario**: You're writing a composite action that needs to reference `github.repository` inside one of its run steps.
+**Scenario**:
+You're writing a composite action that needs to reference `github.repository` inside one of its run steps.
 
-**Question**: Is `${{ github.repository }}` available in the composite action step?
+**Question**:
+Is `${{ github.repository }}` available in the composite action step?
 
 - A) Yes, because the composite action runs in the context of the caller workflow
 - B) No, composite actions have isolated context and cannot reference github context
@@ -239,11 +297,14 @@
 
 ## Topic 4: Workflow File Structure (7 Questions)
 
-### Question 16 – Workflow File Naming and Location
+### Question 16 — Workflow File Naming and Location
 
-**Difficulty**: Easy | **Answer Type**: one | **Topic**: Workflow File Location and Discovery
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: Workflow File Location and Discovery
 
-**Question**: What is the correct directory structure for GitHub Actions workflow files?
+**Question**:
+What is the correct directory structure for GitHub Actions workflow files?
 
 - A) `/.github/workflows/` (any `.yml` or `.yaml` file)
 - B) `/workflows/` or `/actions/workflows/`
@@ -252,11 +313,14 @@
 
 ---
 
-### Question 17 – Job Dependencies and Needs
+### Question 17 — Job Dependencies and Needs
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Job Ordering and Dependencies
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Job Ordering and Dependencies
 
-**Scenario**: Your workflow has three jobs: `build`, `test`, and `deploy`. The `test` job depends on `build`. The `deploy` job depends on both `build` and `test`.
+**Scenario**:
+Your workflow has three jobs: `build`, `test`, and `deploy`. The `test` job depends on `build`. The `deploy` job depends on both `build` and `test`.
 
 **Question** (Select all that apply): Which configurations correctly express this dependency graph?
 
@@ -267,13 +331,17 @@
 
 ---
 
-### Question 18 – Permissions Block Structure
+### Question 18 — Permissions Block Structure
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Fine-Grained Permission Scopes
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Fine-Grained Permission Scopes
 
-**Scenario**: You want to allow a job to write releases and read pull requests, but explicitly deny write access to issues.
+**Scenario**:
+You want to allow a job to write releases and read pull requests, but explicitly deny write access to issues.
 
-**Question**: Which permission configuration is correct?
+**Question**:
+Which permission configuration is correct?
 
 - A) `permissions: { releases: write, pull-requests: read, issues: none }`
 - B) `permissions: { releases: write, pull-requests: read, issues: false }`
@@ -282,11 +350,14 @@
 
 ---
 
-### Question 19 – Container and Services Definition
+### Question 19 — Container and Services Definition
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Container Jobs and Service Containers
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Container Jobs and Service Containers
 
-**Scenario**: Your job needs to run inside a Node.js container and also spin up a PostgreSQL service for integration tests.
+**Scenario**:
+Your job needs to run inside a Node.js container and also spin up a PostgreSQL service for integration tests.
 
 **Question** (Select all that apply): Which statements are correct about container and services configuration?
 
@@ -297,13 +368,17 @@
 
 ---
 
-### Question 20 – YAML Anchors and Aliases
+### Question 20 — YAML Anchors and Aliases
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: DRY Principles with YAML Anchors
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: DRY Principles with YAML Anchors
 
-**Scenario**: Your workflow repeats a common set of steps across multiple jobs. You define a YAML anchor: `defaults: &common_env { NODE_ENV: production, DEBUG: 'false' }`. Later, in two jobs, you use `env: *common_env`.
+**Scenario**:
+Your workflow repeats a common set of steps across multiple jobs. You define a YAML anchor: `defaults: &common_env { NODE_ENV: production, DEBUG: 'false' }`. Later, in two jobs, you use `env: *common_env`.
 
-**Question**: What happens when two jobs reference the same anchor alias?
+**Question**:
+What happens when two jobs reference the same anchor alias?
 
 - A) Each job receives an independent copy of the anchor values; changes in one job don't affect the other
 - B) Both jobs share the same object reference; modifications in one job affect the other at runtime
@@ -312,13 +387,17 @@
 
 ---
 
-### Question 21 – Conditional Step Execution
+### Question 21 — Conditional Step Execution
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: if Conditions and Status Checks
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: if Conditions and Status Checks
 
-**Scenario**: Your workflow has a step that uploads artifacts, and you want it to run even if previous steps fail, but still fail gracefully if the upload step itself fails. Other steps should skip on failure.
+**Scenario**:
+Your workflow has a step that uploads artifacts, and you want it to run even if previous steps fail, but still fail gracefully if the upload step itself fails. Other steps should skip on failure.
 
-**Question**: Which `if` condition achieves this?
+**Question**:
+Which `if` condition achieves this?
 
 - A) `if: always()`
 - B) `if: failure()`
@@ -327,13 +406,17 @@
 
 ---
 
-### Question 22 – Matrix Strategy with Exclude
+### Question 22 — Matrix Strategy with Exclude
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Matrix Strategy Configuration
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Matrix Strategy Configuration
 
-**Scenario**: Your matrix is: `{ node: [16, 18, 20], os: [ubuntu-latest, macos-latest] }`. You want all 6 jobs except `(node: 20, os: macos-latest)` because Node 20 isn't stable on macOS runners yet.
+**Scenario**:
+Your matrix is: `{ node: [16, 18, 20], os: [ubuntu-latest, macos-latest] }`. You want all 6 jobs except `(node: 20, os: macos-latest)` because Node 20 isn't stable on macOS runners yet.
 
-**Question**: How do you configure the exclusion?
+**Question**:
+How do you configure the exclusion?
 
 - A) `strategy: { matrix: { node: [16, 18, 20], os: [ubuntu-latest, macos-latest], exclude: [{node: 20, os: macos-latest}] } }`
 - B) `strategy: { matrix: { node: [16, 18, 20], os: [ubuntu-latest], include: [{node: 20, os: ubuntu-latest}] } }`
@@ -344,13 +427,17 @@
 
 ## Topic 5: Workflow Trigger Events (7 Questions)
 
-### Question 23 – push Trigger with Path Filters
+### Question 23 — push Trigger with Path Filters
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Path-Based Trigger Filtering
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Path-Based Trigger Filtering
 
-**Scenario**: Your repository has a web application in `/src` and documentation in `/docs`. You want CI to trigger on any push to `/src` but exclude changes to `/docs`.
+**Scenario**:
+Your repository has a web application in `/src` and documentation in `/docs`. You want CI to trigger on any push to `/src` but exclude changes to `/docs`.
 
-**Question**: Which trigger configuration is correct?
+**Question**:
+Which trigger configuration is correct?
 
 - A) `on: { push: { paths: [src/**], paths-ignore: [docs/**] } }`
 - B) `on: { push: { paths: [src/**] } }` (omit paths-ignore for clarity)
@@ -359,11 +446,14 @@
 
 ---
 
-### Question 24 – pull_request_target vs pull_request
+### Question 24 — pull_request_target vs pull_request
 
-**Difficulty**: Hard | **Answer Type**: many | **Topic**: Fork PR Security and Token Access
+**Difficulty**: Hard
+**Answer Type**: many
+**Topic**: Fork PR Security and Token Access
 
-**Scenario**: Your repository is public, and you're concerned about untrusted PRs from forks accessing secrets. You're deciding between `pull_request` and `pull_request_target` events.
+**Scenario**:
+Your repository is public, and you're concerned about untrusted PRs from forks accessing secrets. You're deciding between `pull_request` and `pull_request_target` events.
 
 **Question** (Select all that apply): Which statements are accurate?
 
@@ -374,13 +464,17 @@
 
 ---
 
-### Question 25 – Scheduled Event (cron) Limitations
+### Question 25 — Scheduled Event (cron) Limitations
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: schedule Event Behavior
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: schedule Event Behavior
 
-**Scenario**: You configure a workflow with `schedule: [cron: '0 0 * * *']` (daily at midnight UTC). The workflow hasn't run for 2 weeks because the repository had no commits and no scheduled runs.
+**Scenario**:
+You configure a workflow with `schedule: [cron: '0 0 * * *']` (daily at midnight UTC). The workflow hasn't run for 2 weeks because the repository had no commits and no scheduled runs.
 
-**Question**: Why didn't the scheduled workflow run?
+**Question**:
+Why didn't the scheduled workflow run?
 
 - A) Cron schedules only trigger on repositories with commits in the past 60 days
 - B) GitHub requires at least one manual workflow run before enabling auto-scheduling
@@ -389,11 +483,14 @@
 
 ---
 
-### Question 26 – workflow_dispatch Inputs
+### Question 26 — workflow_dispatch Inputs
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Manual Trigger with Inputs
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Manual Trigger with Inputs
 
-**Scenario**: You want users to manually trigger a deployment workflow and select from predefined environment options: `dev`, `staging`, `prod`.
+**Scenario**:
+You want users to manually trigger a deployment workflow and select from predefined environment options: `dev`, `staging`, `prod`.
 
 **Question** (Select all that apply): How would you configure this?
 
@@ -404,17 +501,21 @@
 
 ---
 
-### Question 27 – Trigger on Multiple Events with Different Conditions
+### Question 27 — Trigger on Multiple Events with Different Conditions
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Complex Event Filtering
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Complex Event Filtering
 
-**Scenario**: Your deploy workflow should trigger on:
+**Scenario**:
+Your deploy workflow should trigger on:
 - Any push to `main` branch
 - Any PR targeting `main` branch
 - Manual trigger via workflow_dispatch
 But NOT on PR comments or wiki updates.
 
-**Question**: Which event configuration is most appropriate?
+**Question**:
+Which event configuration is most appropriate?
 
 - A) `on: [push: { branches: [main] }, pull_request: { branches: [main] }, workflow_dispatch]`
 - B) `on: { push: { branches: [main] }, pull_request: { branches: [main] }, workflow_dispatch }`
@@ -423,13 +524,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 28 – workflow_run Event for Cross-Workflow Automation
+### Question 28 — workflow_run Event for Cross-Workflow Automation
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Workflow Run Event
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Workflow Run Event
 
-**Scenario**: You have a CI workflow that builds and tests. You want a separate notification workflow to run **after** CI completes (success or failure) to send Slack alerts.
+**Scenario**:
+You have a CI workflow that builds and tests. You want a separate notification workflow to run **after** CI completes (success or failure) to send Slack alerts.
 
-**Question**: Which configuration allows the notification workflow to trigger after CI finishes?
+**Question**:
+Which configuration allows the notification workflow to trigger after CI finishes?
 
 - A) `on: { workflow_run: { workflows: [CI], types: [completed] } }`
 - B) `on: { workflow: [CI completed] }`
@@ -438,13 +543,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 29 – Event Payload Context Filtering
+### Question 29 — Event Payload Context Filtering
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Conditional Trigger Logic
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Conditional Trigger Logic
 
-**Scenario**: You want your deployment workflow to trigger **only** when a push includes a commit message starting with `[DEPLOY]`. Other commits should not trigger the workflow.
+**Scenario**:
+You want your deployment workflow to trigger **only** when a push includes a commit message starting with `[DEPLOY]`. Other commits should not trigger the workflow.
 
-**Question**: What is the best approach?
+**Question**:
+What is the best approach?
 
 - A) Use path filters to detect `[DEPLOY]` in commit messages
 - B) Use `if: contains(github.event.head_commit.message, '[DEPLOY]')` in the job condition
@@ -455,11 +564,14 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 6: Custom Environment Variables (5 Questions)
 
-### Question 30 – Workflow-Level env Variable Scope
+### Question 30 — Workflow-Level env Variable Scope
 
-**Difficulty**: Easy | **Answer Type**: one | **Topic**: Environment Variable Scoping
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: Environment Variable Scoping
 
-**Question**: You define `env: { REGISTRY: ghcr.io }` at the workflow root level. Which jobs/steps can access `${{ env.REGISTRY }}`?
+**Question**:
+You define `env: { REGISTRY: ghcr.io }` at the workflow root level. Which jobs/steps can access `${{ env.REGISTRY }}`?
 
 - A) Only steps in the first job
 - B) All jobs and all steps in the workflow
@@ -468,13 +580,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 31 – Job and Step-Level env Override
+### Question 31 — Job and Step-Level env Override
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Environment Variable Precedence
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Environment Variable Precedence
 
-**Scenario**: Workflow level: `env: { LOG_LEVEL: info }`. Job level: `env: { LOG_LEVEL: debug }`. A step accesses `${{ env.LOG_LEVEL }}`.
+**Scenario**:
+Workflow level: `env: { LOG_LEVEL: info }`. Job level: `env: { LOG_LEVEL: debug }`. A step accesses `${{ env.LOG_LEVEL }}`.
 
-**Question**: What value does the step receive?
+**Question**:
+What value does the step receive?
 
 - A) `info` (workflow level always takes precedence)
 - B) `debug` (job level overrides workflow level)
@@ -483,11 +599,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 32 – GITHUB_OUTPUT for Inter-Step Communication
+### Question 32 — GITHUB_OUTPUT for Inter-Step Communication
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Step Outputs and GITHUB_OUTPUT
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Step Outputs and GITHUB_OUTPUT
 
-**Scenario**: Your first step generates a version number. A subsequent step needs to use that version in a build command.
+**Scenario**:
+Your first step generates a version number. A subsequent step needs to use that version in a build command.
 
 **Question** (Select all that apply): Which approaches set the output correctly?
 
@@ -498,13 +617,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 33 – Secrets in Environment Variables
+### Question 33 — Secrets in Environment Variables
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Secrets Management and Masking
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Secrets Management and Masking
 
-**Scenario**: You reference a secret in an environment variable: `env: { DB_PASSWORD: ${{ secrets.DB_PASSWORD }} }`. A step exports this to stdout: `echo "DB_PASSWORD=$DB_PASSWORD"`.
+**Scenario**:
+You reference a secret in an environment variable: `env: { DB_PASSWORD: ${{ secrets.DB_PASSWORD }} }`. A step exports this to stdout: `echo "DB_PASSWORD=$DB_PASSWORD"`.
 
-**Question**: What appears in the logs?
+**Question**:
+What appears in the logs?
 
 - A) The actual secret value (unmasked because it's in an env var)
 - B) The secret is masked automatically by GitHub (value replaced with `***`)
@@ -513,13 +636,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 34 – Dynamic Environment Variables with Contexts
+### Question 34 — Dynamic Environment Variables with Contexts
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Context Interpolation in env Blocks
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Context Interpolation in env Blocks
 
-**Scenario**: You define: `env: { IMAGE_TAG: ${{ github.sha }} }` at the workflow level. Later, a step tries to access `${{ env.IMAGE_TAG }}`.
+**Scenario**:
+You define: `env: { IMAGE_TAG: ${{ github.sha }} }` at the workflow level. Later, a step tries to access `${{ env.IMAGE_TAG }}`.
 
-**Question**: What is the value of `IMAGE_TAG`?
+**Question**:
+What is the value of `IMAGE_TAG`?
 
 - A) The short commit SHA (first 7 characters)
 - B) The full commit SHA (40 characters)
@@ -530,11 +657,14 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 7: Default Environment Variables (5 Questions)
 
-### Question 35 – GITHUB_TOKEN Automatic Provisioning
+### Question 35 — GITHUB_TOKEN Automatic Provisioning
 
-**Difficulty**: Easy | **Answer Type**: one | **Topic**: Default Token Availability
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: Default Token Availability
 
-**Question**: When is `GITHUB_TOKEN` automatically created by GitHub?
+**Question**:
+When is `GITHUB_TOKEN` automatically created by GitHub?
 
 - A) At the start of each job
 - B) At the start of each step
@@ -543,11 +673,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 36 – Runner Environment Variables
+### Question 36 — Runner Environment Variables
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Runner Context
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Runner Context
 
-**Scenario**: Your workflow needs to determine which runner (hosted or self-hosted) executed the current job. You plan to log runner information for debugging.
+**Scenario**:
+Your workflow needs to determine which runner (hosted or self-hosted) executed the current job. You plan to log runner information for debugging.
 
 **Question** (Select all that apply): Which default env variables provide runner information?
 
@@ -558,11 +691,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 37 – GITHUB_WORKSPACE Path
+### Question 37 — GITHUB_WORKSPACE Path
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Default Paths and Directory Structure
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Default Paths and Directory Structure
 
-**Question**: Your step runs a build script at: `run: ./build.sh` (relative path). Which default env variable contains the absolute path to the repository root?
+**Question**:
+Your step runs a build script at: `run: ./build.sh` (relative path). Which default env variable contains the absolute path to the repository root?
 
 - A) `GITHUB_WORKSPACE`
 - B) `GITHUB_REPOSITORY_PATH`
@@ -571,11 +707,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 38 – CI Flag and Debugging Variables
+### Question 38 — CI Flag and Debugging Variables
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: CI Detection and Debug Logging
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: CI Detection and Debug Logging
 
-**Scenario**: You're writing a script that needs to detect if it's running in GitHub Actions and provide verbose logging for debugging.
+**Scenario**:
+You're writing a script that needs to detect if it's running in GitHub Actions and provide verbose logging for debugging.
 
 **Question** (Select all that apply): Which default env variables help with this?
 
@@ -586,13 +725,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 39 – API Token Availability and Scope
+### Question 39 — API Token Availability and Scope
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: GITHUB_TOKEN Scope and Limitations
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: GITHUB_TOKEN Scope and Limitations
 
-**Scenario**: Your workflow step tries to create a PR in a different repository using `GITHUB_TOKEN` and the GitHub API: `curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/other-org/other-repo/...`
+**Scenario**:
+Your workflow step tries to create a PR in a different repository using `GITHUB_TOKEN` and the GitHub API: `curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/other-org/other-repo/...`
 
-**Question**: What is the most likely outcome?
+**Question**:
+What is the most likely outcome?
 
 - A) The API call succeeds because GITHUB_TOKEN has org-level access
 - B) The API call fails; GITHUB_TOKEN is scoped to the current repository only
@@ -603,13 +746,17 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 8: Environment Protection Rules (5 Questions)
 
-### Question 40 – Required Reviewers for Deployments
+### Question 40 — Required Reviewers for Deployments
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Deployment Protection and Review
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Deployment Protection and Review
 
-**Scenario**: Your `prod` environment has a protection rule requiring 2 required reviewers before any deployment. A developer pushes a workflow that deploys to `prod` without specifying reviewers.
+**Scenario**:
+Your `prod` environment has a protection rule requiring 2 required reviewers before any deployment. A developer pushes a workflow that deploys to `prod` without specifying reviewers.
 
-**Question**: What happens?
+**Question**:
+What happens?
 
 - A) The workflow fails immediately without running the deployment job
 - B) The deployment job waits for the required reviewers to approve in the GitHub UI
@@ -618,11 +765,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 41 – Deployment Branches Protection
+### Question 41 — Deployment Branches Protection
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Branch-Based Deployment Rules
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Branch-Based Deployment Rules
 
-**Scenario**: You configure an environment protection rule: "Deployment branches: Only `main` and `release/*` branches can deploy to prod."
+**Scenario**:
+You configure an environment protection rule: "Deployment branches: Only `main` and `release/*` branches can deploy to prod."
 
 **Question** (Select all that apply): Which scenarios respect this protection?
 
@@ -633,13 +783,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 42 – Wait Timer Before Deployment
+### Question 42 — Wait Timer Before Deployment
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Deployment Delay Rules
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Deployment Delay Rules
 
-**Scenario**: Your prod environment has a 24-hour wait timer protection rule. A workflow triggers a deployment at Tuesday 2 PM. No other conditions are blocking it.
+**Scenario**:
+Your prod environment has a 24-hour wait timer protection rule. A workflow triggers a deployment at Tuesday 2 PM. No other conditions are blocking it.
 
-**Question**: When can the deployment execute?
+**Question**:
+When can the deployment execute?
 
 - A) Immediately (wait timer only applies to manual deployments)
 - B) After 24 hours (Wednesday 2 PM)
@@ -648,13 +802,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 43 – Custom Deployment Protection Rules
+### Question 43 — Custom Deployment Protection Rules
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Environment Rules Configuration
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Environment Rules Configuration
 
-**Scenario**: Your company requires that deployments to production can only occur between 9 AM and 5 PM PT. You attempt to configure this via environment protection rules in GitHub.
+**Scenario**:
+Your company requires that deployments to production can only occur between 9 AM and 5 PM PT. You attempt to configure this via environment protection rules in GitHub.
 
-**Question**: What is the correct approach?
+**Question**:
+What is the correct approach?
 
 - A) Use GitHub's built-in time-window protection rule (if available)
 - B) GitHub does not offer time-based protection rules; use a custom third-party app or workflow condition
@@ -663,11 +821,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 44 – Environment Variables Specific to Deployment
+### Question 44 — Environment Variables Specific to Deployment
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Environment Configuration
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Environment Configuration
 
-**Scenario**: You configure an environment called `staging` with environment-specific variables (e.g., `DEPLOY_URL`, `API_ENDPOINT`). A job references this environment.
+**Scenario**:
+You configure an environment called `staging` with environment-specific variables (e.g., `DEPLOY_URL`, `API_ENDPOINT`). A job references this environment.
 
 **Question** (Select all that apply): Which are true about environment variables?
 
@@ -680,11 +841,14 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 9: Workflow Artifacts (5 Questions)
 
-### Question 45 – Artifact Upload and Retention
+### Question 45 — Artifact Upload and Retention
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Artifact Storage and Retention
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Artifact Storage and Retention
 
-**Scenario**: Your build job uploads a 100 MB artifact with `retention-days: 7`. After 7 days, the workflow is still active. What happens to the artifact?
+**Scenario**:
+Your build job uploads a 100 MB artifact with `retention-days: 7`. After 7 days, the workflow is still active. What happens to the artifact?
 
 - A) The artifact is automatically deleted after 7 days
 - B) The artifact persists indefinitely (retention-days is advisory only)
@@ -693,11 +857,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 46 – Artifacts Between Jobs
+### Question 46 — Artifacts Between Jobs
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Inter-Job Artifact Sharing
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Inter-Job Artifact Sharing
 
-**Scenario**: Job `build` uploads an artifact named `app-binary`. Job `test` (which depends on `build`) needs to download and test this artifact.
+**Scenario**:
+Job `build` uploads an artifact named `app-binary`. Job `test` (which depends on `build`) needs to download and test this artifact.
 
 **Question** (Select all that apply): Which statements are correct?
 
@@ -708,13 +875,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 47 – Artifact Paths and Glob Patterns
+### Question 47 — Artifact Paths and Glob Patterns
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Artifact Path Specification
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Artifact Path Specification
 
-**Scenario**: Your build step creates: `dist/app.js`, `dist/styles.css`, `dist/sourcemaps/app.js.map`, and `README.md`. You want to upload only JS and CSS files from `dist/`, excluding sourcemaps.
+**Scenario**:
+Your build step creates: `dist/app.js`, `dist/styles.css`, `dist/sourcemaps/app.js.map`, and `README.md`. You want to upload only JS and CSS files from `dist/`, excluding sourcemaps.
 
-**Question**: Which path glob is correct?
+**Question**:
+Which path glob is correct?
 
 - A) `path: dist/**/*.{js,css}`
 - B) `path: |` followed by `dist/**/*.js` and `dist/**/*.css` (multi-line)
@@ -723,13 +894,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 48 – Artifact Name Collisions
+### Question 48 — Artifact Name Collisions
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Artifact Naming and Uniqueness
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Artifact Naming and Uniqueness
 
-**Scenario**: Your matrix job (3 combinations) each uploads an artifact named `test-results`. They all complete within the workflow run.
+**Scenario**:
+Your matrix job (3 combinations) each uploads an artifact named `test-results`. They all complete within the workflow run.
 
-**Question**: What happens?
+**Question**:
+What happens?
 
 - A) The last job's artifact overwrites the previous ones; only one `test-results` artifact exists
 - B) All three artifacts are stored separately; GitHub appends a numeric suffix (e.g., `test-results-1`, `test-results-2`)
@@ -738,11 +913,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 49 – Artifact Permissions and Access
+### Question 49 — Artifact Permissions and Access
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Artifact Access Controls
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Artifact Access Controls
 
-**Scenario**: Your repository is private. You upload an artifact. A collaborator from a different organization tries to access it.
+**Scenario**:
+Your repository is private. You upload an artifact. A collaborator from a different organization tries to access it.
 
 **Question** (Select all that apply): Which statements are true?
 
@@ -755,13 +933,17 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 10: Workflow Caching (5 Questions)
 
-### Question 50 – Cache Key Strategy
+### Question 50 — Cache Key Strategy
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Cache Key Generation
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Cache Key Generation
 
-**Scenario**: Your workflow caches npm dependencies: `cache-key: npm-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}`. A developer updates `package-lock.json`. The next workflow run should detect the change and re-cache.
+**Scenario**:
+Your workflow caches npm dependencies: `cache-key: npm-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}`. A developer updates `package-lock.json`. The next workflow run should detect the change and re-cache.
 
-**Question**: Does this cache key strategy work correctly?
+**Question**:
+Does this cache key strategy work correctly?
 
 - A) Yes; the hash changes when `package-lock.json` changes, invalidating the cache
 - B) No; the key is static and won't change even if dependencies change
@@ -770,11 +952,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 51 – Restore Keys and Path Fallback
+### Question 51 — Restore Keys and Path Fallback
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Cache Restoration Strategy
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Cache Restoration Strategy
 
-**Scenario**: Your cache action uses: `cache-key: npm-${{ runner.os }}-${{ hashFiles(...) }}` and `restore-keys: npm-${{ runner.os }}-`. A job runs on `ubuntu-latest`, but no exact cache match exists for the current npm hash.
+**Scenario**:
+Your cache action uses: `cache-key: npm-${{ runner.os }}-${{ hashFiles(...) }}` and `restore-keys: npm-${{ runner.os }}-`. A job runs on `ubuntu-latest`, but no exact cache match exists for the current npm hash.
 
 **Question** (Select all that apply): Which outcomes are possible?
 
@@ -785,13 +970,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 52 – Multiple Paths in Cache Action
+### Question 52 — Multiple Paths in Cache Action
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Multi-Path Caching
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Multi-Path Caching
 
-**Scenario**: Your workflow caches npm dependencies (`node_modules/`) and pip packages (`venv/`) simultaneously.
+**Scenario**:
+Your workflow caches npm dependencies (`node_modules/`) and pip packages (`venv/`) simultaneously.
 
-**Question**: What is the correct syntax?
+**Question**:
+What is the correct syntax?
 
 - A) `path: [node_modules/, venv/]`
 - B) `path: | node_modules/ venv/` (multi-line)
@@ -800,13 +989,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 53 – Cache Hit Output Variable
+### Question 53 — Cache Hit Output Variable
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Cache Hit Detection
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Cache Hit Detection
 
-**Scenario**: You want to skip the `npm install` step if a cache hit occurs. Your cache action has `id: npm-cache`.
+**Scenario**:
+You want to skip the `npm install` step if a cache hit occurs. Your cache action has `id: npm-cache`.
 
-**Question**: How do you check for a cache hit?
+**Question**:
+How do you check for a cache hit?
 
 - A) `if: ${{ steps.npm-cache.outputs.cache-hit }} == 'true'`
 - B) `if: ${{ steps.npm-cache.outputs.cache_hit == 'true' }}`
@@ -815,13 +1008,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 54 – Cache Size Limits and Performance
+### Question 54 — Cache Size Limits and Performance
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Cache Limits and Eviction
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Cache Limits and Eviction
 
-**Scenario**: Your workflow caches are consistently hitting the repository cache limit. You have 20 different caches, each ~800 MB. GitHub starts evicting older caches.
+**Scenario**:
+Your workflow caches are consistently hitting the repository cache limit. You have 20 different caches, each ~800 MB. GitHub starts evicting older caches.
 
-**Question**: What is the best approach to manage cache space?
+**Question**:
+What is the best approach to manage cache space?
 
 - A) Request a higher cache limit from GitHub Support
 - B) Implement a more granular cache key strategy to reduce redundant caches
@@ -832,11 +1029,14 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 11: Workflow Sharing (5 Questions)
 
-### Question 55 – Reusable Workflow Basics
+### Question 55 — Reusable Workflow Basics
 
-**Difficulty**: Easy | **Answer Type**: one | **Topic**: Reusable Workflow Definition
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: Reusable Workflow Definition
 
-**Question**: What trigger event is required for a reusable workflow file?
+**Question**:
+What trigger event is required for a reusable workflow file?
 
 - A) `on: workflow_call`
 - B) `on: workflow_reuse`
@@ -845,11 +1045,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 56 – Calling Reusable Workflows
+### Question 56 — Calling Reusable Workflows
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Reusable Workflow Invocation
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Reusable Workflow Invocation
 
-**Scenario**: Your organization has a reusable CI workflow at `/shared-workflows/.github/workflows/ci.yml`. Your repository is in a different organization. You want to call it.
+**Scenario**:
+Your organization has a reusable CI workflow at `/shared-workflows/.github/workflows/ci.yml`. Your repository is in a different organization. You want to call it.
 
 **Question** (Select all that apply): Which approaches work?
 
@@ -860,11 +1063,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 57 – Reusable Workflow Inputs and Outputs
+### Question 57 — Reusable Workflow Inputs and Outputs
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Workflow Input/Output Contracts
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Workflow Input/Output Contracts
 
-**Scenario**: Your reusable workflow defines: `inputs: { environment: { type: string, required: true } }` and `outputs: { status: { value: ${{ jobs.build.outputs.status }} } }`.
+**Scenario**:
+Your reusable workflow defines: `inputs: { environment: { type: string, required: true } }` and `outputs: { status: { value: ${{ jobs.build.outputs.status }} } }`.
 
 **Question** (Select all that apply): Which statements are correct?
 
@@ -875,13 +1081,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 58 – Secrets Inheritance in Reusable Workflows
+### Question 58 — Secrets Inheritance in Reusable Workflows
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Secret Propagation
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Secret Propagation
 
-**Scenario**: A reusable workflow needs to use a secret (e.g., `DEPLOY_KEY`). The caller workflow has the secret defined in the repository. How does the secret reach the reusable workflow?
+**Scenario**:
+A reusable workflow needs to use a secret (e.g., `DEPLOY_KEY`). The caller workflow has the secret defined in the repository. How does the secret reach the reusable workflow?
 
-**Question**: What is the recommended approach?
+**Question**:
+What is the recommended approach?
 
 - A) Secrets are automatically inherited by reusable workflows; no action needed
 - B) Use `with: secrets: inherit` to explicitly pass all repository secrets
@@ -890,11 +1100,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 59 – Marketplace Action Publishing
+### Question 59 — Marketplace Action Publishing
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Action Marketplace and Distribution
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Action Marketplace and Distribution
 
-**Scenario**: You've built a custom action and want to publish it to the GitHub Marketplace for public use.
+**Scenario**:
+You've built a custom action and want to publish it to the GitHub Marketplace for public use.
 
 **Question** (Select all that apply): Which requirements must be met?
 
@@ -907,13 +1120,17 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 12: Workflow Debugging (5 Questions)
 
-### Question 60 – Enabling Runner Debug Mode
+### Question 60 — Enabling Runner Debug Mode
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Runner Debug Logging
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Runner Debug Logging
 
-**Scenario**: A workflow is failing unexpectedly, and you need detailed diagnostic logs. You want to enable debug logging for a specific workflow run.
+**Scenario**:
+A workflow is failing unexpectedly, and you need detailed diagnostic logs. You want to enable debug logging for a specific workflow run.
 
-**Question**: Which approach enables runner debug mode?
+**Question**:
+Which approach enables runner debug mode?
 
 - A) Set `RUNNER_DEBUG=1` as a repository secret, then re-run the workflow
 - B) Set `RUNNER_DEBUG=true` as an environment variable in the organization settings
@@ -922,11 +1139,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 61 – Workflow Logging Commands
+### Question 61 — Workflow Logging Commands
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Workflow Output and Grouping
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Workflow Output and Grouping
 
-**Scenario**: You want to provide structured diagnostic output: groups of log messages that users can expand/collapse, warnings, errors, and debug lines.
+**Scenario**:
+You want to provide structured diagnostic output: groups of log messages that users can expand/collapse, warnings, errors, and debug lines.
 
 **Question** (Select all that apply): Which workflow commands are available?
 
@@ -937,11 +1157,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 62 – Accessing Workflow Logs
+### Question 62 — Accessing Workflow Logs
 
-**Difficulty**: Easy | **Answer Type**: one | **Topic**: Log Retrieval and Access
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: Log Retrieval and Access
 
-**Question**: Where can you view the full logs for a completed workflow run?
+**Question**:
+Where can you view the full logs for a completed workflow run?
 
 - A) Actions tab → select the workflow run → click "View logs"
 - B) Repository API endpoint `/repos/{owner}/{repo}/actions/runs/{run_id}/logs`
@@ -950,13 +1173,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 63 – Debugging with Intermediate Artifacts
+### Question 63 — Debugging with Intermediate Artifacts
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Debugging via Artifact Upload
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Debugging via Artifact Upload
 
-**Scenario**: A build step fails with a cryptic error. You want to preserve intermediate build artifacts (e.g., log files, object files) to post-mortem analyze the failure.
+**Scenario**:
+A build step fails with a cryptic error. You want to preserve intermediate build artifacts (e.g., log files, object files) to post-mortem analyze the failure.
 
-**Question**: Which approach captures these debug artifacts?
+**Question**:
+Which approach captures these debug artifacts?
 
 - A) Add `if: always()` to an artifact upload step to run even on failure
 - B) Use `if: failure()` to upload artifacts only when the job fails
@@ -965,13 +1192,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 64 – Performance Profiling a Slow Step
+### Question 64 — Performance Profiling a Slow Step
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Timing and Duration Analysis
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Timing and Duration Analysis
 
-**Scenario**: Your build workflow has become slow (25 minutes). You suspect the npm install step is the culprit but aren't certain. You want to measure step durations.
+**Scenario**:
+Your build workflow has become slow (25 minutes). You suspect the npm install step is the culprit but aren't certain. You want to measure step durations.
 
-**Question**: What is the best approach?
+**Question**:
+What is the best approach?
 
 - A) Use `time` command in bash: `run: time npm install`
 - B) Enable RUNNER_DEBUG and look for timing information in logs
@@ -982,13 +1213,17 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 13: Workflows REST API (5 Questions)
 
-### Question 65 – Listing Workflows
+### Question 65 — Listing Workflows
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: API Basics
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: API Basics
 
-**Scenario**: You want to programmatically list all workflows in your repository using the GitHub REST API.
+**Scenario**:
+You want to programmatically list all workflows in your repository using the GitHub REST API.
 
-**Question**: What is the correct endpoint?
+**Question**:
+What is the correct endpoint?
 
 - A) `GET /repos/{owner}/{repo}/actions/workflows`
 - B) `GET /repos/{owner}/{repo}/workflows`
@@ -997,11 +1232,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 66 – Triggering a Workflow Run via API
+### Question 66 — Triggering a Workflow Run via API
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Remote Trigger via REST API
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Remote Trigger via REST API
 
-**Scenario**: You want to trigger a `workflow_dispatch` workflow remotely using the GitHub REST API and pass custom inputs.
+**Scenario**:
+You want to trigger a `workflow_dispatch` workflow remotely using the GitHub REST API and pass custom inputs.
 
 **Question** (Select all that apply): Which are correct?
 
@@ -1012,11 +1250,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 67 – Listing Workflow Runs and Filtering
+### Question 67 — Listing Workflow Runs and Filtering
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Run Retrieval and Filtering
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Run Retrieval and Filtering
 
-**Scenario**: You're building a dashboard and need to retrieve recent workflow runs for a specific workflow, filtering by status.
+**Scenario**:
+You're building a dashboard and need to retrieve recent workflow runs for a specific workflow, filtering by status.
 
 **Question** (Select all that apply): Which query parameters are supported?
 
@@ -1027,13 +1268,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 68 – Canceling a Workflow Run
+### Question 68 — Canceling a Workflow Run
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Run Control
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Run Control
 
-**Scenario**: A long-running workflow started 30 minutes ago with id `12345`. You want to cancel it immediately.
+**Scenario**:
+A long-running workflow started 30 minutes ago with id `12345`. You want to cancel it immediately.
 
-**Question**: What is the correct endpoint?
+**Question**:
+What is the correct endpoint?
 
 - A) `DELETE /repos/{owner}/{repo}/actions/runs/12345`
 - B) `POST /repos/{owner}/{repo}/actions/runs/12345/cancel`
@@ -1042,13 +1287,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 69 – Downloading Artifacts via API
+### Question 69 — Downloading Artifacts via API
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Artifact Retrieval
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Artifact Retrieval
 
-**Scenario**: You want to programmatically download a specific artifact from a completed workflow run using the REST API.
+**Scenario**:
+You want to programmatically download a specific artifact from a completed workflow run using the REST API.
 
-**Question**: What is the best approach?
+**Question**:
+What is the best approach?
 
 - A) `GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/download` → follows redirect to download URL
 - B) List artifacts with `GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts`, then download each via URL
@@ -1059,13 +1308,17 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 14: Reviewing Deployments (4 Questions)
 
-### Question 70 – Environment Configuration
+### Question 70 — Environment Configuration
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Deployment Environment Setup
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Deployment Environment Setup
 
-**Scenario**: You want to distinguish between staging and production deployments. Each should have different protection rules and environment variables.
+**Scenario**:
+You want to distinguish between staging and production deployments. Each should have different protection rules and environment variables.
 
-**Question**: Where are environments configured?
+**Question**:
+Where are environments configured?
 
 - A) Repository Settings → Environments
 - B) `.github/environments.yml` in the repository
@@ -1074,11 +1327,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 71 – Deployment Status and History
+### Question 71 — Deployment Status and History
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Deployment Tracking
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Deployment Tracking
 
-**Scenario**: You want to see a timeline of all deployments to production, including who triggered them, when, and the status (success/failure).
+**Scenario**:
+You want to see a timeline of all deployments to production, including who triggered them, when, and the status (success/failure).
 
 **Question** (Select all that apply): Where can you find this information?
 
@@ -1089,13 +1345,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 72 – Deployment Review Workflow
+### Question 72 — Deployment Review Workflow
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Review Process
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Review Process
 
-**Scenario**: Your prod environment has "Required Reviewers" protection rule (2 reviewers). A deployment workflow triggers and waits for approval. A reviewer approves, but does not reject. A second approval comes from a different reviewer.
+**Scenario**:
+Your prod environment has "Required Reviewers" protection rule (2 reviewers). A deployment workflow triggers and waits for approval. A reviewer approves, but does not reject. A second approval comes from a different reviewer.
 
-**Question**: What is the deployment status?
+**Question**:
+What is the deployment status?
 
 - A) Approved and continues immediately upon the 2nd approval
 - B) Still pending (a third approval is needed for consensus)
@@ -1104,13 +1364,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 73 – Environment Secrets and Variables in Deployment
+### Question 73 — Environment Secrets and Variables in Deployment
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Environment-Scoped Configuration
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Environment-Scoped Configuration
 
-**Scenario**: You define: Prod environment variables: `API_ENDPOINT=https://api.prod.com`. Prod environment secrets: `DEPLOY_KEY`. A deployment job references `${{ secrets.DEPLOY_KEY }}` and `${{ vars.API_ENDPOINT }}`.
+**Scenario**:
+You define: Prod environment variables: `API_ENDPOINT=https://api.prod.com`. Prod environment secrets: `DEPLOY_KEY`. A deployment job references `${{ secrets.DEPLOY_KEY }}` and `${{ vars.API_ENDPOINT }}`.
 
-**Question**: Are these available to the job?
+**Question**:
+Are these available to the job?
 
 - A) Yes, if the job specifies `environment: prod`
 - B) Yes, only secrets are environment-scoped; variables are global
@@ -1121,11 +1385,14 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 15: Creating and Publishing Actions (5 Questions)
 
-### Question 74 – Action Metadata File
+### Question 74 — Action Metadata File
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: action.yml File Structure
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: action.yml File Structure
 
-**Question**: What is the required structure of an action's metadata file?
+**Question**:
+What is the required structure of an action's metadata file?
 
 - A) Filename must be `action.yml` or `action.yaml` at the repository root
 - B) Must include `name`, `description`, and either `runs` (composite/Docker) or `main` (JavaScript)
@@ -1134,11 +1401,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 75 – JavaScript Action with Dependencies
+### Question 75 — JavaScript Action with Dependencies
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: JavaScript Action Development
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: JavaScript Action Development
 
-**Scenario**: You're building a JavaScript action. Your code uses external npm packages (e.g., axios). You want to distribute it efficiently.
+**Scenario**:
+You're building a JavaScript action. Your code uses external npm packages (e.g., axios). You want to distribute it efficiently.
 
 **Question** (Select all that apply): Which approaches are recommended?
 
@@ -1149,13 +1419,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 76 – Composite Action Structure
+### Question 76 — Composite Action Structure
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Composite Action Implementation
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Composite Action Implementation
 
-**Scenario**: You're building a reusable action that checks out code, installs dependencies, then runs tests. You decide to use a composite action approach.
+**Scenario**:
+You're building a reusable action that checks out code, installs dependencies, then runs tests. You decide to use a composite action approach.
 
-**Question**: In the action.yml, what does the `runs` section look like?
+**Question**:
+In the action.yml, what does the `runs` section look like?
 
 - A) `runs: { using: nodejs16 }`
 - B) `runs: { using: composite, steps: [...] }`
@@ -1164,13 +1438,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 77 – Action Versioning and Tags
+### Question 77 — Action Versioning and Tags
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Version Management
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Version Management
 
-**Scenario**: You publish an action to the Marketplace with tag `v1.0.0`. Five months later, you release `v1.1.0` (non-breaking change). Users currently reference `v1` in their workflows. Should they get the `v1.1.0` automatically?
+**Scenario**:
+You publish an action to the Marketplace with tag `v1.0.0`. Five months later, you release `v1.1.0` (non-breaking change). Users currently reference `v1` in their workflows. Should they get the `v1.1.0` automatically?
 
-**Question**: What is the best practice?
+**Question**:
+What is the best practice?
 
 - A) Tag the new release as both `v1.1.0` and `v1` (move the `v1` tag) so existing references receive the update
 - B) Always require users to update to the explicit version; don't move version tags
@@ -1179,13 +1457,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 78 – Testing Custom Actions Locally
+### Question 78 — Testing Custom Actions Locally
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Action Development and Testing
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Action Development and Testing
 
-**Scenario**: You've built a custom action and want to test it locally before publishing to the Marketplace.
+**Scenario**:
+You've built a custom action and want to test it locally before publishing to the Marketplace.
 
-**Question**: What is the best approach?
+**Question**:
+What is the best approach?
 
 - A) Use `act` (nektos/act) to run GitHub Actions workflows locally, including your custom action
 - B) Reference your action from a test workflow using relative path: `uses: ./`(from same repo)
@@ -1196,11 +1478,14 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 16: Managing Runners (5 Questions)
 
-### Question 79 – Hosted Runner Selection
+### Question 79 — Hosted Runner Selection
 
-**Difficulty**: Easy | **Answer Type**: one | **Topic**: Choosing Hosted Runners
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: Choosing Hosted Runners
 
-**Question**: Your project requires Python 3.10, which you need to test on Linux. Which hosted runner should you use?
+**Question**:
+Your project requires Python 3.10, which you need to test on Linux. Which hosted runner should you use?
 
 - A) `ubuntu-latest`
 - B) `ubuntu-22.04`
@@ -1209,11 +1494,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 80 – Self-Hosted Runner Labels
+### Question 80 — Self-Hosted Runner Labels
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Runner Organization and Targeting
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Runner Organization and Targeting
 
-**Scenario**: You've set up 5 self-hosted runners in your organization: 3 on Linux, 2 on Windows. You want workflows to dispatch to specific runners based on custom criteria.
+**Scenario**:
+You've set up 5 self-hosted runners in your organization: 3 on Linux, 2 on Windows. You want workflows to dispatch to specific runners based on custom criteria.
 
 **Question** (Select all that apply): How can you target runners?
 
@@ -1224,11 +1512,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 81 – Runner Groups in Enterprise
+### Question 81 — Runner Groups in Enterprise
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Enterprise Runner Organization
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Enterprise Runner Organization
 
-**Scenario**: Your enterprise manages 100 self-hosted runners across 10 organizations. You want to restrict certain runners to specific organizations for compliance.
+**Scenario**:
+Your enterprise manages 100 self-hosted runners across 10 organizations. You want to restrict certain runners to specific organizations for compliance.
 
 **Question** (Select all that apply): Which approaches use runner groups?
 
@@ -1239,13 +1530,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 82 – Self-Hosted Runner Scalability
+### Question 82 — Self-Hosted Runner Scalability
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Runner Capacity and Autoscaling
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Runner Capacity and Autoscaling
 
-**Scenario**: Your organization runs hundreds of workflows daily on 20 self-hosted runners. During peak hours, workflows queue up. You're considering autoscaling the runner fleet.
+**Scenario**:
+Your organization runs hundreds of workflows daily on 20 self-hosted runners. During peak hours, workflows queue up. You're considering autoscaling the runner fleet.
 
-**Question**: What is the best approach?
+**Question**:
+What is the best approach?
 
 - A) GitHub Actions provides built-in autoscaling via `scale_policy`
 - B) Integrate a third-party autoscaler (e.g., philips-labs/terraform-provider-githubrunner)
@@ -1254,11 +1549,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 83 – Runner Maintenance and Updates
+### Question 83 — Runner Maintenance and Updates
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Self-Hosted Runner Hygiene
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Self-Hosted Runner Hygiene
 
-**Scenario**: Your team manages 15 Linux self-hosted runners. Security patches are released weekly. Your organizational policy requires patches to be applied within 72 hours.
+**Scenario**:
+Your team manages 15 Linux self-hosted runners. Security patches are released weekly. Your organizational policy requires patches to be applied within 72 hours.
 
 **Question** (Select all that apply): Which practices support this?
 
@@ -1271,13 +1569,17 @@ But NOT on PR comments or wiki updates.
 
 ## Topic 17: GitHub Actions Enterprise (5 Questions)
 
-### Question 84 – Organizational Action Policies
+### Question 84 — Organizational Action Policies
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Action Allowlisting
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Action Allowlisting
 
-**Scenario**: Your enterprise requires that all workflows use only verified, trusted actions. You configure an organizational policy: "Allow local actions only" (actions in the same organization/enterprise).
+**Scenario**:
+Your enterprise requires that all workflows use only verified, trusted actions. You configure an organizational policy: "Allow local actions only" (actions in the same organization/enterprise).
 
-**Question**: What is the result?
+**Question**:
+What is the result?
 
 - A) Workflows can use actions from any repository in your organization or enterprise
 - B) Workflows can only use actions in the current repository
@@ -1286,11 +1588,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 85 – Required Workflows at Enterprise Level
+### Question 85 — Required Workflows at Enterprise Level
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Enforced Workflows
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Enforced Workflows
 
-**Scenario**: Your enterprise mandates that all repositories run a security scanning workflow (SAST). An enterprise admin creates a required workflow pointing to `/shared-workflows/.github/workflows/security-scan.yml@main`.
+**Scenario**:
+Your enterprise mandates that all repositories run a security scanning workflow (SAST). An enterprise admin creates a required workflow pointing to `/shared-workflows/.github/workflows/security-scan.yml@main`.
 
 **Question** (Select all that apply): Which statements are true?
 
@@ -1301,13 +1606,17 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 86 – IP Allowlists for Self-Hosted Runners
+### Question 86 — IP Allowlists for Self-Hosted Runners
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Network Isolation
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Network Isolation
 
-**Scenario**: Your enterprise requires that workflows can only communicate with internal services via whitelisted IPs. You configure an IP allowlist at the organization level: `10.0.1.0/24`.
+**Scenario**:
+Your enterprise requires that workflows can only communicate with internal services via whitelisted IPs. You configure an IP allowlist at the organization level: `10.0.1.0/24`.
 
-**Question**: What does this ensure?
+**Question**:
+What does this ensure?
 
 - A) Only runners with IPs in `10.0.1.0/24` can execute workflows
 - B) Workflows can only make API/HTTP requests to services within `10.0.1.0/24`
@@ -1316,11 +1625,14 @@ But NOT on PR comments or wiki updates.
 
 ---
 
-### Question 87 – Secrets Hierarchy in Enterprise
+### Question 87 — Secrets Hierarchy in Enterprise
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Scope and Precedence
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Scope and Precedence
 
-**Scenario**: You define secrets at three levels: Enterprise (`SHARED_KEY=enterprise_value`), Organization (`SHARED_KEY=org_value`), Repository (`SHARED_KEY=repo_value`). A workflow references `${{ secrets.SHARED_KEY }}`.
+**Scenario**:
+You define secrets at three levels: Enterprise (`SHARED_KEY=enterprise_value`), Organization (`SHARED_KEY=org_value`), Repository (`SHARED_KEY=repo_value`). A workflow references `${{ secrets.SHARED_KEY }}`.
 
 **Question** (Select all that apply): Which statements are true?
 
@@ -1332,11 +1644,14 @@ ces
 
 ---
 
-### Question 88 – Audit Logging for Compliance
+### Question 88 — Audit Logging for Compliance
 
-**Difficulty**: Hard | **Answer Type**: many | **Topic**: Enterprise Auditing
+**Difficulty**: Hard
+**Answer Type**: many
+**Topic**: Enterprise Auditing
 
-**Scenario**: Your enterprise must maintain audit logs for regulatory compliance. You want to verify that all workflow runs are logged, including cancellations and manual re-runs.
+**Scenario**:
+Your enterprise must maintain audit logs for regulatory compliance. You want to verify that all workflow runs are logged, including cancellations and manual re-runs.
 
 **Question** (Select all that apply): Which audit logging capabilities exist?
 
@@ -1349,11 +1664,14 @@ ces
 
 ## Topic 18: Security and Optimization (7 Questions)
 
-### Question 89 – GITHUB_TOKEN Permissions and Best Practices
+### Question 89 — GITHUB_TOKEN Permissions and Best Practices
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Token Scope Management (SECURITY)
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Token Scope Management (SECURITY)
 
-**Scenario**: Your workflow only needs to read repository files and create pull request comments. You're configuring `permissions`.
+**Scenario**:
+Your workflow only needs to read repository files and create pull request comments. You're configuring `permissions`.
 
 **Question** (Select all that apply): Which configurations are appropriate?
 
@@ -1364,13 +1682,17 @@ ces
 
 ---
 
-### Question 90 – Script Injection Prevention
+### Question 90 — Script Injection Prevention
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Command Injection (SECURITY)
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Command Injection (SECURITY)
 
-**Scenario**: Your workflow accepts user input from workflow_dispatch (`${{ github.event.inputs.user_comment }}`). You need to log this safely without enabling script injection.
+**Scenario**:
+Your workflow accepts user input from workflow_dispatch (`${{ github.event.inputs.user_comment }}`). You need to log this safely without enabling script injection.
 
-**Question**: Which approach is secure?
+**Question**:
+Which approach is secure?
 
 - A) `run: echo ${{ github.event.inputs.user_comment }}`
 - B) `run: echo "${{ github.event.inputs.user_comment }}"` (double quotes)
@@ -1379,11 +1701,14 @@ ces
 
 ---
 
-### Question 91 – SHA Pinning for Actions
+### Question 91 — SHA Pinning for Actions
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Supply Chain Security (SECURITY)
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Supply Chain Security (SECURITY)
 
-**Scenario**: You're upgrading to a new version of `actions/checkout`. You want to follow supply chain security best practices.
+**Scenario**:
+You're upgrading to a new version of `actions/checkout`. You want to follow supply chain security best practices.
 
 **Question** (Select all that apply): Which approaches are recommended?
 
@@ -1394,11 +1719,14 @@ ces
 
 ---
 
-### Question 92 – OIDC Token for Cloud Federation
+### Question 92 — OIDC Token for Cloud Federation
 
-**Difficulty**: Hard | **Answer Type**: many | **Topic**: Cloud Credential Exchange (SECURITY)
+**Difficulty**: Hard
+**Answer Type**: many
+**Topic**: Cloud Credential Exchange (SECURITY)
 
-**Scenario**: You want to deploy to AWS without storing long-lived credentials. You configure OIDC federation. Your workflow needs an AWS role ARN and audience.
+**Scenario**:
+You want to deploy to AWS without storing long-lived credentials. You configure OIDC federation. Your workflow needs an AWS role ARN and audience.
 
 **Question** (Select all that apply): Which are correct?
 
@@ -1409,13 +1737,17 @@ ces
 
 ---
 
-### Question 93 – Secret Masking Limitations
+### Question 93 — Secret Masking Limitations
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Secret Redaction (SECURITY)
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Secret Redaction (SECURITY)
 
-**Scenario**: Your application logs accidentally include a 20-character API secret. You assume GitHub will mask it automatically. However, you notice it appears unmasked in the logs.
+**Scenario**:
+Your application logs accidentally include a 20-character API secret. You assume GitHub will mask it automatically. However, you notice it appears unmasked in the logs.
 
-**Question**: Why might GitHub fail to mask the secret?
+**Question**:
+Why might GitHub fail to mask the secret?
 
 - A) Secrets shorter than 3 characters are not masked
 - B) GitHub masks exact string matches; if the secret is even slightly transformed (URL-encoded, hashed), masking may fail
@@ -1424,13 +1756,17 @@ ces
 
 ---
 
-### Question 94 – Action Attestation and Supply Chain Risk
+### Question 94 — Action Attestation and Supply Chain Risk
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Trustworthy Actions (SECURITY)
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Trustworthy Actions (SECURITY)
 
-**Scenario**: You review a third-party action on the Marketplace. It has 50K stars but isn't from a GitHub-verified creator. The last update was 18 months ago.
+**Scenario**:
+You review a third-party action on the Marketplace. It has 50K stars but isn't from a GitHub-verified creator. The last update was 18 months ago.
 
-**Question**: What is the appropriate risk assessment?
+**Question**:
+What is the appropriate risk assessment?
 
 - A) High stars guarantee trustworthiness; use it
 - B) Lack of verification badge + stale updates = elevated risk; consider alternatives
@@ -1439,13 +1775,17 @@ ces
 
 ---
 
-### Question 95 – Optimization: Job Parallelization
+### Question 95 — Optimization: Job Parallelization
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Performance
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Performance
 
-**Scenario**: Your workflow has 4 sequential jobs: checkout → build → test → deploy. Each takes ~5 minutes. Total runtime is 20 minutes. You want to minimize runtime.
+**Scenario**:
+Your workflow has 4 sequential jobs: checkout → build → test → deploy. Each takes ~5 minutes. Total runtime is 20 minutes. You want to minimize runtime.
 
-**Question**: What is the best optimization?
+**Question**:
+What is the best optimization?
 
 - A) Run build and test in parallel (both depend only on checkout)
 - B) Run all jobs in parallel with no dependencies
@@ -1456,13 +1796,17 @@ ces
 
 ## Topic 19: Common Failures and Troubleshooting (5 Questions)
 
-### Question 96 – Artifact Download Timeout
+### Question 96 — Artifact Download Timeout
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Troubleshooting
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Troubleshooting
 
-**Scenario**: Your test job tries to download a 500 MB artifact from a build job. The download fails intermittently with timeout errors.
+**Scenario**:
+Your test job tries to download a 500 MB artifact from a build job. The download fails intermittently with timeout errors.
 
-**Question**: What is a likely cause and solution?
+**Question**:
+What is a likely cause and solution?
 
 - A) GitHub's artifact storage is temporarily unavailable (external issue)
 - B) Reduce artifact size or split into smaller chunks and increase download timeout in the action input
@@ -1471,11 +1815,14 @@ ces
 
 ---
 
-### Question 97 – Workflow Not Triggering on Push
+### Question 97 — Workflow Not Triggering on Push
 
-**Difficulty**: Medium | **Answer Type**: many | **Topic**: Trigger Debugging
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: Trigger Debugging
 
-**Scenario**: You configured `on: { push: { branches: [main] } }`. You push to `main` locally, but the workflow doesn't trigger.
+**Scenario**:
+You configured `on: { push: { branches: [main] } }`. You push to `main` locally, but the workflow doesn't trigger.
 
 **Question** (Select all that apply): Which could be the cause?
 
@@ -1487,13 +1834,17 @@ ces
 
 ---
 
-### Question 98 – out of Memory During Build
+### Question 98 — out of Memory During Build
 
-**Difficulty**: Medium | **Answer Type**: one | **Topic**: Resource Constraints
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Resource Constraints
 
-**Scenario**: Your build job runs out of memory and crashes. You're using `ubuntu-latest`. The build is a large monorepo (100,000 files).
+**Scenario**:
+Your build job runs out of memory and crashes. You're using `ubuntu-latest`. The build is a large monorepo (100,000 files).
 
-**Question**: What is the best approach?
+**Question**:
+What is the best approach?
 
 - A) Implement incremental builds or split the monorepo test into smaller jobs
 - B) Switch to a larger hosted runner (if available) or self-hosted runner with more memory
@@ -1502,13 +1853,17 @@ ces
 
 ---
 
-### Question 99 – Permission Denied on Secret Access
+### Question 99 — Permission Denied on Secret Access
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Secret Scope Issues
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Secret Scope Issues
 
-**Scenario**: Your pull request workflow tries to access `${{ secrets.DEPLOY_KEY }}` but the expression evaluates to empty/undefined, causing deployment to fail.
+**Scenario**:
+Your pull request workflow tries to access `${{ secrets.DEPLOY_KEY }}` but the expression evaluates to empty/undefined, causing deployment to fail.
 
-**Question**: Why is the secret not available?
+**Question**:
+Why is the secret not available?
 
 - A) Secrets from forked PRs are intentionally unavailable for security (use `pull_request_target` if needed)
 - B) The secret name is misspelled
@@ -1517,13 +1872,17 @@ ces
 
 ---
 
-### Question 100 – Matrix Job Failure Cascading to Dependent Jobs
+### Question 100 — Matrix Job Failure Cascading to Dependent Jobs
 
-**Difficulty**: Hard | **Answer Type**: one | **Topic**: Matrix Strategy and Dependencies (SCENARIO)
+**Difficulty**: Hard
+**Answer Type**: one
+**Topic**: Matrix Strategy and Dependencies (SCENARIO)
 
-**Scenario**: Your workflow has: Job `test` uses matrix (3 combinations). Job `deploy` depends on `test` via `needs: [test]`. One matrix combination in `test` fails; the other two succeed.
+**Scenario**:
+Your workflow has: Job `test` uses matrix (3 combinations). Job `deploy` depends on `test` via `needs: [test]`. One matrix combination in `test` fails; the other two succeed.
 
-**Question**: What happens to the `deploy` job?
+**Question**:
+What happens to the `deploy` job?
 
 - A) `deploy` runs after all matrix combinations complete (success and failure combined)
 - B) `deploy` is skipped because at least one matrix job failed
@@ -1661,8 +2020,3 @@ ces
 3. **Weak Area Analysis**: Group questions by topic and difficulty; focus on low-success topics
 4. **Peer Discussion**: Discuss complex questions (especially Hard / synthesis questions) with colleagues
 5. **Continuous Iteration**: Use this bank repeatedly; difficulty increases with familiarity
-
-
-
-
-
