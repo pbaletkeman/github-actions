@@ -1,9 +1,13 @@
 # GitHub Actions GH-200 Certification Exam — Question Bank (Iteration 9)
 
 **Iteration**: 9
+
 **Generated**: 2026-03-22
+
 **Total Questions**: 100
+
 **Difficulty Split**: 16 Easy / 80 Medium / 4 Hard
+
 **Answer Types**: 100 `one`
 
 ---
