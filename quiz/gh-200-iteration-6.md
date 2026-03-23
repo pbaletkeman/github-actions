@@ -1993,3 +1993,7 @@ A developer lists statements they believe are true about cancelled GitHub Action
 | 98 | B | When a `run:` step exits with a non-zero exit code, the step is marked failed. Subsequent steps are skipped unless they have `if: always()` or `if: failure()`. The job is then marked as failed, which propagates to the overall workflow. | 19-Common-Failures-Troubleshooting.md | Medium |
 | 99 | A, B, C, D | A: `cancel-in-progress: true` cancels the current run for the same concurrency group. B: Without `cancel-in-progress`, only one pending run is held; additional triggers replace the single pending slot. C: Job-level concurrency groups provide finer control. D: "Queued" runs stuck permanently usually indicate no matching runner is available. | 19-Common-Failures-Troubleshooting.md | Hard |
 | 100 | None | A is incorrect — steps with `if: always()` do NOT execute when a workflow is cancelled; `always()` evaluates to `true` for success, failure, and cancelled states, but the runner does not process new steps after cancellation. B is incorrect — GitHub does not auto-rollback deployments. C is incorrect — cancelled jobs are billed only for the time that actually ran, not the full timeout. D is incorrect — queued matrix jobs are not started after cancellation; they are dropped. | 19-Common-Failures-Troubleshooting.md | Medium |
+
+---
+
+*End of GH-200 Iteration 6 — 100 Questions*

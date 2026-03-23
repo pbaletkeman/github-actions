@@ -4,7 +4,7 @@
 **Generated**: 2026-03-19
 **Total Questions**: 100
 **Difficulty Split**: 20 Easy / 60 Medium / 20 Hard
-**Answer Types**: 55 `one` / 26 `many` / 12 `all` / 7 `none`
+**Answer Types**: 76 `one` / 23 `many` / 1 `none`
 
 ---
 
@@ -1988,5 +1988,3 @@ What is the correct approach to trigger the workflow with an input via the API?
 ---
 
 *End of GH-200 Iteration 1 — 100 Questions*
-
-

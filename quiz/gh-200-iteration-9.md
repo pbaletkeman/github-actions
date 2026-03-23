@@ -1870,13 +1870,13 @@ What is the most likely cause and the correct diagnostic/resolution path?
 
 ## Answer Key
 
-| Q | Answer | Explanation | Source | Difficulty |
-|---|--------|-------------|--------|------------|
+| Q# | Answer(s) | Explanation | Source | Difficulty |
+|----|-----------|-------------|--------|------------|
 | 1 | B | Workflow files must be in `.github/workflows/` for the extension to activate schema validation and IntelliSense. | 01-GitHub-Actions-VS-Code-Extension.md | Easy |
 | 2 | B | Branch tag references like `@main` are mutable; the extension warns to pin to a full commit SHA for security and reproducibility. | 01-GitHub-Actions-VS-Code-Extension.md | Medium |
 | 3 | B | First verify the YAML extension is installed, confirm the file path is `.github/workflows/`, and try "Reload Window" — the most common resolution steps. | 01-GitHub-Actions-VS-Code-Extension.md | Medium |
 | 4 | B | The extension provides expression evaluation that highlights type mismatches and logical issues in `if:` conditions inline. | 01-GitHub-Actions-VS-Code-Extension.md | Medium |
-| 5 | B | `code --list-extensions | grep -i github` lists all installed extensions and filters for GitHub-related ones. | 01-GitHub-Actions-VS-Code-Extension.md | Easy |
+| 5 | B | `code --list-extensions \| grep -i github` lists all installed extensions and filters for GitHub-related ones. | 01-GitHub-Actions-VS-Code-Extension.md | Easy |
 | 6 | B | `github.token` is automatically provisioned each run as a short-lived token for the repository's GitHub App installation — no manual configuration needed. | 02-Contextual-Information.md | Easy |
 | 7 | C | `github.base_ref` is the target branch of the PR (what the PR merges into); `github.head_ref` is the source branch. | 02-Contextual-Information.md | Medium |
 | 8 | C | GitHub Actions automatically redacts known secret values in logs, replacing them with `***`. | 02-Contextual-Information.md | Medium |
@@ -1972,3 +1972,7 @@ What is the most likely cause and the correct diagnostic/resolution path?
 | 98 | B | The error "could not read Username" indicates authentication failure — the `GITHUB_TOKEN` is missing, has insufficient permissions, or the `actions/checkout` step is not configured with an appropriate token. | 19-Common-Failures-Troubleshooting.md | Easy |
 | 99 | B | `timeout-minutes:` is a job-level key that sets the maximum duration for a job; setting it to `300` allows 5 hours of execution. | 19-Common-Failures-Troubleshooting.md | Medium |
 | 100 | B | `npm ci` uses the lock file exactly; when a transitive dependency releases a breaking version that conflicts with the lock file, `ERESOLVE` errors appear. Running `npm install` locally updates the lock file to resolve the conflict. | 19-Common-Failures-Troubleshooting.md | Hard |
+
+---
+
+*End of GH-200 Iteration 9 — 100 Questions*
