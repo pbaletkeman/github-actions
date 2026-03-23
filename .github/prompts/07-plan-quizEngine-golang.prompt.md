@@ -15,7 +15,9 @@ quiz-engine/
 │   ├── database/
 │   │   ├── db.go            # SQLite connection, migrations
 │   │   ├── question.go       # Question CRUD operations
+│   │   ├── question_test.go  # Unit tests for question CRUD
 │   │   ├── session.go        # Session CRUD operations
+│   │   ├── session_test.go   # Unit tests for session CRUD
 │   │   └── response.go       # Response CRUD operations
 │   ├── models/
 │   │   ├── question.go       # Question struct
@@ -23,14 +25,17 @@ quiz-engine/
 │   │   └── response.go       # QuizResponse struct
 │   ├── engine/
 │   │   ├── quiz.go           # QuizEngine struct and methods
+│   │   ├── quiz_test.go      # Unit tests for quiz engine
 │   │   ├── shuffler.go       # Answer randomization
+│   │   ├── shuffler_test.go  # Unit tests for shuffler
 │   │   └── utils.go          # Helper functions
 │   ├── cli/
 │   │   ├── formatter.go      # Terminal formatting, colors
 │   │   ├── prompts.go        # User input collection
 │   │   └── display.go        # Question/result display
 │   ├── parser/
-│   │   └── markdown.go       # Markdown question parsing
+│   │   ├── markdown.go       # Markdown question parsing
+│   │   └── markdown_test.go  # Unit tests for markdown parser
 │   └── service/
 │       ├── quiz_service.go   # Business logic orchestration
 │       ├── history_service.go # Query and format history
@@ -39,8 +44,127 @@ quiz-engine/
 ├── go.sum                     # Dependency lock file
 ├── Makefile                   # Build, test, run targets
 ├── README.md                  # Documentation
+├── Dockerfile               # Container image for production deployment
+├── docker-compose.yml       # Multi-container orchestration for dev/test
 └── .gitignore
 ```
+
+### Docker & Containerization
+
+#### Dockerfile (Production - Multi-stage)
+```dockerfile
+# Build stage
+FROM golang:1.21-alpine as builder
+
+WORKDIR /app
+
+RUN apk add --no-cache make sqlite-dev
+
+COPY go.mod go.sum .
+RUN go mod download
+
+COPY . .
+RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -ldflags "-s -w" -o quiz-engine ./cmd/quiz/main.go
+
+# Runtime stage
+FROM alpine:latest
+
+WORKDIR /app
+
+RUN apk add --no-cache sqlite-libs
+
+COPY --from=builder /app/quiz-engine .
+
+# Create non-root user
+RUN addgroup -g 1000 gouser && adduser -D -u 1000 -G gouser gouser
+RUN chown -R gouser:gouser /app
+USER gouser
+
+ENTRYPOINT ["./quiz-engine"]
+CMD ["--help"]
+```
+
+#### docker-compose.yml (Development)
+```yaml
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: go run ./cmd/quiz/main.go --help
+    environment:
+      - CGO_ENABLED=1
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: bash -c "go test ./... -coverprofile=coverage.out && go tool cover -func=coverage.out && awk '/total:/ {split(\"\"\"$3, a, \"\\%\"; coverage=a[1]; if(coverage < 90) {print \"Coverage \" coverage \"% below 90%\"; exit 1}; print \"Coverage \" coverage \"% OK\"}' coverage.out"
+    environment:
+      - CGO_ENABLED=1
+
+  quiz-engine-build:
+    build: .
+    container_name: quiz-engine-build
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: bash -c "CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -ldflags '-s -w' -o quiz-engine-release ./cmd/quiz/main.go"
+```
+
+#### Getting Started with Docker
+
+**Quick Start (5 steps):**
+
+1. **Build the image:**
+   ```bash
+   docker build -t quiz-engine:latest .
+   ```
+
+2. **Run development mode:**
+   ```bash
+   docker run -it quiz-engine:latest go run ./cmd/quiz/main.go quiz --questions 10
+   ```
+
+3. **Run tests with coverage threshold:**
+   ```bash
+   docker-compose up quiz-engine-test
+   ```
+
+4. **Build optimized binary:**
+   ```bash
+   docker-compose up quiz-engine-build
+   ```
+
+5. **Run compiled executable:**
+   ```bash
+   docker run -it quiz-engine:latest ./quiz-engine quiz --questions 10
+   ```
+
+**Build & Push:**
+```bash
+# Build multi-arch
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry/quiz-engine:1.0 .
+
+# Push to registry
+docker push myregistry/quiz-engine:1.0
+```
+
+**Container Configuration:**
+- Multi-stage build: Go SDK compilation + minimal Alpine runtime
+- Smallest binary size with `-ldflags "-s -w"`
+- CGO enabled for SQLite support
+- Non-root user (gouser) for security
+- Coverage threshold enforcement (90%) in test service
+- Single static binary deployment
 
 ### Database Schema (Using go-sqlite3 or gorm/sqlite)
 
@@ -207,7 +331,7 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
    func (d *DB) GetRandomQuestions(ctx context.Context, n int, difficulty, section string) ([]Question, error) {
        // Query current cycle
        currentCycle := d.GetCurrentCycle(ctx)
-       
+
        // Build query with WHERE usage_cycle = ? filter
        query := `
            SELECT id, question_text, option_a, option_b, option_c, option_d, option_e, section, difficulty
@@ -221,7 +345,7 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
            query += " AND section = ?"
        }
        query += " ORDER BY RANDOM() LIMIT ?"
-       
+
        // Execute query WITHOUT fetching correct_answer or explanation
        return scanQuestions(rows)
    }
@@ -404,7 +528,248 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
 
 ---
 
-### Phase 4: CLI Polish & Deployment
+### Phase 4: Unit Testing & Coverage Enforcement
+**Timeline:** 2-3 hours
+
+**Objective:** Achieve >90% unit test coverage across all internal packages. The `make test` target must fail below 90%.
+
+**Coverage Commands:**
+```bash
+# Run tests with coverage profiling
+go test ./... -coverprofile=coverage.out -covermode=atomic
+
+# Show per-function coverage
+go tool cover -func=coverage.out
+
+# Generate HTML report
+go tool cover -html=coverage.out -o coverage.html
+
+# Enforce 90% threshold (fails with exit 1 if below)
+go test ./... -coverprofile=coverage.out -covermode=atomic && \
+  TOTAL=$(go tool cover -func=coverage.out | grep "^total" | awk '{print $3}' | tr -d '%') && \
+  echo "Total coverage: ${TOTAL}%" && \
+  awk "BEGIN { if (${TOTAL} < 90) { print \"FAIL: coverage " TOTAL "% < 90%\"; exit 1 } else { print \"PASS: coverage " TOTAL "%\"; exit 0 } }"
+```
+
+**Updated `Makefile`:**
+```makefile
+build:
+	go build -o bin/quiz-engine cmd/quiz/main.go
+
+run:
+	go run cmd/quiz/main.go
+
+test:
+	go test ./... -coverprofile=coverage.out -covermode=atomic
+	go tool cover -func=coverage.out
+	@TOTAL=$$(go tool cover -func=coverage.out | grep "^total" | awk '{print $$3}' | tr -d '%'); \
+	echo "Coverage: $${TOTAL}%"; \
+	awk "BEGIN { if ($${TOTAL}+0 < 90) { print \"FAIL: below 90%\"; exit 1 } }"
+
+coverage:
+	go test ./... -coverprofile=coverage.out -covermode=atomic
+	go tool cover -html=coverage.out -o coverage.html
+	open coverage.html
+
+clean:
+	rm -rf bin/ coverage.out coverage.html
+```
+
+**Tasks:**
+
+1. **Write `internal/database/question_test.go` (target: >92%):**
+   ```go
+   package database
+
+   import (
+       "database/sql"
+       "testing"
+       _ "github.com/mattn/go-sqlite3"
+   )
+
+   func openTestDB(t *testing.T) *sql.DB {
+       t.Helper()
+       db, err := sql.Open("sqlite3", ":memory:")
+       if err != nil {
+           t.Fatalf("failed to open test db: %v", err)
+       }
+       if err := InitSchema(db); err != nil {
+           t.Fatalf("failed to init schema: %v", err)
+       }
+       return db
+   }
+
+   func TestInsertAndRetrieveQuestion(t *testing.T) {
+       db := openTestDB(t)
+       defer db.Close()
+       q := Question{QuestionText: "Q1", OptionA: "A", OptionB: "B",
+           OptionC: "C", OptionD: "D", CorrectAnswer: "A"}
+       id, err := InsertQuestion(db, q)
+       if err != nil {
+           t.Fatalf("insert failed: %v", err)
+       }
+       questions, err := GetAllQuestions(db)
+       if err != nil || len(questions) != 1 {
+           t.Fatalf("expected 1 question, got %d", len(questions))
+       }
+       _ = id
+   }
+
+   func TestGetRandomQuestions_OmitsCorrectAnswer(t *testing.T) {
+       db := openTestDB(t)
+       defer db.Close()
+       InsertQuestion(db, Question{QuestionText: "Q1", OptionA: "A",
+           OptionB: "B", OptionC: "C", OptionD: "D", CorrectAnswer: "A"})
+       questions, _ := GetRandomQuestions(db, 1)
+       if questions[0].CorrectAnswer != "" {
+           t.Error("correctAnswer must be empty during quiz")
+       }
+   }
+
+   func TestAdvanceCycle_WhenExhausted(t *testing.T) {
+       db := openTestDB(t)
+       defer db.Close()
+       id, _ := InsertQuestion(db, Question{QuestionText: "Q1", OptionA: "A",
+           OptionB: "B", OptionC: "C", OptionD: "D", CorrectAnswer: "A"})
+       MarkQuestionUsed(db, id)
+       AdvanceCycleIfExhausted(db)
+       cycle, _ := GetCurrentCycle(db)
+       if cycle != 2 {
+           t.Errorf("expected cycle 2, got %d", cycle)
+       }
+   }
+
+   func TestInsert_SkipsDuplicate(t *testing.T) {
+       db := openTestDB(t)
+       defer db.Close()
+       q := Question{QuestionText: "Q1", OptionA: "A",
+           OptionB: "B", OptionC: "C", OptionD: "D", CorrectAnswer: "A"}
+       InsertQuestion(db, q)
+       InsertQuestion(db, q) // duplicate
+       count, _ := CountQuestions(db)
+       if count != 1 {
+           t.Errorf("expected 1 question, got %d", count)
+       }
+   }
+   ```
+
+2. **Write `internal/engine/quiz_test.go` (target: >92%):**
+   ```go
+   package engine
+
+   import (
+       "testing"
+       "github.com/you/quiz-engine/internal/database"
+   )
+
+   func TestSubmitCorrectAnswer_IncreasesScore(t *testing.T) {
+       db := database.OpenTestDB(t)
+       defer db.Close()
+       database.InsertQuestion(db, database.Question{QuestionText: "Q1",
+           OptionA: "A", OptionB: "B", OptionC: "C", OptionD: "D", CorrectAnswer: "A"})
+       engine := NewQuizEngine(db, 1)
+       engine.LoadQuestions()
+       engine.SubmitAnswer(0, "A", 10)
+       if engine.NumCorrect != 1 {
+           t.Errorf("expected 1 correct, got %d", engine.NumCorrect)
+       }
+   }
+
+   func TestFinalizeQuiz_PersistsSession(t *testing.T) {
+       db := database.OpenTestDB(t)
+       defer db.Close()
+       database.InsertQuestion(db, database.Question{QuestionText: "Q1",
+           OptionA: "A", OptionB: "B", OptionC: "C", OptionD: "D", CorrectAnswer: "A"})
+       engine := NewQuizEngine(db, 1)
+       engine.LoadQuestions()
+       engine.SubmitAnswer(0, "A", 5)
+       session, err := engine.FinalizeQuiz()
+       if err != nil || session.SessionID == "" {
+           t.Fatalf("finalize failed: %v", err)
+       }
+   }
+   ```
+
+3. **Write `internal/engine/shuffler_test.go` (target: >95%):**
+   ```go
+   package engine
+
+   import (
+       "sort"
+       "testing"
+   )
+
+   func TestShuffleAnswers_PreservesAllOptions(t *testing.T) {
+       options := []string{"Alpha", "Beta", "Gamma", "Delta"}
+       result := ShuffleAnswers(options, "A")
+       resultCopy := make([]string, len(result.ShuffledOptions))
+       copy(resultCopy, result.ShuffledOptions)
+       sort.Strings(options)
+       sort.Strings(resultCopy)
+       for i := range options {
+           if options[i] != resultCopy[i] {
+               t.Error("shuffled options don't match originals")
+           }
+       }
+   }
+
+   func TestShuffleAnswers_MapsCorrectAnswerToNewPosition(t *testing.T) {
+       options := []string{"Alpha", "Beta", "Gamma", "Delta"}
+       result := ShuffleAnswers(options, "A") // A = "Alpha"
+       if result.ShuffledOptions[result.CorrectShuffledIndex] != "Alpha" {
+           t.Error("correct answer text not preserved in new position")
+       }
+   }
+   ```
+
+4. **Write `internal/parser/markdown_test.go` (target: >90%):**
+   ```go
+   package parser
+
+   import (
+       "os"
+       "testing"
+   )
+
+   func TestParseMarkdownFile_ExtractsQuestions(t *testing.T) {
+       content := `## Q1\n> What is CI?\n- A) Integration\n- B) Delivery\n- C) Deploy\n- D) Build\n**Answer: A**`
+       f, _ := os.CreateTemp("", "test-*.md")
+       f.WriteString(content)
+       f.Close()
+       defer os.Remove(f.Name())
+
+       questions, err := ParseMarkdownFile(f.Name())
+       if err != nil || len(questions) != 1 {
+           t.Fatalf("expected 1 question, got %d, err: %v", len(questions), err)
+       }
+       if questions[0].CorrectAnswer != "A" {
+           t.Errorf("expected answer A, got %s", questions[0].CorrectAnswer)
+       }
+   }
+
+   func TestParseMarkdownFile_ErrorOnMissingAnswer(t *testing.T) {
+       f, _ := os.CreateTemp("", "test-*.md")
+       f.WriteString("## Q1\n> No answer here")
+       f.Close()
+       defer os.Remove(f.Name())
+
+       _, err := ParseMarkdownFile(f.Name())
+       if err == nil {
+           t.Error("expected error for missing answer line")
+       }
+   }
+   ```
+
+5. **Coverage target summary:**
+
+| Package | Target |
+|---|---|
+| `internal/database` | >92% |
+| `internal/engine` | >92% |
+| `internal/parser` | >90% |
+| `internal/service` | >90% |
+
+### Phase 5: CLI Polish & Deployment
 **Timeline:** 1.5-2 hours
 
 **Objective:** Polish CLI, add help, build executable, document.
@@ -418,61 +783,38 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
    - Usage examples in help text
 
 2. **Create `Makefile`:**
-   ```makefile
-   build:
-       go build -o bin/quiz-engine cmd/quiz/main.go
-       go build -o bin/quiz-import cmd/import/main.go
-       go build -o bin/quiz-history cmd/history/main.go
-       go build -o bin/quiz-clear cmd/clear/main.go
+   *(see updated Makefile in Phase 4 above — `make test` enforces >90% coverage)*
 
-   run:
-       go run cmd/quiz/main.go
-
-   test:
-       go test ./... -v -cover
-
-   clean:
-       rm -rf bin/
-   ```
-
-3. **Add Logging (optional):**
-   - `go.uber.org/zap` for structured logging
-   - Verbose mode: `--verbose` flag
-
-4. **Create Comprehensive `README.md`:**
-   - Getting Started (Go 1.21+)
-   - Build instructions
-   - Running quizzes
-   - Importing questions
-   - Viewing history
-   - Clearing data
-   - Troubleshooting
-   - Architecture overview
-
-5. **Cross-Platform Build:**
+3. **Cross-Platform Build:**
    ```bash
    # Windows
    GOOS=windows GOARCH=amd64 go build -o quiz-engine.exe
-   
+
    # macOS
    GOOS=darwin GOARCH=amd64 go build -o quiz-engine-macos
-   
+
    # Linux
    GOOS=linux GOARCH=amd64 go build -o quiz-engine-linux
    ```
 
-6. **End-to-End Test:**
+4. **Create Comprehensive `README.md`:**
+   - Getting Started (Go 1.21+)
+   - Build instructions
+   - **Testing:** `make test` — enforces >90% coverage; `make coverage` for HTML report
+   - Running quizzes, importing questions, viewing history, clearing data
+   - Architecture overview
+
+5. **End-to-End Test:**
    - Build executable
-   - Import questions
-   - Take quiz
-   - View history
-   - Clear data
+   - Import questions, take quiz, view history, clear data
    - No errors
 
 **Success Criteria:**
+- `make test` **passes and enforces >90% total line coverage**
+- `make coverage` generates `coverage.html` with detailed per-function breakdown
 - All CLI commands polished
 - Executable builds for Windows/Mac/Linux
-- README comprehensive
+- README comprehensive with testing instructions
 - First-time user success in <15 minutes
 - Proper error messages
 
@@ -599,4 +941,3 @@ make build
 - **Cycle Logic:** Identical to Python and other implementations
 - **Concealment:** Regex can be used for markdown parsing or standard string matching
 - **Future:** Could add web UI (Gin), REST API, or export formats
-

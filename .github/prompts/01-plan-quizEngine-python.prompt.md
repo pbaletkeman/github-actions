@@ -19,13 +19,126 @@ quiz-engine/
 │   ├── view_history.py       # Query sessions, format output, export CSV/JSON
 │   ├── clear_database.py     # Truncate questions table
 │   └── clear_history.py      # Delete quiz sessions & responses
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py               # Shared fixtures (in-memory SQLite, sample questions)
+│   ├── test_database.py          # CRUD ops, cycle queries, schema validation
+│   ├── test_models.py            # Pydantic model validation, edge cases
+│   ├── test_quiz.py              # QuizEngine load/submit/finalize, scoring
+│   ├── test_utils.py             # AnswerShuffler, markdown parser, time helpers
+│   ├── test_history.py           # History query formatting, export
+│   └── test_import.py            # Markdown import, validation, batch insert
+├── .coveragerc                   # Coverage config (omit CLI, enforce 90%)
+├── pyproject.toml                # pytest + coverage configuration
 ├── requirements.txt      # Python dependencies
+├── requirements-dev.txt  # Development-only dependencies (pytest, coverage)
 ├── setup.sh              # Create venv, install deps - bash shell
 ├── setup.bat             # Create venv, install deps - Windows batch file
 ├── setup.ps1             # Create venv, install deps - Windows PowerShell script
 ├── README.md             # Setup, usage, operation docs
+├── Dockerfile               # Container image for production deployment
+├── docker-compose.yml       # Multi-container orchestration for dev/test
 └── .gitignore
 ```
+
+### Docker & Containerization
+
+#### Dockerfile (Production)
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY quiz_engine/ ./quiz_engine/
+COPY scripts/ ./scripts/
+COPY README.md .
+
+# Create non-root user for security
+RUN useradd -m -u 1000 quizuser && chown -R quizuser:quizuser /app
+USER quizuser
+
+# Run the quiz engine
+ENTRYPOINT ["python", "-m", "quiz_engine.main"]
+CMD ["--help"]
+```
+
+#### docker-compose.yml (Development)
+```yaml
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+      - /app/.venv  # Exclude venv from mount
+    working_dir: /app
+    command: python -m quiz_engine.main --help
+    environment:
+      - PYTHONUNBUFFERED=1
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: pytest --cov=quiz_engine --cov-fail-under=90
+    environment:
+      - PYTHONUNBUFFERED=1
+```
+
+#### Getting Started with Docker
+
+**Quick Start (5 steps):**
+
+1. **Build the image:**
+   ```bash
+   docker build -t quiz-engine:latest .
+   ```
+
+2. **Run interactively:**
+   ```bash
+   docker run -it quiz-engine:latest quiz --questions 10
+   ```
+
+3. **Import questions (with volume mount):**
+   ```bash
+   docker run -it -v $(pwd):/app quiz-engine:latest python -m quiz_engine.main import --file questions.md
+   ```
+
+4. **Run with docker-compose:**
+   ```bash
+   docker-compose up quiz-engine
+   ```
+
+5. **Run tests with coverage:**
+   ```bash
+   docker-compose up quiz-engine-test
+   ```
+
+**Build & Push to Registry:**
+```bash
+# Build multi-arch image
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry/quiz-engine:1.0 .
+
+# Push to registry
+docker push myregistry/quiz-engine:1.0
+```
+
+**Environment Setup Inside Container:**
+- Python 3.11-slim base image
+- Non-root user (quizuser) for security
+- SQLite database persisted via volume mount
+- Development volume mounts for live code updates
 
 ### Database Schema
 
@@ -247,35 +360,225 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
 
 ---
 
-### Phase 4: CLI Polish & README
-**Timeline:** 1-2 hours
+### Phase 4: Unit Testing & Coverage Enforcement
+**Timeline:** 2-3 hours
 
-**Objective:** Enhance user experience and document the system.
+**Objective:** Achieve >90% unit test coverage across all modules. Every public function and class must have corresponding unit tests.
+
+**Coverage Configuration (`pyproject.toml`):**
+```toml
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=quiz_engine --cov-report=html:coverage_html --cov-report=xml --cov-report=term-missing --cov-fail-under=90"
+
+[tool.coverage.run]
+branch = true
+source = ["quiz_engine"]
+omit = ["quiz_engine/cli.py"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:"
+]
+```
 
 **Tasks:**
-1. Add Rich formatting to all CLI output:
-   - Colored headers, progress bars, styled tables
-   - Error messages in red, success in green
-   - Clear visual separation between sections
-2. Implement graceful error handling:
-   - Network timeouts (none expected, but future-proof)
-   - Invalid database state (auto-repair)
-   - User input validation with retries
-   - Keyboard interrupt handling (Ctrl+C) with session save
-3. Add verbose logging (optional `--verbose` flag):
-   - Log DB queries, timings, imports
-   - Help with debugging
-4. Create comprehensive `README.md`:
-   - **Getting Started:** Python 3.9+ requirement, venv setup, `setup.sh` usage
-   - **Configuration:** Sensible defaults (100 questions, 60 sec/Q, 90 min)
-   - **Taking Quizzes:** How to run `python -m quiz_engine.main`, what to expect
-   - **Importing Questions:** How to add markdown files, validation rules
-   - **Reviewing History:** How to view past quiz results, export to CSV/JSON
-   - **Clearing Data:** How to safely clear questions or history
-   - **Troubleshooting:** Common issues (no questions, DB locked, etc.)
-   - **Architecture:** Diagram or description of system components
-5. Add `--help` and `--version` flags to all scripts
-6. Test end-to-end workflow for a "new user":
+
+1. **Configure test infrastructure (`tests/conftest.py`):**
+   ```python
+   import pytest
+   import sqlite3
+   from quiz_engine.database import DatabaseManager
+   from quiz_engine.models import Question
+
+   @pytest.fixture
+   def db(tmp_path):
+       """In-memory SQLite database for isolated tests."""
+       db_path = tmp_path / "test.db"
+       manager = DatabaseManager(str(db_path))
+       manager.init_schema()
+       yield manager
+       manager.close()
+
+   @pytest.fixture
+   def sample_questions():
+       return [
+           Question(question_text="Q1", option_a="A", option_b="B",
+                    option_c="C", option_d="D", correct_answer="A"),
+           Question(question_text="Q2", option_a="A", option_b="B",
+                    option_c="C", option_d="D", correct_answer="B"),
+       ]
+
+   @pytest.fixture
+   def populated_db(db, sample_questions):
+       for q in sample_questions:
+           db.insert_question(q)
+       return db
+   ```
+
+2. **Write `tests/test_database.py` (target: >90% of `database.py`):**
+   ```python
+   def test_schema_creates_all_tables(db):
+       tables = db.get_table_names()
+       assert "questions" in tables
+       assert "quiz_sessions" in tables
+       assert "quiz_responses" in tables
+
+   def test_insert_and_retrieve_question(db, sample_questions):
+       db.insert_question(sample_questions[0])
+       results = db.get_all_questions()
+       assert len(results) == 1
+       assert results[0].question_text == "Q1"
+
+   def test_correct_answer_not_returned_in_random_query(populated_db):
+       questions = populated_db.get_random_questions(2)
+       for q in questions:
+           assert not hasattr(q, 'correct_answer') or q.correct_answer is None
+
+   def test_cycle_advances_when_all_questions_used(populated_db):
+       populated_db.mark_question_used(1)
+       populated_db.mark_question_used(2)
+       populated_db.advance_cycle_if_exhausted()
+       cycle = populated_db.get_current_cycle()
+       assert cycle == 2
+
+   def test_get_random_questions_respects_cycle(populated_db):
+       # Exhaust cycle 1
+       populated_db.mark_question_used(1)
+       populated_db.mark_question_used(2)
+       populated_db.advance_cycle_if_exhausted()
+       results = populated_db.get_random_questions(2)
+       for q in results:
+           assert q.usage_cycle == 2
+
+   def test_insert_duplicate_question_skipped(db, sample_questions):
+       db.insert_question(sample_questions[0])
+       db.insert_question(sample_questions[0])  # Duplicate
+       assert db.count_questions() == 1
+   ```
+
+3. **Write `tests/test_quiz.py` (target: >90% of `quiz.py`):**
+   ```python
+   def test_quiz_load_returns_correct_count(populated_db):
+       engine = QuizEngine(populated_db, num_questions=2)
+       engine.load_questions()
+       assert len(engine.questions) == 2
+
+   def test_quiz_does_not_expose_correct_answer(populated_db):
+       engine = QuizEngine(populated_db, num_questions=2)
+       engine.load_questions()
+       for q in engine.questions:
+           assert q.correct_answer is None
+
+   def test_submit_correct_answer_scores_point(populated_db):
+       engine = QuizEngine(populated_db, num_questions=1)
+       engine.load_questions()
+       engine.submit_answer(0, "A", time_taken=10)
+       assert engine.num_correct == 1
+
+   def test_submit_wrong_answer_no_score(populated_db):
+       engine = QuizEngine(populated_db, num_questions=1)
+       engine.load_questions()
+       engine.submit_answer(0, "B", time_taken=10)
+       assert engine.num_correct == 0
+
+   def test_finalize_calculates_percentage(populated_db):
+       engine = QuizEngine(populated_db, num_questions=2)
+       engine.load_questions()
+       engine.submit_answer(0, "A", 10)
+       engine.submit_answer(1, "B", 10)
+       session = engine.finalize()
+       assert session.percentage_correct == 100.0
+
+   def test_finalize_persists_session(populated_db):
+       engine = QuizEngine(populated_db, num_questions=2)
+       engine.load_questions()
+       engine.submit_answer(0, "A", 5)
+       engine.submit_answer(1, "B", 5)
+       session = engine.finalize()
+       saved = populated_db.get_session(session.session_id)
+       assert saved is not None
+   ```
+
+4. **Write `tests/test_utils.py` (target: >90% of `utils.py`):**
+   ```python
+   def test_shuffle_answers_randomizes_order():
+       options = ["Apple", "Banana", "Cherry", "Date"]
+       result = shuffle_answers(options, "A")
+       assert set(result.options) == set(options)
+
+   def test_shuffle_preserves_correct_answer_mapping():
+       options = ["Apple", "Banana", "Cherry", "Date"]
+       result = shuffle_answers(options, "A")  # A = "Apple"
+       correct_pos = result.correct_shuffled_position
+       assert result.options[correct_pos] == "Apple"
+
+   def test_parse_markdown_extracts_questions(tmp_path):
+       md = tmp_path / "test.md"
+       md.write_text("## Q1\n> What is CI?\n- A) Integration\n- B) Delivery\n- C) Deploy\n- D) Build\n**Answer: A**")
+       questions = parse_markdown_file(str(md))
+       assert len(questions) == 1
+       assert questions[0].correct_answer == "A"
+
+   def test_parse_markdown_rejects_invalid_answer():
+       with pytest.raises(ValueError):
+           parse_question_block("...no answer line...")
+   ```
+
+5. **Write `tests/test_models.py` (target: >90% of `models.py`):**
+   ```python
+   def test_question_model_rejects_empty_text():
+       with pytest.raises(ValidationError):
+           Question(question_text="", option_a="A", option_b="B",
+                    option_c="C", option_d="D", correct_answer="A")
+
+   def test_question_requires_valid_answer_letter():
+       with pytest.raises(ValidationError):
+           Question(question_text="Q?", option_a="A", option_b="B",
+                    option_c="C", option_d="D", correct_answer="Z")
+
+   def test_quiz_session_percentage_defaults_to_zero():
+       session = QuizSession(session_id="abc", num_questions=10)
+       assert session.percentage_correct == 0.0
+   ```
+
+6. **Run coverage and enforce threshold:**
+   ```bash
+   # Install dev dependencies
+   pip install pytest pytest-cov coverage
+
+   # Run all tests with coverage
+   pytest --cov=quiz_engine --cov-report=html --cov-fail-under=90
+
+   # View detailed coverage report
+   coverage report --show-missing
+
+   # Open HTML report
+   open coverage_html/index.html
+   ```
+   Expected output:
+   ```
+   ---------- coverage: platform ... ----------
+   Name                     Stmts   Miss Branch BrPart  Cover
+   quiz_engine/database.py     87      4     24      2    95%
+   quiz_engine/models.py       32      1      8      0    97%
+   quiz_engine/quiz.py         64      3     18      1    95%
+   quiz_engine/utils.py        41      2     12      1    94%
+   quiz_engine/history.py      28      2      8      0    93%
+   TOTAL                      252     12     70      4    94%
+   PASSED (>90% threshold met)
+   ```
+
+7. **CLI Polish & README:**
+   - Add Rich formatting to all CLI output
+   - Implement graceful error handling (Ctrl+C, DB locked, invalid input)
+   - Add `--help` and `--version` flags
+   - Create comprehensive `README.md` with testing instructions
+
+8. **Test end-to-end workflow for a "new user":
    - Install Python
    - Run setup.sh
    - Import questions
@@ -413,9 +716,41 @@ FROM questions WHERE id IN (...) JOIN quiz_responses ...
 - **Hook:** `get_random_questions(n, difficulty, section)` supports filtering
 
 ### 12. Testing Strategy
-- **Unit Tests:** database.py (CRUD), utils.py (shuffling, parsing)
-- **Integration Tests:** quiz.py (load → submit → finalize flow)
-- **Manual Tests:** CLI end-to-end, history export, clear operations
+
+**Coverage Requirement: >90% on all non-CLI modules**
+
+| Module | Test File | Target Coverage |
+|---|---|---|
+| `database.py` | `tests/test_database.py` | >93% |
+| `models.py` | `tests/test_models.py` | >95% |
+| `quiz.py` | `tests/test_quiz.py` | >92% |
+| `utils.py` | `tests/test_utils.py` | >92% |
+| `history.py` | `tests/test_history.py` | >90% |
+| `scripts/import_questions.py` | `tests/test_import.py` | >90% |
+
+**Test Types:**
+- **Unit Tests:** Each function tested in isolation with fixtures and mocks
+- **Integration Tests:** Full flow (load → submit → finalize) with temp SQLite database
+- **Edge Case Tests:** Empty inputs, invalid data, boundary conditions, duplicate handling
+- **Regression Tests:** Non-repetition cycle mechanics verified across multiple quiz runs
+
+**Running Tests:**
+```bash
+# Install dev dependencies
+pip install -r requirements-dev.txt
+
+# Run with coverage enforcement
+pytest --cov=quiz_engine --cov-fail-under=90
+
+# Run a specific test module
+pytest tests/test_quiz.py -v
+
+# Generate HTML report
+pytest --cov=quiz_engine --cov-report=html
+open coverage_html/index.html
+```
+
+**CI Integration:** Add to `setup.cfg` or `pyproject.toml` so `pytest` always runs with coverage. Fail the build if coverage drops below 90%.
 
 ---
 

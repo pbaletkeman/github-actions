@@ -40,17 +40,138 @@ quiz_engine/
 │   └── exceptions/
 │       └── QuizExceptions.ts               # Custom exceptions
 ├── test/
-│   ├── database/
-│   │   ├── QuestionRepository.test.ts
-│   │   └── database.test.ts
-│   ├── service/
-│   │   ├── QuizEngine.test.ts
-│   │   └── AnswerShuffler.test.ts
-│   └── models/
-│       └── models.test.ts
+│   ├── setup.ts                            # Global fixtures (in-memory SQLite, sample data)
+│   ├── unit/
+│   │   ├── QuestionRepository.test.ts      # CRUD, cycle mechanics, duplicate handling
+│   │   ├── QuizEngine.test.ts              # Session lifecycle, scoring, finalization
+│   │   ├── AnswerShuffler.test.ts          # Shuffle correctness, correct-answer mapping
+│   │   ├── MarkdownParser.test.ts          # File parsing, validation, error cases
+│   │   └── HistoryService.test.ts          # History queries, export formatting
+│   └── integration/
+│       └── quiz.workflow.test.ts           # Full load → answer → finalize flow
+├── jest.config.ts                          # Jest config with >90% coverage thresholds
+├── coverage/                               # Generated HTML/LCOV coverage reports
+├── Dockerfile               # Container image for production deployment
+├── docker-compose.yml       # Multi-container orchestration for dev/test
 ├── .env                                    # Environment configuration
 └── README.md                               # Documentation
 ```
+
+### Docker & Containerization
+
+#### Dockerfile (Production)
+```dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy TypeScript and source
+COPY tsconfig.json .
+COPY src/ ./src/
+
+# Build TypeScript
+RUN npm run build
+
+# Create non-root user
+RUN addgroup -g 1000 node && adduser -D -u 1000 -G node nodeuser
+RUN chown -R nodeuser:node /app
+USER nodeuser
+
+# Expose default port (can be overridden)
+EXPOSE 3000
+
+# Run
+ENTRYPOINT ["node", "dist/main.js"]
+CMD ["--help"]
+```
+
+#### docker-compose.yml (Development)
+```yaml
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+      - /app/node_modules  # Exclude node_modules from mount
+    working_dir: /app
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run test:coverage
+    environment:
+      - NODE_ENV=test
+
+  quiz-engine-lint:
+    build: .
+    container_name: quiz-engine-lint
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run lint
+```
+
+#### Getting Started with Docker
+
+**Quick Start (5 steps):**
+
+1. **Build the image:**
+   ```bash
+   docker build -t quiz-engine:latest .
+   ```
+
+2. **Run development mode:**
+   ```bash
+   docker-compose up quiz-engine
+   ```
+
+3. **Run tests with coverage:**
+   ```bash
+   docker-compose up quiz-engine-test
+   ```
+
+4. **Run linting:**
+   ```bash
+   docker-compose up quiz-engine-lint
+   ```
+
+5. **Execute quiz interactively:**
+   ```bash
+   docker run -it quiz-engine:latest npm run dev -- quiz --questions 10
+   ```
+
+**Build & Push:**
+```bash
+# Build multi-arch
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry/quiz-engine:1.0 .
+
+# Push to registry
+docker push myregistry/quiz-engine:1.0
+```
+
+**Container Configuration:**
+- Node 20-alpine base image (minimal footprint)
+- Non-root user (nodeuser) for security
+- Volume mounts for live development
+- node_modules excluded from bind mounts for performance
+- Development, test, and lint services defined
 
 ### Database Schema (TypeORM)
 
@@ -384,27 +505,223 @@ export class QuizResponse {
 
 ---
 
-### Phase 4: Testing & Packaging
-**Timeline:** 1-1.5 hours
+### Phase 4: Unit Testing & Coverage Enforcement
+**Timeline:** 2-3 hours
 
-**Objective:** Comprehensive testing, compile to executable.
+**Objective:** Achieve >90% unit test coverage across all non-CLI source modules using Jest.
+
+**Coverage Configuration (`jest.config.ts`):**
+```typescript
+import type { Config } from 'jest';
+
+const config: Config = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testMatch: ['**/test/**/*.test.ts'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/main.ts',           // Exclude CLI entry point
+    '!src/cli/**/*.ts',       // Exclude CLI command wiring
+    '!src/**/*.d.ts',
+  ],
+  coverageThreshold: {
+    global: {
+      lines: 90,
+      functions: 90,
+      branches: 85,
+      statements: 90,
+    },
+  },
+  coverageReporters: ['text', 'text-summary', 'html', 'lcov'],
+  coverageDirectory: 'coverage',
+};
+
+export default config;
+```
+
+**Add to `package.json` scripts:**
+```json
+"scripts": {
+  "test": "jest",
+  "test:watch": "jest --watch",
+  "test:coverage": "jest --coverage",
+  "test:ci": "jest --coverage --ci --runInBand"
+}
+```
 
 **Tasks:**
 
-1. **Write Unit Tests:**
-   ```bash
-   npm test
+1. **Create `test/setup.ts` — shared fixtures:**
+   ```typescript
+   import Database from 'better-sqlite3';
+   import { QuestionRepository } from '../src/database/repositories/QuestionRepository';
+
+   export function createTestRepo() {
+     const db = new Database(':memory:');
+     const repo = new QuestionRepository(db);
+     repo.initSchema();
+     return repo;
+   }
+
+   export const sampleQuestion = {
+     questionText: 'What is CI/CD?',
+     optionA: 'Continuous Integration',
+     optionB: 'Code Import',
+     optionC: 'Compiler Install',
+     optionD: 'Content Index',
+     correctAnswer: 'A',
+   };
    ```
-   - Test repositories: CRUD operations
-   - Test services: Business logic
-   - Test utilities: Shuffling, parsing
 
-2. **Write Integration Tests:**
-   - Full quiz flow: load → submit → finalize
-   - Cycle mechanics verification
-   - Non-repetition across quizzes
+2. **Write `test/unit/QuestionRepository.test.ts` (target: >92%):**
+   ```typescript
+   import { createTestRepo, sampleQuestion } from '../setup';
 
-3. **Build Release Binary:**
+   describe('QuestionRepository', () => {
+     it('creates schema tables on init', () => {
+       const repo = createTestRepo();
+       expect(repo.getTableNames()).toContain('questions');
+       expect(repo.getTableNames()).toContain('quiz_sessions');
+     });
+
+     it('inserts a question and retrieves it by ID', () => {
+       const repo = createTestRepo();
+       repo.insert(sampleQuestion);
+       const all = repo.getAll();
+       expect(all).toHaveLength(1);
+       expect(all[0].questionText).toBe('What is CI/CD?');
+     });
+
+     it('omits correctAnswer in getRandomQuestions result', () => {
+       const repo = createTestRepo();
+       repo.insert(sampleQuestion);
+       const questions = repo.getRandomQuestions(1);
+       expect((questions[0] as any).correctAnswer).toBeUndefined();
+     });
+
+     it('advances cycle when all questions marked used', () => {
+       const repo = createTestRepo();
+       repo.insert(sampleQuestion);
+       repo.markUsed(1);
+       repo.advanceCycleIfExhausted();
+       expect(repo.getCurrentCycle()).toBe(2);
+     });
+
+     it('skips duplicate on insert', () => {
+       const repo = createTestRepo();
+       repo.insert(sampleQuestion);
+       repo.insert(sampleQuestion); // duplicate
+       expect(repo.count()).toBe(1);
+     });
+   });
+   ```
+
+3. **Write `test/unit/AnswerShuffler.test.ts` (target: >95%):**
+   ```typescript
+   import { shuffleAnswers } from '../../src/service/AnswerShuffler';
+
+   describe('AnswerShuffler', () => {
+     const options = ['Alpha', 'Beta', 'Gamma', 'Delta'];
+
+     it('returns all original options after shuffling', () => {
+       const result = shuffleAnswers(options, 'A');
+       expect(new Set(result.shuffledOptions)).toEqual(new Set(options));
+     });
+
+     it('maps correct answer to its new shuffled index', () => {
+       const result = shuffleAnswers(options, 'A'); // A = 'Alpha'
+       expect(result.shuffledOptions[result.correctShuffledIndex]).toBe('Alpha');
+     });
+
+     it('always returns 4 options', () => {
+       const result = shuffleAnswers(options, 'B');
+       expect(result.shuffledOptions).toHaveLength(4);
+     });
+   });
+   ```
+
+4. **Write `test/unit/MarkdownParser.test.ts` (target: >92%):**
+   ```typescript
+   import * as fs from 'fs';
+   import * as path from 'path';
+   import * as os from 'os';
+   import { parseMarkdownFile } from '../../src/service/MarkdownParser';
+
+   describe('MarkdownParser', () => {
+     it('parses a valid markdown file into question objects', () => {
+       const file = path.join(os.tmpdir(), `test-${Date.now()}.md`);
+       fs.writeFileSync(file, [
+         '## Q1',
+         '> What does CI stand for?',
+         '- A) Continuous Integration',
+         '- B) Code Import',
+         '- C) Compiler Install',
+         '- D) Content Index',
+         '**Answer: A**',
+       ].join('\n'));
+       const questions = parseMarkdownFile(file);
+       expect(questions).toHaveLength(1);
+       expect(questions[0].correctAnswer).toBe('A');
+       fs.unlinkSync(file);
+     });
+
+     it('throws on missing answer line', () => {
+       const file = path.join(os.tmpdir(), `test-${Date.now()}.md`);
+       fs.writeFileSync(file, '## Q1\n> No answer here.');
+       expect(() => parseMarkdownFile(file)).toThrow();
+       fs.unlinkSync(file);
+     });
+   });
+   ```
+
+5. **Write `test/unit/QuizEngine.test.ts` (target: >92%):**
+   ```typescript
+   describe('QuizEngine', () => {
+     it('scores correct answer', () => {
+       const repo = createTestRepo();
+       repo.insert(sampleQuestion);
+       const engine = new QuizEngine(repo, { numQuestions: 1 });
+       engine.loadQuestions();
+       engine.submitAnswer(0, engine.questions[0].correctShuffledIndex, 10);
+       expect(engine.numCorrect).toBe(1);
+     });
+
+     it('does not score wrong answer', () => {
+       const repo = createTestRepo();
+       repo.insert(sampleQuestion);
+       const engine = new QuizEngine(repo, { numQuestions: 1 });
+       engine.loadQuestions();
+       engine.submitAnswer(0, 99, 10);
+       expect(engine.numCorrect).toBe(0);
+     });
+
+     it('finalizes and persists session to DB', () => {
+       const repo = createTestRepo();
+       repo.insert(sampleQuestion);
+       const engine = new QuizEngine(repo, { numQuestions: 1 });
+       engine.loadQuestions();
+       engine.submitAnswer(0, 0, 10);
+       const session = engine.finalize();
+       expect(repo.getSession(session.sessionId)).not.toBeNull();
+     });
+   });
+   ```
+
+6. **Run coverage and enforce threshold:**
+   ```bash
+   npm run test:coverage
+
+   # Build fails automatically if coverage < 90%:
+   # FAIL - "global" coverage threshold for lines (90%) not met: 87%
+
+   # On success:
+   # Lines   : 93.2% ( 280/300 )  ✓
+   # Functions: 91.0% ( 82/90 )   ✓
+   # Statements: 93.0% ( 280/301 ) ✓
+   # HTML report: ./coverage/index.html
+   ```
+
+7. **Build Release Binary:**
    ```bash
    npm run build
    pkg dist/main.js --output bin/quiz_engine
@@ -412,23 +729,22 @@ export class QuizResponse {
    - Single executable file using `pkg`
    - No Node.js runtime dependency
 
-4. **Write Comprehensive README:**
+8. **Write Comprehensive README:**
    - **Getting Started:** Node.js 18+ requirement
    - **Installation:** `npm install && npm run build`
    - **Running Quizzes:** `npm run dev quiz` or `./bin/quiz_engine quiz`
    - **CLI Commands:** quiz, import, history, clear
-   - **Configuration:** `.env` file settings
+   - **Testing:** `npm run test:coverage` — must show ≥90% coverage
    - **Architecture:** TypeORM, yargs CLI structure
-   - **Testing:** How to run tests with Jest
 
-5. **Final Testing:**
-   - Full end-to-end workflow
-   - Create → Import → Take Quiz → View History → Retake
-   - Verify cycle mechanics
-   - Test packaged executable
+9. **Final Testing:**
+   - Full end-to-end workflow: Import → Quiz → History → Retake
+   - Verify cycle mechanics (no repeats until all seen)
+   - Test packaged executable on target platforms
 
 **Success Criteria:**
-- All tests passing with Jest
+- `npm run test:coverage` passes with ≥90% lines, functions, statements
+- Jest build **fails automatically** if coverage drops below threshold
 - Executable compiles successfully with `pkg`
 - Single executable works (no Node.js needed)
 - Full documentation provided
@@ -520,7 +836,9 @@ npm run dev clear --history --all --confirm
 - ✓ Performance: Load questions + display <500ms
 - ✓ Usability: Full workflow <15 minutes
 - ✓ Reliability: Graceful error handling, transactional integrity
-- ✓ Maintainability: Clean architecture, testable
+- ✓ Maintainability: Clean architecture, fully testable
+- ✓ **Test Coverage: `npm run test:coverage` enforces ≥90% lines/functions/statements**
+- ✓ **Coverage Gate: Jest build fails automatically below 90% threshold**
 - ✓ Compatibility: Node.js 18+, Windows/Mac/Linux (native executables)
 - ✓ Distribution: Single executable, no dependencies
 

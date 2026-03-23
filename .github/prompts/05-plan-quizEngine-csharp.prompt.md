@@ -42,8 +42,121 @@ QuizEngine/
 │   ├── RepositoryTests.cs
 │   ├── QuizEngineTests.cs
 │   └── AnswerShufflerTests.cs
+├── Dockerfile               # Container image for production deployment
+├── docker-compose.yml       # Multi-container orchestration for dev/test
 └── README.md                               # Documentation
 ```
+
+### Docker & Containerization
+
+#### Dockerfile (Production - Multi-stage)
+```dockerfile
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN dotnet restore
+RUN dotnet build -c Release -o /app/build
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/runtime:8.0
+
+WORKDIR /app
+
+COPY --from=builder /app/build .
+
+# Create non-root user
+RUN useradd -m -u 1000 dotnetuser && chown -R dotnetuser:dotnetuser /app
+USER dotnetuser
+
+ENTRYPOINT ["dotnet", "QuizEngine.CLI.dll"]
+CMD ["--help"]
+```
+
+#### docker-compose.yml (Development)
+```yaml
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+    working_dir: /app/QuizEngine.CLI
+    command: dotnet run
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: dotnet test QuizEngine.Tests --configuration Release /p:Threshold=90 /p:ThresholdType=line
+    environment:
+      - DOTNET_ENVIRONMENT=Test
+
+  quiz-engine-build:
+    build: .
+    container_name: quiz-engine-build
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: dotnet build -c Release
+```
+
+#### Getting Started with Docker
+
+**Quick Start (5 steps):**
+
+1. **Build the image:**
+   ```bash
+   docker build -t quiz-engine:latest .
+   ```
+
+2. **Run development mode:**
+   ```bash
+   docker-compose up quiz-engine
+   ```
+
+3. **Run tests with Coverlet:**
+   ```bash
+   docker-compose up quiz-engine-test
+   ```
+
+4. **Run build:**
+   ```bash
+   docker-compose up quiz-engine-build
+   ```
+
+5. **Run interactively:**
+   ```bash
+   docker run -it quiz-engine:latest quiz --questions 10
+   ```
+
+**Build & Push:**
+```bash
+# Build multi-arch
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry/quiz-engine:1.0 .
+
+# Push to registry
+docker push myregistry/quiz-engine:1.0
+```
+
+**Container Configuration:**
+- Multi-stage build: .NET SDK for builds + minimal runtime
+- .NET 8 runtime Alpine equivalent
+- Non-root user (dotnetuser) for security
+- Entity Framework Core migrations run automatically
+- Coverlet coverage enforcement (90% threshold)
+- Development and test profiles for different environments
 
 ### Database Schema (Managed by EF Core Migrations)
 
@@ -566,40 +679,240 @@ public class QuizResponse
 
 ---
 
-### Phase 5: Testing & Packaging
-**Timeline:** 1-1.5 hours
+### Phase 5: Unit Testing & Coverage Enforcement (xUnit + Coverlet)
+**Timeline:** 2-3 hours
 
-**Objective:** Comprehensive tests, create release build.
+**Objective:** Achieve >90% unit test coverage across all non-CLI source modules. Coverlet must fail the build below 90%.
+
+**Install test packages:**
+```bash
+cd QuizEngine.Tests
+dotnet add package xunit
+dotnet add package xunit.runner.visualstudio
+dotnet add package Microsoft.NET.Test.Sdk
+dotnet add package coverlet.collector
+dotnet add package coverlet.msbuild
+dotnet add package Microsoft.EntityFrameworkCore.InMemory
+dotnet add package Moq
+```
+
+**Run tests with coverage enforcement:**
+```bash
+# Run tests — fails build if any threshold not met
+dotnet test /p:CollectCoverage=true \
+            /p:CoverletOutputFormat=lcov \
+            /p:CoverletOutput=./coverage/ \
+            /p:Threshold=90 \
+            /p:ThresholdType=line \
+            /p:ExcludeByFile="**/Program.cs,**/Migrations/**"
+
+# Generate HTML report (install once: dotnet tool install -g dotnet-reportgenerator-globaltool)
+reportgenerator -reports:"coverage/coverage.info" \
+                -targetdir:"coverage/html" \
+                -reporttypes:"Html"
+```
+
+**Add to `QuizEngine.Tests.csproj`:**
+```xml
+<PropertyGroup>
+  <CollectCoverage>true</CollectCoverage>
+  <CoverletOutputFormat>lcov</CoverletOutputFormat>
+  <Threshold>90</Threshold>
+  <ThresholdType>line</ThresholdType>
+  <ExcludeByFile>**/Program.cs;**/Migrations/**</ExcludeByFile>
+</PropertyGroup>
+```
 
 **Tasks:**
 
-1. **Write Unit Tests (`QuizEngine.Tests/`):**
-   - `xUnit` for test framework
-   - InMemory SQLite for data layer tests
-   - Mock services for CLI tests
+1. **Create `Tests/Fixtures/DatabaseFixture.cs` — shared in-memory context:**
+   ```csharp
+   public class DatabaseFixture : IDisposable
+   {
+       public QuizEngineContext Context { get; }
 
-2. **Create Release Build:**
+       public DatabaseFixture()
+       {
+           var options = new DbContextOptionsBuilder<QuizEngineContext>()
+               .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+               .Options;
+           Context = new QuizEngineContext(options);
+           Context.Database.EnsureCreated();
+       }
+
+       public void Dispose() => Context.Dispose();
+   }
+   ```
+
+2. **Write `Tests/Repository/QuestionRepositoryTests.cs` (target: >92%):**
+   ```csharp
+   public class QuestionRepositoryTests : IClassFixture<DatabaseFixture>
+   {
+       private readonly DatabaseFixture _fixture;
+       private readonly QuestionRepository _repo;
+
+       public QuestionRepositoryTests(DatabaseFixture fixture)
+       {
+           _fixture = fixture;
+           _repo = new QuestionRepository(_fixture.Context);
+       }
+
+       [Fact]
+       public async Task InsertAsync_ShouldPersistQuestion()
+       {
+           var question = BuildSampleQuestion();
+           await _repo.InsertAsync(question);
+           var all = await _repo.GetAllAsync();
+           Assert.Single(all);
+           Assert.Equal("What is CI?", all.First().QuestionText);
+       }
+
+       [Fact]
+       public async Task GetRandomAsync_ShouldOmitCorrectAnswer()
+       {
+           await _repo.InsertAsync(BuildSampleQuestion());
+           var questions = await _repo.GetRandomQuestionsAsync(1);
+           Assert.Null(questions.First().CorrectAnswer);
+       }
+
+       [Fact]
+       public async Task AdvanceCycle_WhenAllQuestionsUsed()
+       {
+           var q = await _repo.InsertAsync(BuildSampleQuestion());
+           await _repo.MarkUsedAsync(q.Id);
+           await _repo.AdvanceCycleIfExhaustedAsync();
+           Assert.Equal(2, await _repo.GetCurrentCycleAsync());
+       }
+
+       [Fact]
+       public async Task InsertAsync_SkipsDuplicateQuestion()
+       {
+           var q = BuildSampleQuestion();
+           await _repo.InsertAsync(q);
+           await _repo.InsertAsync(q); // duplicate
+           Assert.Equal(1, await _repo.CountAsync());
+       }
+
+       [Theory]
+       [InlineData("A", true)]
+       [InlineData("B", false)]
+       [InlineData("C", false)]
+       public void CheckAnswer_ReturnsCorrectResult(string submitted, bool expected)
+       {
+           Assert.Equal(expected, _repo.CheckAnswer("A", submitted));
+       }
+   }
+   ```
+
+3. **Write `Tests/Service/QuizEngineTests.cs` (target: >92%):**
+   ```csharp
+   public class QuizEngineTests : IClassFixture<DatabaseFixture>
+   {
+       private readonly QuizEngineService _service;
+
+       public QuizEngineTests(DatabaseFixture fixture)
+       {
+           var repo = new QuestionRepository(fixture.Context);
+           var sessionRepo = new SessionRepository(fixture.Context);
+           _service = new QuizEngineService(repo, sessionRepo);
+       }
+
+       [Fact]
+       public async Task StartQuiz_LoadsRequestedNumberOfQuestions()
+       {
+           await SeedQuestionsAsync(5);
+           var session = await _service.StartQuizAsync(3);
+           Assert.Equal(3, session.Questions.Count);
+       }
+
+       [Fact]
+       public async Task SubmitAnswer_CorrectAnswer_IncreasesScore()
+       {
+           await SeedQuestionsAsync(1);
+           var session = await _service.StartQuizAsync(1);
+           var result = await _service.SubmitAnswerAsync(session.SessionId, 0, "A", 10);
+           Assert.True(result.IsCorrect);
+       }
+
+       [Fact]
+       public async Task FinalizeQuiz_PersistsSessionToDatabase()
+       {
+           await SeedQuestionsAsync(2);
+           var session = await _service.StartQuizAsync(2);
+           await _service.SubmitAnswerAsync(session.SessionId, 0, "A", 10);
+           await _service.SubmitAnswerAsync(session.SessionId, 1, "B", 10);
+           var result = await _service.FinalizeAsync(session.SessionId);
+           Assert.Equal(100.0, result.PercentageCorrect, 2);
+           Assert.NotNull(await _service.GetSessionAsync(session.SessionId));
+       }
+   }
+   ```
+
+4. **Write `Tests/Utils/AnswerShufflerTests.cs` (target: >95%):**
+   ```csharp
+   public class AnswerShufflerTests
+   {
+       [Fact]
+       public void Shuffle_PreservesAllOptions()
+       {
+           var options = new[] { "Alpha", "Beta", "Gamma", "Delta" };
+           var result = AnswerShuffler.Shuffle(options, "A");
+           Assert.Equal(new HashSet<string>(options), new HashSet<string>(result.ShuffledOptions));
+       }
+
+       [Fact]
+       public void Shuffle_MapsCorrectAnswerToNewPosition()
+       {
+           var options = new[] { "Alpha", "Beta", "Gamma", "Delta" };
+           var result = AnswerShuffler.Shuffle(options, "A"); // A = "Alpha"
+           Assert.Equal("Alpha", result.ShuffledOptions[result.CorrectShuffledIndex]);
+       }
+
+       [Theory]
+       [InlineData("A", "Alpha")]
+       [InlineData("B", "Beta")]
+       [InlineData("C", "Gamma")]
+       [InlineData("D", "Delta")]
+       public void Shuffle_CorrectAnswerTextPreserved(string letter, string expectedText)
+       {
+           var options = new[] { "Alpha", "Beta", "Gamma", "Delta" };
+           var result = AnswerShuffler.Shuffle(options, letter);
+           Assert.Equal(expectedText, result.ShuffledOptions[result.CorrectShuffledIndex]);
+       }
+   }
+   ```
+
+5. **Coverage target summary:**
+
+| Class | Test File | Target |
+|---|---|---|
+| `QuestionRepository` | `QuestionRepositoryTests` | >92% |
+| `SessionRepository` | `SessionRepositoryTests` | >90% |
+| `QuizEngineService` | `QuizEngineTests` | >92% |
+| `HistoryService` | `HistoryServiceTests` | >90% |
+| `AnswerShuffler` | `AnswerShufflerTests` | >95% |
+| `MarkdownParser` | `MarkdownParserTests` | >90% |
+
+6. **Create Release Build:**
    ```bash
    dotnet publish -c Release -o ./release
    ```
 
-3. **Write README:**
-   - **Getting Started:** .NET 8 requirement, download/build
-   - **Configuration:** appsettings.json options
-   - **Running:** `dotnet run -- quiz` or release executable
-   - **CLI Commands:** quiz, import, history, clear
-   - **Architecture:** EF Core, Spectre.Console, repository pattern
+7. **Write README** with testing section:
+   - `dotnet test /p:CollectCoverage=true /p:Threshold=90` — must show ≥90% coverage
+   - Link to HTML coverage report
 
-4. **Final testing:**
+8. **Final testing:**
    - Full end-to-end workflow
-   - Create, take, review, retake quizzes
-   - Verify cycle mechanics
+   - Verify cycle mechanics and non-repetition
 
 **Success Criteria:**
+- `dotnet test /p:Threshold=90` **passes; build fails automatically below 90% line coverage**
+- Coverlet HTML report at `coverage/html/index.html`
 - All tests passing
 - Release build creates standalone executable
 - Can run on Windows/Mac/Linux (.NET 8 installed)
-- Documentation complete
+- Documentation complete and includes testing instructions
 
 ---
 

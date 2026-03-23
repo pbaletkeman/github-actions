@@ -45,14 +45,139 @@ quiz_engine/
 │   │   └── prompts.rs                      # Interactive prompts
 │   └── error.rs                            # Custom error types
 ├── tests/
-│   ├── database_tests.rs
-│   ├── service_tests.rs
-│   └── integration_tests.rs
+│   ├── database_tests.rs             # Integration tests for repository layer
+│   ├── service_tests.rs              # Integration tests for QuizEngine service
+│   └── integration_tests.rs          # Full workflow: load → answer → finalize
 ├── migrations/
 │   └── 2024-03-23-000000_create_tables/
 │       └── up.sql
+├── Dockerfile               # Container image for production deployment
+├── docker-compose.yml       # Multi-container orchestration for dev/test
 └── README.md                               # Documentation
 ```
+
+### Docker & Containerization
+
+#### Dockerfile (Production - Multi-stage)
+```dockerfile
+# Build stage
+FROM rust:1.75 as builder
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y libsqlite3-dev && rm -rf /var/lib/apt/lists/*
+
+COPY Cargo.* .
+RUN mkdir src && echo "fn main() {}" > src/main.rs && cargo build --release && rm -rf src
+
+COPY . .
+RUN cargo build --release
+
+# Runtime stage
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y libsqlite3-0 && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /app/target/release/quiz_engine .
+
+# Create non-root user
+RUN useradd -m -u 1000 rustuser && chown -R rustuser:rustuser /app
+USER rustuser
+
+ENTRYPOINT ["./quiz_engine"]
+CMD ["--help"]
+```
+
+#### docker-compose.yml (Development)
+```yaml
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    command: cargo run -- --help
+    environment:
+      - CARGO_NET_OFFLINE=false
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    command: bash -c "cargo test && cargo tarpaulin --fail-under 90 --out Html"
+    environment:
+      - CARGO_NET_OFFLINE=false
+
+  quiz-engine-build:
+    build: .
+    container_name: quiz-engine-build
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    command: cargo build --release
+
+volumes:
+  cargo-cache:
+```
+
+#### Getting Started with Docker
+
+**Quick Start (5 steps):**
+
+1. **Build the image:**
+   ```bash
+   docker build -t quiz-engine:latest .
+   ```
+
+2. **Run development mode:**
+   ```bash
+   docker run -it quiz-engine:latest cargo run -- quiz --questions 10
+   ```
+
+3. **Run tests with Tarpaulin (code coverage):**
+   ```bash
+   docker-compose up quiz-engine-test
+   ```
+
+4. **Build optimized release binary:**
+   ```bash
+   docker-compose up quiz-engine-build
+   ```
+
+5. **Run compiled executable:**
+   ```bash
+   docker run -it quiz-engine:latest ./quiz_engine quiz --questions 10
+   ```
+
+**Build & Push:**
+```bash
+# Build multi-arch
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry/quiz-engine:1.0 .
+
+# Push to registry
+docker push myregistry/quiz-engine:1.0
+```
+
+**Container Configuration:**
+- Multi-stage build: Rust full SDK build + minimal Debian runtime
+- SQLite support with libsqlite3-dev during build
+- Diesel ORM pre-compiled migrations
+- Non-root user (rustuser) for security
+- Cargo cache volume for faster rebuilds
+- Tarpaulin for code coverage with 90% threshold
+- Single static binary optimized for size and performance
 
 ### Database Schema (Diesel)
 
@@ -388,58 +513,256 @@ pub struct QuizResponse {
 
 ---
 
-### Phase 4: Testing & Packaging
-**Timeline:** 1-1.5 hours
+### Phase 4: Unit Testing & Coverage Enforcement
+**Timeline:** 2-3 hours
 
-**Objective:** Comprehensive testing, compile to release binary.
+**Objective:** Achieve >90% unit test coverage. `cargo tarpaulin` must fail if coverage drops below 90%.
+
+**Install and configure `cargo-tarpaulin`:**
+```bash
+cargo install cargo-tarpaulin
+
+# Run with threshold enforcement (exits 1 if below 90%)
+cargo tarpaulin \
+  --out Html \
+  --output-dir coverage \
+  --exclude-files "src/main.rs" "src/cli/**" \
+  --fail-under 90
+
+# Or with llvm-cov (faster):
+cargo install cargo-llvm-cov
+cargo llvm-cov \
+  --html \
+  --output-dir coverage \
+  --ignore-filename-regex "main\.rs|cli/" \
+  --fail-under-lines 90
+```
+
+**Add to `Cargo.toml`:**
+```toml
+[dev-dependencies]
+tempfile = "3"
+wildmatch = "2"
+
+[profile.test]
+opt-level = 0
+debug = true
+```
 
 **Tasks:**
 
-1. **Write Unit Tests:**
-   ```bash
-   cargo test
+1. **Write unit tests inside `src/database/repositories/question_repo.rs` (target: >92%):**
+   ```rust
+   #[cfg(test)]
+   mod tests {
+       use super::*;
+       use crate::database::connection::establish_test_connection;
+
+       fn setup() -> SqliteConnection {
+           let mut conn = establish_test_connection(); // returns :memory: connection
+           run_migrations(&mut conn).expect("migrations failed");
+           conn
+       }
+
+       #[test]
+       fn test_insert_and_retrieve_question() {
+           let mut conn = setup();
+           let new_q = NewQuestion {
+               question_text: "What is CI?",
+               option_a: "Continuous Integration",
+               option_b: "Code Import",
+               option_c: "Compile",
+               option_d: "Configure",
+               correct_answer: "A",
+               ..Default::default()
+           };
+           let id = QuestionRepo::insert(&mut conn, new_q).expect("insert failed");
+           let questions = QuestionRepo::get_all(&mut conn).expect("get failed");
+           assert_eq!(questions.len(), 1);
+           assert_eq!(questions[0].question_text, "What is CI?");
+           let _ = id;
+       }
+
+       #[test]
+       fn test_get_random_questions_omits_correct_answer() {
+           let mut conn = setup();
+           insert_sample(&mut conn);
+           let questions = QuestionRepo::get_random_for_quiz(&mut conn, 1)
+               .expect("query failed");
+           // QuizQuestion projection must not include correct_answer
+           // This is enforced at the type level: QuizQuestion has no correct_answer field
+           assert_eq!(questions.len(), 1);
+       }
+
+       #[test]
+       fn test_advance_cycle_when_all_used() {
+           let mut conn = setup();
+           let id = insert_sample(&mut conn);
+           QuestionRepo::mark_used(&mut conn, id).unwrap();
+           QuestionRepo::advance_cycle_if_exhausted(&mut conn).unwrap();
+           assert_eq!(QuestionRepo::get_current_cycle(&mut conn).unwrap(), 2);
+       }
+
+       #[test]
+       fn test_insert_skips_duplicate() {
+           let mut conn = setup();
+           let q = sample_new_question();
+           QuestionRepo::insert_if_not_exists(&mut conn, q.clone()).unwrap();
+           QuestionRepo::insert_if_not_exists(&mut conn, q).unwrap();
+           assert_eq!(QuestionRepo::count(&mut conn).unwrap(), 1);
+       }
+   }
    ```
-   - Test repositories: CRUD operations
-   - Test services: Business logic
-   - Test utilities: Shuffling, parsing
 
-2. **Write Integration Tests:**
-   - Full quiz flow: load → submit → finalize
-   - Cycle mechanics verification
-   - Non-repetition across quizzes
+2. **Write unit tests inside `src/service/answer_shuffler.rs` (target: >95%):**
+   ```rust
+   #[cfg(test)]
+   mod tests {
+       use super::*;
+       use std::collections::HashSet;
 
-3. **Build Release Binary:**
+       #[test]
+       fn test_shuffle_preserves_all_options() {
+           let options = vec![
+               "Alpha".to_string(), "Beta".to_string(),
+               "Gamma".to_string(), "Delta".to_string(),
+           ];
+           let result = shuffle_answers(&options, "A");
+           let original: HashSet<_> = options.iter().collect();
+           let shuffled: HashSet<_> = result.shuffled_options.iter().collect();
+           assert_eq!(original, shuffled);
+       }
+
+       #[test]
+       fn test_shuffle_maps_correct_answer_to_new_position() {
+           let options = vec![
+               "Alpha".to_string(), "Beta".to_string(),
+               "Gamma".to_string(), "Delta".to_string(),
+           ];
+           let result = shuffle_answers(&options, "A"); // A = "Alpha"
+           assert_eq!(result.shuffled_options[result.correct_shuffled_index], "Alpha");
+       }
+
+       #[test]
+       fn test_shuffle_returns_four_options() {
+           let options = vec![
+               "A".to_string(), "B".to_string(),
+               "C".to_string(), "D".to_string(),
+           ];
+           let result = shuffle_answers(&options, "C");
+           assert_eq!(result.shuffled_options.len(), 4);
+       }
+   }
+   ```
+
+3. **Write unit tests inside `src/service/markdown_parser.rs` (target: >90%):**
+   ```rust
+   #[cfg(test)]
+   mod tests {
+       use super::*;
+       use std::io::Write;
+       use tempfile::NamedTempFile;
+
+       #[test]
+       fn test_parse_valid_markdown_file() {
+           let mut file = NamedTempFile::new().unwrap();
+           writeln!(file, "## Q1").unwrap();
+           writeln!(file, "> What is CI?").unwrap();
+           writeln!(file, "- A) Continuous Integration").unwrap();
+           writeln!(file, "- B) Code Import").unwrap();
+           writeln!(file, "- C) Compile").unwrap();
+           writeln!(file, "- D) Configure").unwrap();
+           writeln!(file, "**Answer: A**").unwrap();
+
+           let questions = parse_markdown_file(file.path()).unwrap();
+           assert_eq!(questions.len(), 1);
+           assert_eq!(questions[0].correct_answer, "A");
+       }
+
+       #[test]
+       fn test_parse_fails_on_missing_answer_line() {
+           let mut file = NamedTempFile::new().unwrap();
+           writeln!(file, "## Q1\n> No answer here.").unwrap();
+           let result = parse_markdown_file(file.path());
+           assert!(result.is_err());
+       }
+
+       #[test]
+       fn test_parse_fails_on_invalid_answer_letter() {
+           let mut file = NamedTempFile::new().unwrap();
+           writeln!(file, "**Answer: Z**").unwrap();
+           let result = parse_markdown_file(file.path());
+           assert!(result.is_err());
+       }
+   }
+   ```
+
+4. **Write integration test `tests/service_tests.rs` (target: QuizEngine >92%):**
+   ```rust
+   use quiz_engine::database::connection::establish_test_connection;
+   use quiz_engine::database::repositories::QuestionRepo;
+   use quiz_engine::service::quiz_engine::QuizEngine;
+
+   #[test]
+   fn test_submit_correct_answer_increases_score() {
+       let mut conn = establish_test_connection();
+       quiz_engine::database::migrations::run(&mut conn).unwrap();
+       QuestionRepo::insert(&mut conn, sample_question()).unwrap();
+       let mut engine = QuizEngine::new(&mut conn, 1);
+       engine.load_questions().unwrap();
+       engine.submit_answer(0, "A", 10).unwrap();
+       assert_eq!(engine.num_correct(), 1);
+   }
+
+   #[test]
+   fn test_finalize_persists_session() {
+       let mut conn = establish_test_connection();
+       quiz_engine::database::migrations::run(&mut conn).unwrap();
+       QuestionRepo::insert(&mut conn, sample_question()).unwrap();
+       let mut engine = QuizEngine::new(&mut conn, 1);
+       engine.load_questions().unwrap();
+       engine.submit_answer(0, "A", 5).unwrap();
+       let session = engine.finalize().unwrap();
+       assert!(!session.session_id.is_empty());
+   }
+   ```
+
+5. **Coverage target summary:**
+
+| Module | Test Location | Target |
+|---|---|---|
+| `database/repositories/question_repo` | `#[cfg(test)]` inline | >92% |
+| `service/answer_shuffler` | `#[cfg(test)]` inline | >95% |
+| `service/markdown_parser` | `#[cfg(test)]` inline | >90% |
+| `service/quiz_engine` | `tests/service_tests.rs` | >92% |
+| `service/history_service` | `tests/service_tests.rs` | >90% |
+
+6. **Build Release Binary:**
    ```bash
    cargo build --release
+   # Binary at: target/release/quiz_engine (~10MB)
    ```
-   - Single executable in `target/release/quiz_engine`
-   - ~10MB binary size
-   - No runtime dependencies
 
-4. **Cross-Compilation (Optional):**
+7. **Cross-Compilation (Optional):**
    ```bash
    cargo install cross
    cross build --release --target x86_64-pc-windows-gnu
    cross build --release --target x86_64-apple-darwin
    ```
 
-5. **Write Comprehensive README:**
-   - **Getting Started:** Rust 1.70+ requirement
-   - **Installation:** `cargo build --release`
-   - **Running Quizzes:** `./target/release/quiz_engine quiz`
-   - **CLI Commands:** quiz, import, history, clear
-   - **Configuration:** Environment variables via `.env`
-   - **Architecture:** Diesel ORM, Clap CLI, async Tokio
-   - **Testing:** How to run tests with `cargo test`
+8. **Write Comprehensive README** with testing section:
+   - `cargo tarpaulin --fail-under 90` — must show ≥90% coverage
+   - HTML coverage report at `coverage/tarpaulin-report.html`
 
-6. **Final Testing:**
-   - Full end-to-end workflow
-   - Create → Import → Take Quiz → View History → Retake
-   - Verify cycle mechanics
-   - Cross-platform execution
+9. **Final Testing:**
+   - Full end-to-end workflow: Import → Quiz → History → Retake
+   - Verify cycle mechanics and non-repetition
    - Performance profiling
 
 **Success Criteria:**
+- `cargo tarpaulin --fail-under 90` **exits 0 (fails build below 90%)**
+- Or `cargo llvm-cov --fail-under-lines 90` as alternative
+- HTML coverage report generated in `coverage/`
 - All tests passing with `cargo test`
 - Release binary compiles successfully
 - Single executable works (no dependencies)

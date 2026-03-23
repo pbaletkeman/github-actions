@@ -54,8 +54,128 @@ quiz-engine/
 │       ├── gradle-wrapper.jar
 │       └── gradle-wrapper.properties
 ├── README.md                                 # Setup, usage docs
+├── Dockerfile               # Container image for production deployment
+├── docker-compose.yml       # Multi-container orchestration for dev/test
 └── .gitignore
 ```
+
+### Docker & Containerization
+
+#### Dockerfile (Production - Multi-stage)
+```dockerfile
+# Build stage
+FROM gradle:8-jdk17 as builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN gradle bootBuildImage -x test --no-daemon || gradle build -x test --no-daemon
+
+# Runtime stage
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+# Create non-root user
+RUN addgroup -g 1000 springuser && adduser -D -u 1000 -G springuser springuser
+RUN chown -R springuser:springuser /app
+USER springuser
+
+# JVM optimizations for Spring Boot
+ENV JAVA_OPTS="-XX:+UseG1GC -XX:MaxRAMPercentage=75.0 -Dserver.port=8080"
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD []
+```
+
+#### docker-compose.yml (Development)
+```yaml
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - gradle-cache:/root/.gradle
+    working_dir: /app
+    command: gradle bootRun --no-daemon
+    environment:
+      - GRADLE_OPTS=-Dorg.gradle.daemon=false
+      - SPRING_PROFILES_ACTIVE=dev
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+      - gradle-cache:/root/.gradle
+    working_dir: /app
+    command: gradle test jacocoTestCoverageVerification --no-daemon
+    environment:
+      - GRADLE_OPTS=-Dorg.gradle.daemon=false
+      - SPRING_PROFILES_ACTIVE=test
+
+volumes:
+  gradle-cache:
+```
+
+#### Getting Started with Docker
+
+**Quick Start (5 steps):**
+
+1. **Build the image:**
+   ```bash
+   docker build -t quiz-engine:latest .
+   ```
+
+2. **Run development mode:**
+   ```bash
+   docker-compose up quiz-engine
+   ```
+
+3. **Access Spring Boot app:**
+   ```bash
+   curl http://localhost:8080/api/quiz
+   ```
+
+4. **Run tests with JaCoCo:**
+   ```bash
+   docker-compose up quiz-engine-test
+   ```
+
+5. **Run in production mode:**
+   ```bash
+   docker run -p 8080:8080 quiz-engine:latest
+   ```
+
+**Build & Push:**
+```bash
+# Build multi-arch
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry/quiz-engine:1.0 .
+
+# Push to registry
+docker push myregistry/quiz-engine:1.0
+```
+
+**Container Configuration:**
+- Multi-stage build for optimized image size
+- Spring Boot profiles for dev/test/prod
+- JPA/Hibernate SQLite configuration inside container
+- Port 8080 exposed for REST API
+- Non-root user (springuser) for security
+- Gradle cache volume for faster builds
+- JaCoCo coverage verification
 
 ### Database Schema (Managed by JPA/Spring)
 
@@ -441,57 +561,232 @@ public class QuizResponse {
 
 ---
 
-### Phase 4: Testing, Polish & Documentation
-**Timeline:** 1.5-2 hours
+### Phase 4: Testing & Coverage Enforcement (JUnit 5 + JaCoCo)
+**Timeline:** 2-3 hours
 
-**Objective:** Comprehensive testing, error handling, README.
+**Objective:** Achieve >90% unit and integration test coverage. JaCoCo must fail the Gradle build below 90%.
+
+**JaCoCo Configuration (`build.gradle.kts`):**
+```kotlin
+plugins {
+    id("org.springframework.boot") version "3.2.0"
+    id("io.spring.dependency-management") version "1.1.4"
+    java
+    jacoco
+}
+
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.90".toBigDecimal()   // fail build below 90%
+            }
+        }
+        rule {
+            element = "CLASS"
+            excludes = listOf(
+                "com.quizengine.QuizEngineApplication",  // Spring Boot main
+                "com.quizengine.cli.*"                    // CLI wiring
+            )
+            limit { minimum = "0.90".toBigDecimal() }
+        }
+    }
+}
+
+tasks.check {
+    dependsOn(tasks.jacocoTestCoverageVerification)
+}
+```
+
+**Run coverage:**
+```bash
+./gradlew test jacocoTestReport jacocoTestCoverageVerification
+# HTML report: build/reports/jacoco/test/html/index.html
+```
 
 **Tasks:**
 
-1. **Write Integration Tests:**
-   - `@SpringBootTest` with embedded database
-   - Test full quiz flow: load → submit → finalize
-   - Verify cycle-aware question selection
-   - Test non-repetition across multiple quizzes
+1. **Write Repository Tests with `@DataJpaTest` (target: >92% repository layer):**
+   ```java
+   @DataJpaTest
+   @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+   @TestPropertySource(properties = "spring.datasource.url=jdbc:sqlite::memory:")
+   class QuestionRepositoryTest {
 
-2. **Write Repository Tests:**
-   - `@DataJpaTest` for each repository
-   - Test custom query methods
-   - Verify cycle calculations
+       @Autowired
+       private QuestionRepository questionRepository;
 
-3. **Implement Error Handling:**
+       @Test
+       void saveAndFind_returnsQuestion() {
+           Question q = Question.builder()
+               .questionText("What is CI?")
+               .optionA("Continuous Integration")
+               .optionB("Code Import")
+               .optionC("Compile")
+               .optionD("Configure")
+               .correctAnswer("A")
+               .usageCycle(1)
+               .build();
+           questionRepository.save(q);
+           List<Question> questions = questionRepository.findByUsageCycle(1);
+           assertThat(questions).hasSize(1);
+           assertThat(questions.get(0).getQuestionText()).isEqualTo("What is CI?");
+       }
+
+       @Test
+       void getRandomQuestions_doesNotExposeCorrectAnswer() {
+           // Verify the JPQL query omits correctAnswer projection
+           questionRepository.save(buildSampleQuestion());
+           List<QuestionProjection> results =
+               questionRepository.findRandomForQuiz(PageRequest.of(0, 1));
+           // QuestionProjection interface must not include correctAnswer getter
+           assertThat(results.get(0)).doesNotHave(
+               new Condition<>(p -> hasField(p, "correctAnswer"), "correctAnswer field"));
+       }
+
+       @Test
+       void advanceCycle_whenAllQuestionsExhausted() {
+           Question q = questionRepository.save(buildSampleQuestion());
+           questionRepository.markQuestionUsed(q.getId());
+           questionRepository.advanceCycleIfExhausted();
+           assertThat(questionRepository.getCurrentCycle()).isEqualTo(2);
+       }
+   }
+   ```
+
+2. **Write Integration Tests with `@SpringBootTest` (target: >90% service layer):**
+   ```java
+   @SpringBootTest
+   @TestPropertySource(locations = "classpath:application-test.properties")
+   class QuizServiceIntegrationTest {
+
+       @Autowired
+       private QuizService quizService;
+
+       @Autowired
+       private QuestionRepository questionRepository;
+
+       @BeforeEach
+       void setUp() {
+           questionRepository.deleteAll();
+           questionRepository.save(buildSampleQuestion());
+           questionRepository.save(buildSampleQuestion2());
+       }
+
+       @Test
+       void startQuiz_loadsCorrectNumberOfQuestions() {
+           QuizSession session = quizService.startQuiz(2);
+           assertThat(session.getQuestions()).hasSize(2);
+       }
+
+       @Test
+       void submitAnswer_correctAnswer_incrementsScore() {
+           QuizSession session = quizService.startQuiz(1);
+           String sessionId = session.getSessionId();
+           SubmitResult result = quizService.submitAnswer(sessionId, 0, "A", 10);
+           assertThat(result.isCorrect()).isTrue();
+       }
+
+       @Test
+       void finalizeQuiz_persistsSessionWithStats() {
+           QuizSession session = quizService.startQuiz(2);
+           quizService.submitAnswer(session.getSessionId(), 0, "A", 10);
+           quizService.submitAnswer(session.getSessionId(), 1, "B", 10);
+           QuizResult result = quizService.finalizeQuiz(session.getSessionId());
+           assertThat(result.getPercentageCorrect()).isEqualTo(100.0);
+           assertThat(quizService.getSession(session.getSessionId())).isNotNull();
+       }
+
+       @Test
+       void questionsNeverRepeatWithinCycle() {
+           // add 3 questions, take 3 quizzes of 1 question each
+           questionRepository.save(buildSampleQuestion3());
+           Set<Long> seenIds = new HashSet<>();
+           for (int i = 0; i < 3; i++) {
+               QuizSession s = quizService.startQuiz(1);
+               Long id = s.getQuestions().get(0).getId();
+               assertThat(seenIds).doesNotContain(id);
+               seenIds.add(id);
+               quizService.finalizeQuiz(s.getSessionId());
+           }
+       }
+   }
+   ```
+
+3. **Write `test/resources/application-test.properties`:**
+   ```properties
+   spring.datasource.url=jdbc:sqlite::memory:
+   spring.jpa.hibernate.ddl-auto=create-drop
+   spring.jpa.show-sql=false
+   logging.level.root=WARN
+   ```
+
+4. **Write Service Unit Tests with Mockito (target: >90% business logic):**
+   ```java
+   @ExtendWith(MockitoExtension.class)
+   class QuizEngineUnitTest {
+
+       @Mock
+       private QuestionRepository questionRepository;
+
+       @InjectMocks
+       private QuizEngine quizEngine;
+
+       @Test
+       void loadQuestions_callsRepositoryForCurrentCycle() {
+           when(questionRepository.getCurrentCycle()).thenReturn(1);
+           when(questionRepository.findRandomForQuiz(any())).thenReturn(List.of());
+           quizEngine.loadQuestions(3);
+           verify(questionRepository).findRandomForQuiz(any());
+       }
+
+       @Test
+       void checkAnswer_returnsTrueForCorrectAnswer() {
+           boolean correct = quizEngine.checkAnswer("A", "A");
+           assertTrue(correct);
+       }
+
+       @Test
+       void checkAnswer_returnsFalseForWrongAnswer() {
+           assertFalse(quizEngine.checkAnswer("A", "B"));
+       }
+   }
+   ```
+
+5. **Coverage target summary:**
+
+| Layer | Test Style | Target |
+|---|---|---|
+| Repository | `@DataJpaTest` | >92% |
+| Service | `@SpringBootTest` | >90% |
+| Business Logic | Mockito unit tests | >92% |
+| Utilities (Shuffler, Parser) | Plain JUnit 5 | >95% |
+
+6. **Implement Error Handling:**
    - Custom `QuizEngineException`
-   - `@ControllerAdvice` (or global exception handler)
    - Graceful handling of DB failures, validation errors
 
-4. **Add Application Properties:**
-   - `application-dev.yml` for development
-   - `application-prod.yml` for production
-   - Enable/disable debug logging
-
-5. **Create Executable JAR:**
-   - Configure Gradle build to produce executable JAR
-   - Enable Spring Boot executable JAR format in `build.gradle.kts`
-   - Build with `./gradlew build`
-   - Creates `build/libs/quiz-engine-0.0.1-SNAPSHOT.jar`
-
-6. **Write Comprehensive README:**
-   - **Getting Started:** Java 17+ requirement, download/build steps
-   - **Configuration:** application.yml options
-   - **Running Quizzes:** `java -jar build/libs/quiz-engine-0.0.1-SNAPSHOT.jar quiz`
-   - **CLI Commands:** quiz, import, history, clear with examples
-   - **Architecture:** Spring Data JPA, Picocli integration
-   - **Testing:** How to run tests
-   - **Troubleshooting:** Common issues
-
-7. **Test end-to-end:**
-   - `./gradlew build`
-   - `java -jar build/libs/quiz-engine-0.0.1-SNAPSHOT.jar` → works
-   - `java -jar build/libs/quiz-engine-0.0.1-SNAPSHOT.jar --help` → shows commands
-   - All workflows function correctly
+7. **Create Executable JAR and README:**
+   - `./gradlew build` → `build/libs/quiz-engine-0.0.1-SNAPSHOT.jar`
+   - README must include testing section showing how to run coverage
 
 **Success Criteria:**
-- All tests passing with >80% coverage
+- `./gradlew test jacocoTestCoverageVerification` **passes (enforces >90% coverage)**
+- JaCoCo HTML report at `build/reports/jacoco/test/html/`
+- All tests passing with ≥90% coverage
 - Executable JAR runs standalone
 - README complete and clear
 - No unhandled exceptions

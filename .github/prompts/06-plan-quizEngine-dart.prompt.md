@@ -49,8 +49,125 @@ quiz_engine/
 │   │   └── models/
 │   │       └── models_test.dart
 ├── analysis_options.yaml                  # Linting rules
+├── Dockerfile               # Container image for production deployment
+├── docker-compose.yml       # Multi-container orchestration for dev/test
 └── README.md                               # Documentation
 ```
+
+### Docker & Containerization
+
+#### Dockerfile (Production - Multi-stage)
+```dockerfile
+# Build stage
+FROM google/dart:3.0 as builder
+
+WORKDIR /app
+
+COPY pubspec.* .
+RUN dart pub get
+
+COPY . .
+RUN dart compile exe lib/main.dart -o bin/quiz-engine
+
+# Runtime stage
+FROM alpine:latest
+
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat sqlite-libs
+
+COPY --from=builder /app/bin/quiz-engine .
+
+# Create non-root user
+RUN addgroup -g 1000 dartuser && adduser -D -u 1000 -G dartuser dartuser
+RUN chown -R dartuser:dartuser /app
+USER dartuser
+
+ENTRYPOINT ["./quiz-engine"]
+CMD ["--help"]
+```
+
+#### docker-compose.yml (Development)
+```yaml
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: dart run lib/main.dart --help
+    environment:
+      - PUB_CACHE=/app/.pub-cache
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: bash -c "dart pub get && dart run test && dart run test --coverage=coverage && format_coverage --lcov --in=coverage/test_coverage.json --out=coverage/coverage.lcov && dart run scripts/check_coverage.sh"
+    environment:
+      - PUB_CACHE=/app/.pub-cache
+
+  quiz-engine-build:
+    build: .
+    container_name: quiz-engine-build
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: dart compile exe lib/main.dart -o bin/quiz-engine-release
+```
+
+#### Getting Started with Docker
+
+**Quick Start (5 steps):**
+
+1. **Build the image:**
+   ```bash
+   docker build -t quiz-engine:latest .
+   ```
+
+2. **Run development mode:**
+   ```bash
+   docker run -it quiz-engine:latest dart run lib/main.dart quiz --questions 10
+   ```
+
+3. **Run tests with coverage threshold:**
+   ```bash
+   docker-compose up quiz-engine-test
+   ```
+
+4. **Build native executable:**
+   ```bash
+   docker-compose up quiz-engine-build
+   ```
+
+5. **Run compiled binary directly:**
+   ```bash
+   docker run -it quiz-engine:latest ./quiz-engine quiz --questions 10
+   ```
+
+**Build & Push:**
+```bash
+# Build multi-arch
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry/quiz-engine:1.0 .
+
+# Push to registry
+docker push myregistry/quiz-engine:1.0
+```
+
+**Container Configuration:**
+- Multi-stage build: Dart SDK build + minimal Alpine runtime
+- Compiled native executable (single binary, no runtime dependency)
+- Drift database compiled into executable
+- Non-root user (dartuser) for security
+- Coverage verification with genhtml/lcov
+- Pub cache volume for faster dependency resolution
 
 ### Database Schema (Drift)
 
@@ -455,50 +572,226 @@ class QuizResponses extends Table {
 
 ---
 
-### Phase 4: Testing & Packaging
-**Timeline:** 1-1.5 hours
+### Phase 4: Unit Testing & Coverage Enforcement
+**Timeline:** 2-3 hours
 
-**Objective:** Comprehensive testing, compile to executable.
+**Objective:** Achieve >90% unit test coverage. The CI script must fail if coverage drops below 90%.
+
+**Add to `pubspec.yaml` dev_dependencies:**
+```yaml
+dev_dependencies:
+  test: ^1.24.0
+  coverage: ^1.6.0
+  mocktail: ^1.0.0
+  lints: ^3.0.0
+```
+
+**Run tests with coverage:**
+```bash
+# Run tests and collect coverage
+dart pub global activate coverage
+dart run test --coverage=coverage
+
+# Convert to LCOV format
+dart pub global run coverage:format_coverage \
+  --lcov \
+  --in=coverage \
+  --out=coverage/lcov.info \
+  --report-on=lib
+
+# Generate HTML report (requires lcov installed)
+genhtml coverage/lcov.info --output-directory coverage/html
+open coverage/html/index.html
+```
+
+**Enforce 90% threshold (add to `Makefile` or CI script):**
+```bash
+#!/bin/bash
+# scripts/check_coverage.sh
+COVERAGE=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines" | awk '{print $2}' | tr -d '%')
+echo "Line coverage: ${COVERAGE}%"
+if (( $(echo "$COVERAGE < 90" | bc -l) )); then
+  echo "ERROR: Coverage ${COVERAGE}% is below the required 90%"
+  exit 1
+fi
+echo "Coverage check passed: ${COVERAGE}%"
+```
 
 **Tasks:**
 
-1. **Write Unit Tests:**
-   ```bash
-   dart test
+1. **Create `test/helpers.dart` — shared fixtures:**
+   ```dart
+   import 'package:quiz_engine/database/database.dart';
+
+   /// Creates an in-memory Drift database for test isolation.
+   QuizDatabase openTestDatabase() {
+     return QuizDatabase.forTesting();
+   }
+
+   QuestionCompanion sampleQuestion({
+     String questionText = 'What is CI?',
+     String optionA = 'Continuous Integration',
+     String optionB = 'Code Import',
+     String optionC = 'Compile',
+     String optionD = 'Configure',
+     String correctAnswer = 'A',
+   }) =>
+       QuestionCompanion.insert(
+         questionText: questionText,
+         optionA: optionA,
+         optionB: optionB,
+         optionC: optionC,
+         optionD: optionD,
+         correctAnswer: correctAnswer,
+       );
    ```
-   - Test DAOs: CRUD operations
-   - Test services: BusinessLogic
-   - Test utilities: Shuffling, parsing
 
-2. **Write Integration Tests:**
-   - Full quiz flow: load → submit → finalize
-   - Cycle mechanics verification
-   - Non-repetition across quizzes
+2. **Write `test/dao/question_dao_test.dart` (target: >92%):**
+   ```dart
+   import 'package:test/test.dart';
+   import '../helpers.dart';
 
-3. **Build Release Executable:**
+   void main() {
+     late QuizDatabase db;
+
+     setUp(() => db = openTestDatabase());
+     tearDown(() async => await db.close());
+
+     test('inserts and retrieves a question', () async {
+       await db.questionsDao.insert(sampleQuestion());
+       final all = await db.questionsDao.getAllQuestions();
+       expect(all.length, equals(1));
+       expect(all.first.questionText, equals('What is CI?'));
+     });
+
+     test('getRandomQuestions omits correctAnswer', () async {
+       await db.questionsDao.insert(sampleQuestion());
+       final questions = await db.questionsDao.getRandomQuestions(1);
+       // The projection must not include correctAnswer
+       expect(() => questions.first.correctAnswer, throwsNoSuchMethodError);
+     });
+
+     test('advances cycle when all questions used', () async {
+       final id = await db.questionsDao.insert(sampleQuestion());
+       await db.questionsDao.markQuestionUsed(id);
+       await db.questionsDao.advanceCycleIfExhausted();
+       expect(await db.questionsDao.getCurrentCycle(), equals(2));
+     });
+
+     test('skips duplicate on insert', () async {
+       final q = sampleQuestion();
+       await db.questionsDao.insertIfNotExists(q);
+       await db.questionsDao.insertIfNotExists(q);
+       final count = await db.questionsDao.countQuestions();
+       expect(count, equals(1));
+     });
+
+     test('getRandomQuestions respects current cycle', () async {
+       final id = await db.questionsDao.insert(sampleQuestion());
+       await db.questionsDao.markQuestionUsed(id);
+       await db.questionsDao.advanceCycleIfExhausted();
+       final questions = await db.questionsDao.getRandomQuestions(1);
+       expect(questions.first.usageCycle, equals(2));
+     });
+   }
+   ```
+
+3. **Write `test/service/quiz_engine_test.dart` (target: >92%):**
+   ```dart
+   void main() {
+     late QuizDatabase db;
+     late QuizEngine engine;
+
+     setUp(() async {
+       db = openTestDatabase();
+       await db.questionsDao.insert(sampleQuestion());
+       await db.questionsDao.insert(
+         sampleQuestion(questionText: 'Q2', correctAnswer: 'B'),
+       );
+       engine = QuizEngine(db.questionsDao, db.sessionsDao, numQuestions: 2);
+     });
+
+     tearDown(() async => await db.close());
+
+     test('loadQuestions returns requested count', () async {
+       await engine.loadQuestions();
+       expect(engine.questions.length, equals(2));
+     });
+
+     test('submitAnswer increments score on correct answer', () async {
+       await engine.loadQuestions();
+       await engine.submitAnswer(0, 'A', timeTaken: 10);
+       expect(engine.numCorrect, equals(1));
+     });
+
+     test('submitAnswer does not score wrong answer', () async {
+       await engine.loadQuestions();
+       await engine.submitAnswer(0, 'B', timeTaken: 10);
+       expect(engine.numCorrect, equals(0));
+     });
+
+     test('finalizeQuiz persists session to database', () async {
+       await engine.loadQuestions();
+       await engine.submitAnswer(0, 'A', timeTaken: 5);
+       await engine.submitAnswer(1, 'B', timeTaken: 5);
+       final session = await engine.finalizeQuiz();
+       expect(session.sessionId, isNotEmpty);
+       final saved = await db.sessionsDao.getSession(session.sessionId);
+       expect(saved, isNotNull);
+     });
+   }
+   ```
+
+4. **Write `test/utils/answer_shuffler_test.dart` (target: >95%):**
+   ```dart
+   void main() {
+     test('shuffle preserves all original options', () {
+       final options = ['Alpha', 'Beta', 'Gamma', 'Delta'];
+       final result = shuffleAnswers(options, 'A');
+       expect(result.shuffledOptions.toSet(), equals(options.toSet()));
+     });
+
+     test('shuffle maps correct answer to new position', () {
+       final options = ['Alpha', 'Beta', 'Gamma', 'Delta'];
+       final result = shuffleAnswers(options, 'A'); // A = 'Alpha'
+       expect(result.shuffledOptions[result.correctShuffledIndex], equals('Alpha'));
+     });
+
+     test('shuffle returns 4 options', () {
+       final result = shuffleAnswers(['A', 'B', 'C', 'D'], 'C');
+       expect(result.shuffledOptions.length, equals(4));
+     });
+   }
+   ```
+
+5. **Coverage target summary:**
+
+| File | Test File | Target |
+|---|---|---|
+| `lib/dao/question_dao.dart` | `test/dao/question_dao_test.dart` | >92% |
+| `lib/service/quiz_engine.dart` | `test/service/quiz_engine_test.dart` | >92% |
+| `lib/utils/answer_shuffler.dart` | `test/utils/answer_shuffler_test.dart` | >95% |
+| `lib/utils/markdown_parser.dart` | `test/utils/markdown_parser_test.dart` | >90% |
+| `lib/service/history_service.dart` | `test/service/history_service_test.dart` | >90% |
+
+6. **Build Release Executable:**
    ```bash
    dart compile exe lib/main.dart -o bin/quiz_engine
    ```
-   - Single executable file (no runtime dependency)
-   - Cross-platform capable
+   - Single executable file (no Dart runtime dependency)
 
-4. **Write Comprehensive README:**
-   - **Getting Started:** Dart 3+ requirement
-   - **Installation:** `dart pub get && dart compile exe`
-   - **Running Quizzes:** `./bin/quiz_engine quiz`
-   - **CLI Commands:** quiz, import, history, clear
-   - **Configuration:** Default values in code
-   - **Architecture:** Drift ORM, command-line structure
-   - **Testing:** How to run tests
+7. **Write Comprehensive README** with testing section:
+   - `dart run test --coverage=coverage && scripts/check_coverage.sh` — must show ≥90%
 
-5. **Final Testing:**
-   - Full end-to-end workflow
-   - Create → Import → Take Quiz → View History → Retake
-   - Verify cycle mechanics
+8. **Final Testing:**
+   - Full end-to-end workflow: Import → Quiz → History → Retake
+   - Verify cycle mechanics and non-repetition
    - Cross-platform execution
 
 **Success Criteria:**
-- All tests passing
+- `dart run test --coverage=coverage` passes with all tests green
+- `scripts/check_coverage.sh` **exits 0 only at ≥90% line coverage**
+- LCOV HTML report generated at `coverage/html/index.html`
 - Executable compiles successfully
 - Single-file distribution (no dependencies)
 - Full documentation provided

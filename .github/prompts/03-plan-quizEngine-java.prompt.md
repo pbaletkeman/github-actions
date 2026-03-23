@@ -30,9 +30,15 @@ quiz-engine/
 │   ├── resources/
 │   │   └── schema.sql                   # SQLite schema definition
 │   └── test/java/com/quizengine/
-│       ├── dao/QuestionDAOTest.java
-│       ├── service/QuizEngineTest.java
-│       └── util/AnswerShufflerTest.java
+│       ├── dao/
+│       │   ├── QuestionDAOTest.java          # CRUD, cycle mechanics, duplicate handling
+│       │   └── SessionDAOTest.java           # Session insert, query, export
+│       ├── service/
+│       │   ├── QuizEngineTest.java           # Load, submit, finalize, scoring
+│       │   └── HistoryServiceTest.java       # History queries, formatting
+│       └── util/
+│           ├── AnswerShufflerTest.java       # Shuffling correctness, answer mapping
+│           └── MarkdownParserTest.java       # File parsing, validation, edge cases
 ├── build.gradle.kts                     # Gradle dependencies and build config
 ├── gradlew                              # Gradle wrapper (Unix/Mac)
 ├── gradlew.bat                          # Gradle wrapper (Windows)
@@ -42,8 +48,122 @@ quiz-engine/
 │       └── gradle-wrapper.properties
 ├── settings.gradle.kts                  # Gradle project settings
 ├── README.md                            # Setup, usage, operation docs
+├── Dockerfile               # Container image for production deployment
+├── docker-compose.yml       # Multi-container orchestration for dev/test
 └── .gitignore
 ```
+
+### Docker & Containerization
+
+#### Dockerfile (Production - Multi-stage)
+```dockerfile
+# Build stage
+FROM gradle:8-jdk17 as builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN gradle build -x test --no-daemon
+
+# Runtime stage
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copy built JAR from builder
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+# Create non-root user
+RUN addgroup -g 1000 javauser && adduser -D -u 1000 -G javauser javauser
+RUN chown -R javauser:javauser /app
+USER javauser
+
+# JVM optimizations
+ENV JAVA_OPTS="-XX:+UseG1GC -XX:MaxRAMPercentage=75.0"
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["--help"]
+```
+
+#### docker-compose.yml (Development)
+```yaml
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+      - gradle-cache:/root/.gradle  # Cache Gradle downloads
+    working_dir: /app
+    command: gradle bootRun --no-daemon
+    environment:
+      - GRADLE_OPTS=-Dorg.gradle.daemon=false
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+      - gradle-cache:/root/.gradle
+    working_dir: /app
+    command: gradle test jacocoTestCoverageVerification --no-daemon
+    environment:
+      - GRADLE_OPTS=-Dorg.gradle.daemon=false
+
+volumes:
+  gradle-cache:
+```
+
+#### Getting Started with Docker
+
+**Quick Start (5 steps):**
+
+1. **Build the image:**
+   ```bash
+   docker build -t quiz-engine:latest .
+   ```
+
+2. **Run development mode:**
+   ```bash
+   docker-compose up quiz-engine
+   ```
+
+3. **Run tests with JaCoCo coverage:**
+   ```bash
+   docker-compose up quiz-engine-test
+   ```
+
+4. **Run interactively:**
+   ```bash
+   docker run -it quiz-engine:latest quiz --questions 10
+   ```
+
+5. **Import questions:**
+   ```bash
+   docker run -it -v $(pwd):/app quiz-engine:latest java -jar app.jar import --file questions.md
+   ```
+
+**Build & Push:**
+```bash
+# Build multi-arch
+docker buildx build --platform linux/amd64,linux/arm64 -t myregistry/quiz-engine:1.0 .
+
+# Push to registry
+docker push myregistry/quiz-engine:1.0
+```
+
+**Container Configuration:**
+- Multi-stage build: Gradle build + minimal runtime JRE
+- Eclipse Temurin 17 JRE Alpine for small image size
+- Non-root user (javauser) for security
+- Gradle cache volume for faster rebuilds
+- G1GC garbage collector optimized for containers
+- JaCoCo coverage verification integrated in test service
 
 ### Database Schema
 
@@ -314,8 +434,222 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
 
 ---
 
-### Phase 4: CLI Polish & README
-**Timeline:** 1.5-2 hours
+### Phase 4: Unit Testing & Coverage Enforcement (JUnit 5 + JaCoCo)
+**Timeline:** 2-3 hours
+
+**Objective:** Achieve >90% unit test coverage across all non-CLI modules. JaCoCo must fail the build below 90%.
+
+**JaCoCo Configuration (`build.gradle.kts`):**
+```kotlin
+plugins {
+    java
+    application
+    id("jacoco")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.90".toBigDecimal()   // fail build below 90%
+            }
+        }
+    }
+}
+
+tasks.check {
+    dependsOn(tasks.jacocoTestCoverageVerification)
+}
+```
+
+**Run coverage:**
+```bash
+./gradlew test jacocoTestReport jacocoTestCoverageVerification
+# HTML report: build/reports/jacoco/test/html/index.html
+```
+
+**Tasks:**
+
+1. **Write `QuestionDAOTest.java` (target: >92%):**
+   ```java
+   class QuestionDAOTest {
+       private QuestionDAO dao;
+
+       @BeforeEach
+       void setUp() throws Exception {
+           // In-memory SQLite database for test isolation
+           Connection conn = DriverManager.getConnection("jdbc:sqlite::memory:");
+           DatabaseManager manager = new DatabaseManager(conn);
+           manager.initSchema();
+           dao = new QuestionDAO(conn);
+       }
+
+       @Test
+       void insertAndRetrieve_returnsInsertedQuestion() {
+           Question q = new Question("Q1", "A", "B", "C", "D", "A");
+           dao.insert(q);
+           List<Question> all = dao.getAll();
+           assertEquals(1, all.size());
+           assertEquals("Q1", all.get(0).getQuestionText());
+       }
+
+       @Test
+       void getRandomQuestions_omitsCorrectAnswer() {
+           dao.insert(new Question("Q1", "A", "B", "C", "D", "A"));
+           List<Question> questions = dao.getRandomQuestions(1);
+           assertNull(questions.get(0).getCorrectAnswer(),
+               "Correct answer must not be returned during quiz");
+       }
+
+       @Test
+       void advanceCycle_whenAllQuestionsUsed() {
+           dao.insert(new Question("Q1", "A", "B", "C", "D", "A"));
+           dao.markUsed(1);
+           dao.advanceCycleIfExhausted();
+           assertEquals(2, dao.getCurrentCycle());
+       }
+
+       @Test
+       void insert_skipsExactDuplicate() {
+           Question q = new Question("Q1", "A", "B", "C", "D", "A");
+           dao.insert(q);
+           dao.insert(q);
+           assertEquals(1, dao.count());
+       }
+
+       @Test
+       void getRandomQuestions_respectsCurrentCycle() {
+           dao.insert(new Question("Q1", "A", "B", "C", "D", "A"));
+           dao.markUsed(1);
+           dao.advanceCycleIfExhausted();
+           List<Question> q2 = dao.getRandomQuestions(1);
+           assertEquals(2, q2.get(0).getUsageCycle());
+       }
+   }
+   ```
+
+2. **Write `QuizEngineTest.java` (target: >92%):**
+   ```java
+   class QuizEngineTest {
+       @Test
+       void submitCorrectAnswer_incrementsScore() {
+           QuestionDAO dao = buildInMemoryDAO();
+           dao.insert(sample());
+           QuizEngine engine = new QuizEngine(dao, 1);
+           engine.loadQuestions();
+           engine.submitAnswer(0, "A", 10);
+           assertEquals(1, engine.getNumCorrect());
+       }
+
+       @Test
+       void submitWrongAnswer_doesNotScore() {
+           QuestionDAO dao = buildInMemoryDAO();
+           dao.insert(sample());
+           QuizEngine engine = new QuizEngine(dao, 1);
+           engine.loadQuestions();
+           engine.submitAnswer(0, "B", 10);
+           assertEquals(0, engine.getNumCorrect());
+       }
+
+       @Test
+       void finalize_persistsSessionToDatabase() {
+           QuestionDAO dao = buildInMemoryDAO();
+           dao.insert(sample());
+           QuizEngine engine = new QuizEngine(dao, 1);
+           engine.loadQuestions();
+           engine.submitAnswer(0, "A", 5);
+           QuizSession session = engine.finalize();
+           assertNotNull(session.getSessionId());
+           assertNotNull(dao.getSession(session.getSessionId()));
+       }
+
+       @Test
+       void finalize_calculatesCorrectPercentage() {
+           QuestionDAO dao = buildInMemoryDAO();
+           dao.insert(sample()); dao.insert(sample2());
+           QuizEngine engine = new QuizEngine(dao, 2);
+           engine.loadQuestions();
+           engine.submitAnswer(0, "A", 5);
+           engine.submitAnswer(1, "B", 5);
+           QuizSession session = engine.finalize();
+           assertEquals(100.0, session.getPercentageCorrect(), 0.01);
+       }
+   }
+   ```
+
+3. **Write `AnswerShufflerTest.java` (target: >95%):**
+   ```java
+   class AnswerShufflerTest {
+       @Test
+       void shuffle_preservesAllOptions() {
+           Set<String> original = Set.of("Alpha", "Beta", "Gamma", "Delta");
+           ShuffleResult result = AnswerShuffler.shuffle(
+               List.of("Alpha", "Beta", "Gamma", "Delta"), "A");
+           assertEquals(original, new HashSet<>(result.getShuffledOptions()));
+       }
+
+       @Test
+       void shuffle_mapsCorrectAnswerToNewPosition() {
+           ShuffleResult result = AnswerShuffler.shuffle(
+               List.of("Alpha", "Beta", "Gamma", "Delta"), "A"); // A = "Alpha"
+           String correctText = result.getShuffledOptions()
+               .get(result.getCorrectShuffledIndex());
+           assertEquals("Alpha", correctText);
+       }
+   }
+   ```
+
+4. **Write `MarkdownParserTest.java` (target: >90%):**
+   ```java
+   class MarkdownParserTest {
+       @Test
+       void parseFile_extractsQuestionsCorrectly(@TempDir Path tempDir) throws IOException {
+           Path file = tempDir.resolve("test.md");
+           Files.writeString(file, """
+               ## Q1
+               > What is CI?
+               - A) Integration\n- B) Delivery\n- C) Deploy\n- D) Build
+               **Answer: A**
+               """);
+           List<Question> questions = MarkdownParser.parseFile(file.toString());
+           assertEquals(1, questions.size());
+           assertEquals("A", questions.get(0).getCorrectAnswer());
+       }
+
+       @Test
+       void parseBlock_throwsOnMissingAnswer() {
+           assertThrows(IllegalArgumentException.class,
+               () -> MarkdownParser.parseBlock("...no answer line..."));
+       }
+   }
+   ```
+
+5. **Coverage target summary:**
+
+| Class | Test File | Target |
+|---|---|---|
+| `QuestionDAO` | `QuestionDAOTest` | >92% |
+| `SessionDAO` | `SessionDAOTest` | >90% |
+| `QuizEngine` | `QuizEngineTest` | >92% |
+| `HistoryService` | `HistoryServiceTest` | >90% |
+| `AnswerShuffler` | `AnswerShufflerTest` | >95% |
+| `MarkdownParser` | `MarkdownParserTest` | >90% |
+
+### Phase 5: CLI Polish & README
+**Timeline:** 1-2 hours
 
 **Objective:** Enhance UX, implement error handling, document system.
 
@@ -329,39 +663,27 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
 
 2. **Create `ConsoleFormatter.java`:**
    - Box drawing for question display
-   - Colored output (ANSI codes or similar)
+   - Colored output (ANSI codes)
    - Progress bar for timer
    - Table formatting for results
 
 3. **Add Picocli Features:**
    - `@Command` on main class with subcommands
    - `--help` and `--version` flags
-   - Tab completion support (auto-generated)
-   - Bash/Zsh script generation
+   - Tab completion support
 
 4. **Write README.md:**
-   - **Getting Started:** Java 17+ requirement, Gradle setup, build command
-   - **Configuration:** Default values, how to customize
-   - **Taking Quizzes:** How to run app, quiz flow, answer review
-   - **Importing Questions:** Markdown format, validation rules
-   - **Viewing History:** How to query, export options
-   - **Clearing Data:** Safe deletion procedures
-   - **Troubleshooting:** Common issues (DB locked, no questions, etc.)
-   - **Architecture:** Component diagram
+   - Getting Started, configuration, usage for all commands
+   - **Testing section:** `./gradlew test jacocoTestReport` — must show ≥90% coverage
+   - Architecture overview
 
-5. **Build Configuration:**
-   - Add shadow plugin to `build.gradle.kts` for fat JAR creation
-   - Shadow plugin configuration: `shadowJar { ... }`
-   - Run `./gradlew shadowJar` → creates `build/libs/quiz-engine-all.jar`
-
-6. **Test end-to-end:**
-   - `./gradlew build`
-   - `./gradlew shadowJar`
-   - `java -jar build/libs/quiz-engine-all.jar` → interactive quiz
-   - All commands work without errors
-   - First-time user workflow <15 minutes
+5. **Build fat JAR and end-to-end test:**
+   - `./gradlew shadowJar` → creates `build/libs/quiz-engine-all.jar`
+   - `java -jar build/libs/quiz-engine-all.jar` → all commands work
 
 **Success Criteria:**
+- `./gradlew test jacocoTestCoverageVerification` **passes (>90% coverage enforced)**
+- JaCoCo HTML report generated at `build/reports/jacoco/test/html/`
 - Fat JAR builds successfully
 - All CLI commands work from command line
 - Error messages are helpful
