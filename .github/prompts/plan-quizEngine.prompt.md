@@ -47,10 +47,14 @@ CREATE TABLE questions (
     difficulty TEXT,
     source_file TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    usage_cycle INTEGER DEFAULT 1,
+    times_used INTEGER DEFAULT 0,
+    last_used_at TIMESTAMP,
     UNIQUE(question_text, correct_answer)
 );
 CREATE INDEX idx_questions_section ON questions(section);
 CREATE INDEX idx_questions_difficulty ON questions(difficulty);
+CREATE INDEX idx_questions_usage_cycle ON questions(usage_cycle);
 ```
 
 #### Table: quiz_sessions
@@ -110,6 +114,14 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
    - `get_questions_by_id(ids)` → fetch specific questions
    - `count_questions()` → total question count
    - `delete_all_questions()` → truncate questions table
+   - **`get_current_cycle()`** → determine MIN(usage_cycle) for questions not yet exhausted in this cycle
+   - **`get_random_questions(n, difficulty=None, section=None)`** → SQL query that:
+     1. Determines current_cycle from `get_current_cycle()`
+     2. Queries: `SELECT ... WHERE usage_cycle = current_cycle [AND difficulty/section filters] ORDER BY RANDOM() LIMIT n`
+     3. Returns questions WITHOUT correct_answer/explanation
+     4. **NEVER returns same question twice until all questions in current cycle are used**
+   - **`mark_question_used(question_id)`** → increment times_used, update last_used_at, check if cycle exhausted
+   - **`advance_questions_to_next_cycle()`** → after all questions at current cycle used, increment usage_cycle for those questions, reset them into active pool
 4. Write `models.py`:
    - Pydantic `Question` class (id, question_text, options A-E, correct_answer, explanation, section, difficulty)
    - Pydantic `QuizSession` class (session_id, started_at, ended_at, num_questions, num_correct, etc.)
@@ -141,9 +153,9 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
    - `markdown_to_questions(file_path)` → parse gh-200-iteration-*.md, extract explanations
 2. Write `quiz.py` with `QuizEngine` class:
    - `__init__(session_id, config: QuizConfig)` → initialize session with user-provided config
-   - `load_questions()` → fetch random questions via SQL **WITHOUT correct_answer/explanation**, store in memory
+   - `load_questions()` → fetch random questions via SQL **using cycle-aware logic, WITHOUT correct_answer/explanation**, store in memory
    - `submit_answer(question_idx, user_answer, time_taken)` → record response, calculate correct/incorrect internally, persist to DB **only session_id, question_id, user_answer, is_correct, time_taken**
-   - `finalize()` → calculate final score, close session timestamp, save to quiz_sessions table
+   - `finalize()` → calculate final score, close session timestamp, save to quiz_sessions table, **mark all used questions as used via `mark_question_used()`, check if current cycle exhausted, auto-advance to next cycle if needed**
    - `get_session_review()` → **NEW METHOD** fetch all questions WITH correct_answer and explanation for review-only display
    - `get_results()` → return session summary (correct count, percentage, time) WITHOUT answer details
 3. Write `cli.py`:
@@ -167,14 +179,23 @@ CREATE INDEX idx_responses_session ON quiz_responses(session_id);
      7. If yes → display_final_review() with ALL correct answers and explanations
      8. Prompt: "Take another quiz? (y/n)" or Exit
 5. Test full quiz flow: `python -m quiz_engine.main --questions 5` (5-question quiz for test)
+6. **Test non-repetition cycle:**
+   - Load 10 questions, take 2 quizzes of 5 questions each
+   - Verify: First quiz uses 5 from cycle 1, second quiz uses different 5 from cycle 1
+   - Verify: After 2nd quiz, all 10 marked used, cycle incremented to 2
+   - Take 3rd quiz: should load from cycle 2 (questions available again)
+   - Log confirms no duplicates within or across cycles
 
 **Success Criteria:**
 - Quiz loads 100 random questions (or user-specified count)
+- **NO questions repeat until entire question pool exhausted at current cycle**
 - All answers randomized and correctly tracked
 - Per-question timer functional (visual countdown in Rich)
 - Score calculation accurate (e.g., 8/10 = 80%)
 - Session persisted to DB with UUID
 - User can retake quiz
+- Database fields (usage_cycle, times_used, last_used_at) properly maintained
+- Cycle auto-advances when all questions exhausted
 
 ---
 
@@ -307,20 +328,39 @@ FROM questions WHERE id IN (...) JOIN quiz_responses ...
 
 ## Core Features & Design Decisions
 
-### 1. Question Randomization
-- **Approach:** SQL `ORDER BY RANDOM()` with LIMIT N
-- **Rationale:** Scalable, DB-level optimization, reproducible
-- **Implementation:** `get_random_questions(n, difficulty, section)` in database.py
+### 1. Question Randomization & Non-Repetition Cycling
+- **Approach:** SQL `ORDER BY RANDOM()` with LIMIT N, filtered by `usage_cycle` to prevent repetition until all questions seen
+- **Rationale:** Scalable, DB-level optimization, ensures spaced repetition before repeating questions
+- **Non-Repetition Algorithm:**
+  1. Track each question's `usage_cycle` (starts at 1) and `times_used` count
+  2. Determine the current global cycle = MIN(usage_cycle) across all unused questions in the pool
+  3. Query: `SELECT ... WHERE usage_cycle = current_cycle ORDER BY RANDOM() LIMIT n`
+  4. When a question is used in a quiz, increment `times_used` and update `last_used_at`
+  5. After each quiz, check if all questions at current cycle have been used
+  6. When all questions at current cycle are exhausted, increment `usage_cycle` for those questions to cycle them back into pool
+  7. This ensures NO question repeats until ALL questions have been seen at least once
+- **Implementation:** `get_random_questions(n, difficulty, section)` in database.py with cycle-aware SELECT logic
 
-### 2. Answer Shuffling & Concealment
-- **Approach:** Python list shuffle post-fetch, track shuffled position of correct answer, **NEVER display correct answer during quiz**
-- **Rationale:** Per-answer randomization, prevents pattern recognition, ensures answers only visible in review
-- **Storage:**
-  - quiz_responses.user_answer stores shuffled letter (A-E) that user selected
-  - Correct answer verified against questions table at review time only
-  - Shuffle mapping NOT persisted (recalculated from seed/random for each display)
+### 2. Non-Repetition Question Cycling
+- **Objective:** Prevent question repetition until all questions have been seen at least once
+- **Mechanism:**
+  - Track `usage_cycle` (integer starting at 1) for each question
+  - When loading quiz questions, query only questions WHERE `usage_cycle = current_global_cycle` (min used cycle)
+  - After quiz finalization, mark each used question with `times_used++` and `last_used_at=now`
+  - When ALL questions at the current cycle have `times_used > 0`, increment `usage_cycle` for those questions to cycle them back into the pool
+  - Next quiz automatically uses questions from the NEW cycle (which now have usage_cycle incremented)
+- **Example Flow (100 questions):**
+  1. Quiz 1: Load 50 random questions from cycle 1; mark them used
+  2. Quiz 2: Load 50 more random questions from cycle 1 (different ones); mark them used
+  3. All 100 now used. System auto-increments usage_cycle to 2 for all questions.
+  4. Quiz 3: Load 50 random from cycle 2 (all questions available again, fresh cycle)
+  5. Repeat indefinitely without seeing question repeats until full cycle exhausted
+- **Benefits:**
+  - Ensures true randomization without duplication in learning sessions
+  - Supports spaced repetition by cycling questions back after all seen
+  - DB-driven: scales to 1M+ questions without performance penalty
 
-### 3. Timer Logic & Answer Feedback
+### 3. Answer Shuffling & Concealment
 - **Per-Question Timer:** Countdown display (Rich progress bar), user can skip
 - **Global Limit:** Total time enforced at finalize (warn at 10 min remaining)
 - **Handling:** Unanswered questions auto-marked as wrong (fail-safe)
@@ -549,6 +589,8 @@ python scripts/clear_history.py --before 30 --confirm  # Delete sessions older t
 
 ### Functional Requirements
 - ✓ Load 100+ random questions from SQLite (WITHOUT correct answers)
+- ✓ **NEVER repeat a question in subsequent quizzes until ALL questions have been used at least once** (usage_cycle tracking)
+- ✓ Auto-cycle questions back into pool after all exhausted at current cycle
 - ✓ Randomize answers per question, conceal correct answer during display
 - ✓ Per-question and global timers
 - ✓ Calculate and display score (initially WITHOUT answer details)
@@ -569,6 +611,161 @@ python scripts/clear_history.py --before 30 --confirm  # Delete sessions older t
 
 ---
 
+## Non-Repetition Question Cycling (Implementation Reference)
+
+### Overview
+The quiz engine prevents question repetition using a "usage cycle" mechanism. Questions are never repeated until **all questions have been used at least once**, at which point they cycle back into the pool fresh.
+
+### How It Works
+
+#### 1. Database Fields (per question)
+```
+usage_cycle       INTEGER DEFAULT 1       # Cycle number this question is in
+times_used        INTEGER DEFAULT 0       # How many times question was used
+last_used_at      TIMESTAMP               # When question was last used
+```
+
+#### 2. Current Cycle Determination
+```python
+def get_current_cycle():
+    """Find the minimum usage_cycle currently in use."""
+    cursor.execute("SELECT MIN(usage_cycle) FROM questions")
+    return cursor.fetchone()[0] or 1
+```
+
+#### 3. Loading Questions (Cycle-Aware)
+```python
+def get_random_questions(n, difficulty=None, section=None):
+    """Load n random questions from current cycle only."""
+    current_cycle = get_current_cycle()
+
+    query = "SELECT id, question_text, option_a, option_b, option_c, option_d, option_e "
+    query += "FROM questions WHERE usage_cycle = ? "
+
+    if difficulty:
+        query += "AND difficulty = ? "
+    if section:
+        query += "AND section = ? "
+
+    query += "ORDER BY RANDOM() LIMIT ?"
+
+    # This ensures ONLY questions from current cycle selected
+    # NO repeats until entire cycle exhausted
+```
+
+#### 4. Marking Questions Used (During Quiz Finalization)
+```python
+def mark_question_used(question_id):
+    """Increment usage counter and update timestamp."""
+    cursor.execute("""
+        UPDATE questions
+        SET times_used = times_used + 1, last_used_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+    """, (question_id,))
+
+    # Check if this question was the last one in its cycle
+    cursor.execute("""
+        SELECT COUNT(*) FROM questions
+        WHERE usage_cycle = (SELECT usage_cycle FROM questions WHERE id = ?)
+        AND times_used = 0
+    """, (question_id,))
+
+    remaining = cursor.fetchone()[0]
+    if remaining == 0:
+        # All questions in this cycle have been used
+        auto_advance_cycle()
+```
+
+#### 5. Auto-Cycling to Next Cycle
+```python
+def advance_questions_to_next_cycle():
+    """Push all used questions to next cycle."""
+    current_cycle = get_current_cycle()
+
+    cursor.execute("""
+        UPDATE questions
+        SET usage_cycle = usage_cycle + 1
+        WHERE usage_cycle = ? AND times_used > 0
+    """, (current_cycle,))
+
+    # Now questions are ready for re-use in a fresh cycle
+```
+
+### Example Trace (10 Questions, 5 per Quiz)
+
+**Initial State:**
+```
+Q1-Q10: usage_cycle=1, times_used=0
+current_cycle = 1
+```
+
+**Quiz 1 (5 questions):**
+```
+SELECT ... WHERE usage_cycle=1 ORDER BY RANDOM() LIMIT 5
+→ Returns: Q3, Q7, Q1, Q9, Q5
+
+After Quiz 1:
+Q1: times_used=1
+Q3: times_used=1
+Q5: times_used=1
+Q7: times_used=1
+Q9: times_used=1
+Q2,Q4,Q6,Q8,Q10: times_used=0
+current_cycle = 1 (still have unused questions)
+```
+
+**Quiz 2 (5 questions):**
+```
+SELECT ... WHERE usage_cycle=1 ORDER BY RANDOM() LIMIT 5
+→ Returns: Q2, Q4, Q6, Q8, Q10 (guaranteed different from Quiz 1!)
+
+After Quiz 2:
+ALL Q1-Q10: times_used=1
+remaining in cycle 1 = 0
+→ TRIGGER: advance_questions_to_next_cycle()
+
+After cycle advance:
+Q1-Q10: usage_cycle=2, times_used=1
+current_cycle = 2
+```
+
+**Quiz 3 (5 questions):**
+```
+SELECT ... WHERE usage_cycle=2 ORDER BY RANDOM() LIMIT 5
+→ Returns: Q4, Q1, Q9, Q6, Q2 (can repeat now, fresh cycle!)
+
+After Quiz 3:
+Q1: times_used=2, usage_cycle=2
+Q2: times_used=2, usage_cycle=2
+... (cycle continues)
+```
+
+### Key Guarantees
+1. **No duplicates within a cycle:** Until all questions exhausted, question IDs never repeat
+2. **Automatic cycling:** When all used, system automatically resets for next cycle
+3. **Transparent to user:** Happens automatically during `quiz.finalize()`
+4. **Scales infinitely:** Works for 1 question or 1M questions
+
+### Testing the Feature
+```bash
+# Create test with 10 questions
+python scripts/import_questions.py --file test_10.md
+
+# Quiz 1: 5 questions
+python -m quiz_engine.main --questions 5
+→ Logs: Q[x,y,z,a,b] selected from cycle 1
+
+# Quiz 2: 5 different questions
+python -m quiz_engine.main --questions 5
+→ Logs: Q[p,q,r,s,t] selected from cycle 1 (different!)
+
+# Quiz 3: Cycle auto-advanced, can repeat
+python -m quiz_engine.main --questions 5
+→ Logs: Q[x,p,z,q,b] selected from cycle 2 (some repeats OK now)
+```
+
+---
+
 ## Implementation Notes
 
 - **Testing first:** Write unit tests for database and utils before CLI integration
@@ -576,4 +773,5 @@ python scripts/clear_history.py --before 30 --confirm  # Delete sessions older t
 - **User experience:** Make error messages helpful and actionable
 - **Documentation:** Inline comments explain WHY, not WHAT; self-documenting code preferred
 - **Version control:** Commit after each phase, tag releases
+- **Non-repetition:** The cycling mechanism is the core feature preventing question duplicates—test thoroughly!
 - **Future roadmap:** Difficulty filters, section filters, performance analytics, web UI
