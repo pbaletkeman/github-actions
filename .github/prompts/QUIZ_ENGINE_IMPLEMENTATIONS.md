@@ -1,8 +1,18 @@
 # Quiz Engine Implementations: Comprehensive Analysis
 
+## Prompt Files & Resources
+
+Complete implementation plans are available for each technology stack:
+
+- **[Dart/Drift Implementation Plan](plan-quizEngine-dart.prompt.md)** - Async-first, modern, full-featured
+- **[Node.js/TypeORM Implementation Plan](plan-quizEngine-nodejs.prompt.md)** - JavaScript ecosystem, TypeScript support
+- **[Rust/Diesel Implementation Plan](plan-quizEngine-rust.prompt.md)** - Memory-safe, blazing-fast, native binaries
+
+---
+
 ## Executive Summary
 
-This document provides a detailed comparison of six quiz engine implementations targeting different technology stacks, all implementing the same GH-200 certification quiz system. Each implementation trades off different dimensions: startup speed, runtime performance, ecosystem maturity, deployment complexity, and developer experience.
+This document provides a detailed comparison of eight quiz engine implementations targeting different technology stacks, all implementing the same GH-200 certification quiz system. Each implementation trades off different dimensions: startup speed, runtime performance, ecosystem maturity, deployment complexity, and developer experience.
 
 **Quick Comparison Table:**
 
@@ -14,16 +24,18 @@ This document provides a detailed comparison of six quiz engine implementations 
 | **C#** | C# 12/.NET 8 | EF Core | Spectre.Console | Modern language, rich library | CLR overhead, Windows-focused |
 | **Dart** | Dart 3+ | Drift ORM | args package | Async-first, modern | Smallest community, niche deployment |
 | **Go** | Go 1.21+ | SQLite (direct) | Cobra | Fastest startup, smallest binary | Less ecosystem, manual memory management |
+| **Node.js** | JavaScript/TS | TypeORM | Yargs | Rich ecosystem, fast dev cycle | Slower than compiled languages |
+| **Rust** | Rust 1.70+ | Diesel | Clap | Fastest, memory-safe, smallest binary | Steep learning curve, longer compile |
 
 ---
 
 ## 1. Python/SQLite Implementation
 
 ### Overview
-**Stack:** Python 3.9+, Typer, Rich, Pydantic, SQLite3  
-**Development Time:** 6-8 hours  
-**Binary Size:** N/A (interpreted)  
-**Startup Time:** 500-1000ms (Python interpreter init)  
+**Stack:** Python 3.9+, Typer, Rich, Pydantic, SQLite3
+**Development Time:** 6-8 hours
+**Binary Size:** N/A (interpreted)
+**Startup Time:** 500-1000ms (Python interpreter init)
 **Memory Footprint:** 50-100MB (Python runtime + dependencies)
 
 ### Performance Analysis
@@ -110,10 +122,10 @@ This document provides a detailed comparison of six quiz engine implementations 
 ## 2. Java/JDBC Implementation
 
 ### Overview
-**Stack:** Java 17+, JDBC, HikariCP, Picocli, Maven  
-**Development Time:** 8-10 hours  
-**Binary Size:** 50-80MB (JAR + dependencies)  
-**Startup Time:** 1-2 seconds (JVM warmup)  
+**Stack:** Java 17+, JDBC, HikariCP, Picocli, Maven
+**Development Time:** 8-10 hours
+**Binary Size:** 50-80MB (JAR + dependencies)
+**Startup Time:** 1-2 seconds (JVM warmup)
 **Memory Footprint:** 150-200MB at startup
 
 ### Performance Analysis
@@ -202,10 +214,10 @@ This document provides a detailed comparison of six quiz engine implementations 
 ## 3. Spring Boot Implementation
 
 ### Overview
-**Stack:** Spring Boot 3.2, Spring Data JPA, Hibernate SQLite Dialect, Picocli, Maven  
-**Development Time:** 7-9 hours  
-**Binary Size:** 80-150MB (fat JAR)  
-**Startup Time:** 2-4 seconds (Spring framework initialization)  
+**Stack:** Spring Boot 3.2, Spring Data JPA, Hibernate SQLite Dialect, Picocli, Maven
+**Development Time:** 7-9 hours
+**Binary Size:** 80-150MB (fat JAR)
+**Startup Time:** 2-4 seconds (Spring framework initialization)
 **Memory Footprint:** 200-300MB at startup
 
 ### Performance Analysis
@@ -293,10 +305,10 @@ This document provides a detailed comparison of six quiz engine implementations 
 ## 4. C#/.NET 8 Implementation
 
 ### Overview
-**Stack:** C# 12, .NET 8, Entity Framework Core, Spectre.Console, System.CommandLine  
-**Development Time:** 7-9 hours  
-**Binary Size:** 40-80MB (self-contained executable)  
-**Startup Time:** 300-800ms (CLR initialization)  
+**Stack:** C# 12, .NET 8, Entity Framework Core, Spectre.Console, System.CommandLine
+**Development Time:** 7-9 hours
+**Binary Size:** 40-80MB (self-contained executable)
+**Startup Time:** 300-800ms (CLR initialization)
 **Memory Footprint:** 80-150MB at startup
 
 ### Performance Analysis
@@ -386,10 +398,10 @@ This document provides a detailed comparison of six quiz engine implementations 
 ## 5. Dart/Drift Implementation
 
 ### Overview
-**Stack:** Dart 3+, Drift ORM, args package, Flutter (optional)  
-**Development Time:** 7-9 hours  
-**Binary Size:** 30-60MB (native compiled)  
-**Startup Time:** 50-200ms (native executable)  
+**Stack:** Dart 3+, Drift ORM, args package, Flutter (optional)
+**Development Time:** 7-9 hours
+**Binary Size:** 30-60MB (native compiled)
+**Startup Time:** 50-200ms (native executable)
 **Memory Footprint:** 30-60MB at runtime
 
 ### Performance Analysis
@@ -479,10 +491,10 @@ This document provides a detailed comparison of six quiz engine implementations 
 ## 6. Go/Golang Implementation
 
 ### Overview
-**Stack:** Go 1.21+, SQLite driver, Cobra CLI, built-in SQLite fork  
-**Development Time:** 6-8 hours  
-**Binary Size:** 20-40MB (static binary)  
-**Startup Time:** 20-100ms (native executable)  
+**Stack:** Go 1.21+, SQLite driver, Cobra CLI, built-in SQLite fork
+**Development Time:** 6-8 hours
+**Binary Size:** 20-40MB (static binary)
+**Startup Time:** 20-100ms (native executable)
 **Memory Footprint:** 20-50MB at runtime
 
 ### Performance Analysis
@@ -571,47 +583,176 @@ This document provides a detailed comparison of six quiz engine implementations 
 
 ---
 
+## 7. Node.js/TypeORM Implementation
+
+### Overview
+**Stack:** Node.js 18+, TypeORM, Yargs CLI, Chalk formatting
+**Development Time:** 7-9 hours
+**Binary Size:** 45-80MB (packaged with `pkg`)
+**Startup Time:** 250-500ms (Node.js runtime init)
+**Memory Footprint:** 60-120MB at runtime
+
+**See complete plan:** [Node.js/TypeORM Implementation Plan](plan-quizEngine-nodejs.prompt.md)
+
+### Performance Analysis
+
+#### Strengths
+- ✅ **Rich Ecosystem:** npm has millions of packages; rich tooling
+- ✅ **TypeScript Support:** Full type safety with optional typing
+- ✅ **Single Language:** Frontend + backend in same language
+- ✅ **Fast Development:** Rapid iteration via ts-node
+- ✅ **Familiar to Web Teams:** Most web developers know JavaScript/Node.js
+- ✅ **TypeORM Decorators:** Clean entity definitions
+
+#### Performance Metrics
+- **Startup Time:** 250-500ms (V8 JIT startup)
+- **Quiz Load (100 Q):** 80-150ms
+- **Quiz Submission:** 15-40ms per answer
+- **Memory (Idle):** 60MB
+- **Memory (Quiz Active):** 100-150MB
+- **Binary (pkg):** 50-80MB
+
+#### Weaknesses
+- ❌ **Slower Than Native:** V8 JIT slower than Go/Rust
+- ❌ **Event Loop Single-Threaded:** True parallelism requires worker_threads
+- ❌ **npm Ecosystem Volatility:** Left-pad crisis; constant security updates
+- ❌ **Package Bloat:** Dependencies can add 100s of MB
+- ❌ **Startup Latency:** V8 startup slower than Go
+
+### Key Selling Points
+
+1. **JavaScript Familiarity:** Most developers know Node.js
+2. **TypeORM:** Powerful ORM with decorator syntax
+3. **Rapid Development:** Hot reload via ts-node; fast feedback loop
+4. **Rich Formatting:** Chalk for beautiful terminal output
+5. **Cross-Platform:** Works on Windows/Mac/Linux
+6. **Web Extensibility:** Easy to add Express.js/REST API layer later
+
+### Ideal Use Cases
+- ✅ Teams with strong JavaScript/TypeScript expertise
+- ✅ Applications that might evolve into web services
+- ✅ Rapid prototyping and MVPs
+- ✅ Teams using JavaScript across stack (MERN, MEAN)
+
+### Anti-Patterns
+- ❌ Performance-critical systems (slower than Go/Rust)
+- ❌ Highly concurrent services (event loop limits)
+- ❌ Teams unfamiliar with async/await patterns
+
+---
+
+## 8. Rust/Diesel Implementation
+
+### Overview
+**Stack:** Rust 1.70+, Diesel ORM, Clap CLI, Tokio async runtime
+**Development Time:** 10-12 hours (steeper learning curve)
+**Binary Size:** 8-15MB (smallest, stripped)
+**Startup Time:** 10-50ms (native compiled)
+**Memory Footprint:** 10-30MB at runtime
+
+**See complete plan:** [Rust/Diesel Implementation Plan](plan-quizEngine-rust.prompt.md)
+
+### Performance Analysis
+
+#### Strengths
+- ✅ **Blazing Fast:** Native compiled; fastest startup and execution
+- ✅ **Memory-Safe:** Borrow checker prevents memory leaks at compile time
+- ✅ **Smallest Binary:** 8-15MB (including all dependencies)
+- ✅ **Lowest Memory:** 10-30MB runtime (half of Go)
+- ✅ **Type System:** Strongest type safety of any language (compiler catches bugs)
+- ✅ **Zero Runtime Cost:** True zero-cost abstractions
+- ✅ **Diesel ORM:** Type-safe SQL via macros and query builder
+
+#### Performance Metrics
+- **Startup Time:** 10-50ms (fastest of all)
+- **Quiz Load (100 Q):** 30-60ms
+- **Quiz Submission:** 5-15ms per answer
+- **Memory (Idle):** 10MB (lowest)
+- **Memory (Quiz Active):** 20-40MB (lowest)
+- **Binary (stripped):** 8-15MB
+
+#### Weaknesses
+- ❌ **Steep Learning Curve:** Ownership, lifetimes, borrowing require paradigm shift
+- ❌ **Slow Compilation:** Rustc is slower than Go/Node.js
+- ❌ **Smaller Ecosystem:** Fewer packages than Python/Java/JavaScript
+- ❌ **Verbose Syntax:** More explicit than Go/Python
+- ❌ **Hiring Difficulty:** Rust developers rarer than Java/Python/Go
+
+### Key Selling Points
+
+1. **Peak Performance:** Fastest execution, smallest binary, lowest memory
+2. **Memory Safety:** Compiler prevents entire classes of bugs (null pointers, buffer overflows, data races)
+3. **Correctness:** Strong type system + borrow checker = difficult to write buggy code
+4. **Diesel ORM:** Type-safe SQL prevents injection attacks
+5. **Standalone Binary:** No runtime; runs on any OS (static linking)
+6. **Production-Grade:** Used in production by Cloudflare, Dropbox, Discord (Discord's stated reason for Rust adoption: reliability)
+
+### Ideal Use Cases
+- ✅ Performance-critical systems
+- ✅ Systems requiring memory safety guarantees
+- ✅ Long-lived servers (safety removes entire categories of bugs)
+- ✅ Resource-constrained environments (embedded, edge computing)
+- ✅ Teams willing to invest in learning curve for long-term safety
+
+### Anti-Patterns
+- ❌ Rapid prototyping (slow compilation hurts iteration speed)
+- ❌ Startup projects (hiring difficult; developer pool small)
+- ❌ Teams without systems programming experience (steep learning curve)
+- ❌ Time-critical projects (Rust development slower initially)
+
+---
+
 ## Comparative Performance Summary
 
 ### Startup Time Ranking (Fastest to Slowest)
-1. 🥇 **Go:** 20-100ms (native compiled)
-2. 🥈 **Dart:** 50-200ms (native compiled)
-3. 🥉 **C#/.NET:** 300-800ms (CLR startup)
-4. **Python:** 500-1000ms (Python interpreter init)
-5. **Java:** 1-2 seconds (JVM bootstrap)
-6. **Spring Boot:** 2-4 seconds (Spring context)
+1. 🥇 **Rust:** 10-50ms (native compiled, no overhead)
+2. 🥈 **Go:** 20-100ms (native compiled)
+3. 🥉 **Dart:** 50-200ms (native compiled)
+4. **Node.js:** 250-500ms (V8 JIT startup)
+5. **C#/.NET:** 300-800ms (CLR startup)
+6. **Python:** 500-1000ms (Python interpreter init)
+7. **Java:** 1-2 seconds (JVM bootstrap)
+8. **Spring Boot:** 2-4 seconds (Spring context)
 
 ### Memory Footprint Ranking (Lightest to Heaviest)
-1. 🥇 **Go:** 20-50MB (native, no VM)
-2. 🥈 **Dart:** 30-60MB (compiled, minimal runtime)
-3. 🥉 **C#/.NET:** 80-150MB (CLR baseline)
-4. **Python:** 50-100MB (runtime + deps)
-5. **Java:** 150-200MB (JVM minimum)
-6. **Spring Boot:** 200-300MB (JVM + Spring)
+1. 🥇 **Rust:** 10-30MB (native, zero runtime overhead)
+2. 🥈 **Go:** 20-50MB (native, no VM)
+3. 🥉 **Dart:** 30-60MB (compiled, minimal runtime)
+4. **Node.js:** 60-120MB (V8 + libuv)
+5. **C#/.NET:** 80-150MB (CLR baseline)
+6. **Python:** 50-100MB (runtime + deps)
+7. **Java:** 150-200MB (JVM minimum)
+8. **Spring Boot:** 200-300MB (JVM + Spring)
 
 ### Binary Size Ranking (Smallest to Largest)
-1. 🥇 **Go:** 20-40MB (fastest compiler, lean stdlib)
-2. 🥈 **Dart:** 30-60MB (compiled, includes some runtime)
-3. 🥉 **C#/.NET:** 40-80MB (self-contained)
-4. **Java JAR:** 50-80MB (JDBC only)
-5. **Spring Boot JAR:** 80-150MB (fat JAR)
-6. **Python:** N/A (interpreted; ships source)
+1. 🥇 **Rust:** 8-15MB (stripped, maximum compression)
+2. 🥈 **Go:** 20-40MB (fastest compiler, lean stdlib)
+3. 🥉 **Dart:** 30-60MB (compiled, includes some runtime)
+4. **Node.js:** 45-80MB (packaged with pkg)
+5. **C#/.NET:** 40-80MB (self-contained)
+6. **Java JAR:** 50-80MB (JDBC only)
+7. **Spring Boot JAR:** 80-150MB (fat JAR)
+8. **Python:** N/A (interpreted; ships source)
 
 ### Development Speed Ranking (Fastest to Slowest)
 1. 🥇 **Python:** Typer + Rich nearly automatic
-2. 🥈 **Go:** Simplicity speeds development
-3. 🥉 **C#:** Language elegance compensates for framework setup
-4. **Spring Boot:** ORM reduces boilerplate vs JDBC
-5. **Java JDBC:** Verbose; manual mapping tedious
-6. **Dart:** Code generation (build_runner) adds build cycle
+2. 🥈 **Node.js:** Rich ecosystem, fast iteration with ts-node
+3. 🥉 **Go:** Simplicity speeds development
+4. **C#:** Language elegance compensates for framework setup
+5. **Spring Boot:** ORM reduces boilerplate vs JDBC
+6. **Java JDBC:** Verbose; manual mapping tedious
+7. **Dart:** Code generation (build_runner) adds build cycle
+8. **Rust:** Slow compilation, steep learning curve
 
 ### Production-Ready Ranking (Confidence Level)
 1. 🥇 **Java (JDBC):** Proven at billion-transaction scale
-2. 🥈 **Spring Boot:** Enterprise framework; battle-tested
-3. 🥉 **Go:** Production use pervasive (Docker, Kubernetes, etc.)
-4. **C#/.NET:** Enterprise-grade; Microsoft-backed
-5. **Python:** Works but distribution/startup not optimized
-6. **Dart:** Newer; less production history; Flutter-first
+2. 🥈 **Go:** Production use pervasive (Docker, Kubernetes, etc.)
+3. 🥉 **Rust:** Production use growing (Cloudflare, Discord, etc.)
+4. **Spring Boot:** Enterprise framework; battle-tested
+5. **C#/.NET:** Enterprise-grade; Microsoft-backed
+6. **Node.js:** Production-ready but event loop limitations
+7. **Python:** Works but distribution/startup not optimized
+8. **Dart:** Newer; less production history; Flutter-first
 
 ---
 
@@ -619,26 +760,32 @@ This document provides a detailed comparison of six quiz engine implementations 
 
 Choose your implementation based on priorities:
 
+### If Absolute Peak Performance Required (Startup, Memory, Execution)
+→ **Rust** (8-15MB, 10-50ms startup, memory-safe)
+
 ### If Startup & Memory Critical (CLI Tools, Edge Devices)
-→ **Go** or **Dart**
+→ **Go** (20-40MB, 20-100ms) or **Rust** (even better but steeper curve)
 
 ### If Team Expertise Paramount (Minimize Learning Curve)
-→ **Python** (fastest to ship) or **Java** (most teams know it)
+→ **Python** (fastest to ship) or **Node.js** (familiar to web teams) or **Java** (most teams know it)
 
 ### If Modern Language Desired (Type Safety, Elegance)
-→ **C#** (.NET 8) or **Go**
+→ **C#** (.NET 8), **Go**, or **Rust**
 
 ### If Enterprise Ecosystem Required (Third-party integrations, pools of developers)
 → **Java** (JDBC for simplicity) or **Spring Boot** (for scalability)
 
 ### If Cross-Platform Binary Distribution Simplicity
-→ **Go** (smallest, most portable)
+→ **Go** (small, portable) or **Rust** (smallest, most portable)
 
 ### If ORM Power & Testability at Scale
-→ **C#** (EF Core) or **Spring Boot** (JPA)
+→ **C#** (EF Core), **Spring Boot** (JPA), or **Node.js** (TypeORM)
 
-### If Interactive Development & Rapid Iteration
-→ **Python**
+### If Web Team Familiarity
+→ **Node.js** (TypeScript/JavaScript) or **C#** (similar to C# web ecosystem)
+
+### If Long-Term Reliability & Safety
+→ **Rust** (compiler catches bugs) or **Java** (battle-tested infrastructure)
 
 ---
 
@@ -680,7 +827,17 @@ All implementations solve the same problem; choose based on **team, environment,
 
 ---
 
-## References
+## References & Implementation Plans
+
+### Official Implementation Plans
+
+Complete architectural plans with phased implementation timelines:
+
+- **[Dart/Drift Plan](plan-quizEngine-dart.prompt.md)** - Async-first, modern Dart/Flutter ecosystem
+- **[Node.js/TypeORM Plan](plan-quizEngine-nodejs.prompt.md)** - JavaScript/TypeScript ecosystem with rich npm
+- **[Rust/Diesel Plan](plan-quizEngine-rust.prompt.md)** - Memory-safe, blazing-fast systems programming
+
+### Documentation & Resources by Implementation
 
 - **Python:** Typer, Rich, Pydantic documentation
 - **Java JDBC:** Picocli, HikariCP documentation
@@ -688,3 +845,5 @@ All implementations solve the same problem; choose based on **team, environment,
 - **C#/.NET:** EF Core, System.CommandLine, Spectre.Console documentation
 - **Dart:** Drift ORM, args package documentation
 - **Go:** Cobra CLI, go-sqlite3 documentation
+- **Node.js:** TypeORM, Yargs, Chalk documentation
+- **Rust:** Diesel ORM, Clap, Tokio documentation
