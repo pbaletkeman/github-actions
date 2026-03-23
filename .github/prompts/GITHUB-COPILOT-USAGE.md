@@ -95,7 +95,7 @@ Once files are pushed to GitHub, you can use GitHub Copilot from anywhere (compu
 ```
 @github-copilot
 
-Please read the file `.github/prompts/00-quiz-engine-meta-prompt.md` 
+Please read the file `.github/prompts/00-quiz-engine-meta-prompt.md`
 and summarize what implementations I have and their key features.
 ```
 
@@ -109,7 +109,7 @@ and summarize what implementations I have and their key features.
 ```
 @github-copilot
 
-Based on the Quiz Engine implementations in `.github/prompts/`, 
+Based on the Quiz Engine implementations in `.github/prompts/`,
 please generate code for a new endpoint: `/api/v1/quizzes/{id}/attempts`
 
 The endpoint should:
@@ -129,10 +129,10 @@ Generate this for: Python, Node.js, and Rust
 ```
 @github-copilot
 
-Reference `.github/prompts/00-quiz-engine-meta-prompt.md` 
+Reference `.github/prompts/00-quiz-engine-meta-prompt.md`
 and the Docker & Containerization phase.
 
-Create a step-by-step guide for deploying all 8 quiz engine implementations 
+Create a step-by-step guide for deploying all 8 quiz engine implementations
 to Docker Hub with multi-architecture support (linux/amd64, linux/arm64).
 ```
 
@@ -195,8 +195,8 @@ Read `.github/prompts/08-plan-quizEngine-rust.prompt.md`
 ```
 @github-copilot
 
-From the Quiz Engine implementations, what is the consistent API response 
-format used across all 8 languages? Show me an example response for creating 
+From the Quiz Engine implementations, what is the consistent API response
+format used across all 8 languages? Show me an example response for creating
 a new quiz session.
 ```
 
@@ -214,7 +214,7 @@ Include the exact commands I need to run.
 @github-copilot
 
 From all 8 implementations, what is the quiz engine database schema?
-Show the ERD (Entity Relationship Diagram) and explain how each language 
+Show the ERD (Entity Relationship Diagram) and explain how each language
 uses its ORM (SQLAlchemy, TypeORM, JPA, etc.) to interact with it.
 ```
 
@@ -223,7 +223,7 @@ uses its ORM (SQLAlchemy, TypeORM, JPA, etc.) to interact with it.
 @github-copilot
 
 Based on `.github/prompts/00-quiz-engine-meta-prompt.md`,
-create a docker-compose.yml that spins up all 8 quiz engine implementations 
+create a docker-compose.yml that spins up all 8 quiz engine implementations
 simultaneously with their test suites. Include coverage verification for each.
 ```
 
