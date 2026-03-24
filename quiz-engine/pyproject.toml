@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "quiz-engine"
+version = "1.0.0"
+description = "Python/SQLite Quiz Engine for GH-200 Certification"
+requires-python = ">=3.9"
+dependencies = [
+    "typer[all]==0.9.0",
+    "rich==13.7.0",
+    "pydantic==2.5.3",
+    "python-dateutil==2.8.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=quiz_engine --cov-report=html:coverage_html --cov-report=xml --cov-report=term-missing --cov-fail-under=90"
+
+[tool.coverage.run]
+branch = true
+source = ["quiz_engine"]
+omit = ["quiz_engine/cli.py", "quiz_engine/main.py"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "def __repr__",
+]
