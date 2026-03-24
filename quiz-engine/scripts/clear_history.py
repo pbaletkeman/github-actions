@@ -24,7 +24,7 @@ def main():
     if args.session_id:
         db.delete_session(args.session_id)
         print(f"Deleted session {args.session_id}")
-    elif getattr(args, 'all'):
+    elif args.all:
         db.delete_all_sessions()
         print("Deleted all sessions.")
     elif args.before:

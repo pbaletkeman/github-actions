@@ -135,7 +135,10 @@ def test_import_extracts_correct_answers(tmp_path):
 def test_import_script_function(tmp_path):
     """Test the import_file function from scripts."""
     import sys
-    sys.path.insert(0, '/home/runner/work/github-actions/github-actions/quiz-engine')
+    import os
+    quiz_engine_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if quiz_engine_dir not in sys.path:
+        sys.path.insert(0, quiz_engine_dir)
     from scripts.import_questions import import_file
 
     md_file = tmp_path / "script_test.md"
