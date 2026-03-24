@@ -1,0 +1,13 @@
+target/
+*.class
+*.jar
+!src/**/*.jar
+.mvn/
+*.db
+*.db-shm
+*.db-wal
+.idea/
+*.iml
+.classpath
+.project
+.settings/
