@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - quiz-data:/data
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - QUIZ_DB_PATH=/data/quiz.db
+    stdin_open: true
+    tty: true
+    command: ["--help"]
+
+  quiz-engine-test:
+    build:
+      context: .
+      target: builder
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      dotnet test QuizEngine.Tests
+        --configuration Release
+        /p:CollectCoverage=true
+        /p:CoverletOutputFormat=lcov
+        /p:CoverletOutput=./coverage/
+        /p:Threshold=90
+        /p:ThresholdType=line
+        /p:ExcludeByFile="**/Program.cs;**/Migrations/**"
+    environment:
+      - DOTNET_ENVIRONMENT=Test
+
+  quiz-engine-build:
+    build:
+      context: .
+      target: builder
+    container_name: quiz-engine-build
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: dotnet build -c Release
+
+volumes:
+  quiz-data:
+    driver: local
