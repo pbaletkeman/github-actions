@@ -626,7 +626,7 @@ function get_questions(session_id):
   - SHUFFLE question order
   - Shuffle answers within each question
   - Return questions without answer correctness
-  
+
 // 3. Submit Answer & Evaluate
 function submit_answer(session_id, question_id, selected_answer_id):
   - Validate session exists and is active
@@ -635,7 +635,7 @@ function submit_answer(session_id, question_id, selected_answer_id):
   - Record user response
   - Update session score incrementally
   - Return {is_correct, points}
-  
+
 // 4. Calculate Final Score
 function calculate_score(session_id):
   - Sum all correct responses
@@ -682,11 +682,11 @@ services:
   quiz-engine:                    # Development service
     build: .
     ports: [8000:8000]
-    
+
   quiz-engine-test:               # Test service with coverage
     build: .
     command: [test command with coverage verification >90%]
-    
+
   quiz-engine-build:              # Optional build-only service
     build: .
     command: [build command]
