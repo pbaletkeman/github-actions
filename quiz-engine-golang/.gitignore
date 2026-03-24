@@ -1,0 +1,8 @@
+bin/
+*.db
+coverage.out
+coverage.html
+quiz-engine
+quiz-engine.exe
+quiz-engine-linux
+quiz-engine-macos
