@@ -1,7 +1,7 @@
 # How to Generate All 8 Quiz Engines with GitHub Copilot Agent
 
-**Status:** ✅ All generation prompts now on GitHub  
-**Files Pushed:** CODEGEN-PROMPT-all-8-quiz-engines.md  
+**Status:** ✅ All generation prompts now on GitHub
+**Files Pushed:** CODEGEN-PROMPT-all-8-quiz-engines.md
 **Repository:** https://github.com/pbaletkeman/github-actions
 
 ---
@@ -20,14 +20,14 @@
 3. **Send this prompt to Copilot:**
    ```
    @github-copilot
-   
-   You are a code generation expert. Your task is to generate all 8 quiz engine 
+
+   You are a code generation expert. Your task is to generate all 8 quiz engine
    implementations based on the specification in this repository.
-   
+
    1. Read: .github/prompts/CODEGEN-PROMPT-all-8-quiz-engines.md
    2. Read: .github/prompts/00-quiz-engine-meta-prompt.md
    3. Reference: Each individual prompt file (0[1-8]-plan-quizEngine-*.prompt.md)
-   
+
    Then generate COMPLETE, PRODUCTION-READY code for all 8 languages:
    1. Python (Flask + SQLAlchemy)
    2. Node.js (Express + TypeORM)
@@ -37,7 +37,7 @@
    6. Dart (Dart + Drift)
    7. Go (Gin + GORM)
    8. Rust (Actix-web + Diesel)
-   
+
    For each implementation:
    - Create project structure following the specification
    - Generate all source files with complete code
@@ -45,14 +45,14 @@
    - Generate Docker and docker-compose files
    - Create README.md documentation
    - Ensure all implementations use the SAME database schema and API format
-   
+
    Success criteria:
    - All 8 implementations have >90% test coverage
    - All APIs follow the same endpoint patterns
    - All responses use the same JSON envelope format
    - All Docker images build and run successfully
    - Code is production-ready and follows language best practices
-   
+
    Create the implementations and put them into respective directories:
    quiz-engine-python/
    quiz-engine-nodejs/
@@ -62,7 +62,7 @@
    quiz-engine-dart/
    quiz-engine-golang/
    quiz-engine-rust/
-   
+
    Then commit to GitHub.
    ```
 
@@ -91,8 +91,8 @@ If you have VS Code with Copilot extension:
 
 3. **Send agent prompt:**
    ```
-   Read the current file and generate all 8 quiz engine implementations 
-   according to the specification. Create complete, tested, and dockerized code 
+   Read the current file and generate all 8 quiz engine implementations
+   according to the specification. Create complete, tested, and dockerized code
    for all languages. Commit to GitHub when complete.
    ```
 
@@ -365,7 +365,7 @@ Verify with: pytest --cov, npm test, gradle test, dotnet test, etc.
 ```
 @github-copilot
 
-The Dockerfile for [language] won't build. 
+The Dockerfile for [language] won't build.
 The error is: [paste error]
 
 Fix it to:
