@@ -1,0 +1,46 @@
+{
+  "name": "quiz-engine",
+  "version": "1.0.0",
+  "description": "Node.js/TypeORM Quiz Engine for GH-200 Certification",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "ts-node --project tsconfig.json src/main.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --coverage --ci --runInBand",
+    "typeorm": "typeorm-ts-node-commonjs"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.3",
+    "dotenv": "^17.3.1",
+    "inquirer": "^8.2.6",
+    "reflect-metadata": "^0.1.14",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.20",
+    "uuid": "^9.0.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/inquirer": "^8.2.10",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.7",
+    "@types/uuid": "^9.0.8",
+    "@types/yargs": "^17.0.32",
+    "ts-jest": "^29.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "keywords": [
+    "quiz",
+    "typeorm",
+    "typescript",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT"
+}
