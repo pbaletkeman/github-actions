@@ -1,0 +1,19 @@
+# https://dart.dev/guides/libraries/private-files
+# Created by `dart pub`
+.dart_tool/
+
+# Build artifacts
+bin/quiz_engine
+bin/quiz_engine-release
+bin/quiz-engine
+bin/quiz-engine-release
+
+# Coverage
+coverage/
+
+# SQLite database files
+*.db
+*.sqlite
+
+# Pub cache
+.pub-cache/
