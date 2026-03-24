@@ -50,7 +50,7 @@ npm run dev -- --help
 ## Installation
 
 ```bash
-cd quiz_engine
+cd quiz-nodejs-engine
 npm install
 npm run build
 ```
@@ -168,7 +168,7 @@ npm run dev -- clear --all --confirm
 ## Architecture
 
 ```
-quiz_engine/
+quiz-nodejs-engine/
 ├── src/
 │   ├── main.ts                             # CLI entry point (yargs)
 │   ├── models/
