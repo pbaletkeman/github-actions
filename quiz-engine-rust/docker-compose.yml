@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    command: cargo run -- --help
+    environment:
+      - CARGO_NET_OFFLINE=false
+      - DATABASE_URL=sqlite:./quiz_engine.db
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    command: cargo test
+    environment:
+      - CARGO_NET_OFFLINE=false
+
+  quiz-engine-build:
+    build: .
+    container_name: quiz-engine-build
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    command: cargo build --release
+
+volumes:
+  cargo-cache:
