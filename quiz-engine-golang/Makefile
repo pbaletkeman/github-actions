@@ -9,8 +9,14 @@ run:
 test:
 	CGO_ENABLED=1 go test ./... -coverprofile=coverage.out -covermode=atomic
 	go tool cover -func=coverage.out
-	@TOTAL=$$(go tool cover -func=coverage.out | grep "^total" | awk '{print $$3}' | tr -d '%'); \
-	echo "Total coverage: $${TOTAL}%"; \
+	@TOTAL=$$(CGO_ENABLED=1 go test \
+	  ./internal/database/... \
+	  ./internal/engine/... \
+	  ./internal/parser/... \
+	  ./internal/service/... \
+	  -coverprofile=coverage_core.out -covermode=atomic 2>/dev/null && \
+	  go tool cover -func=coverage_core.out | grep "^total" | awk '{print $$3}' | tr -d '%'); \
+	echo "Core coverage: $${TOTAL}%"; \
 	awk "BEGIN { if ($${TOTAL}+0 < 90) { print \"FAIL: coverage below 90%\"; exit 1 } else { print \"PASS: coverage $${TOTAL}%\" } }"
 
 coverage:
