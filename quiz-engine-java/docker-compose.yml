@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    stdin_open: true
+    tty: true
+  quiz-engine-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quiz-engine-test
+    command: ["test"]

@@ -1,0 +1,12 @@
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/cli/ConsoleFormatterTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/dao/DatabaseManagerTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/dao/QuestionDAOTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/dao/ResponseDAOTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/dao/SessionDAOTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/model/ModelTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/service/HistoryServiceTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/service/QuizEngineTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/service/QuizServiceTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/util/AnswerShufflerTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/util/MarkdownParserTest.java
+/home/runner/work/github-actions/github-actions/quiz-engine-java/src/test/java/com/quizengine/util/QuizUtilsTest.java
