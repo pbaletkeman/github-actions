@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev -- --help
+    environment:
+      - NODE_ENV=development
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run test:coverage
+    environment:
+      - NODE_ENV=test
+
+  quiz-engine-lint:
+    build: .
+    container_name: quiz-engine-lint
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run build
