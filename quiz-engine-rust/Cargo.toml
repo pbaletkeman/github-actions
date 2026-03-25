@@ -1,0 +1,48 @@
+[package]
+name = "quiz_engine"
+version = "0.1.0"
+edition = "2021"
+description = "GH-200 Certification Quiz Engine built with Rust, sqlx, and clap"
+authors = ["Quiz Engine Contributors"]
+
+[[bin]]
+name = "quiz_engine"
+path = "src/main.rs"
+
+[lib]
+name = "quiz_engine"
+path = "src/lib.rs"
+
+[dependencies]
+sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio-native-tls", "chrono"] }
+tokio = { version = "1", features = ["full"] }
+clap = { version = "4.5", features = ["derive"] }
+uuid = { version = "1.11", features = ["v4"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+rand = "0.8"
+regex = "1.11"
+anyhow = "1.0"
+thiserror = "2.0"
+dotenvy = "0.15"
+
+[dev-dependencies]
+tempfile = "3.14"
+criterion = { version = "0.5", features = ["async_tokio"] }
+tokio = { version = "1", features = ["full"] }
+
+[[bench]]
+name = "quiz_bench"
+harness = false
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.test]
+opt-level = 0
+debug = true
