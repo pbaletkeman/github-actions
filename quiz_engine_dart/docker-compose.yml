@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - .:/app
+      - pub_cache:/app/.pub-cache
+    working_dir: /app
+    command: dart run lib/main.dart --help
+    environment:
+      - PUB_CACHE=/app/.pub-cache
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build: .
+    container_name: quiz-engine-test
+    volumes:
+      - .:/app
+      - pub_cache:/app/.pub-cache
+    working_dir: /app
+    command: >
+      bash -c "dart pub get &&
+               dart test &&
+               dart pub global activate coverage &&
+               dart test --coverage=coverage &&
+               dart pub global run coverage:format_coverage
+                 --lcov --in=coverage --out=coverage/lcov.info --report-on=lib &&
+               bash scripts/check_coverage.sh"
+    environment:
+      - PUB_CACHE=/app/.pub-cache
+
+  quiz-engine-build:
+    build: .
+    container_name: quiz-engine-build
+    volumes:
+      - .:/app
+      - pub_cache:/app/.pub-cache
+    working_dir: /app
+    command: dart compile exe lib/main.dart -o bin/quiz-engine-release
+    environment:
+      - PUB_CACHE=/app/.pub-cache
+
+volumes:
+  pub_cache:
