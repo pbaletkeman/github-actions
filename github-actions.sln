@@ -1,0 +1,60 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "quiz-engine", "quiz-engine", "{49C961B0-F336-A91A-13CF-310206FC42B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "quiz-engine-csharp", "quiz-engine-csharp", "{49CF1F7E-6CE0-A133-A4CC-14F4138482DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizEngine.CLI", "quiz-engine\quiz-engine-csharp\QuizEngine.CLI\QuizEngine.CLI.csproj", "{A2F4F2DF-C669-8E73-B043-8EE7DAC64C07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizEngine.Data", "quiz-engine\quiz-engine-csharp\QuizEngine.Data\QuizEngine.Data.csproj", "{AD139D7F-AE6C-CBFA-F1D3-A4F76E036DC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizEngine.Entities", "quiz-engine\quiz-engine-csharp\QuizEngine.Entities\QuizEngine.Entities.csproj", "{3574F293-BC8C-C5B2-B2F2-045111E6EB70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizEngine.Service", "quiz-engine\quiz-engine-csharp\QuizEngine.Service\QuizEngine.Service.csproj", "{9BAEAA10-810E-8776-E53E-931A43C0AB5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizEngine.Tests", "quiz-engine\quiz-engine-csharp\QuizEngine.Tests\QuizEngine.Tests.csproj", "{A7D7F526-7684-4169-715C-B4272E1724C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2F4F2DF-C669-8E73-B043-8EE7DAC64C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F4F2DF-C669-8E73-B043-8EE7DAC64C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F4F2DF-C669-8E73-B043-8EE7DAC64C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F4F2DF-C669-8E73-B043-8EE7DAC64C07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD139D7F-AE6C-CBFA-F1D3-A4F76E036DC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD139D7F-AE6C-CBFA-F1D3-A4F76E036DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD139D7F-AE6C-CBFA-F1D3-A4F76E036DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD139D7F-AE6C-CBFA-F1D3-A4F76E036DC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3574F293-BC8C-C5B2-B2F2-045111E6EB70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3574F293-BC8C-C5B2-B2F2-045111E6EB70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3574F293-BC8C-C5B2-B2F2-045111E6EB70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3574F293-BC8C-C5B2-B2F2-045111E6EB70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BAEAA10-810E-8776-E53E-931A43C0AB5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BAEAA10-810E-8776-E53E-931A43C0AB5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BAEAA10-810E-8776-E53E-931A43C0AB5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BAEAA10-810E-8776-E53E-931A43C0AB5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7D7F526-7684-4169-715C-B4272E1724C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7D7F526-7684-4169-715C-B4272E1724C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7D7F526-7684-4169-715C-B4272E1724C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7D7F526-7684-4169-715C-B4272E1724C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{49CF1F7E-6CE0-A133-A4CC-14F4138482DF} = {49C961B0-F336-A91A-13CF-310206FC42B4}
+		{A2F4F2DF-C669-8E73-B043-8EE7DAC64C07} = {49CF1F7E-6CE0-A133-A4CC-14F4138482DF}
+		{AD139D7F-AE6C-CBFA-F1D3-A4F76E036DC3} = {49CF1F7E-6CE0-A133-A4CC-14F4138482DF}
+		{3574F293-BC8C-C5B2-B2F2-045111E6EB70} = {49CF1F7E-6CE0-A133-A4CC-14F4138482DF}
+		{9BAEAA10-810E-8776-E53E-931A43C0AB5D} = {49CF1F7E-6CE0-A133-A4CC-14F4138482DF}
+		{A7D7F526-7684-4169-715C-B4272E1724C6} = {49CF1F7E-6CE0-A133-A4CC-14F4138482DF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9AFBA1CB-DD3C-4A4B-A77A-49FADAC8F78C}
+	EndGlobalSection
+EndGlobal
