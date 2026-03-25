@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  quiz-engine:
+    build: .
+    container_name: quiz-engine-dev
+    volumes:
+      - ./data:/app/data
+    command: ["--help"]
+    stdin_open: true
+    tty: true
+
+  quiz-engine-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: quiz-engine-test
+    working_dir: /app
+    command: >
+      sh -c "CGO_ENABLED=1 go test ./... -coverprofile=coverage.out -covermode=atomic &&
+             go tool cover -func=coverage.out"
