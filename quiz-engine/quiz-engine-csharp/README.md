@@ -15,9 +15,9 @@ A command-line quiz engine for GH-200 GitHub Actions certification preparation. 
 
 ## Project Structure
 
-```
+```plaintext
 quiz-engine-csharp/
-├── QuizEngine.sln                    # Solution file
+├── QuizEngine.sln                    # Solution file (.NET standard format)
 ├── QuizEngine.Entities/              # Entity models
 │   ├── Question.cs
 │   ├── QuizSession.cs
@@ -60,7 +60,7 @@ quiz-engine-csharp/
 
 ## Prerequisites
 
-- .NET 8 SDK: https://dotnet.microsoft.com/download/dotnet/8
+- .NET 8 SDK: <https://dotnet.microsoft.com/download/dotnet/8>
 - Or Docker (no local .NET required)
 
 ## Quick Start
@@ -212,7 +212,7 @@ Uses SQLite via Entity Framework Core. The database file is created automaticall
 ## Dependencies
 
 | Package | Version | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | Microsoft.EntityFrameworkCore | 8.0.0 | ORM |
 | Microsoft.EntityFrameworkCore.Sqlite | 8.0.0 | SQLite provider |
 | Spectre.Console | 0.49.1 | Rich terminal output |

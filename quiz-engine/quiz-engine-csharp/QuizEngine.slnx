@@ -1,7 +1,0 @@
-<Solution>
-  <Project Path="QuizEngine.CLI/QuizEngine.CLI.csproj" />
-  <Project Path="QuizEngine.Data/QuizEngine.Data.csproj" />
-  <Project Path="QuizEngine.Entities/QuizEngine.Entities.csproj" />
-  <Project Path="QuizEngine.Service/QuizEngine.Service.csproj" />
-  <Project Path="QuizEngine.Tests/QuizEngine.Tests.csproj" />
-</Solution>
