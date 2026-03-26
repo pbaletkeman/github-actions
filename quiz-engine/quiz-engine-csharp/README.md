@@ -74,7 +74,9 @@ dotnet build
 
 ### 2. Import Questions
 
-Create a Markdown file with questions in this format:
+The MarkdownParser supports **two markdown formats**:
+
+#### Format 1: Simple Format (Recommended for new files)
 
 ```markdown
 ## Question 1
@@ -94,7 +96,35 @@ Section: GitHub Actions
 Difficulty: easy
 ```
 
-Then import:
+#### Format 2: Answer-Key Format (Bulk exam files)
+
+Questions structured with metadata headers and answers extracted from a table:
+
+```markdown
+### Question 1 — Topic/Section
+
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: GitHub Actions
+
+**Question**:
+What does CI stand for?
+
+- A) Continuous Integration
+- B) Code Integration
+- C) Complete Infrastructure
+- D) Cloud Infrastructure
+
+...
+
+## Answer Key
+
+| Q# | Answer(s) | Explanation | Source | Difficulty |
+|----|-----------|-------------|--------|------------|
+| 1 | A | CI stands for Continuous Integration. | source.md | Easy |
+```
+
+**To import**:
 
 ```bash
 dotnet run --project QuizEngine.CLI -- import --file questions.md
@@ -122,17 +152,42 @@ dotnet run --project QuizEngine.CLI -- quiz --questions 10 --section "GitHub Act
 dotnet run --project QuizEngine.CLI -- quiz --no-explanation
 ```
 
+**Note:** Explanations are shown **after all questions are answered** (at the end of the quiz), not after each individual question. This prevents spoilers and helps you think through answers before seeing explanations. Use `--no-explanation` to skip them entirely.
+
 ### 4. View History
 
 ```bash
-# List recent sessions
+# List recent sessions (most recent first, default)
 dotnet run --project QuizEngine.CLI -- history
 
 # Show last N sessions
 dotnet run --project QuizEngine.CLI -- history --count 5
 
-# Show session details
-dotnet run --project QuizEngine.CLI -- history --session-id <uuid>
+# Sort by highest scores first
+dotnet run --project QuizEngine.CLI -- history --sort score --order desc
+
+# Sort by question count (most questions first)
+dotnet run --project QuizEngine.CLI -- history --sort questions --order desc
+
+# Sort by time spent (longest first)
+dotnet run --project QuizEngine.CLI -- history --sort time --order desc
+
+# Sort options
+# --sort: date (default), score, questions, or time
+# --order: desc (default) or asc
+```
+
+**Session ID Lookup:**
+
+Session IDs now display the first 18 characters for better readability (e.g., `beca2997-7aab-455b...`). You can use prefix matching to look up sessions:
+
+```bash
+# All of these work to find the same session:
+dotnet run --project QuizEngine.CLI -- history --session-id beca2997
+dotnet run --project QuizEngine.CLI -- history --session-id beca2997-7aab-4
+dotnet run --project QuizEngine.CLI -- history --session-id beca2997-7aab-455b-9f12-c01ec03519a2
+
+# Shows session details
 ```
 
 ### 5. Clear Data

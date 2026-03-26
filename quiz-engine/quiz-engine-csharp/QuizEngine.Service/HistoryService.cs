@@ -14,18 +14,52 @@ public class HistoryService
         _responseRepo = responseRepo;
     }
 
-    public async Task<List<QuizSession>> GetRecentSessionsAsync(int count = 10)
+    public async Task<List<QuizSession>> GetRecentSessionsAsync(int count = 10, string sortBy = "date", string order = "desc")
     {
-        return await _sessionRepo.GetAllAsync(0, count);
+        var sessions = await _sessionRepo.GetAllAsync(0, count);
+
+        sessions = (sortBy.ToLower(), order.ToLower()) switch
+        {
+            ("score", "asc") => sessions.OrderBy(s => s.PercentageCorrect).ToList(),
+            ("score", _) => sessions.OrderByDescending(s => s.PercentageCorrect).ToList(),
+            ("questions", "asc") => sessions.OrderBy(s => s.NumQuestions).ToList(),
+            ("questions", _) => sessions.OrderByDescending(s => s.NumQuestions).ToList(),
+            ("time", "asc") => sessions.OrderBy(s => s.TimeTakenSeconds ?? int.MaxValue).ToList(),
+            ("time", _) => sessions.OrderByDescending(s => s.TimeTakenSeconds ?? 0).ToList(),
+            ("date", "asc") => sessions.OrderBy(s => s.StartedAt).ToList(),
+            (_, _) => sessions.OrderByDescending(s => s.StartedAt).ToList(),
+        };
+
+        return sessions;
     }
 
     public async Task<(QuizSession? Session, List<QuizResponse> Responses)> GetSessionDetailAsync(string sessionId)
     {
+        // Try exact match first
         var session = await _sessionRepo.GetByIdAsync(sessionId);
         if (session == null)
-            return (null, new List<QuizResponse>());
+        {
+            // Try prefix match
+            var allSessions = await _sessionRepo.GetAllAsync(0, 1000);
+            var matches = allSessions.Where(s => s.SessionId.StartsWith(sessionId, StringComparison.OrdinalIgnoreCase)).ToList();
 
-        var responses = await _responseRepo.GetBySessionIdAsync(sessionId);
+            if (matches.Count == 1)
+            {
+                session = matches[0];
+            }
+            else if (matches.Count > 1)
+            {
+                // Multiple matches - return null with error message
+                return (null, new List<QuizResponse>());
+            }
+            else
+            {
+                // No matches at all
+                return (null, new List<QuizResponse>());
+            }
+        }
+
+        var responses = await _responseRepo.GetBySessionIdAsync(session.SessionId);
         return (session, responses);
     }
 

@@ -52,7 +52,15 @@ public static class QuizCommand
         using var scope = services.CreateScope();
         var quizService = scope.ServiceProvider.GetRequiredService<QuizService>();
 
-        AnsiConsole.Clear();
+        try
+        {
+            AnsiConsole.Clear();
+        }
+        catch
+        {
+            // Clear may fail if console is not available (e.g., piped input)
+        }
+
         AnsiConsole.Write(new FigletText("Quiz Engine").Color(Color.Cyan1));
         AnsiConsole.MarkupLine("[dim]GitHub Actions GH-200 Certification Prep[/]\n");
 
@@ -73,6 +81,8 @@ public static class QuizCommand
         if (section != null) AnsiConsole.MarkupLine($"[dim]Section: {section}[/]");
         AnsiConsole.WriteLine();
 
+        var allResults = new List<(int Index, AnswerResult Result)>();
+
         for (int i = 0; i < state.Questions.Count; i++)
         {
             var question = state.Questions[i];
@@ -86,12 +96,34 @@ public static class QuizCommand
             {
                 AnsiConsole.MarkupLine("[dim]Skipped.[/]");
                 // Still record as wrong
-                await quizService.SubmitAnswerAsync(state.SessionId, i, "?", 0);
+                var skippedResult = await quizService.SubmitAnswerAsync(state.SessionId, i, "?", 0);
+                allResults.Add((i, skippedResult));
                 continue;
             }
 
             var result = await quizService.SubmitAnswerAsync(state.SessionId, i, answer, 0);
-            ConsoleFormatter.PrintAnswerResult(result, showExplanation);
+            // Don't show any feedback yet - just collect results
+            allResults.Add((i, result));
+        }
+
+        // Show all results and explanations after quiz is complete
+        AnsiConsole.WriteLine();
+        AnsiConsole.Write(new Rule("[bold yellow]Quiz Results[/]"));
+
+        foreach (var (index, result) in allResults)
+        {
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine($"[bold]Question {index + 1}:[/]");
+
+            if (result.IsCorrect)
+                AnsiConsole.MarkupLine("[bold green]✓ Correct![/]");
+            else
+                AnsiConsole.MarkupLine($"[bold red]✗ Incorrect. Correct answer: {result.CorrectAnswer}[/]");
+
+            if (showExplanation && !string.IsNullOrEmpty(result.Explanation))
+            {
+                AnsiConsole.MarkupLine($"[dim italic]{Markup.Escape(result.Explanation)}[/]");
+            }
         }
 
         var quizResult = await quizService.FinalizeAsync(state.SessionId);

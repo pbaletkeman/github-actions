@@ -20,11 +20,23 @@ public static class HistoryCommand
             "--session-id",
             description: "Show details for a specific session");
 
+        var sortOption = new Option<string>(
+            "--sort",
+            getDefaultValue: () => "date",
+            description: "Sort by: date, score, questions, or time");
+
+        var orderOption = new Option<string>(
+            "--order",
+            getDefaultValue: () => "desc",
+            description: "Sort order: asc or desc");
+
         var command = new Command("history", "View quiz history");
         command.AddOption(countOption);
         command.AddOption(sessionIdOption);
+        command.AddOption(sortOption);
+        command.AddOption(orderOption);
 
-        command.SetHandler(async (int count, string? sessionId) =>
+        command.SetHandler(async (int count, string? sessionId, string sort, string order) =>
         {
             using var scope = services.CreateScope();
             var historyService = scope.ServiceProvider.GetRequiredService<HistoryService>();
@@ -41,12 +53,12 @@ public static class HistoryCommand
             }
             else
             {
-                var sessions = await historyService.GetRecentSessionsAsync(count);
+                var sessions = await historyService.GetRecentSessionsAsync(count, sort, order);
                 var total = await historyService.GetTotalSessionsAsync();
                 AnsiConsole.MarkupLine($"\n[bold]Quiz History[/] (showing {sessions.Count} of {total} sessions)\n");
                 ConsoleFormatter.PrintSessionHistory(sessions);
             }
-        }, countOption, sessionIdOption);
+        }, countOption, sessionIdOption, sortOption, orderOption);
 
         return command;
     }
