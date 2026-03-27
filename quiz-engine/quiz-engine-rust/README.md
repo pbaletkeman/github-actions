@@ -6,6 +6,128 @@ A high-performance, memory-safe CLI quiz engine for GH-200 GitHub Actions certif
 
 Built with **Rust 1.70+**, **sqlx** (async SQLite), **clap** (CLI), **criterion** (benchmarks), and **tokio** (async runtime).
 
+## Prerequisites
+
+### Required Software
+
+- **Rust 1.70+** - [Install Rust](https://www.rust-lang.org/tools/install)
+- **Cargo** - Included with Rust
+- **SQLite** - Required for database support
+- **C Compiler** - Required for building SQLite bindings
+  - **Windows**: Visual C++ Build Tools or MinGW-w64
+  - **macOS**: Xcode Command Line Tools
+  - **Linux**: GCC or Clang
+
+### Verifying Prerequisites
+
+```bash
+# Check Rust version
+rustc --version
+
+# Check Cargo version
+cargo --version
+
+# Check SQLite (if installed separately)
+sqlite3 --version
+```
+
+## Installing Rust
+
+### Windows Installation
+
+1. Download [rustup-init.exe](https://www.rust-lang.org/tools/install)
+2. Run the installer and follow the prompts
+3. Select `1) Proceed with installation`
+4. Close terminal and restart
+5. Verify installation:
+   ```cmd
+   rustc --version
+   cargo --version
+   ```
+
+### macOS Installation
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Follow the prompts, then activate Rust:
+source $HOME/.cargo/env
+
+# Verify installation
+rustc --version
+cargo --version
+```
+
+### Linux Installation
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Follow the prompts, then activate Rust:
+source $HOME/.cargo/env
+
+# Verify installation
+rustc --version
+cargo --version
+```
+
+## Setting Up Build Environment
+
+### Windows Setup
+
+#### Option 1: Using Visual C++ Build Tools
+
+1. Download [Visual C++ Build Tools](https://visualstudio.microsoft.com/downloads/)
+2. Run installer and select "Desktop development with C++"
+3. Complete installation and restart
+
+#### Option 2: Using MinGW-w64
+
+1. Download [MinGW-w64](https://www.mingw-w64.org/)
+2. Extract to folder (e.g., `C:\mingw`)
+3. Add to PATH and update Rust:
+   ```cmd
+   rustup default stable-gnu
+   ```
+
+### macOS Setup
+
+```bash
+# Install Xcode Command Line Tools
+xcode-select --install
+
+# Rust will use clang automatically
+```
+
+### Linux Setup
+
+#### Debian/Ubuntu
+
+```bash
+sudo apt-get update
+sudo apt-get install build-essential sqlite3 libsqlite3-dev
+```
+
+#### Fedora/RHEL
+
+```bash
+sudo dnf groupinstall "Development Tools"
+sudo dnf install sqlite sqlite-devel
+```
+
+## Installed Dependencies
+
+The project uses the following Rust crates (automatically downloaded):
+
+- **tokio** - Async runtime
+- **sqlx** - SQL toolkit with SQLite support
+- **clap** - Command-line argument parser
+- **serde** - Serialization framework
+- **criterion** - Benchmarking framework
+- **uuid** - UUID generation
+
+These are defined in `Cargo.toml` and installed automatically via `cargo build`.
+
 ## Features
 
 - 📚 Load and randomize questions from Markdown files
@@ -19,18 +141,103 @@ Built with **Rust 1.70+**, **sqlx** (async SQLite), **clap** (CLI), **criterion*
 
 ## Quick Start
 
+### 1. Clone or Navigate to Project
+
 ```bash
-# Build (debug)
+cd quiz-engine-rust
+```
+
+### 2. Build the Project
+
+```bash
+# Debug build (faster compile, larger binary, debug info)
 cargo build
 
-# Build (release — optimized, ~10MB binary)
+# Release build (optimized, ~10MB binary, faster execution)
 cargo build --release
+```
 
-# Run (debug)
+**Note**: First build may take 2-5 minutes as dependencies are downloaded and compiled.
+
+### 3. Locate the Executable
+
+- **Debug**: `target/debug/quiz_engine`
+- **Release**: `target/release/quiz_engine`
+
+### 4. Verify Build Success
+
+```bash
+# Using debug binary
 cargo run -- --help
 
-# Run (release)
+# Using release binary
 ./target/release/quiz_engine --help
+```
+
+## Building the Project
+
+### Full Build
+
+```bash
+# Debug build (default)
+cargo build
+
+# Release build (optimized)
+cargo build --release
+
+# Verbose build output
+cargo build --verbose
+
+# Check for errors without building
+cargo check
+```
+
+### Clean Build
+
+```bash
+# Remove build artifacts
+cargo clean
+
+# Rebuild from scratch
+cargo clean && cargo build --release
+```
+
+### Build Troubleshooting
+
+**Error**: `error[E0514]: found crate ... compiled by an incompatible version`
+- **Solution**: Run `cargo clean && cargo build`
+
+**Error**: `error: linking with ... failed: exit status: 1`
+- **Solution**: Ensure C compiler is installed (see Setup Build Environment section)
+
+**Error**: `error: could not compile sqlx`
+- **Solution**: Install SQLite development files for your OS
+
+## Running the Project
+
+### Using Cargo (Debug)
+
+```bash
+# Run default quiz (10 questions)
+cargo run -- quiz
+
+# Run with custom question count
+cargo run -- quiz --questions 50
+
+# Show help
+cargo run -- --help
+```
+
+### Using Compiled Binary (Release)
+
+```bash
+# Windows
+.\target\release\quiz_engine --help
+.\target\release\quiz_engine quiz --questions 20
+
+# macOS/Linux
+./target/release/quiz_engine --help
+./target/release/quiz_engine quiz --questions 20
 ```
 
 ## CLI Commands
@@ -176,21 +383,64 @@ quiz-engine-rust/
 cargo test
 ```
 
-### Run with Output
+### Run Tests with Output
 
 ```bash
+# Show println! and other output
 cargo test -- --nocapture
+
+# Run tests sequentially (default is parallel)
+cargo test -- --test-threads=1
 ```
 
-### Run Specific Test File
+### Run Specific Test
 
 ```bash
+# Run a single test by name
+cargo test test_quiz_creation
+
+# Run all tests in a specific file
+cargo test --test integration_tests
+
+# Run tests matching a pattern
+cargo test history --lib
+```
+
+### Run Tests by Module
+
+```bash
+# Database/repository tests
 cargo test --test database_tests
+
+# Business logic tests
 cargo test --test service_tests
+
+# End-to-end workflow tests
 cargo test --test integration_tests
 ```
 
-### Code Coverage (optional)
+### Test Coverage
+
+```bash
+# Install tarpaulin (code coverage tool)
+cargo install cargo-tarpaulin
+
+# Generate coverage report
+cargo tarpaulin --out Html
+```
+
+## Benchmarking
+
+Run performance benchmarks using Criterion:
+
+```bash
+cargo bench
+
+# Benchmark specific function
+cargo bench quiz_engine
+```
+
+## Code Coverage (optional)
 
 ```bash
 # Install tarpaulin
