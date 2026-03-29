@@ -12,10 +12,10 @@ import 'src/cli/formatter.dart';
 
 void main(List<String> args) {
   final parser = ArgParser()
-    ..addCommand('quiz')
-    ..addCommand('import')
-    ..addCommand('history')
-    ..addCommand('clear')
+    ..addCommand('quiz', ArgParser.allowAnything())
+    ..addCommand('import', ArgParser.allowAnything())
+    ..addCommand('history', ArgParser.allowAnything())
+    ..addCommand('clear', ArgParser.allowAnything())
     ..addOption('db',
         help: 'Path to SQLite database file',
         defaultsTo: p.join(

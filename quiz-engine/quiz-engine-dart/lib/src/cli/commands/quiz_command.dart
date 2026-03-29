@@ -84,6 +84,8 @@ int _runQuiz(QuizEngine engine) {
       'Type the letter of your answer and press ENTER.',
       title: 'GitHub Actions Quiz Engine'));
 
+  final results = <_QuestionResult>[];
+
   for (var i = 0; i < engine.questions.length; i++) {
     final question = engine.questions[i];
     final shuffle = engine.getShuffleResult(i);
@@ -104,14 +106,29 @@ int _runQuiz(QuizEngine engine) {
     final answer = Prompts.readAnswer(shuffle.labels);
     engine.submitAnswer(i, answer);
 
-    final correct = answer == shuffle.correctLabel;
-    if (correct) {
-      print(Formatter.success('Correct!'));
+    results.add(_QuestionResult(
+      number: i + 1,
+      questionText: question.questionText,
+      userAnswer: answer,
+      correctLabel: shuffle.correctLabel,
+      explanation: question.explanation,
+    ));
+  }
+
+  // Display full review after all questions have been answered
+  print('');
+  print(Formatter.boxed('Review of all answers:', title: 'Answer Review'));
+  for (final r in results) {
+    print('');
+    print(Formatter.info('Q${r.number}: ${r.questionText}'));
+    if (r.isCorrect) {
+      print(Formatter.success('  Your answer: ${r.userAnswer} — Correct!'));
     } else {
       print(Formatter.error(
-          'Incorrect. The correct answer was ${shuffle.correctLabel}.'));
-      if (question.explanation != null) {
-        print('  Explanation: ${question.explanation}');
+          '  Your answer: ${r.userAnswer} — Incorrect. '
+          'Correct answer: ${r.correctLabel}'));
+      if (r.explanation != null) {
+        print('  Explanation: ${r.explanation}');
       }
     }
   }
@@ -129,6 +146,24 @@ void _printResults(dynamic session) {
     'Session ID: ${session.sessionId}',
     title: 'Quiz Complete',
   ));
+}
+
+class _QuestionResult {
+  final int number;
+  final String questionText;
+  final String userAnswer;
+  final String correctLabel;
+  final String? explanation;
+
+  _QuestionResult({
+    required this.number,
+    required this.questionText,
+    required this.userAnswer,
+    required this.correctLabel,
+    this.explanation,
+  });
+
+  bool get isCorrect => userAnswer.toUpperCase() == correctLabel.toUpperCase();
 }
 
 /// A shuffler that leaves answers in their original order.

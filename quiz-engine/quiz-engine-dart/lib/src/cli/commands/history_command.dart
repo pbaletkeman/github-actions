@@ -80,7 +80,7 @@ int historyCommand(List<String> args, AppDatabase db) {
     ['Session ID', 'Date', 'Score', '%'],
     sessions
         .map((s) => [
-              '${s.sessionId.substring(0, 8)}…',
+              s.sessionId,
               s.startedAt.toLocal().toString().substring(0, 16),
               '${s.numCorrect}/${s.numQuestions}',
               '${s.percentageCorrect.toStringAsFixed(1)}%',

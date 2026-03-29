@@ -58,11 +58,6 @@ var quizCmd = &cobra.Command{
 			if err := qe.SubmitAnswer(i, answer, timeTaken); err != nil {
 				cli.PrintError(fmt.Sprintf("Error submitting answer: %v", err))
 			}
-
-			correct := qe.Responses[len(qe.Responses)-1].IsCorrect
-			correctLetter := shuffle.PositionMap[shuffle.CorrectShuffledIndex]
-			correctOption := shuffle.ShuffledOptions[shuffle.CorrectShuffledIndex]
-			cli.DisplayResult(correct, fmt.Sprintf("%s) %s", correctLetter, correctOption), "")
 		}
 
 		session, err := qe.FinalizeQuiz()
@@ -70,14 +65,12 @@ var quizCmd = &cobra.Command{
 			return fmt.Errorf("failed to finalize quiz: %w", err)
 		}
 
-		cli.DisplayFinalScore(session)
-
-		if cli.AskYesNo("Would you like to review the questions?") {
-			questions, responses, err := qe.GetReviewData()
-			if err == nil {
-				cli.DisplayReview(questions, responses)
-			}
+		questions, responses, err := qe.GetReviewData()
+		if err == nil {
+			cli.DisplayReview(questions, responses)
 		}
+
+		cli.DisplayFinalScore(session)
 
 		return nil
 	},

@@ -2,11 +2,11 @@ package database
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 func NewDB(dbPath string) (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", dbPath+"?_journal=WAL&_timeout=5000")
+	db, err := sql.Open("sqlite", dbPath+"?_journal=WAL&_timeout=5000")
 	if err != nil {
 		return nil, err
 	}
