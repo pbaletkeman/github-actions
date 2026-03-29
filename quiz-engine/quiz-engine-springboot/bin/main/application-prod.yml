@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:/data/quiz.db
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  thymeleaf:
+    cache: true
+
+logging:
+  level:
+    root: WARN
+    com.quizengine: INFO

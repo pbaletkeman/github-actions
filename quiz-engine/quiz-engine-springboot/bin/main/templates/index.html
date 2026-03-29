@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GH-200 Quiz Engine</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; background: #0d1117; color: #c9d1d9; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        h1 { color: #58a6ff; font-size: 2.5rem; text-align: center; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #8b949e; margin-bottom: 3rem; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+        .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: bold; color: #58a6ff; }
+        .stat-label { color: #8b949e; margin-top: 0.5rem; }
+        .actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .action-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 2rem; text-decoration: none; color: inherit; transition: border-color 0.2s; display: block; }
+        .action-card:hover { border-color: #58a6ff; }
+        .action-card h2 { color: #58a6ff; margin-top: 0; }
+        .action-card p { color: #8b949e; }
+        nav { background: #161b22; border-bottom: 1px solid #30363d; padding: 1rem 2rem; display: flex; gap: 2rem; }
+        nav a { color: #8b949e; text-decoration: none; } nav a:hover { color: #58a6ff; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/quiz">Take Quiz</a>
+        <a href="/history">History</a>
+    </nav>
+    <div class="container">
+        <h1>GH-200 Quiz Engine</h1>
+        <p class="subtitle">GitHub Actions Certification Practice</p>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" th:text="${totalQuestions}">0</div>
+                <div class="stat-label">Questions Available</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" th:text="${summary.totalSessions}">0</div>
+                <div class="stat-label">Quizzes Taken</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" th:text="${#numbers.formatDecimal(summary.bestScore, 1, 1) + '%'}">0%</div>
+                <div class="stat-label">Best Score</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="/quiz" class="action-card">
+                <h2>🎯 Take a Quiz</h2>
+                <p>Practice with random questions from the GH-200 question bank.</p>
+            </a>
+            <a href="/history" class="action-card">
+                <h2>📊 View History</h2>
+                <p>Review your past quiz results and track your progress.</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

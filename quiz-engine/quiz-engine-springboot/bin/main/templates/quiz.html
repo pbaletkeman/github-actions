@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Quiz - GH-200</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; background: #0d1117; color: #c9d1d9; }
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+        nav { background: #161b22; border-bottom: 1px solid #30363d; padding: 1rem 2rem; display: flex; gap: 2rem; }
+        nav a { color: #8b949e; text-decoration: none; } nav a:hover { color: #58a6ff; }
+        #setup { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 2rem; }
+        h1 { color: #58a6ff; }
+        label { display: block; margin-bottom: 0.5rem; color: #8b949e; }
+        input[type=number] { background: #0d1117; border: 1px solid #30363d; color: #c9d1d9; padding: 0.5rem; border-radius: 4px; width: 100px; }
+        button { background: #238636; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-size: 1rem; margin-top: 1rem; }
+        button:hover { background: #2ea043; }
+        #quiz-area { display: none; }
+        .question-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem; }
+        .progress { color: #8b949e; margin-bottom: 1rem; }
+        .question-text { font-size: 1.1rem; margin-bottom: 1.5rem; line-height: 1.6; }
+        .option { display: block; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; cursor: pointer; transition: border-color 0.2s; }
+        .option:hover { border-color: #58a6ff; }
+        .option.selected { border-color: #58a6ff; background: #1c2d3f; }
+        .option.correct { border-color: #2ea043; background: #1c2d1c; }
+        .option.incorrect { border-color: #f85149; background: #2d1c1c; }
+        #feedback { padding: 1rem; border-radius: 6px; margin-top: 1rem; display: none; }
+        #feedback.correct { background: #1c2d1c; border: 1px solid #2ea043; }
+        #feedback.incorrect { background: #2d1c1c; border: 1px solid #f85149; }
+        #results { display: none; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 2rem; text-align: center; }
+        .score { font-size: 3rem; font-weight: bold; margin: 1rem 0; }
+        .score.pass { color: #2ea043; }
+        .score.fail { color: #f85149; }
+        #next-btn { display: none; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/quiz">Take Quiz</a>
+        <a href="/history">History</a>
+    </nav>
+    <div class="container">
+        <h1>Take a Quiz</h1>
+
+        <div id="setup">
+            <p th:if="${totalQuestions == 0}" style="color: #f85149;">
+                ⚠️ No questions available. Please import questions first via the API.
+            </p>
+            <div th:if="${totalQuestions > 0}">
+                <p>Questions available: <strong th:text="${totalQuestions}">0</strong></p>
+                <label for="numQ">Number of questions:</label>
+                <input type="number" id="numQ" min="1" th:max="${totalQuestions}" value="10">
+                <br>
+                <button onclick="startQuiz()">Start Quiz</button>
+            </div>
+        </div>
+
+        <div id="quiz-area">
+            <div id="question-container">
+                <div class="question-card">
+                    <div class="progress" id="progress"></div>
+                    <div class="question-text" id="question-text"></div>
+                    <div id="options"></div>
+                    <div id="feedback"></div>
+                    <button id="next-btn" onclick="nextQuestion()">Next Question &#x2192;</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results">
+            <h2>Quiz Complete!</h2>
+            <div class="score" id="final-score"></div>
+            <p id="final-detail"></p>
+            <button onclick="location.reload()">Take Another Quiz</button>
+            <button onclick="location.href='/history'" style="background: #0969da; margin-left: 1rem;">View History</button>
+        </div>
+    </div>
+
+    <script>
+        let sessionId = null;
+        let questions = [];
+        let currentIndex = 0;
+        let answered = false;
+
+        async function startQuiz() {
+            const numQ = parseInt(document.getElementById('numQ').value);
+            const resp = await fetch('/api/quiz/start', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({numQuestions: numQ})
+            });
+            const data = await resp.json();
+            if (data.error) { alert(data.error); return; }
+            sessionId = data.sessionId;
+            questions = data.questions;
+            currentIndex = 0;
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('quiz-area').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentIndex >= questions.length) { finalize(); return; }
+            const q = questions[currentIndex];
+            answered = false;
+            document.getElementById('progress').textContent = 'Question ' + (currentIndex + 1) + ' of ' + questions.length;
+            document.getElementById('question-text').textContent = q.questionText;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+
+            const opts = document.getElementById('options');
+            opts.innerHTML = '';
+            ['A','B','C','D','E'].forEach(letter => {
+                const text = q['option' + letter];
+                if (!text) return;
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.setAttribute('data-letter', letter);
+                div.textContent = letter + ') ' + text;
+                div.onclick = () => selectAnswer(letter);
+                opts.appendChild(div);
+            });
+        }
+
+        async function selectAnswer(letter) {
+            if (answered) return;
+            answered = true;
+
+            const resp = await fetch('/api/quiz/' + sessionId + '/answer', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({questionIndex: currentIndex, answer: letter, timeTaken: 0})
+            });
+            const data = await resp.json();
+
+            document.querySelectorAll('.option').forEach(el => {
+                const l = el.getAttribute('data-letter');
+                if (l === data.correctAnswer) el.classList.add('correct');
+                else if (l === letter && !data.correct) el.classList.add('incorrect');
+            });
+
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback ' + (data.correct ? 'correct' : 'incorrect');
+            fb.innerHTML = (data.correct ? '&#x2713; Correct!' : '&#x2717; Incorrect. Answer: ' + data.correctAnswer) +
+                (data.explanation ? '<br><small>' + data.explanation + '</small>' : '');
+            fb.style.display = 'block';
+            document.getElementById('next-btn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            showQuestion();
+        }
+
+        async function finalize() {
+            const resp = await fetch('/api/quiz/' + sessionId + '/finalize', {method: 'POST'});
+            const data = await resp.json();
+            document.getElementById('quiz-area').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            const pct = data.percentageCorrect;
+            const scoreEl = document.getElementById('final-score');
+            scoreEl.textContent = pct.toFixed(1) + '%';
+            scoreEl.className = 'score ' + (pct >= 75 ? 'pass' : 'fail');
+            document.getElementById('final-detail').textContent =
+                data.numCorrect + ' / ' + data.numQuestions + ' correct';
+        }
+    </script>
+</body>
+</html>
