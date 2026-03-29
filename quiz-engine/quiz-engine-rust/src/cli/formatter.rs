@@ -83,3 +83,33 @@ pub fn print_result_box(title: &str, lines: &[String]) {
 pub fn print_divider(width: usize) {
     println!("{}", "─".repeat(width));
 }
+
+/// Print the end-of-quiz answer review.
+/// Each entry: (question_number, question_text, user_letter, correct_letter, correct_answer_text, is_correct, explanation)
+pub fn print_review(items: &[(usize, &str, &str, &str, &str, bool, Option<&str>)]) {
+    if items.is_empty() {
+        return;
+    }
+
+    println!();
+    let border = "═".repeat(60);
+    println!("╔{border}╗");
+    println!("║ {:<58} ║", "Answer Review");
+    println!("╚{border}╝");
+
+    for &(num, question, user_letter, correct_letter, correct_text, is_correct, explanation) in items {
+        println!();
+        let marker = if is_correct { "✓" } else { "✗" };
+        println!("  {marker} Q{num}: {question}");
+        if is_correct {
+            println!("    Your answer: {user_letter})  ✓");
+        } else {
+            println!("    Your answer:    {user_letter})");
+            println!("    Correct answer: {correct_letter}) {correct_text}");
+        }
+        if let Some(expl) = explanation {
+            println!("    Explanation: {expl}");
+        }
+    }
+    println!();
+}

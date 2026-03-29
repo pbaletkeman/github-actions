@@ -65,4 +65,34 @@ public class ConsoleFormatter {
             System.out.println(RED + BOLD + "Grade: " + grade + RESET);
         }
     }
+
+    public static void printReview(java.util.List<ReviewItem> items) {
+        System.out.println();
+        printHeader("ANSWER REVIEW");
+        for (ReviewItem item : items) {
+            System.out.println();
+            System.out.println(BOLD + "Q" + item.number() + ": " + item.questionText() + RESET);
+            if (item.correct()) {
+                System.out.println(GREEN + "  Your answer: " + item.userLetter()
+                    + " — " + item.correctAnswer() + RESET);
+            } else {
+                System.out.println(RED + "  Your answer: " + item.userLetter() + RESET);
+                System.out.println(GREEN + "  Correct:     " + item.correctLetter()
+                    + " — " + item.correctAnswer() + RESET);
+            }
+            if (item.explanation() != null && !item.explanation().isBlank()) {
+                System.out.println(YELLOW + "  Explanation: " + item.explanation() + RESET);
+            }
+        }
+    }
+
+    public record ReviewItem(
+        int number,
+        String questionText,
+        String userLetter,
+        String correctLetter,
+        String correctAnswer,
+        boolean correct,
+        String explanation
+    ) {}
 }

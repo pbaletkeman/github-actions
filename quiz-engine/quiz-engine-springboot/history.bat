@@ -1,6 +1,8 @@
 @echo off
 setlocal
 cd /d "%~dp0"
+set "JAVA_HOME=C:\Users\Pete\.jdks\corretto-21.0.2"
+set "PATH=%JAVA_HOME%\bin;%PATH%"
 echo === Quiz Engine Spring Boot - View History ===
 if not exist "build\libs\quiz-engine-springboot-0.0.1-SNAPSHOT.jar" (
     echo JAR not found. Run build.bat first.

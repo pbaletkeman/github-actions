@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -37,6 +38,7 @@ public class QuizCommand implements Runnable {
 
             Scanner scanner = new Scanner(System.in);
             int correct = 0;
+            List<ConsoleFormatter.ReviewItem> reviewItems = new ArrayList<>();
 
             for (int i = 0; i < questions.size(); i++) {
                 Question question = questions.get(i);
@@ -52,16 +54,26 @@ public class QuizCommand implements Runnable {
                 boolean isCorrect = userAnswer.equals(shuffledCorrect);
                 if (isCorrect) correct++;
 
-                QuizService.SubmitResult result = quizService.submitAnswer(
+                quizService.submitAnswer(
                     sessionId, i, isCorrect ?
                         question.getCorrectAnswer() : userAnswer, 0);
 
-                ConsoleFormatter.printResult(isCorrect, shuffledCorrect, question.getExplanation());
+                reviewItems.add(new ConsoleFormatter.ReviewItem(
+                    i + 1,
+                    question.getQuestionText(),
+                    userAnswer,
+                    shuffledCorrect,
+                    shuffled.getOrDefault(shuffledCorrect, question.getCorrectAnswer()),
+                    isCorrect,
+                    question.getExplanation()
+                ));
             }
 
             QuizSession finalSession = quizService.finalizeQuiz(sessionId);
             ConsoleFormatter.printScore(finalSession.getPercentageCorrect(),
                 finalSession.getNumCorrect(), finalSession.getNumQuestions());
+
+            ConsoleFormatter.printReview(reviewItems);
 
         } catch (QuizEngineException e) {
             ConsoleFormatter.printError(e.getMessage());

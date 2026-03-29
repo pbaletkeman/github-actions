@@ -24,14 +24,21 @@
         .option.selected { border-color: #58a6ff; background: #1c2d3f; }
         .option.correct { border-color: #2ea043; background: #1c2d1c; }
         .option.incorrect { border-color: #f85149; background: #2d1c1c; }
-        #feedback { padding: 1rem; border-radius: 6px; margin-top: 1rem; display: none; }
-        #feedback.correct { background: #1c2d1c; border: 1px solid #2ea043; }
-        #feedback.incorrect { background: #2d1c1c; border: 1px solid #f85149; }
         #results { display: none; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 2rem; text-align: center; }
         .score { font-size: 3rem; font-weight: bold; margin: 1rem 0; }
         .score.pass { color: #2ea043; }
         .score.fail { color: #f85149; }
-        #next-btn { display: none; margin-top: 1rem; }
+        .option.selected { border-color: #58a6ff; background: #1c2d3f; pointer-events: none; }
+        #review-area { display: none; margin-top: 2rem; }
+        .review-item { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+        .review-item.review-correct { border-color: #2ea043; }
+        .review-item.review-incorrect { border-color: #f85149; }
+        .review-q { font-weight: bold; margin-bottom: 0.5rem; }
+        .review-ans { font-size: 0.95rem; margin-top: 0.4rem; }
+        .review-ans.your-answer.wrong { color: #f85149; }
+        .review-ans.correct-answer { color: #2ea043; }
+        .review-ans.your-answer.right { color: #2ea043; }
+        .review-expl { color: #8b949e; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic; }
     </style>
 </head>
 <body>
@@ -62,8 +69,6 @@
                     <div class="progress" id="progress"></div>
                     <div class="question-text" id="question-text"></div>
                     <div id="options"></div>
-                    <div id="feedback"></div>
-                    <button id="next-btn" onclick="nextQuestion()">Next Question &#x2192;</button>
                 </div>
             </div>
         </div>
@@ -75,6 +80,11 @@
             <button onclick="location.reload()">Take Another Quiz</button>
             <button onclick="location.href='/history'" style="background: #0969da; margin-left: 1rem;">View History</button>
         </div>
+
+        <div id="review-area">
+            <h2 style="color: #58a6ff;">Answer Review</h2>
+            <div id="review-list"></div>
+        </div>
     </div>
 
     <script>
@@ -82,6 +92,7 @@
         let questions = [];
         let currentIndex = 0;
         let answered = false;
+        let reviewData = [];
 
         async function startQuiz() {
             const numQ = parseInt(document.getElementById('numQ').value);
@@ -95,6 +106,7 @@
             sessionId = data.sessionId;
             questions = data.questions;
             currentIndex = 0;
+            reviewData = [];
             document.getElementById('setup').style.display = 'none';
             document.getElementById('quiz-area').style.display = 'block';
             showQuestion();
@@ -106,8 +118,6 @@
             answered = false;
             document.getElementById('progress').textContent = 'Question ' + (currentIndex + 1) + ' of ' + questions.length;
             document.getElementById('question-text').textContent = q.questionText;
-            document.getElementById('feedback').style.display = 'none';
-            document.getElementById('next-btn').style.display = 'none';
 
             const opts = document.getElementById('options');
             opts.innerHTML = '';
@@ -127,6 +137,11 @@
             if (answered) return;
             answered = true;
 
+            // Mark selected option visually (no green/red yet)
+            document.querySelectorAll('.option').forEach(el => {
+                if (el.getAttribute('data-letter') === letter) el.classList.add('selected');
+            });
+
             const resp = await fetch('/api/quiz/' + sessionId + '/answer', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -134,29 +149,30 @@
             });
             const data = await resp.json();
 
-            document.querySelectorAll('.option').forEach(el => {
-                const l = el.getAttribute('data-letter');
-                if (l === data.correctAnswer) el.classList.add('correct');
-                else if (l === letter && !data.correct) el.classList.add('incorrect');
+            // Store for review — do not reveal result now
+            const q = questions[currentIndex];
+            const optionMap = {};
+            ['A','B','C','D','E'].forEach(l => { if (q['option' + l]) optionMap[l] = q['option' + l]; });
+            reviewData.push({
+                number: currentIndex + 1,
+                questionText: q.questionText,
+                userLetter: letter,
+                correctLetter: data.correctAnswer,
+                correct: data.correct,
+                explanation: data.explanation,
+                options: optionMap
             });
 
-            const fb = document.getElementById('feedback');
-            fb.className = 'feedback ' + (data.correct ? 'correct' : 'incorrect');
-            fb.innerHTML = (data.correct ? '&#x2713; Correct!' : '&#x2717; Incorrect. Answer: ' + data.correctAnswer) +
-                (data.explanation ? '<br><small>' + data.explanation + '</small>' : '');
-            fb.style.display = 'block';
-            document.getElementById('next-btn').style.display = 'inline-block';
-        }
-
-        function nextQuestion() {
-            currentIndex++;
-            showQuestion();
+            // Auto-advance after a brief pause so the selected option is visible
+            setTimeout(() => { currentIndex++; showQuestion(); }, 400);
         }
 
         async function finalize() {
             const resp = await fetch('/api/quiz/' + sessionId + '/finalize', {method: 'POST'});
             const data = await resp.json();
             document.getElementById('quiz-area').style.display = 'none';
+
+            // Score box
             document.getElementById('results').style.display = 'block';
             const pct = data.percentageCorrect;
             const scoreEl = document.getElementById('final-score');
@@ -164,6 +180,43 @@
             scoreEl.className = 'score ' + (pct >= 75 ? 'pass' : 'fail');
             document.getElementById('final-detail').textContent =
                 data.numCorrect + ' / ' + data.numQuestions + ' correct';
+
+            // Answer review
+            const reviewList = document.getElementById('review-list');
+            reviewList.innerHTML = '';
+            reviewData.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'review-item ' + (item.correct ? 'review-correct' : 'review-incorrect');
+
+                const qLabel = document.createElement('div');
+                qLabel.className = 'review-q';
+                qLabel.textContent = 'Q' + item.number + ': ' + item.questionText;
+                div.appendChild(qLabel);
+
+                const yourAns = document.createElement('div');
+                yourAns.className = 'review-ans your-answer ' + (item.correct ? 'right' : 'wrong');
+                yourAns.textContent = 'Your answer: ' + item.userLetter
+                    + (item.options[item.userLetter] ? ' — ' + item.options[item.userLetter] : '');
+                div.appendChild(yourAns);
+
+                if (!item.correct) {
+                    const correctAns = document.createElement('div');
+                    correctAns.className = 'review-ans correct-answer';
+                    correctAns.textContent = 'Correct: ' + item.correctLetter
+                        + (item.options[item.correctLetter] ? ' — ' + item.options[item.correctLetter] : '');
+                    div.appendChild(correctAns);
+                }
+
+                if (item.explanation) {
+                    const expl = document.createElement('div');
+                    expl.className = 'review-expl';
+                    expl.textContent = item.explanation;
+                    div.appendChild(expl);
+                }
+
+                reviewList.appendChild(div);
+            });
+            document.getElementById('review-area').style.display = 'block';
         }
     </script>
 </body>

@@ -151,6 +151,7 @@ fn build_quiz_question(q: &Question) -> QuizQuestion {
         correct_shuffled_index: shuffle.correct_shuffled_index,
         section: q.section.clone(),
         difficulty: q.difficulty.clone(),
+        explanation: q.explanation.clone(),
     }
 }
 

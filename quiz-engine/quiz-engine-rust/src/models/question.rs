@@ -45,6 +45,7 @@ pub struct QuizQuestion {
     pub correct_shuffled_index: usize,
     pub section: Option<String>,
     pub difficulty: Option<String>,
+    pub explanation: Option<String>,
 }
 
 impl Question {

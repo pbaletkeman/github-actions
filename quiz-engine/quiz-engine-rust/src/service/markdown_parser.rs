@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::path::Path;
 
 use regex::Regex;
@@ -6,25 +7,237 @@ use crate::error::{QuizError, Result};
 use crate::models::NewQuestion;
 
 /// Parse a markdown file and extract quiz questions.
-///
-/// Expected format per question block:
-/// ```markdown
-/// ## Q1
-/// > What is Continuous Integration?
-/// - A) Continuous Integration
-/// - B) Code Import
-/// - C) Compile
-/// - D) Configure
-/// **Answer: A**
-/// > Explanation text (optional)
-/// ```
+/// Supports gh-200 format (with `## Answer Key` table) and legacy format.
 pub fn parse_markdown_file(path: &Path) -> Result<Vec<NewQuestion>> {
     let content = std::fs::read_to_string(path).map_err(QuizError::Io)?;
     parse_markdown_content(&content, path.to_string_lossy().as_ref())
 }
 
 /// Parse markdown content string into questions.
+/// Detects format automatically: gh-200 if `## Answer Key` present, otherwise legacy.
 pub fn parse_markdown_content(content: &str, source_file: &str) -> Result<Vec<NewQuestion>> {
+    if content.contains("## Answer Key") {
+        parse_gh200_content(content, source_file)
+    } else {
+        parse_legacy_content(content, source_file)
+    }
+}
+
+/// Parse gh-200 format: `### Question N — Section` headers with `## Answer Key` table.
+fn parse_gh200_content(content: &str, source_file: &str) -> Result<Vec<NewQuestion>> {
+    let answer_key = parse_answer_key(content);
+    let header_re = Regex::new(r"(?m)^### Question (\d+)(?:\s*[—–-]+\s*(.+))?$").unwrap();
+    let option_re = Regex::new(r"^-\s+([A-Ea-e])\)\s+(.+)$").unwrap();
+
+    // Collect block start positions, question numbers, and sections
+    let mut block_starts: Vec<(usize, u32, Option<String>)> = Vec::new();
+    for cap in header_re.captures_iter(content) {
+        let q_num: u32 = cap[1].parse().unwrap_or(0);
+        let section = cap.get(2).map(|m| m.as_str().trim().to_string());
+        let start = cap.get(0).unwrap().start();
+        block_starts.push((start, q_num, section));
+    }
+
+    let ak_boundary = content.find("\n## Answer Key").unwrap_or(content.len());
+    let mut questions = Vec::new();
+
+    for (i, (start, q_num, section)) in block_starts.iter().enumerate() {
+        let end = if i + 1 < block_starts.len() {
+            block_starts[i + 1].0
+        } else {
+            ak_boundary
+        };
+
+        let block = &content[*start..end];
+
+        let mut difficulty: Option<String> = None;
+        let mut answer_type: Option<String> = None;
+        let mut option_a: Option<String> = None;
+        let mut option_b: Option<String> = None;
+        let mut option_c: Option<String> = None;
+        let mut option_d: Option<String> = None;
+        let mut option_e: Option<String> = None;
+        let mut in_scenario = false;
+        let mut in_question = false;
+        let mut scenario_lines: Vec<String> = Vec::new();
+        let mut question_lines: Vec<String> = Vec::new();
+
+        for line in block.lines() {
+            let line = line.trim();
+
+            if line.is_empty() || line == "---" {
+                // End text collection once options have started
+                if option_a.is_some() {
+                    in_scenario = false;
+                    in_question = false;
+                }
+                continue;
+            }
+
+            // Metadata — reset text collection state
+            if let Some(val) = line.strip_prefix("**Difficulty**:") {
+                in_scenario = false;
+                in_question = false;
+                difficulty = Some(val.trim().to_string());
+                continue;
+            }
+            if let Some(val) = line.strip_prefix("**Answer Type**:") {
+                in_scenario = false;
+                in_question = false;
+                answer_type = Some(val.trim().to_string());
+                continue;
+            }
+            if line.starts_with("**Topic**:") || line.starts_with("**Tags**:") {
+                in_scenario = false;
+                in_question = false;
+                continue;
+            }
+            if line == "**Scenario**:" {
+                in_scenario = true;
+                in_question = false;
+                continue;
+            }
+            if line == "**Question**:" {
+                in_scenario = false;
+                in_question = true;
+                continue;
+            }
+
+            // Option line
+            if let Some(cap) = option_re.captures(line) {
+                in_scenario = false;
+                in_question = false;
+                let letter = cap[1].to_uppercase();
+                let text = cap[2].trim().to_string();
+                match letter.as_str() {
+                    "A" => option_a = Some(text),
+                    "B" => option_b = Some(text),
+                    "C" => option_c = Some(text),
+                    "D" => option_d = Some(text),
+                    "E" => option_e = Some(text),
+                    _ => {}
+                }
+                continue;
+            }
+
+            // Skip the header line itself
+            if line.starts_with("### Question") {
+                continue;
+            }
+
+            if in_scenario {
+                scenario_lines.push(line.to_string());
+            } else if in_question {
+                question_lines.push(line.to_string());
+            }
+        }
+
+        // Skip multi-answer and none answer types
+        if let Some(ref at) = answer_type {
+            let at_lower = at.to_lowercase();
+            if at_lower == "many" || at_lower == "none" {
+                continue;
+            }
+        }
+
+        // Look up answer from answer key (multi-answer questions are excluded from key)
+        let (correct_answer, explanation) = match answer_key.get(q_num) {
+            Some(entry) => entry.clone(),
+            None => continue,
+        };
+
+        // Build question text, prepending scenario if present
+        let question_part = question_lines.join(" ");
+        let question_part = question_part.trim();
+        let question_text = if !scenario_lines.is_empty() {
+            let scenario = scenario_lines.join(" ");
+            let scenario = scenario.trim();
+            if question_part.is_empty() {
+                scenario.to_string()
+            } else {
+                format!("{scenario} {question_part}")
+            }
+        } else {
+            question_part.to_string()
+        };
+
+        if question_text.is_empty() {
+            continue;
+        }
+
+        let a = match option_a { Some(v) => v, None => continue };
+        let b = match option_b { Some(v) => v, None => continue };
+        let c = match option_c { Some(v) => v, None => continue };
+        let d = match option_d { Some(v) => v, None => continue };
+
+        questions.push(NewQuestion {
+            question_text,
+            option_a: a,
+            option_b: b,
+            option_c: c,
+            option_d: d,
+            option_e,
+            correct_answer,
+            explanation,
+            section: section.clone(),
+            difficulty,
+            source_file: Some(source_file.to_string()),
+        });
+    }
+
+    Ok(questions)
+}
+
+/// Parse the `## Answer Key` table.
+/// Returns a map of question number → (answer_letter, explanation).
+/// Multi-answer rows (containing comma) are excluded.
+fn parse_answer_key(content: &str) -> HashMap<u32, (String, Option<String>)> {
+    let mut map = HashMap::new();
+
+    let ak_start = match content.find("## Answer Key") {
+        Some(pos) => pos,
+        None => return map,
+    };
+
+    let row_re = Regex::new(r"^\|\s*(\d+)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|").unwrap();
+
+    for line in content[ak_start..].lines() {
+        let line = line.trim();
+        if !line.starts_with('|') || line.contains("---") {
+            continue;
+        }
+        let lower = line.to_lowercase();
+        if lower.contains("q#") || lower.contains("answer(s)") {
+            continue;
+        }
+
+        if let Some(cap) = row_re.captures(line) {
+            let q_num: u32 = match cap[1].parse() {
+                Ok(n) => n,
+                Err(_) => continue,
+            };
+            let answer = cap[2].trim().to_string();
+            let explanation = cap[3].trim().to_string();
+
+            // Skip multi-answer rows
+            if answer.contains(',') {
+                continue;
+            }
+
+            // Must be a single letter A-E
+            let upper = answer.to_uppercase();
+            if upper.len() == 1 && matches!(upper.as_str(), "A" | "B" | "C" | "D" | "E") {
+                let expl = if explanation.is_empty() { None } else { Some(explanation) };
+                map.insert(q_num, (upper, expl));
+            }
+        }
+    }
+
+    map
+}
+
+/// Parse legacy format: `## Q1` / `### Q1` headers, `> question` blockquotes, `**Answer: X**`.
+fn parse_legacy_content(content: &str, source_file: &str) -> Result<Vec<NewQuestion>> {
     let answer_re = Regex::new(r"(?i)\*\*Answer:\s*([A-Ea-e])\*\*").unwrap();
     let option_re = Regex::new(r"^-\s+([A-Ea-e])\)\s+(.+)$").unwrap();
     let question_re = Regex::new(r"^>\s+(.+)$").unwrap();
