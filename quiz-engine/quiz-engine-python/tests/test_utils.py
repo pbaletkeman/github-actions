@@ -169,6 +169,117 @@ def test_parse_markdown_file_no_questions(tmp_path):
     assert questions == []
 
 
+GH200_MD = """# GitHub Actions GH-200
+
+## Questions
+
+---
+
+### Question 1 \u2014 VS Code Extension
+
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: Extension capabilities
+
+**Question**:
+What is the primary purpose of the VS Code extension?
+
+- A) Execute workflow runs locally
+- B) Provide YAML schema validation and IntelliSense
+- C) Deploy files directly to GitHub
+- D) Manage secrets from within the IDE
+
+---
+
+### Question 2 \u2014 Context
+
+**Difficulty**: Medium
+**Answer Type**: one
+**Topic**: Scenario use
+
+**Scenario**:
+A developer wants to catch syntax errors before committing.
+
+**Question**:
+Which capability directly addresses this need without a workflow run?
+
+- A) Run workflows locally using act
+- B) Real-time YAML syntax validation with inline error highlighting
+- C) Submit the file to a remote linter API
+- D) Dry-run all run steps using a local shell
+
+---
+
+### Question 3 \u2014 Context
+
+**Difficulty**: Hard
+**Answer Type**: many
+**Topic**: Multiple correct answers
+
+**Question**:
+Which of the following apply?
+
+- A) Option one
+- B) Option two
+- C) Option three
+- D) Option four
+
+---
+
+## Answer Key
+
+| Q# | Answer(s) | Explanation | Source | Difficulty |
+|----|-----------|-------------|--------|------------|
+| 1 | B | The extension provides YAML schema validation and IntelliSense. | file.md | Easy |
+| 2 | B | Real-time validation highlights errors without running the workflow. | file.md | Medium |
+| 3 | A, B | Multiple correct answers. | file.md | Hard |
+"""
+
+
+def test_parse_gh200_format_reads_answer_key(tmp_path):
+    md_file = tmp_path / "gh200.md"
+    md_file.write_text(GH200_MD, encoding='utf-8')
+    questions = parse_markdown_file(str(md_file))
+    # Q3 is 'many' type — should be skipped
+    assert len(questions) == 2
+    assert questions[0].correct_answer == "B"
+    assert questions[1].correct_answer == "B"
+
+
+def test_parse_gh200_extracts_section_and_difficulty(tmp_path):
+    md_file = tmp_path / "gh200.md"
+    md_file.write_text(GH200_MD, encoding='utf-8')
+    questions = parse_markdown_file(str(md_file))
+    assert questions[0].section == "VS Code Extension"
+    assert questions[0].difficulty == "Easy"
+    assert questions[1].difficulty == "Medium"
+
+
+def test_parse_gh200_extracts_explanation_from_key(tmp_path):
+    md_file = tmp_path / "gh200.md"
+    md_file.write_text(GH200_MD, encoding='utf-8')
+    questions = parse_markdown_file(str(md_file))
+    assert questions[0].explanation is not None
+    assert "IntelliSense" in questions[0].explanation
+
+
+def test_parse_gh200_scenario_question_text(tmp_path):
+    md_file = tmp_path / "gh200.md"
+    md_file.write_text(GH200_MD, encoding='utf-8')
+    questions = parse_markdown_file(str(md_file))
+    # Q2 has both a Scenario and a Question block — both should appear in text
+    assert "catch syntax errors" in questions[1].question_text
+    assert "directly addresses" in questions[1].question_text
+
+
+def test_parse_gh200_skips_many_type(tmp_path):
+    md_file = tmp_path / "gh200.md"
+    md_file.write_text(GH200_MD, encoding='utf-8')
+    questions = parse_markdown_file(str(md_file))
+    # Q3 has Answer Type: many and a multi-answer key entry — must be excluded
+    assert all(q.question_text != "Which of the following apply?" for q in questions)
+
+
 def test_parse_markdown_file_with_5_options(tmp_path):
     md_content = """## Question 1
 Which of the following are valid?

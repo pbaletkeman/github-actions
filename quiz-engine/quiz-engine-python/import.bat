@@ -7,13 +7,11 @@ if not exist "venv\Scripts\activate.bat" (
     exit /b 1
 )
 call venv\Scripts\activate.bat
-echo Usage: import.bat [file_or_directory]
-echo   Example: import.bat questions.md
-echo   Example: import.bat .\questions\
-echo.
 if "%~1"=="" (
+    echo Usage: import.bat [file_or_directory]
+    echo   Example: import.bat questions.md
+    echo   Example: import.bat .\questions\
     echo No path specified. Please provide a file or directory path.
-    echo Usage: import.bat <file_or_directory>
     exit /b 1
 ) else (
     if exist "%~1\" (

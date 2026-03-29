@@ -45,6 +45,20 @@ def display_result(is_correct: bool, correct_answer: str, explanation: Optional[
         console.print(f"[dim]{explanation}[/dim]")
 
 
+def display_review(items) -> None:  # pragma: no cover
+    console.print("\n[bold cyan]=== Answer Review ===[/bold cyan]")
+    for question_num, question, user_answer, correct_answer, is_correct in items:
+        if is_correct:
+            status = "[bold green]✓ CORRECT[/bold green]"
+        else:
+            status = f"[bold red]✗ WRONG — Correct answer: {correct_answer}[/bold red]"
+        short_text = question.question_text[:80] + ('...' if len(question.question_text) > 80 else '')
+        console.print(f"\n[bold]Q{question_num}:[/bold] {short_text}")
+        console.print(f"  Your answer: [bold]{user_answer}[/bold]  {status}")
+        if not is_correct and question.explanation:
+            console.print(f"  [dim]{question.explanation}[/dim]")
+
+
 def display_session_summary(session):  # pragma: no cover
     console.print("\n")
     table = Table(title="Quiz Results")

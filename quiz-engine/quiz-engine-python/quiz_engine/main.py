@@ -37,6 +37,7 @@ def main():  # pragma: no cover
         sys.exit(1)
 
     total = len(engine.questions)
+    review_items = []
     for idx, question in enumerate(engine.questions):
         cli.display_question(question, idx + 1, total)
         valid = ['A', 'B', 'C', 'D']
@@ -46,7 +47,12 @@ def main():  # pragma: no cover
         if answer == 'Q':
             cli.console.print("[yellow]Quiz aborted.[/yellow]")
             break
-        engine.submit_answer(idx, answer, time_taken=0)
+        is_correct = engine.submit_answer(idx, answer, time_taken=0)
+        correct_answer = engine._correct_answers.get(question.id, '?')
+        review_items.append((idx + 1, question, answer, correct_answer, is_correct))
+
+    if review_items:
+        cli.display_review(review_items)
 
     session = engine.finalize()
     cli.display_session_summary(session)

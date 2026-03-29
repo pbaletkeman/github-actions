@@ -51,104 +51,136 @@ def format_time(seconds: int) -> str:
     return f"{minutes:02d}:{secs:02d}"
 
 
+def _parse_answer_key(content: str) -> dict:
+    """Parse the ## Answer Key table. Returns {q_num: {'answer': str, 'explanation': str|None}}."""
+    key_match = re.search(r'^## Answer Key([\s\S]*)$', content, re.MULTILINE)
+    if not key_match:
+        return {}
+    result = {}
+    row_pattern = re.compile(r'^\|\s*(\d+)\s*\|\s*([^|]+)\s*\|\s*([^|]*)\s*\|', re.MULTILINE)
+    for m in row_pattern.finditer(key_match.group(1)):
+        q_num = int(m.group(1))
+        raw_answer = m.group(2).strip()
+        explanation = m.group(3).strip() or None
+        # Only single-letter answers — skip multi-answer "many" type entries like "A, B, D"
+        if re.match(r'^[A-E]$', raw_answer):
+            result[q_num] = {'answer': raw_answer, 'explanation': explanation}
+    return result
+
+
+def _extract_structured_question(block: str) -> str:
+    """Extract question text from a structured **Scenario**: / **Question**: block."""
+    scenario_match = re.search(r'\*\*Scenario\*\*:\s*([\s\S]+?)(?=\*\*Question\*\*:|$)', block)
+    question_match = re.search(r'\*\*Question\*\*:\s*([\s\S]+?)(?=\n-\s[A-E]\)|$)', block)
+    text = ''
+    if scenario_match:
+        text += scenario_match.group(1).strip() + '\n\n'
+    if question_match:
+        text += question_match.group(1).strip()
+    return text.strip()
+
+
 def parse_markdown_file(file_path: str) -> List[Question]:
-    """Parse gh-200-iteration-*.md files. Extract questions, options, answers."""
+    """Parse gh-200-iteration-*.md files. Answers are read from the ## Answer Key table
+    when present; otherwise the inline **Answer: X** marker is used as a fallback."""
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
+    answer_key = _parse_answer_key(content)
+    has_answer_key = bool(answer_key)
+
+    # Strip the answer key section so it is not mistaken for a question block
+    questions_content = re.sub(r'^## Answer Key[\s\S]*$', '', content, flags=re.MULTILINE) if has_answer_key else content
+
     questions = []
+    # Split at ## Q<n>, ## Question <n>, or ### Question <n> headers
+    blocks = re.split(r'(?=^#{2,3}\s+(?:Q\d+|Question\s+\d+))', questions_content, flags=re.MULTILINE)
 
-    # Split on question headers: ## Question N or ### Question N
-    question_blocks = re.split(r'\n(?=##+ Question \d+)', content)
-
-    for block in question_blocks:
+    for block in blocks:
         block = block.strip()
         if not block:
             continue
 
-        # Check if this block starts with a question header
-        header_match = re.match(r'^#{1,3}\s+Question\s+\d+[.:)]*\s*\n', block, re.IGNORECASE)
+        # Parse header: ## Q1 / ## Question 1 / ### Question 1 — Section
+        header_match = re.match(
+            r'^#{2,3}\s+(?:Q(\d+)|Question\s+(\d+))(?:\s+[-\u2014\u2013]+\s+(.+))?',
+            block,
+        )
         if not header_match:
             continue
 
-        # Remove the header line
-        body = block[header_match.end():].strip()
+        q_num_str = header_match.group(1) or header_match.group(2)
+        question_num = int(q_num_str) if q_num_str else 0
+        section = header_match.group(3).strip() if header_match.group(3) else None
 
-        # Extract options: lines like "- A) text" or "A) text" or "- **A)** text"
-        option_pattern = re.compile(
-            r'^[-*]?\s*\*{0,2}([A-E])\*{0,2}[.):\s]+(.+)$',
-            re.IGNORECASE | re.MULTILINE
-        )
-        option_matches = list(option_pattern.finditer(body))
+        # Extract difficulty
+        diff_match = re.search(r'^\*\*Difficulty\*\*:\s*(.+)$', block, re.MULTILINE)
+        difficulty = diff_match.group(1).strip() if diff_match else None
 
-        if len(option_matches) < 4:
-            # Try alternative format: A. text
-            option_pattern2 = re.compile(
-                r'^[-*]?\s*([A-E])[.)\s]+(.+)$',
-                re.IGNORECASE | re.MULTILINE
-            )
-            option_matches = list(option_pattern2.finditer(body))
-
-        if len(option_matches) < 4:
+        # Skip many/none answer types — only import single-answer questions
+        type_match = re.search(r'^\*\*Answer\s+Type\*\*:\s*(.+?)$', block, re.MULTILINE)
+        if type_match and type_match.group(1).strip().lower() != 'one':
             continue
 
-        # Get question text (everything before first option)
-        first_opt_start = option_matches[0].start()
-        question_text = body[:first_opt_start].strip()
-
-        # Remove markdown bold/italic and clean up
-        question_text = re.sub(r'\*{1,3}', '', question_text).strip()
+        # Extract question text
+        if '**Question**:' in block or '**Scenario**:' in block:
+            question_text = _extract_structured_question(block)
+        else:
+            # Simple format: text is everything between header and first option
+            quote_match = re.search(r'^>\s*(.+?)$', block, re.MULTILINE)
+            if quote_match:
+                question_text = quote_match.group(1).strip()
+            else:
+                body = block[header_match.end():].strip()
+                opt_start = re.search(r'^-\s+[A-E]\)', body, re.MULTILINE)
+                question_text = body[:opt_start.start()].strip() if opt_start else ''
+                question_text = re.sub(r'\*{1,3}', '', question_text).strip()
 
         if not question_text:
             continue
 
-        # Extract options A-E
-        opts = {}
-        for m in option_matches:
-            letter = m.group(1).upper()
-            text = m.group(2).strip()
-            text = re.sub(r'\*{1,3}', '', text).strip()
-            opts[letter] = text
+        # Extract options A–E
+        options: dict = {}
+        for m in re.finditer(r'^-\s+([A-E])\)\s+(.+)$', block, re.MULTILINE):
+            options[m.group(1)] = m.group(2).strip()
 
-        if not all(k in opts for k in ('A', 'B', 'C', 'D')):
+        if not all(k in options for k in ('A', 'B', 'C', 'D')):
             continue
 
-        # Extract answer
-        answer_match = re.search(
-            r'\*{0,2}Answer[:\s]+([A-E])\*{0,2}',
-            body,
-            re.IGNORECASE
-        )
-        if not answer_match:
-            # Try "Correct Answer: X"
-            answer_match = re.search(
-                r'Correct\s+Answer[:\s]+([A-E])',
-                body,
-                re.IGNORECASE
-            )
-
-        correct_answer = answer_match.group(1).upper() if answer_match else None
-
-        # Extract explanation (text after the answer line)
+        # Resolve answer: answer key takes priority, then inline **Answer: X**
+        correct_answer = None
         explanation = None
-        if answer_match:
-            after_answer = body[answer_match.end():].strip()
-            # Remove leading explanation markers
-            after_answer = re.sub(r'^[*_]*Explanation[*_]*[:\s]*', '', after_answer, flags=re.IGNORECASE).strip()
-            after_answer = re.sub(r'\*{1,3}', '', after_answer).strip()
-            if after_answer:
-                explanation = after_answer[:500]  # cap length
 
-        q = Question(
+        key_entry = answer_key.get(question_num)
+        if key_entry:
+            correct_answer = key_entry['answer']
+            explanation = key_entry['explanation']
+        else:
+            ans_match = re.search(r'\*\*Answer:\s*([A-E])\*\*', block, re.IGNORECASE)
+            if ans_match:
+                correct_answer = ans_match.group(1).upper()
+                after = block[ans_match.end():].strip()
+                if after:
+                    explanation = re.sub(r'^>\s*', '', after, flags=re.MULTILINE).strip()[:500] or None
+            elif has_answer_key:
+                continue  # question number not in key (many/none type already skipped above)
+            else:
+                continue  # no answer found at all
+
+        if not correct_answer:
+            continue
+
+        questions.append(Question(
             question_text=question_text,
-            option_a=opts.get('A', ''),
-            option_b=opts.get('B', ''),
-            option_c=opts.get('C', ''),
-            option_d=opts.get('D', ''),
-            option_e=opts.get('E'),
+            option_a=options.get('A', ''),
+            option_b=options.get('B', ''),
+            option_c=options.get('C', ''),
+            option_d=options.get('D', ''),
+            option_e=options.get('E'),
             correct_answer=correct_answer,
             explanation=explanation,
-        )
-        questions.append(q)
+            section=section,
+            difficulty=difficulty,
+        ))
 
     return questions

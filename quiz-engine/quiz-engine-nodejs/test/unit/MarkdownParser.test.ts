@@ -108,6 +108,49 @@ const MULTI_QUESTION_MD = `
 **Answer: C**
 `;
 
+const SOURCE_FORMAT_MD = `
+## Questions
+
+### Question 1 — DevOps
+
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: CI/CD
+
+**Question**:
+What does CI stand for?
+
+- A) Continuous Integration
+- B) Code Import
+- C) Compiler Install
+- D) Content Index
+
+---
+
+### Question 2 — DevOps
+
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: CI/CD
+
+**Question**:
+Which of these are CI tools?
+
+- A) Jenkins
+- B) Word
+- C) Travis CI
+- D) Paint
+
+---
+
+## Answer Key
+
+| Q# | Answer(s) | Explanation | Source | Difficulty |
+|----|-----------|-------------|--------|------------|
+| 1 | A | CI stands for Continuous Integration. | source.md | Easy |
+| 2 | A, C | Jenkins and Travis CI are CI tools. | source.md | Medium |
+`;
+
 function writeTempFile(content: string): string {
   const filePath = path.join(os.tmpdir(), `quiz-test-${Date.now()}-${Math.random()}.md`);
   fs.writeFileSync(filePath, content, 'utf-8');
@@ -203,6 +246,30 @@ describe('MarkdownParser', () => {
       } finally {
         fs.unlinkSync(filePath);
       }
+    });
+  });
+
+  describe('source format with answer key table', () => {
+    it('parses single-answer questions from answer key', () => {
+      const questions = parseMarkdownContent(SOURCE_FORMAT_MD);
+      expect(questions).toHaveLength(1);
+      expect(questions[0].correctAnswer).toBe('A');
+    });
+
+    it('extracts explanation from answer key', () => {
+      const questions = parseMarkdownContent(SOURCE_FORMAT_MD);
+      expect(questions[0].explanation).toBe('CI stands for Continuous Integration.');
+    });
+
+    it('extracts section from source format header', () => {
+      const questions = parseMarkdownContent(SOURCE_FORMAT_MD);
+      expect(questions[0].section).toBe('DevOps');
+    });
+
+    it('skips many-type questions in source format', () => {
+      const questions = parseMarkdownContent(SOURCE_FORMAT_MD);
+      const texts = questions.map((q) => q.questionText);
+      expect(texts.some((t) => t.includes('CI tools'))).toBe(false);
     });
   });
 });

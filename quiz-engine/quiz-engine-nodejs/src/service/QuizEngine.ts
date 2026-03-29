@@ -21,6 +21,7 @@ export interface QuizQuestion {
   shuffledOptions: string[];
   correctShuffledIndex: number;
   displayToOriginal: Record<string, string>;
+  explanation?: string;
   answered: boolean;
   userAnswer?: string;
   isCorrect?: boolean;
@@ -78,6 +79,7 @@ export class QuizEngine {
         shuffledOptions: shuffle.shuffledOptions,
         correctShuffledIndex: shuffle.correctShuffledIndex,
         displayToOriginal: shuffle.displayToOriginal,
+        explanation: q.explanation,
         answered: false,
       };
     });

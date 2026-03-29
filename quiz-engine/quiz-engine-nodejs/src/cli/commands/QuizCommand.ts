@@ -2,7 +2,7 @@ import { Argv } from 'yargs';
 import chalk from 'chalk';
 import { DataSource } from 'typeorm';
 import { QuizEngine } from '../../service/QuizEngine';
-import { Formatter } from '../Formatter';
+import { Formatter, ReviewItem } from '../Formatter';
 import { Prompts } from '../Prompts';
 import { QuizUtils } from '../../service/QuizUtils';
 
@@ -42,6 +42,8 @@ export const quizCommand = {
       process.exit(1);
     }
 
+    const reviewItems: ReviewItem[] = [];
+
     for (let i = 0; i < state.questions.length; i++) {
       const quizQ = state.questions[i];
       console.log(
@@ -51,11 +53,14 @@ export const quizCommand = {
       const answer = await Prompts.selectAnswer(quizQ.shuffledOptions);
       const isCorrect = await engine.submitAnswer(state, i, answer);
 
-      const letters = ['A', 'B', 'C', 'D', 'E'];
-      const correctLetter = letters[quizQ.correctShuffledIndex];
-      const correctText = quizQ.shuffledOptions[quizQ.correctShuffledIndex];
-
-      console.log(Formatter.answerFeedback(isCorrect, correctLetter, correctText));
+      reviewItems.push({
+        questionText: quizQ.questionText,
+        shuffledOptions: quizQ.shuffledOptions,
+        correctShuffledIndex: quizQ.correctShuffledIndex,
+        userAnswerLetter: answer,
+        isCorrect,
+        explanation: quizQ.explanation,
+      });
 
       if (i < state.questions.length - 1) {
         await Prompts.pressEnterToContinue();
@@ -70,6 +75,7 @@ export const quizCommand = {
       ? QuizUtils.formatDuration(session.timeTakenSeconds)
       : 'N/A';
 
+    console.log(Formatter.reviewSection(reviewItems));
     console.log(
       Formatter.quizResult(
         session.numCorrect,

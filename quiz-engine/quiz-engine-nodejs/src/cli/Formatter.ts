@@ -1,6 +1,15 @@
 import Table from 'cli-table3';
 import chalk from 'chalk';
 
+export interface ReviewItem {
+  questionText: string;
+  shuffledOptions: string[];
+  correctShuffledIndex: number;
+  userAnswerLetter: string;
+  isCorrect: boolean;
+  explanation?: string;
+}
+
 export class Formatter {
   /**
    * Render a table from an array of objects. All objects should have the same keys.
@@ -38,6 +47,33 @@ export class Formatter {
     );
 
     return [header, titleLine, separator, ...contentLines, footer].join('\n');
+  }
+
+  static reviewSection(items: ReviewItem[]): string {
+    const letters = ['A', 'B', 'C', 'D', 'E'];
+    const lines: string[] = [];
+    lines.push(chalk.bold('\n📝 Answer Review'));
+    lines.push('─'.repeat(60));
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const marker = item.isCorrect ? chalk.green('✓') : chalk.red('✗');
+      const firstLine = item.questionText.split('\n')[0];
+      lines.push(`${marker} Q${i + 1}: ${firstLine}`);
+
+      if (!item.isCorrect) {
+        const correctLetter = letters[item.correctShuffledIndex];
+        const correctText = item.shuffledOptions[item.correctShuffledIndex];
+        lines.push(
+          chalk.dim(`   Your answer: ${item.userAnswerLetter} | Correct: ${correctLetter}) ${correctText}`),
+        );
+        if (item.explanation) {
+          lines.push(chalk.yellow(`   💡 ${item.explanation}`));
+        }
+      }
+    }
+    lines.push('');
+    return lines.join('\n');
   }
 
   /**

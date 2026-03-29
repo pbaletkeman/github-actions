@@ -8,10 +8,11 @@ version = "1.0.0"
 description = "Python/SQLite Quiz Engine for GH-200 Certification"
 requires-python = ">=3.9"
 dependencies = [
-    "typer[all]==0.9.0",
-    "rich==13.7.0",
-    "pydantic==2.5.3",
+    "typer==0.24.1",
+    "rich==14.3.3",
+    "pydantic==2.12.5",
     "python-dateutil==2.8.2",
+    "shellingham==1.5.4",
 ]
 
 [tool.pytest.ini_options]

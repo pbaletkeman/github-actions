@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Question } from '../models/Question';
 import { ParseError } from '../exceptions/QuizExceptions';
 
 export interface ParsedQuestion {
@@ -14,6 +13,11 @@ export interface ParsedQuestion {
   explanation?: string;
   section?: string;
   difficulty?: string;
+}
+
+interface AnswerEntry {
+  answer: string;
+  explanation?: string;
 }
 
 /**
@@ -58,60 +62,93 @@ export function parseMarkdownFile(filePath: string): ParsedQuestion[] {
 }
 
 export function parseMarkdownContent(content: string, sourceFile = ''): ParsedQuestion[] {
+  const answerKey = parseAnswerKey(content);
+  const hasAnswerKey = answerKey.size > 0;
+
+  // Strip the answer key section so it isn't parsed as a question block
+  const questionsContent = hasAnswerKey
+    ? content.replace(/^## Answer Key[\s\S]*$/m, '')
+    : content;
+
   const questions: ParsedQuestion[] = [];
-  const blocks = splitIntoBlocks(content);
+  const blocks = splitIntoBlocks(questionsContent);
 
   for (const block of blocks) {
     try {
-      const parsed = parseBlock(block, sourceFile);
+      const parsed = parseBlock(block, sourceFile, answerKey, hasAnswerKey);
       if (parsed) {
         questions.push(parsed);
       }
     } catch (err) {
-      if (err instanceof ParseError) {
+      if (!hasAnswerKey && err instanceof ParseError) {
         throw err;
       }
-      // Skip malformed blocks in lenient mode
     }
   }
 
   return questions;
 }
 
+function parseAnswerKey(content: string): Map<number, AnswerEntry> {
+  const map = new Map<number, AnswerEntry>();
+  const keyMatch = content.match(/^## Answer Key([\s\S]*)$/m);
+  if (!keyMatch) return map;
+
+  const keySection = keyMatch[1];
+  const rowRegex = /^\|\s*(\d+)\s*\|\s*([^|]+)\s*\|\s*([^|]*)\s*\|/gm;
+  let match: RegExpExecArray | null;
+  while ((match = rowRegex.exec(keySection)) !== null) {
+    const qNum = parseInt(match[1], 10);
+    const rawAnswer = match[2].trim();
+    const explanation = match[3].trim() || undefined;
+    // Only single-letter answers (skip "A, C" type answers for many-type questions)
+    if (/^[A-E]$/.test(rawAnswer)) {
+      map.set(qNum, { answer: rawAnswer, explanation });
+    }
+  }
+  return map;
+}
+
 function splitIntoBlocks(content: string): string[] {
-  // Split on ### Question N or ## Q markers
   const parts = content.split(/(?=^#{2,3}\s+(?:Q\d+|Question\s+\d+))/m);
   return parts.filter((p) => p.trim().length > 0);
 }
 
-function parseBlock(block: string, sourceFile: string): ParsedQuestion | null {
+function parseBlock(
+  block: string,
+  sourceFile: string,
+  answerKey: Map<number, AnswerEntry>,
+  hasAnswerKey: boolean,
+): ParsedQuestion | null {
   const lines = block.split('\n').map((l) => l.trim());
-
-  // Extract header info
   const headerLine = lines[0];
-  let section: string | undefined;
+  const headerMatch = headerLine.match(
+    /^#{2,3}\s+(?:Q(\d+)|Question\s+(\d+))(?:\s+[-\u2014\u2013]+\s+(.+))?/,
+  );
+  if (!headerMatch) return null;
+
+  const questionNumStr = headerMatch[1] || headerMatch[2];
+  const questionNum = questionNumStr ? parseInt(questionNumStr, 10) : 0;
+  const section = headerMatch[3] ? headerMatch[3].trim() : undefined;
+
   let difficulty: string | undefined;
-
-  const sectionMatch = headerLine.match(/^#{2,3}\s+(?:Q\d+|Question\s+\d+)(?:\s+[—-]\s+(.+))?/);
-  if (!sectionMatch) return null;
-  if (sectionMatch[1]) {
-    section = sectionMatch[1].trim();
-  }
-
-  // Extract metadata
   for (const line of lines) {
     const diffMatch = line.match(/^\*\*Difficulty\*\*:\s*(.+)/);
     if (diffMatch) difficulty = diffMatch[1].trim();
   }
 
-  // Extract question text: lines after "> " or after "**Question**:"
-  let questionText = '';
-  const questionMode = block.includes('**Question**:') || block.includes('**Scenario**:');
+  // Skip many/none answer types — only process 'one' type
+  const answerTypeMatch = block.match(/^\*\*Answer\s+Type\*\*:\s*(.+?)$/m);
+  if (answerTypeMatch && answerTypeMatch[1].trim().toLowerCase() !== 'one') {
+    return null;
+  }
 
+  // Extract question text
+  const questionMode = block.includes('**Question**:') || block.includes('**Scenario**:');
+  let questionText = '';
   if (questionMode) {
     questionText = extractStructuredQuestion(block);
   } else {
-    // Simple format: > question text
     const quoteMatch = block.match(/^>\s*(.+?)$/m);
     if (quoteMatch) {
       questionText = quoteMatch[1].trim();
@@ -123,9 +160,9 @@ function parseBlock(block: string, sourceFile: string): ParsedQuestion | null {
   // Extract options
   const optionMap: Record<string, string> = {};
   const optionRegex = /^-\s+([A-E])\)\s+(.+)$/gm;
-  let match: RegExpExecArray | null;
-  while ((match = optionRegex.exec(block)) !== null) {
-    optionMap[match[1]] = match[2].trim();
+  let optMatch: RegExpExecArray | null;
+  while ((optMatch = optionRegex.exec(block)) !== null) {
+    optionMap[optMatch[1]] = optMatch[2].trim();
   }
 
   if (!optionMap['A'] || !optionMap['B'] || !optionMap['C'] || !optionMap['D']) {
@@ -134,24 +171,35 @@ function parseBlock(block: string, sourceFile: string): ParsedQuestion | null {
     );
   }
 
-  // Extract answer
-  const answerMatch = block.match(/\*\*Answer:\s*([A-E])\*\*/i);
-  if (!answerMatch) {
-    throw new ParseError(
-      `Question missing answer line: "${questionText.substring(0, 50)}..."`,
-    );
-  }
-  const correctAnswer = answerMatch[1].toUpperCase();
-
-  // Extract explanation (text after answer line)
+  // Get answer: answer key table takes priority, then inline **Answer: X**
+  let correctAnswer: string | undefined;
   let explanation: string | undefined;
-  const answerLineIdx = block.indexOf(`**Answer: ${correctAnswer}**`);
-  if (answerLineIdx !== -1) {
-    const afterAnswer = block.slice(answerLineIdx + `**Answer: ${correctAnswer}**`.length).trim();
-    if (afterAnswer.length > 0) {
-      explanation = afterAnswer.replace(/^>\s*/gm, '').trim();
+
+  const keyEntry = answerKey.get(questionNum);
+  if (keyEntry) {
+    correctAnswer = keyEntry.answer;
+    explanation = keyEntry.explanation;
+  } else {
+    const answerMatch = block.match(/\*\*Answer:\s*([A-E])\*\*/i);
+    if (!answerMatch) {
+      if (hasAnswerKey) return null;
+      throw new ParseError(
+        `Question missing answer line: "${questionText.substring(0, 50)}..."`,
+      );
+    }
+    correctAnswer = answerMatch[1].toUpperCase();
+    const answerLineIdx = block.indexOf(`**Answer: ${correctAnswer}**`);
+    if (answerLineIdx !== -1) {
+      const afterAnswer = block
+        .slice(answerLineIdx + `**Answer: ${correctAnswer}**`.length)
+        .trim();
+      if (afterAnswer.length > 0) {
+        explanation = afterAnswer.replace(/^>\s*/gm, '').trim();
+      }
     }
   }
+
+  if (!correctAnswer) return null;
 
   return {
     questionText,
@@ -168,8 +216,6 @@ function parseBlock(block: string, sourceFile: string): ParsedQuestion | null {
 }
 
 function extractStructuredQuestion(block: string): string {
-  // Handle: **Scenario**: ... **Question**: ...
-  // Or: **Question**: ...
   const scenarioMatch = block.match(/\*\*Scenario\*\*:\s*([\s\S]+?)(?=\*\*Question\*\*:|$)/);
   const questionMatch = block.match(/\*\*Question\*\*:\s*([\s\S]+?)(?=\n-\s[A-E]\)|$)/);
 

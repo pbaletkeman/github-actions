@@ -6,13 +6,11 @@ if not exist "dist\main.js" (
     echo dist\main.js not found. Run build.bat first.
     exit /b 1
 )
-echo Usage: import.bat [file_or_directory]
-echo   Example: import.bat questions.md
-echo   Example: import.bat .\questions\
-echo.
 if "%~1"=="" (
     echo No path specified. Please provide a file or directory path.
-    echo Usage: import.bat <file_or_directory>
+    echo Usage: import.bat [file_or_directory]
+    echo   Example: import.bat questions.md
+    echo   Example: import.bat .\questions\
     exit /b 1
 ) else (
     if exist "%~1\" (
