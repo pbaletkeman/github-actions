@@ -38,6 +38,35 @@ public class ConsoleFormatter {
                 BOLD, RED, RESET, correctLetter, correctText);
     }
 
+    public static void printReview(List<Question> questions, List<ShuffleResult> shuffles,
+                                    List<String> givenAnswers, List<Boolean> corrects) {
+        System.out.println();
+        printSeparator();
+        System.out.printf("%s%sAnswer Review%s%n", BOLD, CYAN, RESET);
+        printSeparator();
+        for (int i = 0; i < questions.size(); i++) {
+            Question q = questions.get(i);
+            ShuffleResult shuffle = shuffles.get(i);
+            String given = givenAnswers.get(i);
+            boolean correct = corrects.get(i);
+            String marker = correct
+                    ? GREEN + BOLD + "✓" + RESET
+                    : RED + BOLD + "✗" + RESET;
+            System.out.printf("%s Q%-3d %s%n", marker, i + 1, q.getQuestionText().lines().findFirst().orElse(""));
+            if (!correct) {
+                String correctLetter = shuffle.getCorrectShuffledLetter();
+                int correctIdx = shuffle.getCorrectShuffledIndex();
+                String correctText = shuffle.getShuffledOptions().get(correctIdx);
+                System.out.printf("       Your answer: %s%s%s  |  Correct: %s%s) %s%s%n",
+                        RED, given, RESET, GREEN, correctLetter, correctText, RESET);
+                if (q.getExplanation() != null && !q.getExplanation().isEmpty()) {
+                    System.out.printf("       %sExplanation: %s%s%n", YELLOW, q.getExplanation(), RESET);
+                }
+            }
+        }
+        printSeparator();
+    }
+
     public static void printResults(QuizSession session) {
         System.out.println();
         printSeparator();

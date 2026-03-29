@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConsoleFormatter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quiz-engine-java</a> &gt; <a href="index.source.html" class="el_package">com.quizengine.cli</a> &gt; <span class="el_source">ConsoleFormatter.java</span></div><h1>ConsoleFormatter.java</h1><pre class="source lang-java linenums">package com.quizengine.cli;
+
+import com.quizengine.model.Question;
+import com.quizengine.model.QuizSession;
+import com.quizengine.util.QuizUtils;
+import com.quizengine.util.ShuffleResult;
+
+import java.util.List;
+
+<span class="nc" id="L10">public class ConsoleFormatter {</span>
+    public static final String RESET = &quot;\u001B[0m&quot;;
+    public static final String GREEN = &quot;\u001B[32m&quot;;
+    public static final String RED = &quot;\u001B[31m&quot;;
+    public static final String YELLOW = &quot;\u001B[33m&quot;;
+    public static final String CYAN = &quot;\u001B[36m&quot;;
+    public static final String BOLD = &quot;\u001B[1m&quot;;
+
+    public static void printQuestion(int num, int total, Question q, ShuffleResult shuffle) {
+<span class="fc" id="L19">        System.out.println();</span>
+<span class="fc" id="L20">        System.out.printf(&quot;%s%sQuestion %d of %d%s%n&quot;, BOLD, CYAN, num, total, RESET);</span>
+<span class="fc" id="L21">        printSeparator();</span>
+<span class="fc" id="L22">        System.out.println(q.getQuestionText());</span>
+<span class="fc" id="L23">        System.out.println();</span>
+<span class="fc" id="L24">        List&lt;String&gt; opts = shuffle.getShuffledOptions();</span>
+<span class="fc" id="L25">        char letter = 'A';</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        for (String opt : opts) {</span>
+<span class="fc" id="L27">            System.out.printf(&quot;  %c) %s%n&quot;, letter++, opt);</span>
+<span class="fc" id="L28">        }</span>
+<span class="fc" id="L29">        System.out.println();</span>
+<span class="fc" id="L30">    }</span>
+
+    public static void printCorrect() {
+<span class="fc" id="L33">        System.out.printf(&quot;%s%s✓ Correct!%s%n&quot;, BOLD, GREEN, RESET);</span>
+<span class="fc" id="L34">    }</span>
+
+    public static void printIncorrect(String correctLetter, String correctText) {
+<span class="fc" id="L37">        System.out.printf(&quot;%s%s✗ Incorrect.%s The correct answer was: %s) %s%n&quot;,</span>
+                BOLD, RED, RESET, correctLetter, correctText);
+<span class="fc" id="L39">    }</span>
+
+    public static void printReview(List&lt;Question&gt; questions, List&lt;ShuffleResult&gt; shuffles,
+                                    List&lt;String&gt; givenAnswers, List&lt;Boolean&gt; corrects) {
+<span class="nc" id="L43">        System.out.println();</span>
+<span class="nc" id="L44">        printSeparator();</span>
+<span class="nc" id="L45">        System.out.printf(&quot;%s%sAnswer Review%s%n&quot;, BOLD, CYAN, RESET);</span>
+<span class="nc" id="L46">        printSeparator();</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        for (int i = 0; i &lt; questions.size(); i++) {</span>
+<span class="nc" id="L48">            Question q = questions.get(i);</span>
+<span class="nc" id="L49">            ShuffleResult shuffle = shuffles.get(i);</span>
+<span class="nc" id="L50">            String given = givenAnswers.get(i);</span>
+<span class="nc" id="L51">            boolean correct = corrects.get(i);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            String marker = correct</span>
+<span class="nc" id="L53">                    ? GREEN + BOLD + &quot;✓&quot; + RESET</span>
+<span class="nc" id="L54">                    : RED + BOLD + &quot;✗&quot; + RESET;</span>
+<span class="nc" id="L55">            System.out.printf(&quot;%s Q%-3d %s%n&quot;, marker, i + 1, q.getQuestionText().lines().findFirst().orElse(&quot;&quot;));</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (!correct) {</span>
+<span class="nc" id="L57">                String correctLetter = shuffle.getCorrectShuffledLetter();</span>
+<span class="nc" id="L58">                int correctIdx = shuffle.getCorrectShuffledIndex();</span>
+<span class="nc" id="L59">                String correctText = shuffle.getShuffledOptions().get(correctIdx);</span>
+<span class="nc" id="L60">                System.out.printf(&quot;       Your answer: %s%s%s  |  Correct: %s%s) %s%s%n&quot;,</span>
+                        RED, given, RESET, GREEN, correctLetter, correctText, RESET);
+<span class="nc bnc" id="L62" title="All 4 branches missed.">                if (q.getExplanation() != null &amp;&amp; !q.getExplanation().isEmpty()) {</span>
+<span class="nc" id="L63">                    System.out.printf(&quot;       %sExplanation: %s%s%n&quot;, YELLOW, q.getExplanation(), RESET);</span>
+                }
+            }
+        }
+<span class="nc" id="L67">        printSeparator();</span>
+<span class="nc" id="L68">    }</span>
+
+    public static void printResults(QuizSession session) {
+<span class="fc" id="L71">        System.out.println();</span>
+<span class="fc" id="L72">        printSeparator();</span>
+<span class="fc" id="L73">        System.out.printf(&quot;%s%sQuiz Complete!%s%n&quot;, BOLD, CYAN, RESET);</span>
+<span class="fc" id="L74">        printSeparator();</span>
+<span class="fc" id="L75">        System.out.printf(&quot;Score: %s%d/%d (%.1f%%)%s%n&quot;,</span>
+<span class="fc" id="L76">                BOLD, session.getNumCorrect(), session.getNumQuestions(),</span>
+<span class="fc" id="L77">                session.getPercentageCorrect(), RESET);</span>
+<span class="fc" id="L78">        System.out.printf(&quot;Time:  %s%n&quot;, QuizUtils.formatTime(session.getTimeTakenSeconds()));</span>
+<span class="fc" id="L79">        printSeparator();</span>
+<span class="fc" id="L80">    }</span>
+
+    public static void printSessionHistory(List&lt;QuizSession&gt; sessions) {
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (sessions.isEmpty()) {</span>
+<span class="fc" id="L84">            System.out.println(&quot;No quiz sessions found.&quot;);</span>
+<span class="fc" id="L85">            return;</span>
+        }
+<span class="fc" id="L87">        System.out.printf(&quot;%-38s %-20s %5s %7s %10s%n&quot;, &quot;Session ID&quot;, &quot;Date&quot;, &quot;Qs&quot;, &quot;Correct&quot;, &quot;Score&quot;);</span>
+<span class="fc" id="L88">        System.out.println(&quot;-&quot;.repeat(85));</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (QuizSession s : sessions) {</span>
+<span class="fc" id="L90">            System.out.printf(&quot;%-38s %-20s %5d %7d %9.1f%%%n&quot;,</span>
+<span class="fc" id="L91">                    s.getSessionId(),</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">                    s.getStartedAt() != null ? s.getStartedAt() : &quot;N/A&quot;,</span>
+<span class="fc" id="L93">                    s.getNumQuestions(),</span>
+<span class="fc" id="L94">                    s.getNumCorrect(),</span>
+<span class="fc" id="L95">                    s.getPercentageCorrect());</span>
+<span class="fc" id="L96">        }</span>
+<span class="fc" id="L97">    }</span>
+
+    public static void printBanner() {
+<span class="fc" id="L100">        System.out.println(CYAN + BOLD);</span>
+<span class="fc" id="L101">        System.out.println(&quot;  ╔═══════════════════════════════╗&quot;);</span>
+<span class="fc" id="L102">        System.out.println(&quot;  ║   GitHub Actions Quiz Engine  ║&quot;);</span>
+<span class="fc" id="L103">        System.out.println(&quot;  ╚═══════════════════════════════╝&quot;);</span>
+<span class="fc" id="L104">        System.out.println(RESET);</span>
+<span class="fc" id="L105">    }</span>
+
+    public static void printSeparator() {
+<span class="fc" id="L108">        System.out.println(&quot;─&quot;.repeat(60));</span>
+<span class="fc" id="L109">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

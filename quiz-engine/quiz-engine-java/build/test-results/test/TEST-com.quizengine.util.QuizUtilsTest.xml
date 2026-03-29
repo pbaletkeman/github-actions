@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.quizengine.util.QuizUtilsTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-03-29T01:40:48.407Z" hostname="LAPPY" time="0.007">
+  <properties/>
+  <testcase name="calculateScore_returnsCorrectPercentage()" classname="com.quizengine.util.QuizUtilsTest" time="0.0"/>
+  <testcase name="now_returnsFormattedTimestamp()" classname="com.quizengine.util.QuizUtilsTest" time="0.0"/>
+  <testcase name="calculateScore_withZeroTotal_returnsZero()" classname="com.quizengine.util.QuizUtilsTest" time="0.001"/>
+  <testcase name="formatTime_largeValue()" classname="com.quizengine.util.QuizUtilsTest" time="0.0"/>
+  <testcase name="generateSessionId_returnsNonNull()" classname="com.quizengine.util.QuizUtilsTest" time="0.001"/>
+  <testcase name="calculateScore_zeroCorrect()" classname="com.quizengine.util.QuizUtilsTest" time="0.0"/>
+  <testcase name="formatTime_zeroSeconds()" classname="com.quizengine.util.QuizUtilsTest" time="0.0"/>
+  <testcase name="calculateScore_perfectScore()" classname="com.quizengine.util.QuizUtilsTest" time="0.001"/>
+  <testcase name="generateSessionId_returnsUniqueIds()" classname="com.quizengine.util.QuizUtilsTest" time="0.001"/>
+  <testcase name="formatTime_formatsCorrectly()" classname="com.quizengine.util.QuizUtilsTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

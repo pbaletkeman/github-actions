@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.quizengine.dao.QuestionDAOTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-03-29T01:40:47.973Z" hostname="LAPPY" time="0.031">
+  <properties/>
+  <testcase name="getRandomQuestions_withDifficultyFilter_returnsMatchingQuestions()" classname="com.quizengine.dao.QuestionDAOTest" time="0.012"/>
+  <testcase name="insertAndRetrieve_returnsInsertedQuestion()" classname="com.quizengine.dao.QuestionDAOTest" time="0.002"/>
+  <testcase name="getRandomQuestions_omitsCorrectAnswer()" classname="com.quizengine.dao.QuestionDAOTest" time="0.002"/>
+  <testcase name="getCurrentCycle_returnsOneWhenNoQuestions()" classname="com.quizengine.dao.QuestionDAOTest" time="0.001"/>
+  <testcase name="insert_skipsExactDuplicate()" classname="com.quizengine.dao.QuestionDAOTest" time="0.001"/>
+  <testcase name="advanceCycleIfExhausted_incrementsCycle()" classname="com.quizengine.dao.QuestionDAOTest" time="0.002"/>
+  <testcase name="getCurrentCycle_returnsOne_initially()" classname="com.quizengine.dao.QuestionDAOTest" time="0.002"/>
+  <testcase name="getRandomQuestions_withSectionFilter_returnsMatchingQuestions()" classname="com.quizengine.dao.QuestionDAOTest" time="0.001"/>
+  <testcase name="count_returnsCorrectCount()" classname="com.quizengine.dao.QuestionDAOTest" time="0.002"/>
+  <testcase name="markUsed_incrementsTimesUsed()" classname="com.quizengine.dao.QuestionDAOTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

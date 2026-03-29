@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuizEngine.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quiz-engine-java</a> &gt; <a href="index.source.html" class="el_package">com.quizengine.service</a> &gt; <span class="el_source">QuizEngine.java</span></div><h1>QuizEngine.java</h1><pre class="source lang-java linenums">package com.quizengine.service;
+
+import com.quizengine.dao.QuestionDAO;
+import com.quizengine.dao.ResponseDAO;
+import com.quizengine.dao.SessionDAO;
+import com.quizengine.model.Question;
+import com.quizengine.model.QuizResponse;
+import com.quizengine.model.QuizSession;
+import com.quizengine.util.AnswerShuffler;
+import com.quizengine.util.QuizUtils;
+import com.quizengine.util.ShuffleResult;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class QuizEngine {
+    private final QuestionDAO questionDAO;
+    private final SessionDAO sessionDAO;
+    private final ResponseDAO responseDAO;
+    private final int numQuestions;
+    private final String difficulty;
+    private final String section;
+
+    private List&lt;Question&gt; questions;
+    private List&lt;String&gt; internalAnswers;
+    private Map&lt;Integer, ShuffleResult&gt; shuffleResults;
+    private int numCorrect;
+    private String sessionId;
+    private long startTime;
+
+    public QuizEngine(QuestionDAO questionDAO, SessionDAO sessionDAO, ResponseDAO responseDAO, int numQuestions) {
+<span class="fc" id="L35">        this(questionDAO, sessionDAO, responseDAO, numQuestions, null, null);</span>
+<span class="fc" id="L36">    }</span>
+
+<span class="fc" id="L38">    public QuizEngine(QuestionDAO questionDAO, SessionDAO sessionDAO, ResponseDAO responseDAO, int numQuestions, String difficulty, String section) {</span>
+<span class="fc" id="L39">        this.questionDAO = questionDAO;</span>
+<span class="fc" id="L40">        this.sessionDAO = sessionDAO;</span>
+<span class="fc" id="L41">        this.responseDAO = responseDAO;</span>
+<span class="fc" id="L42">        this.numQuestions = numQuestions;</span>
+<span class="fc" id="L43">        this.difficulty = difficulty;</span>
+<span class="fc" id="L44">        this.section = section;</span>
+<span class="fc" id="L45">    }</span>
+
+    public void loadQuestions() throws SQLException {
+        List&lt;Question&gt; loaded;
+<span class="pc bpc" id="L49" title="1 of 4 branches missed.">        if (difficulty != null || section != null) {</span>
+<span class="fc" id="L50">            loaded = questionDAO.getRandomQuestions(numQuestions, difficulty, section);</span>
+        } else {
+<span class="fc" id="L52">            loaded = questionDAO.getRandomQuestions(numQuestions);</span>
+        }
+
+<span class="fc" id="L55">        internalAnswers = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L56">        shuffleResults = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L57">        questions = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        for (int i = 0; i &lt; loaded.size(); i++) {</span>
+<span class="fc" id="L60">            Question q = loaded.get(i);</span>
+<span class="fc" id="L61">            Question full = questionDAO.getById(q.getId());</span>
+<span class="fc" id="L62">            internalAnswers.add(full.getCorrectAnswer());</span>
+
+<span class="fc" id="L64">            List&lt;String&gt; opts = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L65">            opts.add(full.getOptionA());</span>
+<span class="fc" id="L66">            opts.add(full.getOptionB());</span>
+<span class="fc" id="L67">            opts.add(full.getOptionC());</span>
+<span class="fc" id="L68">            opts.add(full.getOptionD());</span>
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">            if (full.getOptionE() != null &amp;&amp; !full.getOptionE().isEmpty()) {</span>
+<span class="fc" id="L70">                opts.add(full.getOptionE());</span>
+            }
+
+<span class="fc" id="L73">            ShuffleResult shuffle = AnswerShuffler.shuffle(opts, full.getCorrectAnswer());</span>
+<span class="fc" id="L74">            shuffleResults.put(i, shuffle);</span>
+
+<span class="fc" id="L76">            Question.Builder builder = new Question.Builder()</span>
+<span class="fc" id="L77">                    .id(full.getId())</span>
+<span class="fc" id="L78">                    .questionText(full.getQuestionText())</span>
+<span class="fc" id="L79">                    .explanation(full.getExplanation())</span>
+<span class="fc" id="L80">                    .section(full.getSection())</span>
+<span class="fc" id="L81">                    .difficulty(full.getDifficulty())</span>
+<span class="fc" id="L82">                    .usageCycle(full.getUsageCycle())</span>
+<span class="fc" id="L83">                    .timesUsed(full.getTimesUsed());</span>
+
+<span class="fc" id="L85">            List&lt;String&gt; shuffled = shuffle.getShuffledOptions();</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">            if (shuffled.size() &gt; 0) builder.optionA(shuffled.get(0));</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (shuffled.size() &gt; 1) builder.optionB(shuffled.get(1));</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            if (shuffled.size() &gt; 2) builder.optionC(shuffled.get(2));</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">            if (shuffled.size() &gt; 3) builder.optionD(shuffled.get(3));</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            if (shuffled.size() &gt; 4) builder.optionE(shuffled.get(4));</span>
+
+<span class="fc" id="L92">            questions.add(builder.build());</span>
+        }
+
+<span class="fc" id="L95">        numCorrect = 0;</span>
+<span class="fc" id="L96">        sessionId = QuizUtils.generateSessionId();</span>
+<span class="fc" id="L97">        startTime = System.currentTimeMillis();</span>
+
+<span class="fc" id="L99">        QuizSession session = new QuizSession.Builder()</span>
+<span class="fc" id="L100">                .sessionId(sessionId)</span>
+<span class="fc" id="L101">                .startedAt(QuizUtils.now())</span>
+<span class="fc" id="L102">                .numQuestions(questions.size())</span>
+<span class="fc" id="L103">                .build();</span>
+<span class="fc" id="L104">        sessionDAO.insert(session);</span>
+<span class="fc" id="L105">    }</span>
+
+    public boolean submitAnswer(int questionIdx, String userAnswer, int timeTakenSeconds) throws SQLException {
+<span class="fc bfc" id="L108" title="All 4 branches covered.">        if (questionIdx &lt; 0 || questionIdx &gt;= questions.size()) return false;</span>
+<span class="fc" id="L109">        ShuffleResult shuffle = shuffleResults.get(questionIdx);</span>
+<span class="fc" id="L110">        String correctShuffledLetter = shuffle.getCorrectShuffledLetter();</span>
+<span class="fc" id="L111">        boolean correct = correctShuffledLetter.equalsIgnoreCase(userAnswer);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (correct) numCorrect++;</span>
+
+<span class="fc" id="L114">        Question q = questions.get(questionIdx);</span>
+<span class="fc" id="L115">        QuizResponse response = new QuizResponse.Builder()</span>
+<span class="fc" id="L116">                .sessionId(sessionId)</span>
+<span class="fc" id="L117">                .questionId(q.getId())</span>
+<span class="fc" id="L118">                .userAnswer(userAnswer.toUpperCase())</span>
+<span class="fc" id="L119">                .isCorrect(correct)</span>
+<span class="fc" id="L120">                .timeTakenSeconds(timeTakenSeconds)</span>
+<span class="fc" id="L121">                .build();</span>
+<span class="fc" id="L122">        responseDAO.insert(response);</span>
+<span class="fc" id="L123">        return correct;</span>
+    }
+
+    public QuizSession complete() throws SQLException {
+<span class="fc" id="L127">        long elapsed = (System.currentTimeMillis() - startTime) / 1000;</span>
+<span class="fc" id="L128">        double percentage = QuizUtils.calculateScore(numCorrect, questions.size());</span>
+
+<span class="fc" id="L130">        QuizSession session = new QuizSession.Builder()</span>
+<span class="fc" id="L131">                .sessionId(sessionId)</span>
+<span class="fc" id="L132">                .endedAt(QuizUtils.now())</span>
+<span class="fc" id="L133">                .numQuestions(questions.size())</span>
+<span class="fc" id="L134">                .numCorrect(numCorrect)</span>
+<span class="fc" id="L135">                .percentageCorrect(percentage)</span>
+<span class="fc" id="L136">                .timeTakenSeconds((int) elapsed)</span>
+<span class="fc" id="L137">                .build();</span>
+<span class="fc" id="L138">        sessionDAO.update(session);</span>
+
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        for (Question q : questions) {</span>
+<span class="fc" id="L141">            questionDAO.markUsed(q.getId());</span>
+<span class="fc" id="L142">        }</span>
+<span class="fc" id="L143">        questionDAO.advanceCycleIfExhausted();</span>
+
+<span class="fc" id="L145">        return session;</span>
+    }
+
+<span class="fc" id="L148">    public int getNumCorrect() { return numCorrect; }</span>
+<span class="fc" id="L149">    public List&lt;Question&gt; getQuestions() { return questions; }</span>
+<span class="fc" id="L150">    public ShuffleResult getShuffleResult(int idx) { return shuffleResults.get(idx); }</span>
+<span class="fc" id="L151">    public String getSessionId() { return sessionId; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

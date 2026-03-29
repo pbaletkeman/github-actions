@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResponseDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quiz-engine-java</a> &gt; <a href="index.source.html" class="el_package">com.quizengine.dao</a> &gt; <span class="el_source">ResponseDAO.java</span></div><h1>ResponseDAO.java</h1><pre class="source lang-java linenums">package com.quizengine.dao;
+
+import com.quizengine.model.QuizResponse;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ResponseDAO {
+    private final Connection connection;
+
+<span class="fc" id="L12">    public ResponseDAO(Connection connection) {</span>
+<span class="fc" id="L13">        this.connection = connection;</span>
+<span class="fc" id="L14">    }</span>
+
+    public void insert(QuizResponse response) throws SQLException {
+<span class="fc" id="L17">        String sql = &quot;INSERT OR IGNORE INTO quiz_responses (session_id, question_id, user_answer, is_correct, time_taken_seconds) VALUES (?,?,?,?,?)&quot;;</span>
+<span class="fc" id="L18">        try (PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L19">            ps.setString(1, response.getSessionId());</span>
+<span class="fc" id="L20">            ps.setInt(2, response.getQuestionId());</span>
+<span class="fc" id="L21">            ps.setString(3, response.getUserAnswer());</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">            ps.setInt(4, response.isCorrect() ? 1 : 0);</span>
+<span class="fc" id="L23">            ps.setInt(5, response.getTimeTakenSeconds());</span>
+<span class="fc" id="L24">            ps.executeUpdate();</span>
+        }
+<span class="fc" id="L26">    }</span>
+
+    public List&lt;QuizResponse&gt; getBySessionId(String sessionId) throws SQLException {
+<span class="fc" id="L29">        String sql = &quot;SELECT * FROM quiz_responses WHERE session_id = ?&quot;;</span>
+<span class="fc" id="L30">        List&lt;QuizResponse&gt; responses = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L31">        try (PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L32">            ps.setString(1, sessionId);</span>
+<span class="fc" id="L33">            try (ResultSet rs = ps.executeQuery()) {</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">                while (rs.next()) {</span>
+<span class="fc" id="L35">                    responses.add(mapRow(rs));</span>
+                }
+            }
+        }
+<span class="fc" id="L39">        return responses;</span>
+    }
+
+    public void deleteBySessionId(String sessionId) throws SQLException {
+<span class="fc" id="L43">        String sql = &quot;DELETE FROM quiz_responses WHERE session_id = ?&quot;;</span>
+<span class="fc" id="L44">        try (PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L45">            ps.setString(1, sessionId);</span>
+<span class="fc" id="L46">            ps.executeUpdate();</span>
+        }
+<span class="fc" id="L48">    }</span>
+
+    private QuizResponse mapRow(ResultSet rs) throws SQLException {
+<span class="fc" id="L51">        return new QuizResponse.Builder()</span>
+<span class="fc" id="L52">                .id(rs.getInt(&quot;id&quot;))</span>
+<span class="fc" id="L53">                .sessionId(rs.getString(&quot;session_id&quot;))</span>
+<span class="fc" id="L54">                .questionId(rs.getInt(&quot;question_id&quot;))</span>
+<span class="fc" id="L55">                .userAnswer(rs.getString(&quot;user_answer&quot;))</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">                .isCorrect(rs.getInt(&quot;is_correct&quot;) == 1)</span>
+<span class="fc" id="L57">                .timeTakenSeconds(rs.getInt(&quot;time_taken_seconds&quot;))</span>
+<span class="fc" id="L58">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

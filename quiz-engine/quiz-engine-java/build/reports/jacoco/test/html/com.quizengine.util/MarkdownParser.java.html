@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MarkdownParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quiz-engine-java</a> &gt; <a href="index.source.html" class="el_package">com.quizengine.util</a> &gt; <span class="el_source">MarkdownParser.java</span></div><h1>MarkdownParser.java</h1><pre class="source lang-java linenums">package com.quizengine.util;
+
+import com.quizengine.model.Question;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.regex.*;
+
+<span class="nc" id="L12">public class MarkdownParser {</span>
+
+    // Matches: ### Question 42 — Some Section Title (em-dash, en-dash, or hyphen)
+<span class="fc" id="L15">    private static final Pattern QUESTION_HEADER = Pattern.compile(</span>
+            &quot;^###\\s+Question\\s+(\\d+)\\s*[-\u2014\u2013]+\\s*(.+)$&quot;, Pattern.MULTILINE);
+
+<span class="fc" id="L18">    private static final Pattern ANSWER_TYPE = Pattern.compile(</span>
+            &quot;\\*\\*Answer Type\\*\\*:\\s*(\\w+)&quot;);
+
+<span class="fc" id="L21">    private static final Pattern DIFFICULTY = Pattern.compile(</span>
+            &quot;\\*\\*Difficulty\\*\\*:\\s*(\\w+)&quot;);
+
+    // Captures scenario text: from **Scenario**:\n up to the next **Xxx** header or first option line
+<span class="fc" id="L25">    private static final Pattern SCENARIO_TEXT = Pattern.compile(</span>
+            &quot;\\*\\*Scenario\\*\\*:[^\\n]*\\n([\\s\\S]+?)(?=\\n\\*\\*[A-Z]|\\n- [A-E]\\))&quot;);
+
+    // Captures question text: from **Question**:\n up to first option line
+<span class="fc" id="L29">    private static final Pattern QUESTION_TEXT = Pattern.compile(</span>
+            &quot;\\*\\*Question\\*\\*:[^\\n]*\\n([\\s\\S]+?)(?=\\n- [A-E]\\))&quot;);
+
+<span class="fc" id="L32">    private static final Pattern OPTION = Pattern.compile(</span>
+            &quot;^- ([A-E])\\) (.+)$&quot;, Pattern.MULTILINE);
+
+    // Matches a single answer key table row: | N | Answer | Explanation | Source | Difficulty |
+<span class="fc" id="L36">    private static final Pattern ANSWER_KEY_ROW = Pattern.compile(</span>
+            &quot;^\\|\\s*(\\d+)\\s*\\|\\s*([^|]+)\\|\\s*([^|]*)\\|&quot;, Pattern.MULTILINE);
+
+    public static List&lt;Question&gt; parseFile(String filePath) throws IOException {
+<span class="fc" id="L40">        String content = new String(Files.readAllBytes(Paths.get(filePath)), StandardCharsets.UTF_8)</span>
+<span class="fc" id="L41">                .replace(&quot;\r\n&quot;, &quot;\n&quot;)</span>
+<span class="fc" id="L42">                .replace(&quot;\r&quot;, &quot;\n&quot;);</span>
+
+<span class="fc" id="L44">        Map&lt;Integer, AnswerEntry&gt; answerKey = parseAnswerKey(content);</span>
+
+<span class="fc" id="L46">        int questionsStart = content.indexOf(&quot;## Questions&quot;);</span>
+<span class="fc" id="L47">        int answerKeyStart = content.indexOf(&quot;## Answer Key&quot;);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (questionsStart &lt; 0) questionsStart = 0;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        String questionsContent = (answerKeyStart &gt; questionsStart)</span>
+<span class="fc" id="L50">                ? content.substring(questionsStart, answerKeyStart)</span>
+<span class="fc" id="L51">                : content.substring(questionsStart);</span>
+
+<span class="fc" id="L53">        Matcher headerMatcher = QUESTION_HEADER.matcher(questionsContent);</span>
+<span class="fc" id="L54">        List&lt;int[]&gt; positions = new ArrayList&lt;&gt;();  // [blockStart, questionNum]</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        while (headerMatcher.find()) {</span>
+<span class="fc" id="L56">            positions.add(new int[]{headerMatcher.start(), Integer.parseInt(headerMatcher.group(1))});</span>
+        }
+
+<span class="fc" id="L59">        List&lt;Question&gt; questions = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        for (int i = 0; i &lt; positions.size(); i++) {</span>
+<span class="fc" id="L61">            int blockStart = positions.get(i)[0];</span>
+<span class="fc" id="L62">            int questionNum = positions.get(i)[1];</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">            int blockEnd = (i + 1 &lt; positions.size()) ? positions.get(i + 1)[0] : questionsContent.length();</span>
+<span class="fc" id="L64">            String block = questionsContent.substring(blockStart, blockEnd);</span>
+            try {
+<span class="fc" id="L66">                Question q = parseBlock(block, questionNum, answerKey, filePath);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">                if (q != null) questions.add(q);</span>
+<span class="nc" id="L68">            } catch (Exception ignored) {</span>
+                // skip malformed blocks
+<span class="fc" id="L70">            }</span>
+        }
+
+<span class="fc" id="L73">        return questions;</span>
+    }
+
+    private static Question parseBlock(String block, int questionNum,
+                                       Map&lt;Integer, AnswerEntry&gt; answerKey, String filePath) {
+<span class="fc" id="L78">        Matcher headerMatcher = QUESTION_HEADER.matcher(block);</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        String section = headerMatcher.find() ? headerMatcher.group(2).trim() : &quot;&quot;;</span>
+
+<span class="fc" id="L81">        Matcher typeMatcher = ANSWER_TYPE.matcher(block);</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        String answerType = typeMatcher.find() ? typeMatcher.group(1).toLowerCase() : &quot;one&quot;;</span>
+<span class="pc bpc" id="L83" title="1 of 4 branches missed.">        if (answerType.equals(&quot;many&quot;) || answerType.equals(&quot;none&quot;)) return null;</span>
+
+<span class="fc" id="L85">        Matcher diffMatcher = DIFFICULTY.matcher(block);</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        String difficulty = diffMatcher.find() ? diffMatcher.group(1) : &quot;&quot;;</span>
+
+<span class="fc" id="L88">        StringBuilder questionText = new StringBuilder();</span>
+<span class="fc" id="L89">        Matcher scenarioMatcher = SCENARIO_TEXT.matcher(block);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (scenarioMatcher.find()) {</span>
+<span class="fc" id="L91">            questionText.append(scenarioMatcher.group(1).trim()).append(&quot;\n\n&quot;);</span>
+        }
+<span class="fc" id="L93">        Matcher qtMatcher = QUESTION_TEXT.matcher(block);</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (qtMatcher.find()) {</span>
+<span class="fc" id="L95">            questionText.append(qtMatcher.group(1).trim());</span>
+        }
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (questionText.length() == 0) return null;</span>
+
+<span class="fc" id="L99">        String optA = null, optB = null, optC = null, optD = null, optE = null;</span>
+<span class="fc" id="L100">        Matcher optMatcher = OPTION.matcher(block);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        while (optMatcher.find()) {</span>
+<span class="fc" id="L102">            String letter = optMatcher.group(1);</span>
+<span class="fc" id="L103">            String text = optMatcher.group(2).trim();</span>
+<span class="pc bpc" id="L104" title="2 of 6 branches missed.">            switch (letter) {</span>
+<span class="fc" id="L105">                case &quot;A&quot;: optA = text; break;</span>
+<span class="fc" id="L106">                case &quot;B&quot;: optB = text; break;</span>
+<span class="fc" id="L107">                case &quot;C&quot;: optC = text; break;</span>
+<span class="fc" id="L108">                case &quot;D&quot;: optD = text; break;</span>
+<span class="nc" id="L109">                case &quot;E&quot;: optE = text; break;</span>
+            }
+<span class="fc" id="L111">        }</span>
+
+<span class="fc" id="L113">        AnswerEntry entry = answerKey.get(questionNum);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (entry == null) return null;</span>
+
+<span class="fc" id="L116">        return new Question.Builder()</span>
+<span class="fc" id="L117">                .questionText(questionText.toString().trim())</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">                .optionA(optA != null ? optA : &quot;&quot;)</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">                .optionB(optB != null ? optB : &quot;&quot;)</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">                .optionC(optC != null ? optC : &quot;&quot;)</span>
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">                .optionD(optD != null ? optD : &quot;&quot;)</span>
+<span class="fc" id="L122">                .optionE(optE)</span>
+<span class="fc" id="L123">                .correctAnswer(entry.answer)</span>
+<span class="fc" id="L124">                .explanation(entry.explanation)</span>
+<span class="fc" id="L125">                .section(section)</span>
+<span class="fc" id="L126">                .difficulty(difficulty)</span>
+<span class="fc" id="L127">                .sourceFile(filePath)</span>
+<span class="fc" id="L128">                .build();</span>
+    }
+
+    private static Map&lt;Integer, AnswerEntry&gt; parseAnswerKey(String content) {
+<span class="fc" id="L132">        Map&lt;Integer, AnswerEntry&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L133">        int keyStart = content.indexOf(&quot;## Answer Key&quot;);</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        if (keyStart &lt; 0) return map;</span>
+<span class="fc" id="L135">        String keySection = content.substring(keyStart);</span>
+<span class="fc" id="L136">        Matcher rowMatcher = ANSWER_KEY_ROW.matcher(keySection);</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        while (rowMatcher.find()) {</span>
+<span class="fc" id="L138">            String numStr = rowMatcher.group(1).trim();</span>
+<span class="fc" id="L139">            String answer = rowMatcher.group(2).trim();</span>
+<span class="fc" id="L140">            String explanation = rowMatcher.group(3).trim();</span>
+            try {
+<span class="fc" id="L142">                int num = Integer.parseInt(numStr);</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">                if (answer.matches(&quot;[A-E]&quot;)) {</span>
+<span class="fc" id="L144">                    map.put(num, new AnswerEntry(answer, explanation));</span>
+                }
+<span class="nc" id="L146">            } catch (NumberFormatException ignored) {</span>
+                // skip header row
+<span class="fc" id="L148">            }</span>
+<span class="fc" id="L149">        }</span>
+<span class="fc" id="L150">        return map;</span>
+    }
+
+    private static class AnswerEntry {
+        final String answer;
+        final String explanation;
+
+<span class="fc" id="L157">        AnswerEntry(String answer, String explanation) {</span>
+<span class="fc" id="L158">            this.answer = answer;</span>
+<span class="fc" id="L159">            this.explanation = explanation;</span>
+<span class="fc" id="L160">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

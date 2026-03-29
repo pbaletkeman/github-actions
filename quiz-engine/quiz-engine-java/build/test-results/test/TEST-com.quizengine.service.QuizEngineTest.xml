@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.quizengine.service.QuizEngineTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-03-29T01:40:48.338Z" hostname="LAPPY" time="0.026">
+  <properties/>
+  <testcase name="submitCorrectAnswer_incrementsScore()" classname="com.quizengine.service.QuizEngineTest" time="0.01"/>
+  <testcase name="finalize_calculatesCorrectPercentage()" classname="com.quizengine.service.QuizEngineTest" time="0.002"/>
+  <testcase name="submitAnswer_withInvalidIndex_returnsFalse()" classname="com.quizengine.service.QuizEngineTest" time="0.001"/>
+  <testcase name="loadQuestions_withFiveOptions_shufflesCorrectly()" classname="com.quizengine.service.QuizEngineTest" time="0.001"/>
+  <testcase name="getShuffleResult_returnsValidMapping()" classname="com.quizengine.service.QuizEngineTest" time="0.002"/>
+  <testcase name="finalize_persistsSessionToDatabase()" classname="com.quizengine.service.QuizEngineTest" time="0.002"/>
+  <testcase name="loadQuestions_withDifficultyAndSection_returnsAvailable()" classname="com.quizengine.service.QuizEngineTest" time="0.002"/>
+  <testcase name="submitWrongAnswer_doesNotScore()" classname="com.quizengine.service.QuizEngineTest" time="0.002"/>
+  <testcase name="loadQuestions_loadsExpectedCount()" classname="com.quizengine.service.QuizEngineTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

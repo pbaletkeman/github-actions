@@ -6,12 +6,10 @@ if not exist "build\libs\quiz-engine.jar" (
     echo JAR not found. Run build.bat first.
     exit /b 1
 )
-echo Usage: import.bat [file]
-echo   Example: import.bat questions.md
-echo.
 if "%~1"=="" (
     echo No file specified. Please provide a markdown file path.
-    echo Usage: import.bat <questions.md>
+    echo Usage: import.bat ^<questions.md^>
+    echo   Example: import.bat questions.md
     exit /b 1
 ) else (
     echo Importing from file: %~1

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.quizengine.cli.ConsoleFormatterTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-03-29T01:40:47.427Z" hostname="LAPPY" time="0.05">
+  <properties/>
+  <testcase name="printSeparator_outputsDashes()" classname="com.quizengine.cli.ConsoleFormatterTest" time="0.019"/>
+  <testcase name="printBanner_outputsTitle()" classname="com.quizengine.cli.ConsoleFormatterTest" time="0.002"/>
+  <testcase name="printSessionHistory_whenEmpty()" classname="com.quizengine.cli.ConsoleFormatterTest" time="0.001"/>
+  <testcase name="printResults_showsScore()" classname="com.quizengine.cli.ConsoleFormatterTest" time="0.004"/>
+  <testcase name="printSessionHistory_nullStartedAt_showsNA()" classname="com.quizengine.cli.ConsoleFormatterTest" time="0.002"/>
+  <testcase name="printIncorrect_showsCorrectAnswer()" classname="com.quizengine.cli.ConsoleFormatterTest" time="0.001"/>
+  <testcase name="printCorrect_outputsCorrect()" classname="com.quizengine.cli.ConsoleFormatterTest" time="0.0"/>
+  <testcase name="printQuestion_showsQuestionText()" classname="com.quizengine.cli.ConsoleFormatterTest" time="0.001"/>
+  <testcase name="printSessionHistory_withSessions()" classname="com.quizengine.cli.ConsoleFormatterTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

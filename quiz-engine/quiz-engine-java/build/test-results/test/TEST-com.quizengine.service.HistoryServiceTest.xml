@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.quizengine.service.HistoryServiceTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-03-29T01:40:48.042Z" hostname="LAPPY" time="0.295">
+  <properties/>
+  <testcase name="getSessionResponses_returnsEmptyForNewSession()" classname="com.quizengine.service.HistoryServiceTest" time="0.226"/>
+  <testcase name="exportToJson_returnsValidJson()" classname="com.quizengine.service.HistoryServiceTest" time="0.059"/>
+  <testcase name="getAllSessions_returnsInsertedSession()" classname="com.quizengine.service.HistoryServiceTest" time="0.002"/>
+  <testcase name="getSessionDetails_returnsCorrectSession()" classname="com.quizengine.service.HistoryServiceTest" time="0.002"/>
+  <testcase name="getAllSessions_returnsEmptyListInitially()" classname="com.quizengine.service.HistoryServiceTest" time="0.001"/>
+  <testcase name="exportToCsv_returnsValidCsv()" classname="com.quizengine.service.HistoryServiceTest" time="0.002"/>
+  <testcase name="formatSessionHistory_returnsNonEmptyString()" classname="com.quizengine.service.HistoryServiceTest" time="0.001"/>
+  <testcase name="formatSessionHistory_emptyList_returnsNoSessionsMessage()" classname="com.quizengine.service.HistoryServiceTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

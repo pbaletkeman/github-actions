@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuizCLI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quiz-engine-java</a> &gt; <a href="index.source.html" class="el_package">com.quizengine.cli</a> &gt; <span class="el_source">QuizCLI.java</span></div><h1>QuizCLI.java</h1><pre class="source lang-java linenums">package com.quizengine.cli;
+
+import com.quizengine.dao.QuestionDAO;
+import com.quizengine.dao.SessionDAO;
+import com.quizengine.dao.ResponseDAO;
+import com.quizengine.model.Question;
+import com.quizengine.model.QuizSession;
+import com.quizengine.service.HistoryService;
+import com.quizengine.service.QuizEngine;
+import com.quizengine.service.QuizService;
+import com.quizengine.util.MarkdownParser;
+import com.quizengine.util.ShuffleResult;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class QuizCLI {
+    private final Scanner scanner;
+    private final Connection connection;
+
+<span class="nc" id="L23">    public QuizCLI(Connection connection) {</span>
+<span class="nc" id="L24">        this.connection = connection;</span>
+<span class="nc" id="L25">        this.scanner = new Scanner(System.in);</span>
+<span class="nc" id="L26">    }</span>
+
+    public void run(String[] args) {
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        String command = args.length &gt; 0 ? args[0].toLowerCase() : &quot;quiz&quot;;</span>
+        try {
+<span class="nc bnc" id="L31" title="All 5 branches missed.">            switch (command) {</span>
+                case &quot;quiz&quot;:
+<span class="nc" id="L33">                    runQuiz();</span>
+<span class="nc" id="L34">                    break;</span>
+                case &quot;import&quot;:
+<span class="nc" id="L36">                    runImport(args);</span>
+<span class="nc" id="L37">                    break;</span>
+                case &quot;history&quot;:
+<span class="nc" id="L39">                    runHistory(args);</span>
+<span class="nc" id="L40">                    break;</span>
+                case &quot;clear&quot;:
+<span class="nc" id="L42">                    runClear(args);</span>
+<span class="nc" id="L43">                    break;</span>
+                case &quot;help&quot;:
+                default:
+<span class="nc" id="L46">                    printHelp();</span>
+                    break;
+            }
+<span class="nc" id="L49">        } catch (Exception e) {</span>
+<span class="nc" id="L50">            System.err.println(&quot;Error: &quot; + e.getMessage());</span>
+<span class="nc" id="L51">        }</span>
+<span class="nc" id="L52">    }</span>
+
+    private void runQuiz() throws Exception {
+<span class="nc" id="L55">        ConsoleFormatter.printBanner();</span>
+<span class="nc" id="L56">        int numQuestions = promptNumQuestions();</span>
+<span class="nc" id="L57">        QuizService quizService = new QuizService(connection);</span>
+<span class="nc" id="L58">        QuizEngine engine = quizService.createQuizEngine(numQuestions);</span>
+<span class="nc" id="L59">        engine.loadQuestions();</span>
+
+<span class="nc" id="L61">        List&lt;Question&gt; questions = engine.getQuestions();</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (questions.isEmpty()) {</span>
+<span class="nc" id="L63">            System.out.println(&quot;No questions available. Import questions first with: import &lt;file.md&gt;&quot;);</span>
+<span class="nc" id="L64">            return;</span>
+        }
+
+<span class="nc" id="L67">        List&lt;Question&gt; reviewQuestions = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L68">        List&lt;ShuffleResult&gt; reviewShuffles = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L69">        List&lt;String&gt; reviewAnswers = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L70">        List&lt;Boolean&gt; reviewCorrects = new ArrayList&lt;&gt;();</span>
+        long questionStart;
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        for (int i = 0; i &lt; questions.size(); i++) {</span>
+<span class="nc" id="L73">            Question q = questions.get(i);</span>
+<span class="nc" id="L74">            ShuffleResult shuffle = engine.getShuffleResult(i);</span>
+<span class="nc" id="L75">            ConsoleFormatter.printQuestion(i + 1, questions.size(), q, shuffle);</span>
+<span class="nc" id="L76">            questionStart = System.currentTimeMillis();</span>
+<span class="nc" id="L77">            String answer = getValidatedAnswer();</span>
+<span class="nc" id="L78">            int timeTaken = (int) ((System.currentTimeMillis() - questionStart) / 1000);</span>
+<span class="nc" id="L79">            boolean correct = engine.submitAnswer(i, answer, timeTaken);</span>
+<span class="nc" id="L80">            reviewQuestions.add(q);</span>
+<span class="nc" id="L81">            reviewShuffles.add(shuffle);</span>
+<span class="nc" id="L82">            reviewAnswers.add(answer);</span>
+<span class="nc" id="L83">            reviewCorrects.add(correct);</span>
+        }
+
+<span class="nc" id="L86">        QuizSession session = engine.complete();</span>
+<span class="nc" id="L87">        ConsoleFormatter.printReview(reviewQuestions, reviewShuffles, reviewAnswers, reviewCorrects);</span>
+<span class="nc" id="L88">        ConsoleFormatter.printResults(session);</span>
+<span class="nc" id="L89">    }</span>
+
+    private void runImport(String[] args) throws Exception {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (args.length &lt; 2) {</span>
+<span class="nc" id="L93">            System.out.println(&quot;Usage: import &lt;filepath.md&gt;&quot;);</span>
+<span class="nc" id="L94">            return;</span>
+        }
+<span class="nc" id="L96">        String filePath = args[1];</span>
+<span class="nc" id="L97">        List&lt;Question&gt; questions = MarkdownParser.parseFile(filePath);</span>
+<span class="nc" id="L98">        QuestionDAO dao = new QuestionDAO(connection);</span>
+<span class="nc" id="L99">        int imported = 0;</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        for (Question q : questions) {</span>
+<span class="nc" id="L101">            dao.insert(q);</span>
+<span class="nc" id="L102">            imported++;</span>
+<span class="nc" id="L103">        }</span>
+<span class="nc" id="L104">        System.out.printf(&quot;Imported %d questions from %s%n&quot;, imported, filePath);</span>
+<span class="nc" id="L105">    }</span>
+
+    private void runHistory(String[] args) throws Exception {
+<span class="nc" id="L108">        HistoryService historyService = new HistoryService(connection);</span>
+<span class="nc" id="L109">        List&lt;QuizSession&gt; sessions = historyService.getAllSessions();</span>
+
+<span class="nc bnc" id="L111" title="All 4 branches missed.">        if (args.length &gt; 1 &amp;&amp; args[1].equals(&quot;--json&quot;)) {</span>
+<span class="nc" id="L112">            System.out.println(historyService.exportToJson(sessions));</span>
+<span class="nc bnc" id="L113" title="All 4 branches missed.">        } else if (args.length &gt; 1 &amp;&amp; args[1].equals(&quot;--csv&quot;)) {</span>
+<span class="nc" id="L114">            System.out.println(historyService.exportToCsv(sessions));</span>
+        } else {
+<span class="nc" id="L116">            ConsoleFormatter.printSessionHistory(sessions);</span>
+        }
+<span class="nc" id="L118">    }</span>
+
+    private void runClear(String[] args) throws Exception {
+<span class="nc" id="L121">        System.out.print(&quot;Are you sure you want to clear all history? (yes/no): &quot;);</span>
+<span class="nc" id="L122">        String confirm = scanner.nextLine().trim().toLowerCase();</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        if (confirm.equals(&quot;yes&quot;)) {</span>
+<span class="nc" id="L124">            SessionDAO sessionDAO = new SessionDAO(connection);</span>
+<span class="nc" id="L125">            ResponseDAO responseDAO = new ResponseDAO(connection);</span>
+<span class="nc" id="L126">            List&lt;QuizSession&gt; sessions = sessionDAO.getAll();</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            for (QuizSession s : sessions) {</span>
+<span class="nc" id="L128">                responseDAO.deleteBySessionId(s.getSessionId());</span>
+<span class="nc" id="L129">            }</span>
+<span class="nc" id="L130">            sessionDAO.deleteAll();</span>
+<span class="nc" id="L131">            System.out.println(&quot;All history cleared.&quot;);</span>
+<span class="nc" id="L132">        } else {</span>
+<span class="nc" id="L133">            System.out.println(&quot;Operation cancelled.&quot;);</span>
+        }
+<span class="nc" id="L135">    }</span>
+
+    private void printHelp() {
+<span class="nc" id="L138">        ConsoleFormatter.printBanner();</span>
+<span class="nc" id="L139">        System.out.println(&quot;Usage: java -jar quiz-engine.jar [command]&quot;);</span>
+<span class="nc" id="L140">        System.out.println();</span>
+<span class="nc" id="L141">        System.out.println(&quot;Commands:&quot;);</span>
+<span class="nc" id="L142">        System.out.println(&quot;  quiz              Start an interactive quiz (default)&quot;);</span>
+<span class="nc" id="L143">        System.out.println(&quot;  import &lt;file.md&gt;  Import questions from markdown file&quot;);</span>
+<span class="nc" id="L144">        System.out.println(&quot;  history           Show quiz history&quot;);</span>
+<span class="nc" id="L145">        System.out.println(&quot;  history --json    Export history as JSON&quot;);</span>
+<span class="nc" id="L146">        System.out.println(&quot;  history --csv     Export history as CSV&quot;);</span>
+<span class="nc" id="L147">        System.out.println(&quot;  clear             Clear all quiz history&quot;);</span>
+<span class="nc" id="L148">        System.out.println(&quot;  help              Show this help message&quot;);</span>
+<span class="nc" id="L149">    }</span>
+
+    private int promptNumQuestions() {
+<span class="nc" id="L152">        System.out.print(&quot;How many questions? [default: 10]: &quot;);</span>
+<span class="nc" id="L153">        String input = scanner.nextLine().trim();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if (input.isEmpty()) return 10;</span>
+        try {
+<span class="nc" id="L156">            int n = Integer.parseInt(input);</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            return n &gt; 0 ? n : 10;</span>
+<span class="nc" id="L158">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L159">            return 10;</span>
+        }
+    }
+
+    private String getValidatedAnswer() {
+        while (true) {
+<span class="nc" id="L165">            System.out.print(&quot;Your answer (A/B/C/D/E): &quot;);</span>
+<span class="nc" id="L166">            String input = scanner.nextLine().trim().toUpperCase();</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            if (input.matches(&quot;[A-E]&quot;)) return input;</span>
+<span class="nc" id="L168">            System.out.println(&quot;Please enter A, B, C, D, or E.&quot;);</span>
+<span class="nc" id="L169">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

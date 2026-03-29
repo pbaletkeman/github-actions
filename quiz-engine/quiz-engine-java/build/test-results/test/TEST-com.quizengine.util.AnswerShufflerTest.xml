@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.quizengine.util.AnswerShufflerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-03-29T01:40:48.370Z" hostname="LAPPY" time="0.002">
+  <properties/>
+  <testcase name="shuffle_correctShuffledLetterIsValid()" classname="com.quizengine.util.AnswerShufflerTest" time="0.001"/>
+  <testcase name="shuffle_preservesAllOptions()" classname="com.quizengine.util.AnswerShufflerTest" time="0.0"/>
+  <testcase name="shuffle_withFourOptions()" classname="com.quizengine.util.AnswerShufflerTest" time="0.001"/>
+  <testcase name="shuffle_mapsCorrectAnswerToNewPosition()" classname="com.quizengine.util.AnswerShufflerTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

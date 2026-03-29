@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SessionDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quiz-engine-java</a> &gt; <a href="index.source.html" class="el_package">com.quizengine.dao</a> &gt; <span class="el_source">SessionDAO.java</span></div><h1>SessionDAO.java</h1><pre class="source lang-java linenums">package com.quizengine.dao;
+
+import com.quizengine.model.QuizSession;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SessionDAO {
+    private final Connection connection;
+
+<span class="fc" id="L12">    public SessionDAO(Connection connection) {</span>
+<span class="fc" id="L13">        this.connection = connection;</span>
+<span class="fc" id="L14">    }</span>
+
+    public void insert(QuizSession session) throws SQLException {
+<span class="fc" id="L17">        String sql = &quot;INSERT OR IGNORE INTO quiz_sessions (session_id, started_at, ended_at, num_questions, num_correct, percentage_correct, time_taken_seconds) VALUES (?,?,?,?,?,?,?)&quot;;</span>
+<span class="fc" id="L18">        try (PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L19">            ps.setString(1, session.getSessionId());</span>
+<span class="fc" id="L20">            ps.setString(2, session.getStartedAt());</span>
+<span class="fc" id="L21">            ps.setString(3, session.getEndedAt());</span>
+<span class="fc" id="L22">            ps.setInt(4, session.getNumQuestions());</span>
+<span class="fc" id="L23">            ps.setInt(5, session.getNumCorrect());</span>
+<span class="fc" id="L24">            ps.setDouble(6, session.getPercentageCorrect());</span>
+<span class="fc" id="L25">            ps.setInt(7, session.getTimeTakenSeconds());</span>
+<span class="fc" id="L26">            ps.executeUpdate();</span>
+        }
+<span class="fc" id="L28">    }</span>
+
+    public void update(QuizSession session) throws SQLException {
+<span class="fc" id="L31">        String sql = &quot;UPDATE quiz_sessions SET ended_at=?, num_correct=?, percentage_correct=?, time_taken_seconds=? WHERE session_id=?&quot;;</span>
+<span class="fc" id="L32">        try (PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L33">            ps.setString(1, session.getEndedAt());</span>
+<span class="fc" id="L34">            ps.setInt(2, session.getNumCorrect());</span>
+<span class="fc" id="L35">            ps.setDouble(3, session.getPercentageCorrect());</span>
+<span class="fc" id="L36">            ps.setInt(4, session.getTimeTakenSeconds());</span>
+<span class="fc" id="L37">            ps.setString(5, session.getSessionId());</span>
+<span class="fc" id="L38">            ps.executeUpdate();</span>
+        }
+<span class="fc" id="L40">    }</span>
+
+    public QuizSession getById(String sessionId) throws SQLException {
+<span class="fc" id="L43">        String sql = &quot;SELECT * FROM quiz_sessions WHERE session_id = ?&quot;;</span>
+<span class="fc" id="L44">        try (PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L45">            ps.setString(1, sessionId);</span>
+<span class="fc" id="L46">            try (ResultSet rs = ps.executeQuery()) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">                if (rs.next()) return mapRow(rs);</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">            }</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        }</span>
+<span class="fc" id="L50">        return null;</span>
+    }
+
+    public List&lt;QuizSession&gt; getAll() throws SQLException {
+<span class="fc" id="L54">        String sql = &quot;SELECT * FROM quiz_sessions ORDER BY started_at DESC&quot;;</span>
+<span class="fc" id="L55">        List&lt;QuizSession&gt; sessions = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L56">        try (Statement stmt = connection.createStatement();</span>
+<span class="fc" id="L57">             ResultSet rs = stmt.executeQuery(sql)) {</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L59">                sessions.add(mapRow(rs));</span>
+            }
+        }
+<span class="fc" id="L62">        return sessions;</span>
+    }
+
+    public void deleteById(String sessionId) throws SQLException {
+<span class="fc" id="L66">        String sql = &quot;DELETE FROM quiz_sessions WHERE session_id = ?&quot;;</span>
+<span class="fc" id="L67">        try (PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L68">            ps.setString(1, sessionId);</span>
+<span class="fc" id="L69">            ps.executeUpdate();</span>
+        }
+<span class="fc" id="L71">    }</span>
+
+    public void deleteAll() throws SQLException {
+<span class="fc" id="L74">        try (Statement stmt = connection.createStatement()) {</span>
+<span class="fc" id="L75">            stmt.executeUpdate(&quot;DELETE FROM quiz_sessions&quot;);</span>
+        }
+<span class="fc" id="L77">    }</span>
+
+    public void deleteBefore(String dateStr) throws SQLException {
+<span class="fc" id="L80">        String sql = &quot;DELETE FROM quiz_sessions WHERE started_at &lt; ?&quot;;</span>
+<span class="fc" id="L81">        try (PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L82">            ps.setString(1, dateStr);</span>
+<span class="fc" id="L83">            ps.executeUpdate();</span>
+        }
+<span class="fc" id="L85">    }</span>
+
+    private QuizSession mapRow(ResultSet rs) throws SQLException {
+<span class="fc" id="L88">        return new QuizSession.Builder()</span>
+<span class="fc" id="L89">                .sessionId(rs.getString(&quot;session_id&quot;))</span>
+<span class="fc" id="L90">                .startedAt(rs.getString(&quot;started_at&quot;))</span>
+<span class="fc" id="L91">                .endedAt(rs.getString(&quot;ended_at&quot;))</span>
+<span class="fc" id="L92">                .numQuestions(rs.getInt(&quot;num_questions&quot;))</span>
+<span class="fc" id="L93">                .numCorrect(rs.getInt(&quot;num_correct&quot;))</span>
+<span class="fc" id="L94">                .percentageCorrect(rs.getDouble(&quot;percentage_correct&quot;))</span>
+<span class="fc" id="L95">                .timeTakenSeconds(rs.getInt(&quot;time_taken_seconds&quot;))</span>
+<span class="fc" id="L96">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

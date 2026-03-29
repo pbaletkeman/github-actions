@@ -12,6 +12,7 @@ import com.quizengine.util.MarkdownParser;
 import com.quizengine.util.ShuffleResult;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -63,6 +64,10 @@ public class QuizCLI {
             return;
         }
 
+        List<Question> reviewQuestions = new ArrayList<>();
+        List<ShuffleResult> reviewShuffles = new ArrayList<>();
+        List<String> reviewAnswers = new ArrayList<>();
+        List<Boolean> reviewCorrects = new ArrayList<>();
         long questionStart;
         for (int i = 0; i < questions.size(); i++) {
             Question q = questions.get(i);
@@ -71,22 +76,15 @@ public class QuizCLI {
             questionStart = System.currentTimeMillis();
             String answer = getValidatedAnswer();
             int timeTaken = (int) ((System.currentTimeMillis() - questionStart) / 1000);
-
             boolean correct = engine.submitAnswer(i, answer, timeTaken);
-            if (correct) {
-                ConsoleFormatter.printCorrect();
-            } else {
-                String correctLetter = shuffle.getCorrectShuffledLetter();
-                int correctIdx = shuffle.getCorrectShuffledIndex();
-                String correctText = shuffle.getShuffledOptions().get(correctIdx);
-                ConsoleFormatter.printIncorrect(correctLetter, correctText);
-                if (q.getExplanation() != null && !q.getExplanation().isEmpty()) {
-                    System.out.println(ConsoleFormatter.YELLOW + "Explanation: " + q.getExplanation() + ConsoleFormatter.RESET);
-                }
-            }
+            reviewQuestions.add(q);
+            reviewShuffles.add(shuffle);
+            reviewAnswers.add(answer);
+            reviewCorrects.add(correct);
         }
 
         QuizSession session = engine.complete();
+        ConsoleFormatter.printReview(reviewQuestions, reviewShuffles, reviewAnswers, reviewCorrects);
         ConsoleFormatter.printResults(session);
     }
 

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Question.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quiz-engine-java</a> &gt; <a href="index.source.html" class="el_package">com.quizengine.model</a> &gt; <span class="el_source">Question.java</span></div><h1>Question.java</h1><pre class="source lang-java linenums">package com.quizengine.model;
+
+public class Question {
+    private int id;
+    private String questionText;
+    private String optionA;
+    private String optionB;
+    private String optionC;
+    private String optionD;
+    private String optionE;
+    private String correctAnswer;
+    private String explanation;
+    private String section;
+    private String difficulty;
+    private String sourceFile;
+<span class="fc" id="L16">    private int usageCycle = 1;</span>
+    private int timesUsed;
+    private String lastUsedAt;
+
+<span class="fc" id="L20">    public Question() {}</span>
+
+<span class="fc" id="L22">    private Question(Builder builder) {</span>
+<span class="fc" id="L23">        this.id = builder.id;</span>
+<span class="fc" id="L24">        this.questionText = builder.questionText;</span>
+<span class="fc" id="L25">        this.optionA = builder.optionA;</span>
+<span class="fc" id="L26">        this.optionB = builder.optionB;</span>
+<span class="fc" id="L27">        this.optionC = builder.optionC;</span>
+<span class="fc" id="L28">        this.optionD = builder.optionD;</span>
+<span class="fc" id="L29">        this.optionE = builder.optionE;</span>
+<span class="fc" id="L30">        this.correctAnswer = builder.correctAnswer;</span>
+<span class="fc" id="L31">        this.explanation = builder.explanation;</span>
+<span class="fc" id="L32">        this.section = builder.section;</span>
+<span class="fc" id="L33">        this.difficulty = builder.difficulty;</span>
+<span class="fc" id="L34">        this.sourceFile = builder.sourceFile;</span>
+<span class="fc" id="L35">        this.usageCycle = builder.usageCycle;</span>
+<span class="fc" id="L36">        this.timesUsed = builder.timesUsed;</span>
+<span class="fc" id="L37">        this.lastUsedAt = builder.lastUsedAt;</span>
+<span class="fc" id="L38">    }</span>
+
+<span class="fc" id="L40">    public int getId() { return id; }</span>
+<span class="fc" id="L41">    public void setId(int id) { this.id = id; }</span>
+<span class="fc" id="L42">    public String getQuestionText() { return questionText; }</span>
+<span class="fc" id="L43">    public void setQuestionText(String questionText) { this.questionText = questionText; }</span>
+<span class="fc" id="L44">    public String getOptionA() { return optionA; }</span>
+<span class="fc" id="L45">    public void setOptionA(String optionA) { this.optionA = optionA; }</span>
+<span class="fc" id="L46">    public String getOptionB() { return optionB; }</span>
+<span class="fc" id="L47">    public void setOptionB(String optionB) { this.optionB = optionB; }</span>
+<span class="fc" id="L48">    public String getOptionC() { return optionC; }</span>
+<span class="fc" id="L49">    public void setOptionC(String optionC) { this.optionC = optionC; }</span>
+<span class="fc" id="L50">    public String getOptionD() { return optionD; }</span>
+<span class="fc" id="L51">    public void setOptionD(String optionD) { this.optionD = optionD; }</span>
+<span class="fc" id="L52">    public String getOptionE() { return optionE; }</span>
+<span class="fc" id="L53">    public void setOptionE(String optionE) { this.optionE = optionE; }</span>
+<span class="fc" id="L54">    public String getCorrectAnswer() { return correctAnswer; }</span>
+<span class="fc" id="L55">    public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }</span>
+<span class="fc" id="L56">    public String getExplanation() { return explanation; }</span>
+<span class="fc" id="L57">    public void setExplanation(String explanation) { this.explanation = explanation; }</span>
+<span class="fc" id="L58">    public String getSection() { return section; }</span>
+<span class="fc" id="L59">    public void setSection(String section) { this.section = section; }</span>
+<span class="fc" id="L60">    public String getDifficulty() { return difficulty; }</span>
+<span class="fc" id="L61">    public void setDifficulty(String difficulty) { this.difficulty = difficulty; }</span>
+<span class="fc" id="L62">    public String getSourceFile() { return sourceFile; }</span>
+<span class="fc" id="L63">    public void setSourceFile(String sourceFile) { this.sourceFile = sourceFile; }</span>
+<span class="fc" id="L64">    public int getUsageCycle() { return usageCycle; }</span>
+<span class="fc" id="L65">    public void setUsageCycle(int usageCycle) { this.usageCycle = usageCycle; }</span>
+<span class="fc" id="L66">    public int getTimesUsed() { return timesUsed; }</span>
+<span class="fc" id="L67">    public void setTimesUsed(int timesUsed) { this.timesUsed = timesUsed; }</span>
+<span class="fc" id="L68">    public String getLastUsedAt() { return lastUsedAt; }</span>
+<span class="fc" id="L69">    public void setLastUsedAt(String lastUsedAt) { this.lastUsedAt = lastUsedAt; }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L73">        return &quot;Question{id=&quot; + id + &quot;, questionText='&quot; + questionText + &quot;', section='&quot; + section + &quot;'}&quot;;</span>
+    }
+
+<span class="fc" id="L76">    public static class Builder {</span>
+        private int id;
+        private String questionText;
+        private String optionA;
+        private String optionB;
+        private String optionC;
+        private String optionD;
+        private String optionE;
+        private String correctAnswer;
+        private String explanation;
+        private String section;
+        private String difficulty;
+        private String sourceFile;
+<span class="fc" id="L89">        private int usageCycle = 1;</span>
+        private int timesUsed;
+        private String lastUsedAt;
+
+<span class="fc" id="L93">        public Builder id(int id) { this.id = id; return this; }</span>
+<span class="fc" id="L94">        public Builder questionText(String questionText) { this.questionText = questionText; return this; }</span>
+<span class="fc" id="L95">        public Builder optionA(String optionA) { this.optionA = optionA; return this; }</span>
+<span class="fc" id="L96">        public Builder optionB(String optionB) { this.optionB = optionB; return this; }</span>
+<span class="fc" id="L97">        public Builder optionC(String optionC) { this.optionC = optionC; return this; }</span>
+<span class="fc" id="L98">        public Builder optionD(String optionD) { this.optionD = optionD; return this; }</span>
+<span class="fc" id="L99">        public Builder optionE(String optionE) { this.optionE = optionE; return this; }</span>
+<span class="fc" id="L100">        public Builder correctAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; return this; }</span>
+<span class="fc" id="L101">        public Builder explanation(String explanation) { this.explanation = explanation; return this; }</span>
+<span class="fc" id="L102">        public Builder section(String section) { this.section = section; return this; }</span>
+<span class="fc" id="L103">        public Builder difficulty(String difficulty) { this.difficulty = difficulty; return this; }</span>
+<span class="fc" id="L104">        public Builder sourceFile(String sourceFile) { this.sourceFile = sourceFile; return this; }</span>
+<span class="fc" id="L105">        public Builder usageCycle(int usageCycle) { this.usageCycle = usageCycle; return this; }</span>
+<span class="fc" id="L106">        public Builder timesUsed(int timesUsed) { this.timesUsed = timesUsed; return this; }</span>
+<span class="fc" id="L107">        public Builder lastUsedAt(String lastUsedAt) { this.lastUsedAt = lastUsedAt; return this; }</span>
+<span class="fc" id="L108">        public Question build() { return new Question(this); }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

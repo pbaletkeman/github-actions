@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.quizengine.util.MarkdownParserTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-03-29T01:40:48.372Z" hostname="LAPPY" time="0.034">
+  <properties/>
+  <testcase name="parseFile_sectionExtracted()" classname="com.quizengine.util.MarkdownParserTest" time="0.008"/>
+  <testcase name="parseFile_emptyContent_returnsEmptyList()" classname="com.quizengine.util.MarkdownParserTest" time="0.002"/>
+  <testcase name="parseFile_correctAnswerFromKey()" classname="com.quizengine.util.MarkdownParserTest" time="0.003"/>
+  <testcase name="parseFile_explanationFromKey()" classname="com.quizengine.util.MarkdownParserTest" time="0.003"/>
+  <testcase name="parseFile_noAnswerKey_returnsEmptyList()" classname="com.quizengine.util.MarkdownParserTest" time="0.003"/>
+  <testcase name="parseFile_optionsParsed()" classname="com.quizengine.util.MarkdownParserTest" time="0.004"/>
+  <testcase name="parseFile_skipsMultiSelectQuestions()" classname="com.quizengine.util.MarkdownParserTest" time="0.004"/>
+  <testcase name="parseFile_scenarioPrependedToQuestion()" classname="com.quizengine.util.MarkdownParserTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

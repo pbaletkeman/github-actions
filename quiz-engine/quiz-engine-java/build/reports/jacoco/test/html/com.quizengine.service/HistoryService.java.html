@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HistoryService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quiz-engine-java</a> &gt; <a href="index.source.html" class="el_package">com.quizengine.service</a> &gt; <span class="el_source">HistoryService.java</span></div><h1>HistoryService.java</h1><pre class="source lang-java linenums">package com.quizengine.service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.quizengine.dao.QuestionDAO;
+import com.quizengine.dao.ResponseDAO;
+import com.quizengine.dao.SessionDAO;
+import com.quizengine.model.QuizResponse;
+import com.quizengine.model.QuizSession;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
+public class HistoryService {
+    private final SessionDAO sessionDAO;
+    private final ResponseDAO responseDAO;
+    private final QuestionDAO questionDAO;
+<span class="fc" id="L18">    private final ObjectMapper objectMapper = new ObjectMapper();</span>
+
+<span class="fc" id="L20">    public HistoryService(Connection connection) {</span>
+<span class="fc" id="L21">        this.sessionDAO = new SessionDAO(connection);</span>
+<span class="fc" id="L22">        this.responseDAO = new ResponseDAO(connection);</span>
+<span class="fc" id="L23">        this.questionDAO = new QuestionDAO(connection);</span>
+<span class="fc" id="L24">    }</span>
+
+    public List&lt;QuizSession&gt; getAllSessions() throws SQLException {
+<span class="fc" id="L27">        return sessionDAO.getAll();</span>
+    }
+
+    public QuizSession getSessionDetails(String sessionId) throws SQLException {
+<span class="fc" id="L31">        return sessionDAO.getById(sessionId);</span>
+    }
+
+    public List&lt;QuizResponse&gt; getSessionResponses(String sessionId) throws SQLException {
+<span class="fc" id="L35">        return responseDAO.getBySessionId(sessionId);</span>
+    }
+
+    public String formatSessionHistory(List&lt;QuizSession&gt; sessions) {
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (sessions.isEmpty()) return &quot;No sessions found.&quot;;</span>
+<span class="fc" id="L40">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L41">        String header = String.format(&quot;%-38s %-20s %5s %7s %10s%n&quot;,</span>
+                &quot;Session ID&quot;, &quot;Date&quot;, &quot;Qs&quot;, &quot;Correct&quot;, &quot;Score&quot;);
+<span class="fc" id="L43">        sb.append(header);</span>
+<span class="fc" id="L44">        sb.append(&quot;-&quot;.repeat(85)).append(&quot;\n&quot;);</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (QuizSession s : sessions) {</span>
+<span class="fc" id="L46">            sb.append(String.format(&quot;%-38s %-20s %5d %7d %9.1f%%%n&quot;,</span>
+<span class="fc" id="L47">                    s.getSessionId(),</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">                    s.getStartedAt() != null ? s.getStartedAt() : &quot;N/A&quot;,</span>
+<span class="fc" id="L49">                    s.getNumQuestions(),</span>
+<span class="fc" id="L50">                    s.getNumCorrect(),</span>
+<span class="fc" id="L51">                    s.getPercentageCorrect()));</span>
+<span class="fc" id="L52">        }</span>
+<span class="fc" id="L53">        return sb.toString();</span>
+    }
+
+    public String exportToJson(List&lt;QuizSession&gt; sessions) throws Exception {
+<span class="fc" id="L57">        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(sessions);</span>
+    }
+
+    public String exportToCsv(List&lt;QuizSession&gt; sessions) {
+<span class="fc" id="L61">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L62">        sb.append(&quot;session_id,started_at,ended_at,num_questions,num_correct,percentage_correct,time_taken_seconds\n&quot;);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (QuizSession s : sessions) {</span>
+<span class="fc" id="L64">            sb.append(String.format(&quot;%s,%s,%s,%d,%d,%.2f,%d%n&quot;,</span>
+<span class="fc" id="L65">                    s.getSessionId(),</span>
+<span class="fc" id="L66">                    s.getStartedAt(),</span>
+<span class="fc" id="L67">                    s.getEndedAt(),</span>
+<span class="fc" id="L68">                    s.getNumQuestions(),</span>
+<span class="fc" id="L69">                    s.getNumCorrect(),</span>
+<span class="fc" id="L70">                    s.getPercentageCorrect(),</span>
+<span class="fc" id="L71">                    s.getTimeTakenSeconds()));</span>
+<span class="fc" id="L72">        }</span>
+<span class="fc" id="L73">        return sb.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

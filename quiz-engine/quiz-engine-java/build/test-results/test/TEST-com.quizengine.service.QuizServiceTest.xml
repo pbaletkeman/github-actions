@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.quizengine.service.QuizServiceTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-03-29T01:40:48.366Z" hostname="LAPPY" time="0.004">
+  <properties/>
+  <testcase name="createQuizEngine_returnsNonNull()" classname="com.quizengine.service.QuizServiceTest" time="0.001"/>
+  <testcase name="createQuizEngine_loadsQuestionsAfterInsert()" classname="com.quizengine.service.QuizServiceTest" time="0.002"/>
+  <testcase name="createQuizEngine_withFilters_returnsNonNull()" classname="com.quizengine.service.QuizServiceTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
