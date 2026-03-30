@@ -1,98 +1,56 @@
-# Quiz Engine — Spring Boot
+﻿# Quiz Engine -- Spring Boot
 
 > Part of the [Quiz Engine multi-language collection](../README.md)
 
-A Spring Boot quiz engine for GH-200 (GitHub Actions) certification practice.
+- [Quiz Engine -- Spring Boot](#quiz-engine----spring-boot)
+  - [Get Started in 5 Minutes](#get-started-in-5-minutes)
+    - [Prerequisites](#prerequisites)
+    - [1. Build \& Run (Web UI)](#1-build--run-web-ui)
+    - [2. Import Questions via API](#2-import-questions-via-api)
+    - [3. Start a Quiz via API](#3-start-a-quiz-via-api)
+    - [4. Run Tests](#4-run-tests)
+    - [5. Docker](#5-docker)
 
-## Features
+A Spring Boot quiz engine for GitHub Actions (GH-200) certification prep. Includes REST API, Thymeleaf web UI, and CLI interface.
 
-- **Spring Boot 3.2** with Spring Data JPA
-- **REST API** for quiz management
-- **Thymeleaf** web interface at http://localhost:8080
-- **CLI** interface via Picocli
-- **H2** (test) / **SQLite** (production) database
-- **JaCoCo** test coverage enforcement
-
-## Quick Start
+## Get Started in 5 Minutes
 
 ### Prerequisites
-- Java 17+
-- Gradle (or use included wrapper)
+- [JDK 17+](https://adoptium.net/)
 
-### Run the Application
+### 1. Build & Run (Web UI)
 ```bash
 ./gradlew bootRun
 ```
+Then open http://localhost:8080
 
-Visit http://localhost:8080
-
-### Run Tests
+### 2. Import Questions via API
 ```bash
-./gradlew test
+curl -X POST http://localhost:8080/api/import \
+  -H 'Content-Type: application/json' \
+  -d '{"content": "## Q1\n...", "source": "questions.md"}'
 ```
 
-### Run with Coverage
-```bash
-./gradlew test jacocoTestReport
-# Report: build/reports/jacoco/test/html/index.html
-```
-
-### Build JAR
-```bash
-./gradlew build
-java -jar build/libs/quiz-engine-springboot-0.0.1-SNAPSHOT.jar
-```
-
-## REST API
-
-### Start a Quiz
+### 3. Start a Quiz via API
 ```bash
 curl -X POST http://localhost:8080/api/quiz/start \
   -H 'Content-Type: application/json' \
   -d '{"numQuestions": 10}'
 ```
 
-### Submit an Answer
+### 4. Run Tests
 ```bash
-curl -X POST http://localhost:8080/api/quiz/{sessionId}/answer \
-  -H 'Content-Type: application/json' \
-  -d '{"questionIndex": 0, "answer": "A", "timeTaken": 15}'
+./gradlew test
 ```
 
-### Get History
+### 5. Docker
 ```bash
-curl http://localhost:8080/api/history
+docker build -t quiz-engine-springboot:latest .
+docker run -p 8080:8080 quiz-engine-springboot:latest
+# or
+docker-compose up quiz-engine
 ```
 
-### Import Questions
-```bash
-curl -X POST http://localhost:8080/api/import \
-  -H 'Content-Type: application/json' \
-  -d '{"content": "## Question 1\n- A) ...", "source": "my-file.md"}'
-```
+---
 
-## Docker
-
-```bash
-docker build -t quiz-engine .
-docker run -p 8080:8080 quiz-engine
-```
-
-## Configuration
-
-See `src/main/resources/application.yml` for configuration options.
-
-## Project Structure
-
-```
-src/main/java/com/quizengine/
-├── QuizEngineApplication.java     # Spring Boot entry point
-├── entity/                        # JPA entities
-├── repository/                    # Spring Data JPA repositories
-├── service/                       # Business logic
-├── controller/                    # REST + Web controllers
-├── cli/                           # Picocli CLI commands
-├── util/                          # Helper utilities
-├── config/                        # Spring configuration
-└── exception/                     # Custom exceptions
-```
+Full docs: [docs/README.md](docs/README.md) | Architecture: [docs/architecture.md](docs/architecture.md)

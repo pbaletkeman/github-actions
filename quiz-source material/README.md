@@ -2,6 +2,23 @@
 
 This directory contains ten independently generated question banks for the **GitHub Actions GH-200 Certification Exam**. Each file provides 100 practice questions with a full answer key including explanations, source references, and difficulty ratings.
 
+- [GH-200 GitHub Actions Certification — Quiz Question Bank](#gh-200-github-actions-certification--quiz-question-bank)
+  - [Format](#format)
+    - [Answer Types](#answer-types)
+  - [Files](#files)
+    - [gh-200-iteration-1.md](#gh-200-iteration-1md)
+    - [gh-200-iteration-2.md](#gh-200-iteration-2md)
+    - [gh-200-iteration-3.md](#gh-200-iteration-3md)
+    - [gh-200-iteration-4.md](#gh-200-iteration-4md)
+    - [gh-200-iteration-5.md](#gh-200-iteration-5md)
+    - [gh-200-iteration-6.md](#gh-200-iteration-6md)
+    - [gh-200-iteration-7.md](#gh-200-iteration-7md)
+    - [gh-200-iteration-8.md](#gh-200-iteration-8md)
+    - [gh-200-iteration-9.md](#gh-200-iteration-9md)
+    - [gh-200-iteration-10.md](#gh-200-iteration-10md)
+  - [Topics Covered](#topics-covered)
+  - [Suggested Study Approach](#suggested-study-approach)
+
 ---
 
 ## Format

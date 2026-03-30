@@ -2,6 +2,23 @@
 
 A collection of **eight quiz engine implementations** for studying the **GitHub Actions GH-200 certification exam**. Each project implements the same quiz engine specification using a different language and technology stack, allowing direct comparison of idiomatic approaches across ecosystems.
 
+- [Quiz Engine — Multi-Language Collection](#quiz-engine--multi-language-collection)
+  - [Projects](#projects)
+  - [Shared Specification](#shared-specification)
+    - [Question Markdown Format](#question-markdown-format)
+  - [Project Details](#project-details)
+    - [quiz-engine-csharp](#quiz-engine-csharp)
+    - [quiz-engine-dart](#quiz-engine-dart)
+    - [quiz-engine-golang](#quiz-engine-golang)
+    - [quiz-engine-java](#quiz-engine-java)
+    - [quiz-engine-nodejs](#quiz-engine-nodejs)
+    - [quiz-engine-python](#quiz-engine-python)
+    - [quiz-engine-rust](#quiz-engine-rust)
+    - [quiz-engine-springboot](#quiz-engine-springboot)
+  - [Docker](#docker)
+  - [Repository Layout](#repository-layout)
+
+
 ---
 
 ## Projects
