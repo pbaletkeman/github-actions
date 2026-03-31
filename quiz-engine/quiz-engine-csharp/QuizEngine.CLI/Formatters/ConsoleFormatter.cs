@@ -84,7 +84,7 @@ public static class ConsoleFormatter
             var scoreColor = s.PercentageCorrect >= 80 ? "green" : s.PercentageCorrect >= 60 ? "yellow" : "red";
             table.AddRow(
                 (i + 1).ToString(),
-                s.SessionId.Length > 18 ? s.SessionId[..18] + "..." : s.SessionId,
+                s.SessionId,
                 s.StartedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm"),
                 s.NumQuestions.ToString(),
                 s.NumCorrect.ToString(),

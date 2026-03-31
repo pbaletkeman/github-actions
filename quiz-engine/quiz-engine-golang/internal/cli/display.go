@@ -70,7 +70,7 @@ func DisplayHistoryTable(sessions []models.QuizSession) {
 			endedStr = s.EndedAt.Format("2006-01-02 15:04")
 		}
 		table.Append([]string{
-			s.SessionID[:8] + "...",
+			s.SessionID,
 			endedStr,
 			fmt.Sprintf("%d", s.NumQuestions),
 			fmt.Sprintf("%d", s.NumCorrect),

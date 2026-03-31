@@ -18,7 +18,6 @@ A collection of **eight quiz engine implementations** for studying the **GitHub 
   - [Docker](#docker)
   - [Repository Layout](#repository-layout)
 
-
 ---
 
 ## Projects
@@ -28,11 +27,11 @@ A collection of **eight quiz engine implementations** for studying the **GitHub 
 | [quiz-engine-csharp](./quiz-engine-csharp/README.md) | C# / .NET 8 | Entity Framework Core, Spectre.Console, SQLite |
 | [quiz-engine-dart](./quiz-engine-dart/README.md) | Dart 3 | SQLite, args package, native executable |
 | [quiz-engine-golang](./quiz-engine-golang/README.md) | Go 1.21 | cobra, go-sqlite3, tablewriter |
-| [quiz-engine-java](./quiz-engine-java/README.md) | Java 17 / Maven | JDBC, SQLite, Picocli |
+| [quiz-engine-java](./quiz-engine-java/README.md) | Java 21 / Gradle | JDBC, SQLite, HikariCP |
 | [quiz-engine-nodejs](./quiz-engine-nodejs/README.md) | TypeScript / Node.js | TypeORM, SQLite, Jest |
 | [quiz-engine-python](./quiz-engine-python/README.md) | Python 3.9+ | Typer, Rich, SQLite, pytest |
 | [quiz-engine-rust](./quiz-engine-rust/README.md) | Rust 1.70+ | sqlx, clap, tokio, criterion |
-| [quiz-engine-springboot](./quiz-engine-springboot/README.md) | Java 17 / Spring Boot 3.2 | Spring Data JPA, Thymeleaf, H2/SQLite |
+| [quiz-engine-springboot](./quiz-engine-springboot/README.md) | Java 21 / Spring Boot 3.2 | Spring Data JPA, Thymeleaf, Picocli, H2/SQLite |
 
 ---
 
@@ -50,22 +49,62 @@ All eight engines implement the same core feature set:
 
 ### Question Markdown Format
 
+Each source file contains a questions section followed by a separate answer key table.
+
 ```markdown
-## Question 1
+# Quiz Title
 
-**Q: What does CI stand for?**
+**Iteration**: 1
+**Total Questions**: 2
 
-- A) Continuous Integration
-- B) Code Integration
-- C) Complete Infrastructure
-- D) Cloud Infrastructure
+---
 
-**Answer: A**
+## Questions
 
-**Explanation:** CI stands for Continuous Integration.
+---
 
-Section: GitHub Actions
-Difficulty: easy
+### Question 1 — Workflow Trigger Events
+
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: schedule trigger
+
+**Question**:
+Which trigger event is used to run a workflow on a recurring time-based schedule?
+
+- A) `on: timer`
+- B) `on: cron`
+- C) `on: schedule`
+- D) `on: workflow_dispatch`
+
+---
+
+### Question 2 — Contextual Information
+
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: secrets context usage
+
+**Scenario**:
+Your team reviews a workflow and finds several usages of the `secrets` context.
+You need to identify which usages are valid.
+
+**(Select all that apply)**
+Which locations in a workflow file can reference the `secrets` context?
+
+- A) `jobs.<job_id>.steps[*].env`
+- B) `jobs.<job_id>.steps[*].with`
+- C) `jobs.<job_id>.strategy.matrix`
+- D) `jobs.<job_id>.steps[*].run` (via expression `${{ secrets.MY_SECRET }}`)
+
+---
+
+## Answer Key
+
+| Q# | Answer(s) | Explanation | Source | Difficulty |
+|----|-----------|-------------|--------|------------|
+| 1 | C | `on: schedule` is the correct trigger. `cron` is the value of the `schedule` key, not the trigger name itself. `timer` and `workflow_dispatch` serve different purposes. | 05-Workflow-Trigger-Events.md | Easy |
+| 2 | A, B, D | `secrets` is available in `steps[*].env`, `steps[*].with`, and `steps[*].run`. It is NOT available in `strategy.matrix`. | 02-Contextual-Information.md | Medium |
 ```
 
 ---
@@ -74,14 +113,20 @@ Difficulty: easy
 
 ### [quiz-engine-csharp](./quiz-engine-csharp/README.md)
 
-A layered .NET 8 solution with four projects — Entities, Data (EF Core), Service, and CLI. Uses `Spectre.Console` for rich terminal output and `System.CommandLine` for argument parsing. xUnit test suite with an in-memory SQLite fixture.
+A layered .NET 8 solution with four projects — Entities, Data (EF Core), Service, and CLI. Uses `Spectre.Console` for rich terminal output and `System.CommandLine` for argument parsing. xUnit + Moq test suite with an in-memory EF Core fixture and Coverlet for coverage.
 
 **Quick start:**
 ```bash
 cd quiz-engine-csharp
-dotnet build
-dotnet run --project QuizEngine.CLI -- import --file questions.md
-dotnet run --project QuizEngine.CLI -- quiz
+build.bat                        # Windows CMD
+.\build.ps1                      # PowerShell
+./build.sh                       # Bash / macOS / Linux
+import.bat questions.md          # Windows CMD
+.\import.ps1 -Path questions.md  # PowerShell
+./import.sh questions.md         # Bash
+quiz.bat 10                      # Windows CMD (10 questions)
+.\quiz.ps1 -Questions 10         # PowerShell
+./quiz.sh 10                     # Bash
 ```
 
 ---
@@ -116,21 +161,29 @@ CGO_ENABLED=1 go build -o bin/quiz-engine .
 
 ### [quiz-engine-java](./quiz-engine-java/README.md)
 
-Plain Java 17 Maven project using raw JDBC with SQLite. No framework dependencies — all ORM logic hand-written in DAO classes. Packaged as a fat JAR with the Maven Shade Plugin. JUnit 5 test suite.
+Plain Java 21 Gradle project using raw JDBC with SQLite. Uses HikariCP for connection pooling — all ORM logic hand-written in DAO classes. Packaged as a fat JAR with the Gradle Shadow Plugin. JUnit 5 + Mockito test suite with JaCoCo coverage.
 
 **Quick start:**
 ```bash
 cd quiz-engine-java
-mvn clean package
-java -jar target/quiz-engine.jar import questions.md
-java -jar target/quiz-engine.jar quiz
+build.bat                        # Windows CMD
+.\build.ps1                      # PowerShell
+./build.sh                       # Bash
+# or directly
+./gradlew shadowJar
+import.bat questions.md          # Windows CMD
+.\import.ps1 -Path questions.md  # PowerShell
+./import.sh questions.md         # Bash
+# or directly
+java -jar build/libs/quiz-engine.jar import questions.md
+java -jar build/libs/quiz-engine.jar quiz
 ```
 
 ---
 
 ### [quiz-engine-nodejs](./quiz-engine-nodejs/README.md)
 
-TypeScript application using TypeORM with the SQLite driver. Features a strongly-typed model layer, migration-based schema management, and a Jest test suite (122 tests, ≥90% coverage). Supports Docker for test isolation.
+TypeScript application using TypeORM with the SQLite driver. Features a strongly-typed model layer, migration-based schema management, and a Jest test suite with ≥90% coverage. Supports Docker for test isolation.
 
 **Quick start:**
 ```bash

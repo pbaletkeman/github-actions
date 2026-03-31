@@ -30,7 +30,7 @@ class HistoryManager:
         started = session.started_at.strftime("%Y-%m-%d %H:%M") if session.started_at else "N/A"
         time_str = f"{session.time_taken_seconds}s" if session.time_taken_seconds else "N/A"
         return (
-            f"Session {session.session_id[:8]}... | {started} | "
+            f"Session {session.session_id} | {started} | "
             f"{session.num_correct}/{session.num_questions} correct | "
             f"{session.percentage_correct:.1f}% | {time_str}"
         )

@@ -86,7 +86,7 @@ def display_history_table(sessions):  # pragma: no cover
     for s in sessions:
         date_str = s.started_at.strftime("%Y-%m-%d %H:%M") if s.started_at else "N/A"
         table.add_row(
-            s.session_id[:8] + "...",
+            s.session_id,
             date_str,
             str(s.num_questions),
             str(s.num_correct),

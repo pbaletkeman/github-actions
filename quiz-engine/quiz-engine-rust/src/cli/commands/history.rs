@@ -85,7 +85,7 @@ pub async fn run_history(pool: Pool<Sqlite>, args: HistoryArgs) -> Result<()> {
             .iter()
             .map(|s| {
                 vec![
-                    s.session_id[..8].to_string() + "…",
+                    s.session_id.clone(),
                     s.started_at[..10].to_string(),
                     s.num_questions.to_string(),
                     s.num_correct.to_string(),
