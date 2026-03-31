@@ -372,25 +372,59 @@ Difficulty: easy
 ### Format 2 — Answer-Key (bulk exam files)
 
 ```markdown
-### Question 1 — Topic/Section
+# Quiz Title
+
+**Iteration**: 1
+**Total Questions**: 2
+
+---
+
+## Questions
+
+---
+
+### Question 1 — Workflow Trigger Events
 
 **Difficulty**: Easy
 **Answer Type**: one
-**Topic**: GitHub Actions
+**Topic**: schedule trigger
 
 **Question**:
-What does CI stand for?
+Which trigger event is used to run a workflow on a recurring time-based schedule?
 
-- A) Continuous Integration
-- B) Code Integration
-- C) Complete Infrastructure
-- D) Cloud Infrastructure
+- A) `on: timer`
+- B) `on: cron`
+- C) `on: schedule`
+- D) `on: workflow_dispatch`
+
+---
+
+### Question 2 — Contextual Information
+
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: secrets context usage
+
+**Scenario**:
+Your team reviews a workflow and finds several usages of the `secrets` context.
+You need to identify which usages are valid.
+
+**(Select all that apply)**
+Which locations in a workflow file can reference the `secrets` context?
+
+- A) `jobs.<job_id>.steps[*].env`
+- B) `jobs.<job_id>.steps[*].with`
+- C) `jobs.<job_id>.strategy.matrix`
+- D) `jobs.<job_id>.steps[*].run` (via expression `${{ secrets.MY_SECRET }}`)
+
+---
 
 ## Answer Key
 
 | Q# | Answer(s) | Explanation | Source | Difficulty |
 |----|-----------|-------------|--------|------------|
-| 1  | A         | CI stands for Continuous Integration. | source.md | Easy |
+| 1 | C | `on: schedule` is the correct trigger. `cron` is the value of the `schedule` key, not the trigger name itself. | 05-Workflow-Trigger-Events.md | Easy |
+| 2 | A, B, D | `secrets` is available in `steps[*].env`, `steps[*].with`, and `steps[*].run`. It is NOT available in `strategy.matrix`. | 02-Contextual-Information.md | Medium |
 ```
 
 ---

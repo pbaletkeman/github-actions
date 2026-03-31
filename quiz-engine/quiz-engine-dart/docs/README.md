@@ -354,29 +354,59 @@ docker buildx build \
 ## Question File Format
 
 ```markdown
-# Section Title
+# Quiz Title
 
-## Question 1
-What does CI stand for?
+**Iteration**: 1
+**Total Questions**: 2
 
-A) Continuous Integration
-B) Code Import
-C) Compile
-D) Configure
+---
 
-**Answer:** A
-**Explanation:** CI stands for Continuous Integration.
+## Questions
 
-## Question 2
-What triggers a GitHub Actions workflow?
+---
 
-A) A Dockerfile
-B) An event such as a push or pull request
-C) A cron job only
-D) Manual trigger only
+### Question 1 — Workflow Trigger Events
 
-**Answer:** B
-**Explanation:** Workflows are triggered by events in the `on:` key.
+**Difficulty**: Easy
+**Answer Type**: one
+**Topic**: schedule trigger
+
+**Question**:
+Which trigger event is used to run a workflow on a recurring time-based schedule?
+
+- A) `on: timer`
+- B) `on: cron`
+- C) `on: schedule`
+- D) `on: workflow_dispatch`
+
+---
+
+### Question 2 — Contextual Information
+
+**Difficulty**: Medium
+**Answer Type**: many
+**Topic**: secrets context usage
+
+**Scenario**:
+Your team reviews a workflow and finds several usages of the `secrets` context.
+You need to identify which usages are valid.
+
+**(Select all that apply)**
+Which locations in a workflow file can reference the `secrets` context?
+
+- A) `jobs.<job_id>.steps[*].env`
+- B) `jobs.<job_id>.steps[*].with`
+- C) `jobs.<job_id>.strategy.matrix`
+- D) `jobs.<job_id>.steps[*].run` (via expression `${{ secrets.MY_SECRET }}`)
+
+---
+
+## Answer Key
+
+| Q# | Answer(s) | Explanation | Source | Difficulty |
+|----|-----------|-------------|--------|------------|
+| 1 | C | `on: schedule` is the correct trigger. `cron` is the value of the `schedule` key, not the trigger name itself. | 05-Workflow-Trigger-Events.md | Easy |
+| 2 | A, B, D | `secrets` is available in `steps[*].env`, `steps[*].with`, and `steps[*].run`. It is NOT available in `strategy.matrix`. | 02-Contextual-Information.md | Medium |
 ```
 
 ---
