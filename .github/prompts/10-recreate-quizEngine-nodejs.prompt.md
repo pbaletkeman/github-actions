@@ -876,8 +876,8 @@ Takes an optional positional argument for question count. Exits with error if `d
 #### `quiz.ps1` — PowerShell
 
 ```powershell
-.\quiz.ps1              # 10 questions
-.\quiz.ps1 -Questions 20  # 20 questions (note: param name is $Questions / -N not shown)
+.\quiz.ps1               # 10 questions (default)
+.\quiz.ps1 -Questions 20 # 20 questions
 ```
 
 **Param:** `[int]$Questions = 10`
