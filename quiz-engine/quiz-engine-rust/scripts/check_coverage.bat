@@ -8,20 +8,21 @@ cargo llvm-cov --version >nul 2>&1
 if %ERRORLEVEL% equ 0 (
     echo Using cargo-llvm-cov...
     cargo llvm-cov --summary-only > %TEMP%\cov_output.txt 2>&1
+    if %ERRORLEVEL% neq 0 (
+        echo ERROR: cargo-llvm-cov failed.
+        exit /b 1
+    )
     type %TEMP%\cov_output.txt
 
-    for /f "tokens=*" %%L in ('findstr /i "^TOTAL" %TEMP%\cov_output.txt') do set TOTAL_LINE=%%L
-    for /f "tokens=*" %%T in ('echo %TOTAL_LINE%') do set LAST=%%T
-    set TOTAL=%LAST:%%=%
-
-    echo.
-    echo Total coverage: %TOTAL%%%
-    echo package main > %TEMP%\cov_check.go
-    echo import "fmt" >> %TEMP%\cov_check.go
-    echo import "os" >> %TEMP%\cov_check.go
-    echo import "strconv" >> %TEMP%\cov_check.go
-    echo func main() { v, _ := strconv.ParseFloat(os.Args[1], 64); t := float64(%THRESHOLD%); if v ^< t { fmt.Printf("ERROR: Coverage %%.1f%%%% is below %d%%%%.\n", v, %THRESHOLD%); os.Exit(1) }; fmt.Printf("Coverage check passed (%%.1f%%%% ^>= %d%%%%)\n", v, %THRESHOLD%) } >> %TEMP%\cov_check.go
-    go run %TEMP%\cov_check.go %TOTAL%
+    REM Use PowerShell to parse the TOTAL line and compare
+    powershell -NoProfile -Command ^
+        "$out = Get-Content '%TEMP%\cov_output.txt'; " ^
+        "$line = $out | Where-Object { $_ -match '^TOTAL' } | Select-Object -Last 1; " ^
+        "if (-not $line) { Write-Error 'Could not find TOTAL line'; exit 1 }; " ^
+        "$pct = [double]($line -replace '.*\s+(\d+\.?\d*)%%.*', '$1'); " ^
+        "Write-Host \"Total coverage: $pct%%\"; " ^
+        "if ($pct -lt %THRESHOLD%) { Write-Error \"ERROR: Coverage $pct%% is below required %THRESHOLD%%.\"; exit 1 } " ^
+        "else { Write-Host \"Coverage check passed ($pct%% >= %THRESHOLD%%%.\" }"
     exit /b %ERRORLEVEL%
 )
 

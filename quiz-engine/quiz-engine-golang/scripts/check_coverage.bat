@@ -13,18 +13,14 @@ echo.
 echo Coverage summary:
 go tool cover -func=coverage.out
 
-REM Extract total coverage percentage
-for /f "tokens=3" %%A in ('go tool cover -func=coverage.out ^| findstr /C:"^total:"') do set TOTAL=%%A
-set TOTAL=%TOTAL:%%=%
-
-echo.
-echo Total coverage: %TOTAL%%%
-
-REM Delegate floating-point comparison to Go
-echo package main > %TEMP%\cov_check.go
-echo import "fmt" >> %TEMP%\cov_check.go
-echo import "os" >> %TEMP%\cov_check.go
-echo import "strconv" >> %TEMP%\cov_check.go
-echo func main() { v, _ := strconv.ParseFloat(os.Args[1], 64); if v < 90 { fmt.Printf("ERROR: Coverage %%.1f%%%% is below 90%%%%.\n", v); os.Exit(1) }; fmt.Printf("Coverage check passed (%%.1f%%%% >= 90%%%%)\n", v) } >> %TEMP%\cov_check.go
-go run %TEMP%\cov_check.go %TOTAL%
-if %ERRORLEVEL% neq 0 exit /b 1
+REM Use PowerShell to parse total coverage and compare
+go tool cover -func=coverage.out > %TEMP%\go_cov_output.txt
+powershell -NoProfile -Command ^
+    "$out = Get-Content '%TEMP%\go_cov_output.txt'; " ^
+    "$line = $out | Where-Object { $_ -match '^total:' } | Select-Object -Last 1; " ^
+    "if (-not $line) { Write-Error 'Could not find total: line'; exit 1 }; " ^
+    "$pct = [double](($line -split '\s+')[-1].TrimEnd('%%')); " ^
+    "Write-Host \"Total coverage: $pct%%\"; " ^
+    "if ($pct -lt 90) { Write-Error \"ERROR: Coverage $pct%% is below required 90%%.\"; exit 1 } " ^
+    "else { Write-Host \"Coverage check passed ($pct%% >= 90%%).\" }"
+exit /b %ERRORLEVEL%
