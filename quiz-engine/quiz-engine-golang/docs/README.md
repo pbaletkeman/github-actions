@@ -437,12 +437,20 @@ go test ./...
 go test ./... -coverprofile=coverage.out
 go tool cover -html=coverage.out -o coverage.html
 
+# Enforce ≥90% coverage threshold
+./scripts/check_coverage.sh        # Linux/macOS
+scripts\check_coverage.bat         # Windows
+
 # Race detection
 go test -race ./...
 
 # Verbose
 go test -v ./...
 ```
+
+> **Coverage threshold:** The project enforces a minimum of **90%** total line coverage.
+> Run `./scripts/check_coverage.sh` (or `scripts\check_coverage.bat` on Windows) before
+> submitting — it exits with code 1 if coverage is below 90%.
 
 ---
 

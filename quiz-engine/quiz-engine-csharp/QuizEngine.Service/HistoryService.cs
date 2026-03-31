@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json;
 using QuizEngine.Data;
 using QuizEngine.Entities;
 
@@ -66,5 +68,55 @@ public class HistoryService
     public async Task<int> GetTotalSessionsAsync()
     {
         return await _sessionRepo.CountAsync();
+    }
+
+    public async Task ExportToJsonAsync(IEnumerable<QuizSession> sessions, string path)
+    {
+        var records = new List<object>();
+        foreach (var session in sessions)
+        {
+            var responses = await _responseRepo.GetBySessionIdAsync(session.SessionId);
+            records.Add(new
+            {
+                session_id = session.SessionId,
+                date = session.StartedAt,
+                score = session.NumCorrect,
+                total_questions = session.NumQuestions,
+                percentage = session.PercentageCorrect,
+                responses = responses.Select(r => new
+                {
+                    question_id = r.QuestionId,
+                    selected_answer = r.UserAnswer,
+                    was_correct = r.IsCorrect == 1
+                })
+            });
+        }
+
+        var json = JsonSerializer.Serialize(records, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(path, json);
+    }
+
+    public async Task ExportToCsvAsync(IEnumerable<QuizSession> sessions, string path)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("session_id,date,score,total_questions,percentage,question_id,selected_answer,was_correct");
+
+        foreach (var session in sessions)
+        {
+            var responses = await _responseRepo.GetBySessionIdAsync(session.SessionId);
+            if (!responses.Any())
+            {
+                sb.AppendLine($"{session.SessionId},{session.StartedAt:o},{session.NumCorrect},{session.NumQuestions},{session.PercentageCorrect:F2},,, ");
+            }
+            else
+            {
+                foreach (var r in responses)
+                {
+                    sb.AppendLine($"{session.SessionId},{session.StartedAt:o},{session.NumCorrect},{session.NumQuestions},{session.PercentageCorrect:F2},{r.QuestionId},{r.UserAnswer},{r.IsCorrect == 1}");
+                }
+            }
+        }
+
+        await File.WriteAllTextAsync(path, sb.ToString());
     }
 }

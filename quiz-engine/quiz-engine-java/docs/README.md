@@ -53,7 +53,7 @@ A command-line quiz engine for GH-200 GitHub Actions certification preparation b
 - **Non-repetition cycle tracking** — questions cycle before repeating
 - **Markdown import** — load questions from `.md` files
 - **Session history** — browse past results
-- **JaCoCo coverage** enforcement (≥80% line coverage)
+- **JaCoCo coverage** enforcement (≥90% line coverage)
 - Packages as a single executable JAR
 
 ---
@@ -415,7 +415,7 @@ java -jar quiz-engine.jar quiz
 # JaCoCo coverage report (HTML at build/reports/jacoco/)
 ./gradlew jacocoTestReport
 
-# Enforce ≥80% coverage threshold (fails build if below)
+# Enforce ≥90% coverage threshold (fails build if below)
 ./gradlew jacocoTestCoverageVerification
 
 # With Maven (Docker workflow)

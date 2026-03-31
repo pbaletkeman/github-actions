@@ -20,6 +20,9 @@ public class ClearCommand implements Runnable {
     @Option(names = {"--history"}, description = "Clear quiz history")
     private boolean clearHistory;
 
+    @Option(names = {"--all"}, description = "Clear all questions and history")
+    private boolean clearAll;
+
     @Option(names = {"--confirm"}, description = "Skip confirmation prompt")
     private boolean confirm;
 
@@ -38,8 +41,8 @@ public class ClearCommand implements Runnable {
     @Override
     @Transactional
     public void run() {
-        if (!clearQuestions && !clearHistory) {
-            ConsoleFormatter.printError("Please specify --questions or --history");
+        if (!clearQuestions && !clearHistory && !clearAll) {
+            ConsoleFormatter.printError("Please specify --questions, --history, or --all");
             return;
         }
 
@@ -53,13 +56,16 @@ public class ClearCommand implements Runnable {
             }
         }
 
-        if (clearHistory) {
+        boolean doHistory = clearHistory || clearAll;
+        boolean doQuestions = clearQuestions || clearAll;
+
+        if (doHistory) {
             responseRepository.deleteAll();
             sessionRepository.deleteAll();
             ConsoleFormatter.printSuccess("Quiz history cleared.");
         }
 
-        if (clearQuestions) {
+        if (doQuestions) {
             questionRepository.deleteAll();
             ConsoleFormatter.printSuccess("All questions cleared.");
         }

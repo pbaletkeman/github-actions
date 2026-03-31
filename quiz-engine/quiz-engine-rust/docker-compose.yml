@@ -22,7 +22,7 @@ services:
       - .:/app
       - cargo-cache:/usr/local/cargo/registry
     working_dir: /app
-    command: cargo test
+    command: sh -c "cargo test && ./scripts/check_coverage.sh"
     environment:
       - CARGO_NET_OFFLINE=false
 

@@ -19,4 +19,5 @@ services:
     working_dir: /app
     command: >
       sh -c "CGO_ENABLED=1 go test ./... -coverprofile=coverage.out -covermode=atomic &&
-             go tool cover -func=coverage.out"
+             go tool cover -func=coverage.out &&
+             ./scripts/check_coverage.sh"

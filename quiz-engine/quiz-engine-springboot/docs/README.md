@@ -60,7 +60,7 @@ A quiz engine for GH-200 GitHub Actions certification preparation built with Spr
 - **Dual database** — H2 in-memory for tests, SQLite for production
 - **Non-repetition cycle tracking** — `usageCycle` + `timesUsed` JPA columns
 - **Markdown import** — load questions from `.md` files via REST or CLI
-- **JaCoCo coverage** — enforced minimum thresholds
+- **JaCoCo coverage** — enforced minimum threshold: 90%
 - Gradle build system + Spring Data JPA
 
 ---
@@ -268,7 +268,28 @@ java -jar quiz-engine.jar quiz --no-shuffle
 java -jar quiz-engine.jar history
 java -jar quiz-engine.jar history --session-id <uuid>
 java -jar quiz-engine.jar history --export json
+java -jar quiz-engine.jar history --export csv
 ```
+
+| Option | Description |
+|--------|-------------|
+| `--session-id` | Show details for a specific session |
+| `--export json\|csv` | Export all sessions to a timestamped file |
+
+### `clear` — Delete stored data
+
+```bash
+java -jar quiz-engine.jar clear --questions --confirm
+java -jar quiz-engine.jar clear --history --confirm
+java -jar quiz-engine.jar clear --all --confirm
+```
+
+| Option | Description |
+|--------|-------------|
+| `--questions` | Delete all imported questions |
+| `--history` | Delete all session history |
+| `--all` | Delete everything (questions and history) |
+| `--confirm` | Required flag to prevent accidental deletion |
 
 ### Global Options
 

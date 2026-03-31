@@ -28,16 +28,21 @@ public static class QuizCommand
             "--no-explanation",
             description: "Skip showing explanations after each answer");
 
+        var noShuffleOption = new Option<bool>(
+            "--no-shuffle",
+            description: "Keep answer options in original order (do not randomise)");
+
         var command = new Command("quiz", "Take an interactive quiz");
         command.AddOption(questionsOption);
         command.AddOption(difficultyOption);
         command.AddOption(sectionOption);
         command.AddOption(noExplanationOption);
+        command.AddOption(noShuffleOption);
 
-        command.SetHandler(async (int numQuestions, string? difficulty, string? section, bool noExplanation) =>
+        command.SetHandler(async (int numQuestions, string? difficulty, string? section, bool noExplanation, bool noShuffle) =>
         {
-            await RunQuizAsync(services, numQuestions, difficulty, section, !noExplanation);
-        }, questionsOption, difficultyOption, sectionOption, noExplanationOption);
+            await RunQuizAsync(services, numQuestions, difficulty, section, !noExplanation, noShuffle);
+        }, questionsOption, difficultyOption, sectionOption, noExplanationOption, noShuffleOption);
 
         return command;
     }
@@ -47,7 +52,8 @@ public static class QuizCommand
         int numQuestions,
         string? difficulty,
         string? section,
-        bool showExplanation)
+        bool showExplanation,
+        bool noShuffle = false)
     {
         using var scope = services.CreateScope();
         var quizService = scope.ServiceProvider.GetRequiredService<QuizService>();
@@ -67,7 +73,7 @@ public static class QuizCommand
         ActiveQuizState state;
         try
         {
-            state = await quizService.StartQuizAsync(numQuestions, difficulty, section);
+            state = await quizService.StartQuizAsync(numQuestions, difficulty, section, noShuffle);
         }
         catch (InvalidOperationException ex)
         {

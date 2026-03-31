@@ -30,13 +30,18 @@ public static class HistoryCommand
             getDefaultValue: () => "desc",
             description: "Sort order: asc or desc");
 
+        var exportOption = new Option<string?>(
+            "--export",
+            description: "Export history to file: json or csv");
+
         var command = new Command("history", "View quiz history");
         command.AddOption(countOption);
         command.AddOption(sessionIdOption);
         command.AddOption(sortOption);
         command.AddOption(orderOption);
+        command.AddOption(exportOption);
 
-        command.SetHandler(async (int count, string? sessionId, string sort, string order) =>
+        command.SetHandler(async (int count, string? sessionId, string sort, string order, string? export) =>
         {
             using var scope = services.CreateScope();
             var historyService = scope.ServiceProvider.GetRequiredService<HistoryService>();
@@ -51,6 +56,27 @@ public static class HistoryCommand
                 }
                 ConsoleFormatter.PrintSessionDetail(session, responses);
             }
+            else if (export != null)
+            {
+                var sessions = await historyService.GetRecentSessionsAsync(int.MaxValue, sort, order);
+                var format = export.ToLower();
+                if (format == "json")
+                {
+                    var path = $"quiz-history-{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+                    await historyService.ExportToJsonAsync(sessions, path);
+                    AnsiConsole.MarkupLine($"[green]Exported {sessions.Count} sessions to[/] {path}");
+                }
+                else if (format == "csv")
+                {
+                    var path = $"quiz-history-{DateTime.UtcNow:yyyyMMddHHmmss}.csv";
+                    await historyService.ExportToCsvAsync(sessions, path);
+                    AnsiConsole.MarkupLine($"[green]Exported {sessions.Count} sessions to[/] {path}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]Unknown export format:[/] {export}. Use 'json' or 'csv'.");
+                }
+            }
             else
             {
                 var sessions = await historyService.GetRecentSessionsAsync(count, sort, order);
@@ -58,7 +84,7 @@ public static class HistoryCommand
                 AnsiConsole.MarkupLine($"\n[bold]Quiz History[/] (showing {sessions.Count} of {total} sessions)\n");
                 ConsoleFormatter.PrintSessionHistory(sessions);
             }
-        }, countOption, sessionIdOption, sortOption, orderOption);
+        }, countOption, sessionIdOption, sortOption, orderOption, exportOption);
 
         return command;
     }

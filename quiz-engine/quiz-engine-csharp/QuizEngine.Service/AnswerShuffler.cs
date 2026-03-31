@@ -62,4 +62,23 @@ public static class AnswerShuffler
             opts.Add(q.OptionE);
         return opts.ToArray();
     }
+
+    public static ShuffleResult Identity(string[] options, string correctLetter)
+    {
+        var letterIndex = Array.IndexOf(Letters, correctLetter.ToUpper());
+        if (letterIndex < 0 || letterIndex >= options.Length)
+            throw new ArgumentException($"Invalid correct answer letter: {correctLetter}");
+
+        var letterMap = new Dictionary<string, string>();
+        for (int i = 0; i < options.Length; i++)
+            letterMap[Letters[i]] = Letters[i];
+
+        return new ShuffleResult
+        {
+            ShuffledOptions = options,
+            CorrectShuffledIndex = letterIndex,
+            CorrectShuffledLetter = correctLetter.ToUpper(),
+            LetterMap = letterMap
+        };
+    }
 }

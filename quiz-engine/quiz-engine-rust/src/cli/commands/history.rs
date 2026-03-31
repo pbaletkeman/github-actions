@@ -1,3 +1,6 @@
+use std::path::Path;
+
+use chrono::Local;
 use clap::Args;
 use sqlx::{Pool, Sqlite};
 
@@ -15,6 +18,10 @@ pub struct HistoryArgs {
     /// Show the answer review for the specified session
     #[arg(long)]
     pub review: bool,
+
+    /// Export history to a file: json or csv
+    #[arg(long)]
+    pub export: Option<String>,
 }
 
 pub async fn run_history(pool: Pool<Sqlite>, args: HistoryArgs) -> Result<()> {
@@ -63,6 +70,32 @@ pub async fn run_history(pool: Pool<Sqlite>, args: HistoryArgs) -> Result<()> {
         let sessions = HistoryService::list_sessions(&pool).await?;
         if sessions.is_empty() {
             println!("No quiz sessions found. Take a quiz first with 'quiz --questions N'.");
+            return Ok(());
+        }
+
+        if let Some(ref fmt) = args.export {
+            let timestamp = Local::now().format("%Y%m%d%H%M%S");
+            match fmt.as_str() {
+                "json" => {
+                    let path_str = format!("quiz-history-{}.json", timestamp);
+                    let path = Path::new(&path_str);
+                    HistoryService::export_json(&pool, &sessions, path).await?;
+                    println!("Exported {} sessions to {}", sessions.len(), path_str);
+                }
+                "csv" => {
+                    let path_str = format!("quiz-history-{}.csv", timestamp);
+                    let path = Path::new(&path_str);
+                    HistoryService::export_csv(&pool, &sessions, path).await?;
+                    println!("Exported {} sessions to {}", sessions.len(), path_str);
+                }
+                other => {
+                    eprintln!("Unknown export format '{}': use 'json' or 'csv'.", other);
+                    return Err(crate::error::QuizError::Other(format!(
+                        "Unknown export format: {}",
+                        other
+                    )));
+                }
+            }
             return Ok(());
         }
 

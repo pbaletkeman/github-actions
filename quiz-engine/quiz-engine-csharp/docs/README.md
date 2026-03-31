@@ -288,6 +288,7 @@ dotnet run --project QuizEngine.CLI -- quiz --no-explanation
 | `--difficulty` | string | (all) | Filter by `easy`, `medium`, or `hard` |
 | `--section` | string | (all) | Filter by topic section |
 | `--no-explanation` | flag | false | Skip answer explanations at the end |
+| `--no-shuffle` | flag | false | Keep answer options in original order (do not randomise) |
 
 > **Note:** Explanations are shown after _all_ questions are answered, not after each one.
 
@@ -315,6 +316,8 @@ dotnet run --project QuizEngine.CLI -- history --count 5
 dotnet run --project QuizEngine.CLI -- history --sort score --order desc
 dotnet run --project QuizEngine.CLI -- history --sort questions --order asc
 dotnet run --project QuizEngine.CLI -- history --session-id beca2997
+dotnet run --project QuizEngine.CLI -- history --export json
+dotnet run --project QuizEngine.CLI -- history --export csv
 ```
 
 | Option | Values | Default | Description |
@@ -323,6 +326,7 @@ dotnet run --project QuizEngine.CLI -- history --session-id beca2997
 | `--sort` | `date`, `score`, `questions`, `time` | `date` | Sort field |
 | `--order` | `asc`, `desc` | `desc` | Sort direction |
 | `--session-id` | UUID prefix | — | Show detail for a specific session |
+| `--export` | `json`, `csv` | — | Export all sessions to a timestamped file |
 
 Session IDs display the first 18 characters; prefix matching is supported.
 
