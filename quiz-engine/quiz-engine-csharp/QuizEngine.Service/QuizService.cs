@@ -49,7 +49,7 @@ public class QuizService
         _responseRepo = responseRepo;
     }
 
-    public async Task<ActiveQuizState> StartQuizAsync(int numQuestions, string? difficulty = null, string? section = null)
+    public async Task<ActiveQuizState> StartQuizAsync(int numQuestions, string? difficulty = null, string? section = null, bool noShuffle = false)
     {
         var questions = await _questionRepo.GetRandomQuestionsAsync(numQuestions, difficulty, section);
 
@@ -66,9 +66,15 @@ public class QuizService
 
         await _sessionRepo.SaveAsync(session);
 
-        // Shuffle answers for each question
+        // Shuffle answers for each question (unless --no-shuffle is set)
         var shuffleResults = questions
-            .Select(q => AnswerShuffler.Shuffle(AnswerShuffler.GetOptionsArray(q), q.CorrectAnswer))
+            .Select(q =>
+            {
+                var opts = AnswerShuffler.GetOptionsArray(q);
+                if (noShuffle)
+                    return AnswerShuffler.Identity(opts, q.CorrectAnswer);
+                return AnswerShuffler.Shuffle(opts, q.CorrectAnswer);
+            })
             .ToList();
 
         var state = new ActiveQuizState

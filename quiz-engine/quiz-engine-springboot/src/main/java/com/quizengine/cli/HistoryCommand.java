@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component
@@ -20,6 +25,9 @@ public class HistoryCommand implements Runnable {
     @Option(names = {"-r", "--review"}, description = "Show detailed review")
     private boolean review;
 
+    @Option(names = {"--export"}, description = "Export history: json or csv")
+    private String export;
+
     private final HistoryService historyService;
 
     public HistoryCommand(HistoryService historyService) {
@@ -30,6 +38,8 @@ public class HistoryCommand implements Runnable {
     public void run() {
         if (sessionId != null) {
             showSessionDetail(sessionId);
+        } else if (export != null) {
+            exportHistory(export);
         } else {
             showAllHistory();
         }
@@ -59,6 +69,28 @@ public class HistoryCommand implements Runnable {
                 s.getNumQuestions(),
                 s.getNumCorrect() != null ? s.getNumCorrect() : 0,
                 s.getPercentageCorrect() != null ? s.getPercentageCorrect() : 0.0);
+        }
+    }
+
+    private void exportHistory(String format) {
+        List<QuizSession> sessions = historyService.getAllSessions();
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        try {
+            switch (format.toLowerCase()) {
+                case "json" -> {
+                    Path path = Paths.get("quiz-history-" + timestamp + ".json");
+                    historyService.exportToJson(sessions, path);
+                    ConsoleFormatter.printSuccess("Exported " + sessions.size() + " sessions to " + path);
+                }
+                case "csv" -> {
+                    Path path = Paths.get("quiz-history-" + timestamp + ".csv");
+                    historyService.exportToCsv(sessions, path);
+                    ConsoleFormatter.printSuccess("Exported " + sessions.size() + " sessions to " + path);
+                }
+                default -> ConsoleFormatter.printError("Unknown export format '" + format + "': use 'json' or 'csv'.");
+            }
+        } catch (IOException e) {
+            ConsoleFormatter.printError("Export failed: " + e.getMessage());
         }
     }
 

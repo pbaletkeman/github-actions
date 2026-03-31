@@ -432,7 +432,7 @@ pytest --cov=quiz_engine --cov-report=term-missing
 pytest --cov=quiz_engine --cov-report=html
 
 # Enforce coverage threshold (also done by CI)
-pytest --cov=quiz_engine --cov-fail-under=80
+pytest --cov=quiz_engine --cov-fail-under=90
 ```
 
 ---

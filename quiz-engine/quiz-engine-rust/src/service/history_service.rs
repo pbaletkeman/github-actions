@@ -1,3 +1,7 @@
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
+
 use sqlx::{Pool, Sqlite};
 
 use crate::db::repositories::{QuestionRepo, ResponseRepo, SessionRepo};
@@ -50,6 +54,89 @@ impl HistoryService {
             average_score: avg_pct,
             best_score: best,
         })
+    }
+
+    /// Export sessions to a JSON file.
+    pub async fn export_json(
+        pool: &Pool<Sqlite>,
+        sessions: &[QuizSession],
+        path: &Path,
+    ) -> Result<()> {
+        use serde_json::{json, Value};
+
+        let mut records: Vec<Value> = Vec::new();
+        for s in sessions {
+            let responses = ResponseRepo::get_by_session(pool, &s.session_id).await?;
+            let resp_arr: Vec<Value> = responses
+                .iter()
+                .map(|r| {
+                    json!({
+                        "question_id": r.question_id,
+                        "user_answer": r.user_answer,
+                        "is_correct": r.correct()
+                    })
+                })
+                .collect();
+
+            records.push(json!({
+                "session_id": s.session_id,
+                "started_at": s.started_at,
+                "score": s.num_correct,
+                "total_questions": s.num_questions,
+                "percentage_correct": s.percentage_correct,
+                "responses": resp_arr
+            }));
+        }
+
+        let json_str = serde_json::to_string_pretty(&records)
+            .map_err(|e| crate::error::QuizError::Other(e.to_string()))?;
+
+        let mut file = File::create(path)?;
+        file.write_all(json_str.as_bytes())?;
+
+        Ok(())
+    }
+
+    /// Export sessions to a CSV file.
+    pub async fn export_csv(
+        pool: &Pool<Sqlite>,
+        sessions: &[QuizSession],
+        path: &Path,
+    ) -> Result<()> {
+        let mut file = File::create(path)?;
+
+        writeln!(
+            file,
+            "session_id,started_at,score,total_questions,percentage_correct,question_id,user_answer,is_correct"
+        )?;
+
+        for s in sessions {
+            let responses = ResponseRepo::get_by_session(pool, &s.session_id).await?;
+            if responses.is_empty() {
+                writeln!(
+                    file,
+                    "{},{},{},{},{:.2},,, ",
+                    s.session_id, s.started_at, s.num_correct, s.num_questions, s.percentage_correct
+                )?;
+            } else {
+                for r in &responses {
+                    writeln!(
+                        file,
+                        "{},{},{},{},{:.2},{},{},{}",
+                        s.session_id,
+                        s.started_at,
+                        s.num_correct,
+                        s.num_questions,
+                        s.percentage_correct,
+                        r.question_id,
+                        r.user_answer,
+                        r.correct()
+                    )?;
+                }
+            }
+        }
+
+        Ok(())
     }
 }
 

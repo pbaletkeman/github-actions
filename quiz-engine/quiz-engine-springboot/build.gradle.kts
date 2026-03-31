@@ -53,7 +53,7 @@ tasks.jacocoTestCoverageVerification {
                 "com.quizengine.config.*"
             )
             limit {
-                minimum = "0.70".toBigDecimal()
+                minimum = "0.90".toBigDecimal()
             }
         }
     }

@@ -441,12 +441,21 @@ cargo bench
 cargo install cargo-llvm-cov
 cargo llvm-cov --html
 
+# Enforce ≥90% coverage threshold
+./scripts/check_coverage.sh        # Linux/macOS
+scripts\check_coverage.bat         # Windows
+
 # Check code (fast, no link)
 cargo check
 
 # Lint
 cargo clippy
 ```
+
+> **Coverage threshold:** The project enforces a minimum of **90%** total line coverage.
+> Run `./scripts/check_coverage.sh` (or `scripts\check_coverage.bat` on Windows) before
+> submitting — it exits with code 1 if coverage is below 90%.
+> Requires `cargo-llvm-cov` (primary) or `cargo-tarpaulin` (fallback).
 
 ### Integration Tests
 
