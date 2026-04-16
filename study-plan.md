@@ -19,7 +19,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 1: GitHub Actions Fundamentals & Tooling (2 hrs)
 
-**Topics:** 01-GitHub-Actions-VS-Code-Extension.md
+**Topics:** [01-GitHub-Actions-VS-Code-Extension.md](01-GitHub-Actions-VS-Code-Extension.md)
 **Overview:**
 
 - GitHub Actions platform capabilities and use cases
@@ -38,7 +38,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 2: Understanding GitHub Contexts - Part 1 (2 hrs)
 
-**Topics:** 02-Contextual-Information.md (first half)
+**Topics:** [02-Contextual-Information.md](02-Contextual-Information.md) (first half)
 **Overview:**
 
 - What are contexts and why they matter in workflows
@@ -57,7 +57,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 3: Understanding GitHub Contexts - Part 2 (2 hrs)
 
-**Topics:** 02-Contextual-Information.md (second half) + 03-Context-Availability-Reference.md
+**Topics:** [02-Contextual-Information.md](02-Contextual-Information.md) (second half) + [03-Context-Availability-Reference.md](03-Context-Availability-Reference.md)
 **Overview:**
 
 - The `job`, `runner`, `steps`, and `matrix` contexts
@@ -77,7 +77,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 4: YAML Syntax & Workflow File Structure (2 hrs)
 
-**Topics:** 04-Workflow-File-Structure.md
+**Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md)
 **Overview:**
 
 - GitHub Actions workflow file anatomy
@@ -100,7 +100,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 5: Workflow Trigger Events - Part 1 (2 hrs)
 
-**Topics:** 05-Workflow-Trigger-Events.md (first half)
+**Topics:** [05-Workflow-Trigger-Events.md](05-Workflow-Trigger-Events.md) (first half)
 **Overview:**
 
 - Repository events: `push`, `pull_request`, `pull_request_review`
@@ -120,7 +120,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 6: Workflow Trigger Events - Part 2 (2 hrs)
 
-**Topics:** 05-Workflow-Trigger-Events.md (second half)
+**Topics:** [05-Workflow-Trigger-Events.md](05-Workflow-Trigger-Events.md) (second half)
 **Overview:**
 
 - Advanced filtering: paths, branches, tags
@@ -140,7 +140,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 7: Environment & Runtime Configuration (2 hrs)
 
-**Topics:** 06-Custom-Environment-Variables.md, 07-Default-Environment-Variables.md
+**Topics:** [06-Custom-Environment-Variables.md](06-Custom-Environment-Variables.md), [07-Default-Environment-Variables.md](07-Default-Environment-Variables.md)
 **Overview:**
 
 - Custom environment variables at workflow, job, and step levels
@@ -162,7 +162,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 8: Environment Protection Rules & Secrets (2 hrs)
 
-**Topics:** 08-Environment-Protection-Rules.md
+**Topics:** [08-Environment-Protection-Rules.md](08-Environment-Protection-Rules.md)
 **Overview:**
 
 - Environment concepts and deployment targets
@@ -186,7 +186,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 9: Jobs, Steps & Conditional Logic (2 hrs)
 
-**Topics:** 04-Workflow-File-Structure.md (jobs section)
+**Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md) (jobs section)
 **Overview:**
 
 - Job definition and identification
@@ -208,7 +208,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 10: Job Strategy & Matrix (2 hrs)
 
-**Topics:** 04-Workflow-File-Structure.md (matrix section)
+**Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md) (matrix section)
 **Overview:**
 
 - Strategy matrix for generating job variations
@@ -230,7 +230,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 11: Service Containers & Dependencies (2 hrs)
 
-**Topics:** 04-Workflow-File-Structure.md (services section)
+**Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md) (services section)
 **Overview:**
 
 - Service containers for testing (databases, Redis, etc.)
@@ -252,7 +252,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 12: Workflow Artifacts - Storage & Retrieval (2 hrs)
 
-**Topics:** 09-Workflow-Artifacts.md
+**Topics:** [09-Workflow-Artifacts.md](09-Workflow-Artifacts.md)
 **Overview:**
 
 - Artifact concepts: upload, storage, retention
@@ -275,7 +275,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 13: Workflow Caching - Performance & Security (2 hrs)
 
-**Topics:** 10-Workflow-Caching.md
+**Topics:** [10-Workflow-Caching.md](10-Workflow-Caching.md)
 **Overview:**
 
 - Caching concepts: key, path, restore key
@@ -301,7 +301,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 14: Inter-Job Communication & Outputs (2 hrs)
 
-**Topics:** GitHub Workflows - Job Outputs section
+**Topics:** [GitHub-Workflows-Guide.md](GitHub-Workflows-Guide.md) - Job Outputs section
 **Overview:**
 
 - Job outputs: defining and exporting step outputs
@@ -324,7 +324,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 15: Workflow Debugging & Troubleshooting (2 hrs)
 
-**Topics:** 12-Workflow-Debugging.md, 19-Common-Failures-Troubleshooting.md (first half)
+**Topics:** [12-Workflow-Debugging.md](12-Workflow-Debugging.md), [19-Common-Failures-Troubleshooting.md](19-Common-Failures-Troubleshooting.md) (first half)
 **Overview:**
 
 - Debug logging: step context and secrets redaction
@@ -348,7 +348,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 16: GitHub Workflow REST API (2 hrs)
 
-**Topics:** 13-Workflows-REST-API.md
+**Topics:** [13-Workflows-REST-API.md](13-Workflows-REST-API.md)
 **Overview:**
 
 - REST API endpoints for workflows
@@ -373,7 +373,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 17: Reusable Workflows & Workflow Sharing (2 hrs)
 
-**Topics:** 11-Workflow-Sharing.md
+**Topics:** [11-Workflow-Sharing.md](11-Workflow-Sharing.md)
 **Overview:**
 
 - Reusable workflow concept: workflow_call
@@ -396,7 +396,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 18: Custom Actions - Types & Structure (2 hrs)
 
-**Topics:** 15-Creating-Publishing-Actions.md (first half)
+**Topics:** [15-Creating-Publishing-Actions.md](15-Creating-Publishing-Actions.md) (first half)
 **Overview:**
 
 - Action types: JavaScript, Docker, Composite
@@ -419,7 +419,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 19: Custom Actions - Distribution & Publishing (2 hrs)
 
-**Topics:** 15-Creating-Publishing-Actions.md (second half)
+**Topics:** [15-Creating-Publishing-Actions.md](15-Creating-Publishing-Actions.md) (second half)
 **Overview:**
 
 - Public vs private action distribution
@@ -444,7 +444,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 20: GitHub-Hosted Runners (2 hrs)
 
-**Topics:** 16-Managing-Runners.md (first half)
+**Topics:** [16-Managing-Runners.md](16-Managing-Runners.md) (first half)
 **Overview:**
 
 - GitHub-hosted runner types (Ubuntu, Windows, macOS)
@@ -467,7 +467,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 21: Self-Hosted Runners & Configuration (2 hrs)
 
-**Topics:** 16-Managing-Runners.md (second half)
+**Topics:** [16-Managing-Runners.md](16-Managing-Runners.md) (second half)
 **Overview:**
 
 - Self-hosted runner installation and setup
@@ -490,7 +490,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 22: Enterprise-Level Management (2 hrs)
 
-**Topics:** 17-GitHub-Actions-Enterprise.md
+**Topics:** [17-GitHub-Actions-Enterprise.md](17-GitHub-Actions-Enterprise.md)
 **Overview:**
 
 - Enterprise policy management
@@ -515,7 +515,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 23: GitHub Actions Security Best Practices - Part 1 (2 hrs)
 
-**Topics:** 18-Security-and-Optimization.md (first half)
+**Topics:** [18-Security-and-Optimization.md](18-Security-and-Optimization.md) (first half)
 **Overview:**
 
 - Principle of least privilege for permissions
@@ -538,7 +538,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 24: GitHub Actions Security Best Practices - Part 2 (2 hrs)
 
-**Topics:** 18-Security-and-Optimization.md (second half)
+**Topics:** [18-Security-and-Optimization.md](18-Security-and-Optimization.md) (second half)
 **Overview:**
 
 - Action pinning: commit SHA vs tags vs fuzzy versions
@@ -561,7 +561,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 25: Workflow Performance Optimization (2 hrs)
 
-**Topics:** 10-Workflow-Caching.md, 18-Security-and-Optimization.md (optimization section)
+**Topics:** [10-Workflow-Caching.md](10-Workflow-Caching.md), [18-Security-and-Optimization.md](18-Security-and-Optimization.md) (optimization section)
 **Overview:**
 
 - Identifying performance bottlenecks
@@ -584,7 +584,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 26: Troubleshooting & Common Failures - Part 2 (2 hrs)
 
-**Topics:** 19-Common-Failures-Troubleshooting.md (second half)
+**Topics:** [19-Common-Failures-Troubleshooting.md](19-Common-Failures-Troubleshooting.md) (second half)
 **Overview:**
 
 - Matrix job failure diagnosis
@@ -610,7 +610,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 27: Job Summaries & Workflow Status (2 hrs)
 
-**Topics:** 04-Workflow-File-Structure.md (job summaries section), 14-Reviewing-Deployments.md
+**Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md) (job summaries section), [14-Reviewing-Deployments.md](14-Reviewing-Deployments.md)
 **Overview:**
 
 - GITHUB_STEP_SUMMARY for rich markdown reports
@@ -656,7 +656,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ### Section 29: Mock Exam - Full Practice Test (2 hrs)
 
-**Topics:** question-prompt.md - Generate practice questions
+**Topics:** [question-prompt.md](question-prompt.md) - Generate practice questions
 **Overview:**
 
 - Full 100-question practice exam
@@ -736,9 +736,9 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 ## Resources & Materials
 
 - **Study Materials:** 19 topic markdown files in root directory
-- **Practice Questions:** question-prompt.md (generates 100 questions per iteration)
+- **Practice Questions:** [question-prompt.md](question-prompt.md) (generates 100 questions per iteration)
 - **Hands-On Labs:** All sections include practical GitHub workflow building
-- **Reference:** GitHub-Workflows-Guide.md and exam-overview.md
+- **Reference:** [GitHub-Workflows-Guide.md](GitHub-Workflows-Guide.md) and [exam-overview.md](exam-overview.md)
 - **External:** Official GitHub Actions documentation and tutorials
 
 ---
