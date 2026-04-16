@@ -72,6 +72,13 @@ def run_clear(db, args):  # pragma: no cover
 
 
 def main():  # pragma: no cover
+    # Check if the first argument is a recognized command
+    # If not, assume it's the old format and prepend 'quiz'
+    if len(sys.argv) > 1 and sys.argv[1] not in ['quiz', 'clear', '-h', '--help']:
+        # Check if it looks like a quiz argument (flag or number)
+        if sys.argv[1].startswith('-') or sys.argv[1].isdigit():
+            sys.argv.insert(1, 'quiz')
+    
     parser = argparse.ArgumentParser(description="GitHub Actions Quiz Engine")
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
@@ -90,22 +97,15 @@ def main():  # pragma: no cover
     clear_parser.add_argument('--db', default='quiz_engine/quiz.db', help='Database path')
     clear_parser.set_defaults(func=run_clear)
 
-    # Legacy support: if no command specified, assume quiz command
     args = parser.parse_args()
-
-    if args.command is None:
-        # Parse args again without subcommand for backward compatibility
-        parser_legacy = argparse.ArgumentParser(description="GitHub Actions Quiz Engine")
-        parser_legacy.add_argument('--db', default='quiz_engine/quiz.db', help='Database path')
-        parser_legacy.add_argument('--questions', type=int, default=20, help='Number of questions')
-        parser_legacy.add_argument('--difficulty', help='Filter by difficulty')
-        parser_legacy.add_argument('--section', help='Filter by section')
-        args = parser_legacy.parse_args()
-        args.func = run_quiz
 
     db = DatabaseManager(args.db)
     db.init_schema()
-    args.func(db, args)
+    if hasattr(args, 'func'):
+        args.func(db, args)
+    else:
+        parser.print_help()
+        sys.exit(1)
 
 
 if __name__ == "__main__":
