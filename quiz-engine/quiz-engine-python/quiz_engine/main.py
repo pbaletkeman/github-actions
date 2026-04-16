@@ -78,7 +78,7 @@ def main():  # pragma: no cover
         # Check if it looks like a quiz argument (flag or number)
         if sys.argv[1].startswith('-') or sys.argv[1].isdigit():
             sys.argv.insert(1, 'quiz')
-    
+
     parser = argparse.ArgumentParser(description="GitHub Actions Quiz Engine")
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
