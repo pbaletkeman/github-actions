@@ -7907,9 +7907,6 @@ runs:
 2. Create `README.md` with usage documentation:
 
 ```markdown
-
-</details>
-
 ## Setup and Validate Action
 
 Sets up Node.js, installs dependencies, validates, and optionally runs tests.
@@ -8004,6 +8001,8 @@ git push origin v1 --force
 - **`git tag -fa` fails** → The `--force` flag requires the remote to allow force-push to tags. Use `git push origin :refs/tags/v1 && git push origin v1` as an alternative.
 
 **Time Estimate:** 30–35 minutes
+
+</details>
 
 ---
 
@@ -11748,9 +11747,6 @@ Deployment completed and verified
 **Scoring Template:**
 
 ```markdown
-
-</details>
-
 ## Mock Exam Score Sheet — Attempt [N]
 
 **Date:** [YYYY-MM-DD]
@@ -11802,6 +11798,8 @@ Deployment completed and verified
 | Artifact retention defaults | Default: 90 days (public repos), configurable 1–90 days |
 
 **Time Estimate:** 2 hours exam + 30 minutes scoring and analysis
+
+</details>
 
 ---
 
@@ -12321,8 +12319,6 @@ Rollout complete and stable
 ```markdown
 # GitHub Actions GH-200 Quick Reference
 
-</details>
-
 ## Trigger Syntax (on:)
 | Event              | Key Options                        |
 |--------------------|------------------------------------|
@@ -12393,6 +12389,8 @@ Rollout complete and stable
 - [ ] Reference fits on 1–2 pages when printed.
 
 **Time Estimate:** 45–60 minutes
+
+</details>
 
 ---
 
