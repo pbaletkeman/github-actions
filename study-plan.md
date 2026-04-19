@@ -67,7 +67,7 @@ jobs:
 
       - name: Print greeting
         run: echo "Hello, ${{ github.actor }}!"
-```
+```bash
 
 4. Hover over `runs-on` → verify a tooltip describing the key appears.
 5. Type `runs-on: invalid-runner-name` → verify a red squiggly warning appears.
@@ -119,7 +119,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 
 ```text
 -P ubuntu-latest=catthehacker/ubuntu:act-latest
-```
+```bash
 
 7. Run `act push --dry-run` to preview execution order without running steps.
 
@@ -136,7 +136,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 [Hello World/greet] 🐳 docker run image=catthehacker/ubuntu:act-latest
 [Hello World/greet]   ✅  Success - Checkout code
 [Hello World/greet]   ✅  Success - Print greeting
-```
+```bash
 
 **Troubleshooting:**
 
@@ -171,11 +171,13 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
    - Verify: `actionlint --version`
 
 2. Run `actionlint` on your workflow:
+
    ```bash
    actionlint .github/workflows/hello.yml
-   ```
+   ```bash
 
 3. Create an intentionally flawed workflow at `.github/workflows/flawed.yml`:
+
    ```yaml
    name: Flawed Workflow
    on: push
@@ -189,7 +191,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
          - name: Unreachable step
            if: false
            run: echo "Never runs"
-   ```
+   ```bash
 
 4. Run `actionlint .github/workflows/flawed.yml` and observe the warnings.
 
@@ -197,13 +199,14 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
    - `pip install pre-commit` (or `brew install pre-commit` on macOS)
 
 6. Create `.pre-commit-config.yaml` in repo root:
+
    ```yaml
    repos:
      - repo: https://github.com/rhysd/actionlint
        rev: v1.6.27
        hooks:
          - id: actionlint
-   ```
+   ```bash
 
 7. Install the git hook: `pre-commit install`
 
@@ -220,10 +223,10 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 
 **Expected Output:**
 
-```
+```bash
 .github/workflows/flawed.yml:7:15: "env.UNDEFINED_VAR" is not defined. available env variables are ["GITHUB_*", ...]
 .github/workflows/flawed.yml:8:5: unreachable step detected. step cannot run because condition is always false
-```
+```bash
 
 **Troubleshooting:**
 
@@ -273,16 +276,20 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
    - Delete `.actrc` if it exists: `rm .actrc`
    - Run `act push` again — note it prompts for image selection or uses default
    - Create `.actrc` with explicit image:
-     ```
+
+     ```bash
      -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
-     ```
+     ```bash
+
    - Run `act push` again — verify correct image is used
 
 4. **Diagnose actionlint Configuration Issues:**
    - Create malformed `.actionlintrc.yaml`:
+
      ```yaml
      invalid: yaml: [structure
-     ```
+     ```bash
+
    - Run `actionlint .github/workflows/hello.yml` — observe error
    - Fix YAML syntax in `.actionlintrc.yaml` — retry
 
@@ -314,7 +321,7 @@ $ act push
 [Hello World/greet] 🐳 docker run image=ghcr.io/catthehacker/ubuntu:act-latest
 [Hello World/greet]   ✅  Success - Checkout code
 [Hello World/greet]   ✅  Success - Print greeting
-```
+```bash
 
 **Troubleshooting:**
 
@@ -346,6 +353,7 @@ $ act push
 
 1. **Create Shared VS Code Workspace Settings:**
    - In repo root, create `.vscode/settings.json`:
+
      ```json
      {
        "[yaml]": {
@@ -359,10 +367,11 @@ $ act push
          "source.fixAll": "explicit"
        }
      }
-     ```
+     ```bash
 
 2. **Create Shared Extensions Recommendation:**
    - Create `.vscode/extensions.json`:
+
      ```json
      {
        "recommendations": [
@@ -372,20 +381,23 @@ $ act push
          "ms-vscode.makefile-tools"
        ]
      }
-     ```
+     ```bash
 
 3. **Commit Team `.actrc` Configuration:**
    - In repo root, create `.github/.actrc.template`:
-     ```
+
+     ```bash
      -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
      -P windows-latest=ghcr.io/catthehacker/windows:latest
      -P macos-latest=ghcr.io/catthehacker/macos:latest
      --artifact-server-path /tmp/artifacts
-     ```
+     ```bash
+
    - Add documentation: **SETUP.md** → "Copy `.github/.actrc.template` to repo root as `.actrc`"
 
 4. **Create Enforced Workflow Template:**
    - Add `.github/workflows/TEMPLATE.yml` with required structure:
+
      ```yaml
      # Copy this template to create new workflows
      # Required sections: name, on, jobs with proper structure
@@ -398,10 +410,11 @@ $ act push
            - uses: actions/checkout@v4
            - name: "[Step description]"
              run: echo "Add your step here"
-     ```
+     ```bash
 
 5. **Create Pre-commit Policy Enforcement:**
    - Extend `.pre-commit-config.yaml` to include filename validation:
+
      ```yaml
      repos:
        - repo: https://github.com/rhysd/actionlint
@@ -415,9 +428,10 @@ $ act push
              entry: bash -c 'for f in .github/workflows/*.yml; do grep -q "jobs:" "$f" || exit 1; done'
              language: system
              files: ^\.github/workflows/
-     ```
+     ```bash
 
 6. **Create Team Onboarding Guide (DEVELOPMENT.md):**
+
    ```markdown
    # Local Development Setup
 
@@ -437,7 +451,7 @@ $ act push
    - Pre-commit hook runs on every commit
    - Manual validation: `actionlint .github/workflows/*.yml`
    - Local simulation: `act push`
-   ```
+   ```bash
 
 7. **Test Team Setup on Fresh Clone:**
    - In a temporary directory: `git clone <repo> test-clone && cd test-clone`
@@ -457,7 +471,8 @@ $ act push
 **Expected Output:**
 
 When a new team member clones the repo:
-```
+
+```bash
 $ git clone <repo>
 $ cd <repo>
 $ pre-commit install
@@ -469,7 +484,7 @@ $ act -l
 
 $ act push
 [workflow runs successfully with shared configuration]
-```
+```bash
 
 **Troubleshooting:**
 
@@ -563,7 +578,7 @@ jobs:
           # Assign context to env var to safely print JSON
           GITHUB_CTX: ${{ toJSON(github) }}
         run: echo "$GITHUB_CTX"
-```
+```bash
 
 2. Push to `main` and examine the "Trigger Info" output — note `ref` = `refs/heads/main`.
 3. Open a pull request and inspect the same job — note `head_ref` and `base_ref` are now populated.
@@ -631,7 +646,7 @@ jobs:
         run: |
           # ${{ secrets.DEMO_API_KEY }} inline in run: works but is not best practice
           echo "Inline ref: ${{ secrets.DEMO_API_KEY }}"
-```
+```bash
 
 3. Trigger via `workflow_dispatch` and view the logs.
 4. Observe that `super-secret-value-abc123` never appears — it is replaced with `***`.
@@ -722,7 +737,7 @@ jobs:
           AUTHOR="${{ github.event.issue.user.login || 'Unknown' }}"
           echo "PR Title with default: $TITLE"
           echo "Issue author with default: $AUTHOR"
-```
+```bash
 
 2. Push the workflow to your repository.
 
@@ -732,9 +747,10 @@ jobs:
    - Go to **Actions → Advanced Context Usage → Run workflow** → set `debug_mode=true` → "Use workflow dispatch input" runs
 
 4. Modify the conditional on the "Complex conditional" step and test:
+
    ```yaml
    if: contains(github.event.pull_request.labels.*.name, 'enhancement')
-   ```
+   ```bash
 
 **Success Criteria:**
 
@@ -746,7 +762,7 @@ jobs:
 
 **Expected Output (on PR with 'bug' label):**
 
-```
+```bash
 === PR Details ===
 PR Title       : Fix authentication bug
 PR Author      : teammate
@@ -755,7 +771,7 @@ PR Head Branch : fix/auth-bug
 PR Draft?      : false
 PR Labels      : bug, urgent
 This should run on PR labeled 'bug' OR any new issue
-```
+```bash
 
 **Troubleshooting:**
 
@@ -788,6 +804,7 @@ This should run on PR labeled 'bug' OR any new issue
 1. **Scenario: PR labels context returns empty list**
    - Create a PR and add a label (`bug`).
    - Create `.github/workflows/diagnose-labels.yml`:
+
      ```yaml
      name: Diagnose Labels
      on: pull_request
@@ -804,13 +821,15 @@ This should run on PR labeled 'bug' OR any new issue
                if [ -z "$LABELS" ]; then
                  echo "ERROR: Labels are empty! This may indicate wrong event type."
                fi
-     ```
+     ```bash
+
    - Push and create a PR. Labels should print as JSON array.
    - **Fix if empty:** Verify PR actually has labels applied; verify event type is `pull_request`.
 
 2. **Scenario: Secrets context returns null**
    - Add a repository secret: `TEST_SECRET=value123`.
    - Create `.github/workflows/diagnose-secrets.yml`:
+
      ```yaml
      name: Diagnose Secrets
      on: workflow_dispatch
@@ -829,7 +848,8 @@ This should run on PR labeled 'bug' OR any new issue
                  echo "ERROR: Secret not available in this job!"
                  echo "Checking permissions..."
                fi
-     ```
+     ```bash
+
    - Push and manually trigger. If secret is empty, check:
      - [ ] Secret name matches exactly (case-sensitive)
      - [ ] Job doesn't have `permissions` block that restricts access
@@ -837,6 +857,7 @@ This should run on PR labeled 'bug' OR any new issue
 
 3. **Scenario: `github.event.pull_request` is null on wrong event**
    - Create `.github/workflows/diagnose-event.yml`:
+
      ```yaml
      name: Diagnose Event
      on:
@@ -854,13 +875,15 @@ This should run on PR labeled 'bug' OR any new issue
                if [ "${{ github.event_name }}" = "push" ]; then
                  echo "On push: PR context is not available"
                fi
-     ```
+     ```bash
+
    - Push a commit (event type = `push`) and create a PR (event type = `pull_request`).
    - Observe: PR number is only available on `pull_request` events.
    - **Fix:** Guard context access with `if: github.event_name == 'pull_request'`.
 
 4. **Scenario: Context differs between job and workflow level**
    - Create `.github/workflows/diagnose-scope.yml`:
+
      ```yaml
      name: Diagnose Scope
      env:
@@ -880,7 +903,8 @@ This should run on PR labeled 'bug' OR any new issue
                echo "Job var: $JOB_VAR"
                echo "Step var: $STEP_VAR"
                # WORKFLOW_VAR and JOB_VAR visible here; step-level overrides all
-     ```
+     ```bash
+
    - Push and observe all three variables print correctly.
    - Modify step to remove `STEP_VAR` — `JOB_VAR` takes precedence.
 
@@ -967,7 +991,7 @@ jobs:
           # Attempt to print the secret - GitHub auto-masks it
           echo "Secret attempt: ${{ secrets.ORG_API_KEY }}"
           # Output will show *** instead of actual value
-```
+```bash
 
 4. **Implement Secret Rotation Automation:**
    - Create `.github/workflows/rotate-secrets.yml` (manually triggered):
@@ -1010,7 +1034,7 @@ jobs:
 
       - name: Send notification
         run: echo "Secret rotation initiated. Update via Settings → Secrets within 5 minutes."
-```
+```bash
 
 5. **Implement Secret Access Audit (via Workflow Logs):**
    - Create `.github/workflows/audit-secrets.yml`:
@@ -1034,7 +1058,7 @@ jobs:
           echo "Secrets used: ORG_API_KEY, PROD_DATABASE_URL"
           echo "Timestamp: $(date -u)"
           # In real scenario, send to centralized audit log
-```
+```bash
 
 6. **Test the Workflow:**
    - Trigger `Secret Rotation Demo` with `production` environment.
@@ -1053,7 +1077,7 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Authenticating with organization secret...
 API key is 24 chars (value masked in logs)
 
@@ -1066,7 +1090,7 @@ Secret rotation logged:
   Secret: ORG_API_KEY
   Timestamp: 2024-04-19T14:23:45Z
   Status: PENDING (awaits manual update in Settings)
-```
+```bash
 
 **Troubleshooting:**
 
@@ -1154,7 +1178,7 @@ jobs:
           echo "Deploying version : ${{ needs.build.outputs.version }}"
           echo "Artifact name     : ${{ needs.build.outputs.artifact-name }}"
           echo "Triggered by      : ${{ github.actor }}"
-```
+```bash
 
 2. Push the file and navigate to **Actions → Job Outputs Demo → Run workflow**.
 3. In the run detail, click the `build` job → expand the "Generate version string" step → note the `version` output value.
@@ -1174,7 +1198,7 @@ jobs:
 Deploying version : 1.0.42
 Artifact name     : app-42
 Triggered by      : your-username
-```
+```bash
 
 **Troubleshooting:**
 
@@ -1240,7 +1264,7 @@ jobs:
       - name: Skip on forks — avoid leaking secrets
         if: github.repository_owner == github.event.repository.owner.login
         run: echo "Running in the origin repo — safe to use secrets"
-```
+```bash
 
 2. Push to `develop` → verify only the "Always runs" step and none of the branch-specific steps execute.
 3. Push to `main` → verify the "Only on push to main" step executes.
@@ -1347,7 +1371,7 @@ jobs:
     steps:
       - name: Send failure notification
         run: echo "📧 Sent failure alert to team"
-```
+```bash
 
 2. Push the workflow and trigger manually. Observe:
    - Build step succeeds → outputs `build_version`
@@ -1370,7 +1394,7 @@ jobs:
     steps:
       - name: Log cancellation
         run: echo "⚠️ Workflow was cancelled by user"
-```
+```bash
 
 **Success Criteria:**
 
@@ -1410,6 +1434,7 @@ jobs:
 
 1. **Scenario: Condition syntax error causes unexpected permissive behavior**
    - Create `.github/workflows/debug-conditional.yml`:
+
      ```yaml
      name: Debug Conditional
      on: workflow_dispatch
@@ -1424,13 +1449,15 @@ jobs:
            - name: Intentional syntax error (typo in function name)
              if: succes()  # Typo: missing final 's'
              run: echo "This should run but won't"
-     ```
+     ```bash
+
    - Push and trigger. The step is **Skipped** (not failed).
    - **Fix:** Change `succes()` to `success()`. Step now runs.
    - **Lesson:** GitHub doesn't error on typos; it defaults to `if: false`.
 
 2. **Scenario: Using wrong output reference syntax**
    - Create `.github/workflows/debug-outputs.yml`:
+
      ```yaml
      name: Debug Outputs
      on: workflow_dispatch
@@ -1449,12 +1476,14 @@ jobs:
            - name: Correct reference
              if: steps.check.outputs.status == 'ready'  # Correct: .outputs (plural)
              run: echo "This will run"
-     ```
+     ```bash
+
    - First step with wrong reference is **Skipped**. Second step runs.
    - **Fix:** Always use `.outputs` (plural).
 
 3. **Scenario: Condition references non-existent step**
    - Create `.github/workflows/debug-step-id.yml`:
+
      ```yaml
      name: Debug Step ID
      on: workflow_dispatch
@@ -1472,12 +1501,14 @@ jobs:
            - name: Correct reference
              id: check
              run: echo "status=ready" >> $GITHUB_OUTPUT
-     ```
+     ```bash
+
    - Push and observe: Condition evaluates to false; step skipped.
    - **Fix:** Ensure every step you reference in `if:` has an `id:` field.
 
 4. **Scenario: Complex condition is hard to debug; need step-by-step validation**
    - Create `.github/workflows/debug-complex-condition.yml`:
+
      ```yaml
      name: Debug Complex
      on: workflow_dispatch
@@ -1500,11 +1531,13 @@ jobs:
                echo "Condition 1 (event): $COND1"
                echo "Condition 2 (ref): $COND2"
                echo "Condition 3 (actor): $COND3"
-     ```
+     ```bash
+
    - Run this to understand which part of a complex condition is false.
 
 5. **Scenario: Job-level `if:` condition references outputs that don't exist yet**
    - Create `.github/workflows/debug-job-condition.yml`:
+
      ```yaml
      name: Debug Job Condition
      on: workflow_dispatch
@@ -1526,7 +1559,8 @@ jobs:
          steps:
            - name: Deploy
              run: echo "Deploying version ${{ needs.build.outputs.version }}"
-     ```
+     ```bash
+
    - The deploy job won't run if the condition is wrong. Fix: ensure `build` job declares outputs with exact syntax.
 
 **Success Criteria:**
@@ -1698,7 +1732,7 @@ jobs:
           echo "  Environment: $ENV"
           echo "  Status: $STATUS"
           echo "  Timestamp: $(date -u)"
-```
+```bash
 
 2. **Create Environment Protection Rules (via Settings):**
    - Navigate to **Settings → Environments → prod-approval** (or via UI create it).
@@ -1844,7 +1878,7 @@ jobs:
         env:
           BUILD_ENV: test
         run: echo "Test env: $BUILD_ENV"
-```
+```bash
 
 2. Validate with the VS Code extension — confirm no red squiggles.
 3. Push and verify the `test` job waits for `build` to finish in the Actions UI.
@@ -1905,7 +1939,7 @@ jobs:
       EXTRA_VAR: job-b-only
     steps:
       - run: env | grep -E 'NODE_ENV|LOG_LEVEL|TIMEOUT|EXTRA_VAR'
-```
+```bash
 
 2. Push and verify both jobs show identical values for `NODE_ENV`, `LOG_LEVEL`, and `TIMEOUT` but different `EXTRA_VAR` values.
 
@@ -1918,7 +1952,7 @@ jobs:
 jobs:
   build:
   runs-on: ubuntu-latest  # ❌ should be indented under build:
-```
+```bash
 
 Fix: indent `runs-on:` two more spaces under `build:`.
 
@@ -1932,7 +1966,7 @@ jobs:
     steps:
       - name: Run tests
         # ❌ missing 'run:' or 'uses:' — a step must have one of them
-```
+```bash
 
 Fix: add `run: pytest` or `uses: actions/...`.
 
@@ -1943,7 +1977,7 @@ Fix: add `run: pytest` or `uses: actions/...`.
 - name: Continue on error
   run: false-command
   continue-on-error: True  # ❌ YAML True ≠ GitHub Actions boolean true
-```
+```bash
 
 Fix: use lowercase `true` (YAML boolean, not string).
 
@@ -1954,7 +1988,7 @@ Fix: use lowercase `true` (YAML boolean, not string).
 on:
   push:
     branches: [${{ github.ref }}]  # ❌ expressions not evaluated in on: block
-```
+```bash
 
 Fix: expressions are only evaluated at runtime inside `jobs:`; use a literal branch name.
 
@@ -1966,7 +2000,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     runs-on: windows-latest  # ❌ duplicate key; last value silently wins
-```
+```bash
 
 Fix: remove the duplicate `runs-on:` line.
 
@@ -1994,6 +2028,7 @@ Fix: remove the duplicate `runs-on:` line.
 
 1. **Create a Shared Defaults Workflow:**
    - Create `.github/workflows/defaults-base.yml`:
+
      ```yaml
      # This is not a callable reusable workflow, but a documentation of standard defaults
      # Teams use this as a template for consistency
@@ -2023,10 +2058,11 @@ Fix: remove the duplicate `runs-on:` line.
              uses: actions/setup-node@v4
              with:
                node-version: ${{ env.NODE_VERSION }}
-     ```
+     ```bash
 
 2. **Create Reusable Workflow for Common Tasks:**
    - Create `.github/workflows/reusable-build.yml`:
+
      ```yaml
      name: Reusable Build Workflow
 
@@ -2062,10 +2098,11 @@ Fix: remove the duplicate `runs-on:` line.
              with:
                name: build-artifact
                path: dist/
-     ```
+     ```bash
 
 3. **Create Reusable Workflow for Testing:**
    - Create `.github/workflows/reusable-test.yml`:
+
      ```yaml
      name: Reusable Test Workflow
 
@@ -2093,10 +2130,11 @@ Fix: remove the duplicate `runs-on:` line.
 
            - name: Run tests
              run: npm test -- --type=${{ inputs.test-type }}
-     ```
+     ```bash
 
 4. **Compose Main Workflow Using Reusable Components:**
    - Create `.github/workflows/main-composed.yml`:
+
      ```yaml
      name: Main Composed Workflow
      on:
@@ -2125,7 +2163,7 @@ Fix: remove the duplicate `runs-on:` line.
          steps:
            - name: Verify artifact
              run: echo "Artifact at: ${{ needs.build-app.outputs.artifact-path }}"
-     ```
+     ```bash
 
 5. **Test the Composed Workflow:**
    - Push to `main` → workflow runs composed structure
@@ -2169,6 +2207,7 @@ Fix: remove the duplicate `runs-on:` line.
 
 1. **Start with a Legacy Workflow (Anti-Patterns):**
    - Create `.github/workflows/legacy-broken.yml`:
+
      ```yaml
      name: Old Workflow
      on: [push]
@@ -2195,7 +2234,7 @@ Fix: remove the duplicate `runs-on:` line.
          steps:
            - run: echo "Deploy"
            # No artifact retrieval
-     ```
+     ```bash
 
 2. **Identify Anti-Patterns:**
    - ✗ Outdated action versions (`@v2`)
@@ -2207,6 +2246,7 @@ Fix: remove the duplicate `runs-on:` line.
 
 3. **Refactor to Modern Syntax:**
    - Create `.github/workflows/modern-refactored.yml`:
+
      ```yaml
      name: Refactored Workflow
 
@@ -2280,18 +2320,21 @@ Fix: remove the duplicate `runs-on:` line.
              run: |
                echo "Deploying ${{ env.ARTIFACT_DIR }}"
                ls -la ${{ env.ARTIFACT_DIR }}
-     ```
+     ```bash
 
 4. **Validate Refactored Workflow:**
    - Use `actionlint` locally to check for issues:
+
      ```bash
      actionlint modern-refactored.yml
-     ```
+     ```bash
+
    - Use VS Code extension to verify no syntax errors
    - Run `act` locally to simulate execution:
+
      ```bash
      act push -j build
-     ```
+     ```bash
 
 5. **Compare Both Workflows:**
    - Document improvements made (versions, structure, artifact handling, etc.)
@@ -2336,6 +2379,7 @@ Fix: remove the duplicate `runs-on:` line.
 
 1. **Define a Workflow Schema (JSON Schema):**
    - Create `workflow-schema.json`:
+
      ```json
      {
        "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2357,10 +2401,11 @@ Fix: remove the duplicate `runs-on:` line.
        },
        "required": ["name", "trigger"]
      }
-     ```
+     ```bash
 
 2. **Create a Workflow Configuration File:**
    - Create `workflow-config.json`:
+
      ```json
      {
        "name": "Build, Test, Deploy",
@@ -2372,10 +2417,11 @@ Fix: remove the duplicate `runs-on:` line.
        "deploy_env": "staging",
        "artifact_retention": 7
      }
-     ```
+     ```bash
 
 3. **Create a Generator Script (Node.js):**
    - Create `generate-workflow.js`:
+
      ```javascript
      #!/usr/bin/env node
 
@@ -2500,10 +2546,11 @@ Fix: remove the duplicate `runs-on:` line.
 
      console.log('✅ Workflow generated successfully!');
      console.log(`📋 Output: .github/workflows/generated-workflow.yml`);
-     ```
+     ```bash
 
 4. **Create Validation Script:**
    - Create `validate-workflow.js`:
+
      ```javascript
      #!/usr/bin/env node
 
@@ -2522,14 +2569,16 @@ Fix: remove the duplicate `runs-on:` line.
      }
 
      console.log('✅ Workflow validation passed!');
-     ```
+     ```bash
 
 5. **Generate and Validate:**
    - Run:
+
      ```bash
      node generate-workflow.js
      node validate-workflow.js
-     ```
+     ```bash
+
    - Review generated `.github/workflows/generated-workflow.yml`
    - Modify `workflow-config.json` and regenerate to see changes
 
@@ -2600,7 +2649,7 @@ Fix: remove the duplicate `runs-on:` line.
    src/app.js
    docs/README.md
    package.json
-   ```
+   ```bash
 
 2. Create `.github/workflows/filtered-ci.yml`:
 
@@ -2632,7 +2681,7 @@ jobs:
           echo "Event  : ${{ github.event_name }}"
           echo "Branch : ${{ github.ref_name }}"
           echo "Actor  : ${{ github.actor }}"
-```
+```bash
 
 3. Push a change to `src/app.js` on `main` → verify workflow triggers.
 4. Push a change to `docs/README.md` on `main` → verify workflow is **not** triggered.
@@ -2741,7 +2790,7 @@ jobs:
       - name: Notify (conditional)
         if: inputs.send-notification == true && inputs.dry-run == false
         run: echo "📢 Notification sent for ${{ inputs.environment }} deploy"
-```
+```bash
 
 2. Push the file. Navigate to **Actions → Manual Deploy → Run workflow**.
 3. Verify the form shows a **dropdown** for environment, **text fields** for version, and **checkboxes** for the boolean inputs.
@@ -2845,7 +2894,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploying ${{ github.ref }}"
-```
+```bash
 
 2. Test each trigger:
    - Push to `develop` with only docs changed → no run
@@ -2884,6 +2933,7 @@ jobs:
 
 1. **Scenario: Push filter expects multiple branches**
    - Create `.github/workflows/trigger-debug.yml`:
+
      ```yaml
      name: Trigger Debug
      on:
@@ -2898,13 +2948,15 @@ jobs:
          runs-on: ubuntu-latest
          steps:
            - run: echo "Workflow triggered"
-     ```
+     ```bash
+
    - Push to `develop` branch with src/ change → workflow does NOT run (expected: main/staging only)
    - Push to `main` with only README.md change → workflow does NOT run (expected: paths filter)
    - Push to `main` with src/ change → workflow DOES run ✓
 
 2. **Scenario: Event type mismatch**
    - Create `.github/workflows/pull-request-only.yml`:
+
      ```yaml
      name: PR Only
      on:
@@ -2916,13 +2968,15 @@ jobs:
          runs-on: ubuntu-latest
          steps:
            - run: echo "PR event only"
-     ```
+     ```bash
+
    - Comment on an existing PR → no run (event is `issue_comment`, not `pull_request`)
    - Push to main → no run (event is `push`, not `pull_request`)
    - Open new PR → runs ✓ (event type is `opened`)
 
 3. **Scenario: Draft PR is skipped**
    - Create `.github/workflows/draft-debug.yml`:
+
      ```yaml
      name: Draft Check
      on:
@@ -2933,12 +2987,14 @@ jobs:
          runs-on: ubuntu-latest
          steps:
            - run: echo "Not a draft PR"
-     ```
+     ```bash
+
    - Open as draft → job skipped (if condition prevents it)
    - Convert to ready → runs ✓
 
 4. **Scenario: Tag filter pattern doesn't match**
    - Create `.github/workflows/tag-debug.yml`:
+
      ```yaml
      name: Tag Debug
      on:
@@ -2950,7 +3006,8 @@ jobs:
          runs-on: ubuntu-latest
          steps:
            - run: echo "Tag: ${{ github.ref }}"
-     ```
+     ```bash
+
    - Create tag `release-1.0` → no run (pattern doesn't match)
    - Create tag `v1.0.0` → runs ✓
 
@@ -2995,6 +3052,7 @@ jobs:
 
 1. **Create a Webhook-Triggered Workflow (Repo A):**
    - Create `.github/workflows/trigger-dependent-repos.yml`:
+
      ```yaml
      name: Trigger Dependent Tests
      on:
@@ -3023,10 +3081,11 @@ jobs:
                  -H "Accept: application/vnd.github.v3+json" \
                  https://api.github.com/repos/YOUR_ORG/repo-c/dispatches \
                  -d '{"event_type":"upstream-build"}'
-     ```
+     ```bash
 
 2. **Create Listener Workflows (Repos B & C):**
    - In Repo B, create `.github/workflows/run-on-upstream.yml`:
+
      ```yaml
      name: Run Tests on Upstream Build
      on:
@@ -3044,10 +3103,11 @@ jobs:
              run: |
                echo "Testing compatibility with Repo A commit: ${{ github.event.client_payload.sha }}"
                npm test
-     ```
+     ```bash
 
 3. **Implement Status Tracking:**
    - Create `.github/workflows/track-status.yml`:
+
      ```yaml
      name: Track Build Status
      on:
@@ -3066,7 +3126,7 @@ jobs:
                else
                  echo "❌ Downstream tests failed"
                fi
-     ```
+     ```bash
 
 4. **Test the Coordination:**
    - Push to Repo A main → triggers curl POST to Repos B & C
@@ -3170,7 +3230,7 @@ jobs:
         run: |
           echo "Triggered by workflow: ${{ github.event.workflow_run.name }}"
           echo "Source commit: ${{ github.event.workflow_run.head_sha }}"
-```
+```bash
 
 2. Create a test workflow `.github/workflows/ci.yml` (referenced by `workflow_run`):
 
@@ -3190,7 +3250,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "CI tests passed"
-```
+```bash
 
 3. Push a commit touching only `README.md` → verify CI workflow is **not** triggered.
 4. Push a commit touching `src/main.js` → verify CI triggers, which then triggers the Release Pipeline.
@@ -3255,7 +3315,7 @@ jobs:
           echo "Version     : ${{ inputs.version }}"
           echo "Dry run     : ${{ inputs.dry-run }}"
           echo "Token set   : ${{ secrets.DEPLOY_TOKEN != '' }}"
-```
+```bash
 
 2. Create the caller workflow `.github/workflows/deploy-orchestrator.yml`:
 
@@ -3290,7 +3350,7 @@ jobs:
       dry-run: ${{ inputs.dry-run }}
     secrets:
       DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-```
+```bash
 
 3. Trigger the orchestrator via `workflow_dispatch` with `environment: staging`, `version: 1.2.3`.
 4. Verify the reusable workflow job receives and prints all three values correctly.
@@ -3354,7 +3414,7 @@ jobs:
               echo "Rolling back: ${{ github.event.client_payload.previous-version }}"
               ;;
           esac
-```
+```bash
 
 2. Trigger via curl with custom payload:
 
@@ -3370,7 +3430,7 @@ curl -X POST \
       "rebuild-cache": false
     }
   }'
-```
+```bash
 
 3. Test event routing and payload access.
 
@@ -3398,16 +3458,18 @@ curl -X POST \
 **Detailed Steps:**
 
 1. Create monorepo structure:
-```
+
+```bash
 /frontend
   /.github/workflows/frontend-tests.yml
 /backend
   /.github/workflows/backend-tests.yml
 /shared
   /components
-```
+```bash
 
 2. Create `.github/workflows/frontend-tests.yml`:
+
 ```yaml
 name: Frontend Tests
 on:
@@ -3423,9 +3485,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm test --prefix frontend
-```
+```bash
 
 3. Create `.github/workflows/backend-tests.yml`:
+
 ```yaml
 name: Backend Tests
 on:
@@ -3441,7 +3504,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm test --prefix backend
-```
+```bash
 
 4. Test scenarios:
    - Push only backend/ changes → Backend Tests runs, Frontend Tests skipped ✓
@@ -3449,9 +3512,10 @@ jobs:
    - Push .md files only → Both skipped ✓
 
 5. Debug failures using `git diff`:
+
 ```bash
 git diff HEAD~1 --name-only | grep -E "^frontend/" && echo "Frontend trigger"
-```
+```bash
 
 **Success Criteria:**
 
@@ -3566,7 +3630,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deployment status: ${{ needs.deploy.result }}"
-```
+```bash
 
 2. Test each trigger path:
    - Manual dispatch to staging → skips approval
@@ -3659,7 +3723,7 @@ jobs:
       - name: Step 3 — back to job-level after step 2
         run: |
           echo "APP_ENV    = $APP_ENV"       # expects: job-level (step override gone)
-```
+```bash
 
 2. Trigger via `workflow_dispatch` and verify each step's output matches expectations.
 3. Add `APP_ENV` as a **Repository Variable** (Settings → Secrets and variables → Variables) and observe it does NOT override the YAML-defined env vars (YAML env wins over repository variables that are set via `vars.` context, not plain env vars).
@@ -3728,7 +3792,7 @@ jobs:
           echo "GITHUB_RUN_ID          : $GITHUB_RUN_ID"
           echo "GITHUB_RUN_NUMBER      : $GITHUB_RUN_NUMBER"
           echo "GITHUB_ACTIONS         : $GITHUB_ACTIONS"
-```
+```bash
 
 2. Trigger and verify Step 2 uses the values set in Step 1 (not empty).
 3. Note that `GITHUB_ENV` values are **not** available in the same step that sets them — only in subsequent steps.
@@ -3801,7 +3865,7 @@ jobs:
 
       - name: Use platform-aware paths
         run: mkdir -p "$ARTIFACT_PATH"
-```
+```bash
 
 2. Run on all platforms; verify paths are correct for each.
 
@@ -3857,7 +3921,7 @@ jobs:
           echo "JOB1_VAR: ${JOB1_VAR:-NOT_FOUND}"
           echo "GLOBAL_VAR: $GLOBAL_VAR"
           # Job2 should see GLOBAL_VAR but NOT LEAKED_VAR or JOB1_VAR
-```
+```bash
 
 2. Run and verify: job2 has access ONLY to GLOBAL_VAR.
 3. Fix: Use job outputs instead of GITHUB_ENV for inter-job communication.
@@ -3909,7 +3973,7 @@ jobs:
           echo "  Node: 20"
           echo "  Cache: npm-cache-${{ github.sha }}"
           echo "  Env: ${{ inputs.environment }}"
-```
+```bash
 
 2. Use in main workflows:
 
@@ -3933,7 +3997,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-```
+```bash
 
 **Success Criteria:**
 
@@ -4047,7 +4111,7 @@ jobs:
         env:
           DB_URL: ${{ secrets.DATABASE_URL }}  # resolves from production environment
         run: echo "Deployed to production — DB: ${#DB_URL} chars"
-```
+```bash
 
 5. Push to `main` and watch the workflow run.
 6. When the `deploy-production` job appears, it should pause and show **"Waiting for review"**.
@@ -4132,7 +4196,7 @@ jobs:
           # Using curl to demonstrate the 403 you would get
           echo "Token permissions: contents=read only"
           echo "Any write operation to issues would return 403"
-```
+```bash
 
 2. Trigger via `workflow_dispatch`.
 3. Verify the `write-issues` job creates a comment on Issue #1.
@@ -4194,7 +4258,7 @@ jobs:
         run: |
           echo "Token expires in ~15 minutes"
           echo "No long-lived credentials stored"
-```
+```bash
 
 2. Configure AWS IAM role to trust GitHub:
    - Create trust policy accepting OIDC issuer: `token.actions.githubusercontent.com`
@@ -4251,7 +4315,7 @@ jobs:
         run: |
           echo "This workflow only reads repo content."
           echo "Scope should be: permissions: { contents: read }"
-```
+```bash
 
 2. Audit using GitHub's built-in security scans:
    - Go to Repo → **Security → Secret scanning → Code scanning**
@@ -4262,7 +4326,7 @@ jobs:
 ```yaml
 permissions:
   contents: read  # Minimal required
-```
+```bash
 
 4. Verify GitHub Actions still work with reduced permissions.
 
@@ -4296,6 +4360,7 @@ permissions:
 
 2. **Create Rotation Automation:**
    - Create `.github/workflows/rotate-org-secrets.yml`:
+
      ```yaml
      name: Rotate Org Secrets
      on:
@@ -4316,7 +4381,7 @@ permissions:
                GH_TOKEN: ${{ secrets.ROTATION_TOKEN }}
              run: |
                gh secret set ORG_DATABASE_URL -b "${NEW_VALUE}" --org YOUR_ORG
-     ```
+     ```bash
 
 3. **Enable Across Organization:**
    - Repository-level workflows inherit org secret: `${{ secrets.ORG_DATABASE_URL }}`
@@ -4427,7 +4492,7 @@ jobs:
         run: |
           echo "Pipeline status captured"
           echo "Upstream conclusion available via needs context"
-```
+```bash
 
 2. Trigger the workflow and observe the run graph:
    - `build` → succeeds
@@ -4498,7 +4563,7 @@ jobs:
 
       - name: Final step — always runs, job is still green
         run: echo "Job completes successfully despite the failed flaky step"
-```
+```bash
 
 2. Trigger and verify the job shows **green** even though a step exited with `exit 1`.
 3. Observe the difference between `outcome` (raw) and `conclusion` (effective): with `continue-on-error: true`, `conclusion` is `success` but `outcome` is `failure`.
@@ -4565,7 +4630,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploying v${{ needs.analyze.outputs.version }}"
-```
+```bash
 
 2. Test: modify `should-deploy` output to `false` → deploy job skips.
 3. Verify outputs pass through the dependency chain.
@@ -4606,7 +4671,7 @@ jobs:
         run: sleep 90  # Exceeds 1 min timeout
       - name: Never runs (job cancelled)
         run: echo "This is skipped"
-```
+```bash
 
 2. Manually cancel workflow mid-run; observe `cancelled` status.
 3. Add cleanup step that always runs:
@@ -4614,7 +4679,7 @@ jobs:
 ```yaml
       - if: always()
         run: echo "Cleanup: timeout occurred at $(date)"
-```
+```bash
 
 **Success Criteria:**
 
@@ -4678,7 +4743,7 @@ jobs:
       - run: |
           echo "Job status: ${{ needs.flaky-operation.result }}"
           echo "Fallback executed: ${{ needs.fallback-path.result != 'skipped' }}"
-```
+```bash
 
 2. Observe: flaky job fails → fallback auto-activates.
 3. On success: fallback skipped.
@@ -4785,7 +4850,7 @@ jobs:
 
       - name: Verify Node version
         run: node --version
-```
+```bash
 
 2. Trigger via `workflow_dispatch` and count the jobs: should be 8 (3×3=9 minus 1 excluded macOS/Node18).
 3. Verify only the `ubuntu-latest`/`node-20` job runs the integration test step.
@@ -4863,7 +4928,7 @@ jobs:
           else
             echo "✅ All builds passed"
           fi
-```
+```bash
 
 2. Trigger and observe: `api` and `frontend` succeed, `worker` fails.
 3. With `fail-fast: false`, the `api` and `frontend` jobs should continue to completion.
@@ -4919,7 +4984,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Testing Node ${{ matrix.node }}"
-```
+```bash
 
 2. Matrix expands to 4 jobs (2 versions × 2 OS).
 3. Add `exclude` to remove unwanted combinations.
@@ -4947,6 +5012,7 @@ jobs:
 **Detailed Steps:**
 
 1. Scenario: platform-specific failure
+
 ```yaml
 jobs:
   test:
@@ -4956,7 +5022,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: cat file.txt | grep "pattern"  # Fails on Windows (different line endings)
-```
+```bash
 
 2. Fix: use cross-platform command or shell setting.
 3. Verify all matrix jobs pass.
@@ -4984,12 +5050,13 @@ jobs:
 **Detailed Steps:**
 
 1. Create matrix with multiple dimensions:
+
 ```yaml
 strategy:
   matrix:
     team: [frontend, backend, infra]
     test-type: [unit, integration]
-```
+```bash
 
 2. This creates 6 jobs (3 teams × 2 types).
 3. Upload results per job.
@@ -5117,7 +5184,7 @@ jobs:
           echo "App would connect to: ${DATABASE_URL}"
           echo "Cache would connect to: ${REDIS_URL}"
           echo "All integration tests passed"
-```
+```bash
 
 2. Push to trigger the workflow (or use `workflow_dispatch`).
 3. Verify the `postgres` and `redis` service containers appear in the run log under "Initialize containers".
@@ -5201,7 +5268,7 @@ jobs:
         run: |
           echo "Tests would run here inside Node 20 Alpine"
           node -e "console.log('Hello from container job!')"
-```
+```bash
 
 2. Trigger and observe that all steps execute inside `node:20-alpine`.
 3. Note the key difference: service containers in container jobs are accessed via their **service name as hostname** (e.g., `redis`), not `localhost`.
@@ -5423,7 +5490,7 @@ jobs:
 
       - name: Display coverage summary
         run: cat coverage-report/summary.txt
-```
+```bash
 
 2. Push and observe three parallel downstream jobs after `build-and-test`.
 3. Navigate to the run → **Artifacts** section to see three uploaded artifacts.
@@ -5488,7 +5555,7 @@ jobs:
         with:
           name: pipeline-summary-${{ github.run_number }}
           path: pipeline-summary.txt
-```
+```bash
 
 2. Add a separate step showing REST API artifact access:
 
@@ -5501,7 +5568,7 @@ jobs:
           gh api \
             /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts \
             --jq '.artifacts[] | [.name, .size_in_bytes, .expires_at] | @tsv'
-```
+```bash
 
 3. Trigger the workflow and verify the aggregation job lists all artifact files.
 4. Verify the REST API response shows all artifacts with sizes and expiration dates.
@@ -5648,7 +5715,7 @@ jobs:
 echo '{"name":"demo","version":"1.0.0","dependencies":{"lodash":"^4.17.21"}}' > package.json
 echo '{}' > package-lock.json  # simplified for demo
 echo "requests==2.31.0" > requirements.txt
-```
+```bash
 
 2. Create `.github/workflows/caching-demo.yml`:
 
@@ -5720,7 +5787,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - run: pip install -r requirements.txt
-```
+```bash
 
 3. Push twice and compare run times on the second push (cache hit expected).
 4. Edit `requirements.txt` (add a new package), push again — observe cache miss and rebuild.
@@ -5816,7 +5883,7 @@ jobs:
 
       - name: Build
         run: gradle --version
-```
+```bash
 
 2. Trigger from a feature branch and observe that PRs can restore from the `main` branch cache.
 3. Add `-v2` to the manual cache key to bust the cache (simulating a dependency conflict).
@@ -6028,7 +6095,7 @@ jobs:
       - run: |
           echo "Deploy result: ${{ needs.deploy.result }}"
           echo "Version      : ${{ needs.prepare.outputs.version }}"
-```
+```bash
 
 2. Trigger via `workflow_dispatch` from `main`.
 3. Verify `deploy` job shows the correct version and environment.
@@ -6111,7 +6178,7 @@ jobs:
           echo "GITHUB_ENV  = available in subsequent STEPS of the same JOB"
           echo "GITHUB_OUTPUT = available in downstream JOBS via needs context"
           echo "GITHUB_PATH = modifies PATH for subsequent steps in same job"
-```
+```bash
 
 2. Trigger and verify the `APP_VERSION` and `BUILD_DATE` are available in the second step.
 3. Verify the multi-line `RELEASE_NOTES` variable preserves newlines.
@@ -6299,7 +6366,7 @@ jobs:
 
       - name: This step is skipped because previous failed
         run: echo "Never runs"
-```
+```bash
 
 4. Trigger via `workflow_dispatch` with debug logging enabled.
 5. Compare the log verbosity with and without `ACTIONS_STEP_DEBUG=true`.
@@ -6348,7 +6415,7 @@ jobs:
       run: echo "This fails due to the 4-space indent on steps"
     - name: Second step
        run: echo "Extra space before run causes mapping key error"
-```
+```bash
 
 2. Push this file and observe the workflow error in the Actions tab before it runs.
 3. Fix the indentation and push again.
@@ -6380,7 +6447,7 @@ jobs:
       - name: Cleanup after timeout
         if: always()
         run: echo "Cleanup runs regardless of timeout"
-```
+```bash
 
 5. Push and observe the hung step being killed at 1 minute with exit code 124.
 6. Verify the cleanup step still runs due to `if: always()`.
@@ -6524,7 +6591,7 @@ jobs:
 ```bash
 gh auth login
 # Or set GH_TOKEN environment variable
-```
+```bash
 
 2. Create `.github/workflows/api-automation.yml`:
 
@@ -6596,7 +6663,7 @@ jobs:
               --dir ./downloaded-artifacts
             ls -la ./downloaded-artifacts/
           fi
-```
+```bash
 
 3. Trigger via `workflow_dispatch` and review the output of each API query step.
 4. Run the same `gh` commands locally against your repository to practice.
@@ -6652,7 +6719,7 @@ jobs:
           echo "Debug mode   : ${{ inputs.debug-mode }}"
           echo "Triggered by API or manual dispatch"
           sleep 30  # Long enough to demonstrate cancellation
-```
+```bash
 
 2. Trigger the workflow via REST API using `gh`:
 
@@ -6674,7 +6741,7 @@ LATEST_RUN=$(gh run list \
   --jq '.[0].databaseId')
 
 echo "Triggered run ID: $LATEST_RUN"
-```
+```bash
 
 3. Cancel the run programmatically before `sleep 30` completes:
 
@@ -6682,7 +6749,7 @@ echo "Triggered run ID: $LATEST_RUN"
 # Cancel the running workflow
 gh run cancel $LATEST_RUN --repo OWNER/REPO
 echo "Run $LATEST_RUN cancelled"
-```
+```bash
 
 4. Verify the run shows as "Cancelled" in the Actions UI.
 
@@ -6873,7 +6940,7 @@ jobs:
         run: |
           echo "Deployment to ${{ inputs.environment }} complete"
           echo "Accessible at: https://${{ inputs.environment }}.example.com"
-```
+```bash
 
 2. Create `.github/workflows/main-pipeline.yml` (the caller workflow):
 
@@ -6924,7 +6991,7 @@ jobs:
       - run: |
           echo "Staging URL   : ${{ needs.deploy-staging.outputs.deploy-url }}"
           echo "Production URL: ${{ needs.deploy-production.outputs.deploy-url }}"
-```
+```bash
 
 3. Push to `main` and observe both deploy jobs calling the same reusable workflow.
 4. Verify the `deploy-url` output propagates from the reusable workflow back to the caller.
@@ -6973,20 +7040,20 @@ jobs:
     # Pass ALL caller secrets to the reusable workflow
     # Avoid if you want explicit control over which secrets are shared
     secrets: inherit
-```
+```bash
 
 2. Create a Git tag and push it:
 
 ```bash
 git tag -a v1.0.0 -m "Release 1.0.0"
 git push origin v1.0.0
-```
+```bash
 
 3. Update the caller to pin to the tag:
 
 ```yaml
     uses: ./.github/workflows/reusable-deploy.yml@v1.0.0
-```
+```bash
 
 4. Verify the tag-pinned call runs the exact version of the workflow at that tag.
 
@@ -7120,7 +7187,7 @@ git push origin v1.0.0
 
 ```bash
 mkdir -p .github/actions/setup-and-validate
-```
+```bash
 
 2. Create `.github/actions/setup-and-validate/action.yml`:
 
@@ -7198,7 +7265,7 @@ runs:
       if: inputs.run-tests == 'true'
       working-directory: ${{ inputs.working-directory }}
       run: npm test --if-present || echo "No tests defined"
-```
+```bash
 
 3. Create `.github/workflows/use-composite-action.yml` to test it:
 
@@ -7225,7 +7292,7 @@ jobs:
         run: |
           echo "Node installed: ${{ steps.setup.outputs.node-version-installed }}"
           echo "Validation    : ${{ steps.setup.outputs.validation-passed }}"
-```
+```bash
 
 4. Push and verify the composite action runs all its steps as part of the `build` job.
 
@@ -7262,7 +7329,7 @@ mkdir -p .github/actions/string-transformer
 cd .github/actions/string-transformer
 npm init -y
 npm install @actions/core
-```
+```bash
 
 2. Create `.github/actions/string-transformer/action.yml`:
 
@@ -7283,7 +7350,7 @@ outputs:
 runs:
   using: node20
   main: index.js
-```
+```bash
 
 3. Create `.github/actions/string-transformer/index.js`:
 
@@ -7311,7 +7378,7 @@ try {
 } catch (error) {
   core.setFailed(error.message);
 }
-```
+```bash
 
 4. Commit `index.js`, `action.yml`, and `node_modules` (necessary for JS actions without `ncc`).
 
@@ -7325,7 +7392,7 @@ try {
           transform: uppercase
 
       - run: echo "Result: ${{ steps.transform.outputs.result }}"
-```
+```bash
 
 **Success Criteria:**
 
@@ -7496,7 +7563,7 @@ runs:
       run: echo "version=$(node --version)" >> $GITHUB_OUTPUT
     - shell: bash
       run: npm ci
-```
+```bash
 
 2. Create `README.md` with usage documentation:
 
@@ -7536,7 +7603,7 @@ Sets up Node.js, installs dependencies, validates, and optionally runs tests.
           - id: setup
             uses: your-username/setup-and-validate-action@v1
           - run: echo "Node ${{ steps.setup.outputs.node-version-installed }}"
-```
+```bash
 
 3. Create the action test workflow in the action's repository:
 
@@ -7568,7 +7635,7 @@ jobs:
             echo "Invalid output format: $VERSION"
             exit 1
           fi
-```
+```bash
 
 4. Create the release and versioned tags:
 
@@ -7580,7 +7647,7 @@ git push origin v1.0.0
 # Create/move the floating major version tag
 git tag -fa v1 -m "Update v1 to v1.0.0"
 git push origin v1 --force
-```
+```bash
 
 **Success Criteria:**
 
@@ -7647,7 +7714,7 @@ jobs:
         run: |
           echo "## ${{ steps.version.outputs.tag }} — $(date +%Y-%m-%d)" >> CHANGELOG.md
           echo "See release notes: ${{ github.event.release.html_url }}" >> CHANGELOG.md
-```
+```bash
 
 **Success Criteria:**
 
@@ -7862,7 +7929,7 @@ jobs:
             echo "--- $dir ---"
             cat "${dir}runner-info.txt"
           done
-```
+```bash
 
 2. Push and observe the three parallel jobs in the Actions UI.
 3. Review that the artifact content differs per OS.
@@ -7923,7 +7990,7 @@ jobs:
 
       - name: Verify version
         run: node --version
-```
+```bash
 
 **Success Criteria:**
 
@@ -8077,7 +8144,7 @@ tar xzf ./actions-runner-linux-x64.tar.gz
 
 # Start the runner interactively (for testing)
 ./run.sh
-```
+```bash
 
 3. Verify the runner appears as **Idle** in the repository settings.
 
@@ -8116,7 +8183,7 @@ jobs:
           # Self-hosted runners reuse workspaces by default
           # Clean up to avoid stale files
           find . -name "*.tmp" -delete 2>/dev/null || true
-```
+```bash
 
 5. Trigger via `workflow_dispatch` and verify the job runs on your local machine.
 6. Check the runner's `_work/` directory to see the workspace.
@@ -8173,7 +8240,7 @@ jobs:
       - name: Deploy to production
         run: |
           echo "Production deployment from approved runner"
-```
+```bash
 
 5. Attempt to run the same workflow from a fork — verify it's blocked.
 
@@ -8315,7 +8382,7 @@ jobs:
   workflow-templates/
     node-ci.yml
     node-ci.properties.json
-```
+```bash
 
 3. Create `.github/workflow-templates/node-ci.yml`:
 
@@ -8360,7 +8427,7 @@ jobs:
         with:
           name: coverage-${{ matrix.node-version }}
           path: coverage/
-```
+```bash
 
 4. Create `.github/workflow-templates/node-ci.properties.json`:
 
@@ -8374,7 +8441,7 @@ jobs:
     "JavaScript"
   ]
 }
-```
+```bash
 
 5. Verify the template appears in a new repository under **Actions → New workflow**.
 
@@ -8412,7 +8479,7 @@ actions/*,
 github/*,
 docker/*@v2,
 aws-actions/configure-aws-credentials@*
-```
+```bash
 
 2. Query audit logs via GitHub API:
 
@@ -8446,7 +8513,7 @@ jobs:
               }
             }
           ' --jq '.data.organization.auditLog.nodes[]'
-```
+```bash
 
 3. Review what a `required_workflow` looks like when configured via the API:
 
@@ -8458,7 +8525,7 @@ jobs:
           # Required workflows are org-level policies
           gh api /orgs/YOUR_ORG/actions/required_workflows \
             --jq '.required_workflows[] | "\(.name): \(.workflow_file_path)"'
-```
+```bash
 
 **Success Criteria:**
 
@@ -8650,7 +8717,7 @@ jobs:
           gh pr comment ${{ github.event.number }} \
             --repo ${{ github.repository }} \
             --body "PR validation passed. Branch naming convention verified."
-```
+```bash
 
 2. Test by creating a PR from a branch named `feature/my-new-feature`.
 3. Test with a branch named `bad-branch-name` and observe the error.
@@ -8724,7 +8791,7 @@ jobs:
           echo "Version : ${{ needs.build.outputs.version }}"
           echo "Actor   : ${{ github.actor }}"
           echo "SHA     : ${{ github.sha }}"
-```
+```bash
 
 4. Push to `main` and verify:
    - Staging deploys automatically
@@ -8906,7 +8973,7 @@ jobs:
           echo "OIDC token acquired (length: ${#OIDC_TOKEN})"
           echo "Token payload (claims):"
           echo $OIDC_TOKEN | cut -d. -f2 | base64 -d 2>/dev/null | jq . || echo "Decode requires padding"
-```
+```bash
 
 2. To find the SHA for any action:
 
@@ -8916,7 +8983,7 @@ gh api repos/actions/checkout/git/ref/tags/v4 --jq '.object.sha'
 
 # Method 2: From the Actions Marketplace page — click the tag, copy SHA from URL
 # Method 3: From the repo commit history
-```
+```bash
 
 3. Configure OIDC trust (concept — requires cloud provider):
 
@@ -8927,7 +8994,7 @@ gh api repos/actions/checkout/git/ref/tags/v4 --jq '.object.sha'
 #
 # Trust policy condition:
 # "token.actions.githubusercontent.com:sub": "repo:ORG/REPO:ref:refs/heads/main"
-```
+```bash
 
 **Success Criteria:**
 
@@ -8984,14 +9051,14 @@ jobs:
         with:
           name: my-artifact
           path: my-artifact.tar.gz
-```
+```bash
 
 2. After the run, verify the attestation:
 
 ```bash
 gh attestation verify my-artifact.tar.gz \
   --repo OWNER/REPO
-```
+```bash
 
 3. Add a dependency scanning step:
 
@@ -9002,7 +9069,7 @@ gh attestation verify my-artifact.tar.gz \
           npm audit --audit-level=high || true
           # Or: using Trivy for container/filesystem scanning
           # trivy fs --exit-code 1 --severity HIGH,CRITICAL .
-```
+```bash
 
 **Success Criteria:**
 
@@ -9166,7 +9233,7 @@ jobs:
           START=$(cat /tmp/start.txt | cut -d: -f2)
           END=$(date +%s)
           echo "Total time: $((END - START)) seconds"
-```
+```bash
 
 2. Run and note the total time (~65+ seconds due to sequential steps).
 
@@ -9238,7 +9305,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "All checks passed — parallel execution complete"
-```
+```bash
 
 4. Compare run times: the optimized version runs lint and both test suites in parallel, reducing wall-clock time from ~65s to ~35s (setup + max of parallel jobs).
 
@@ -9301,7 +9368,7 @@ jobs:
           compression-level: 9
           # Fail if artifact is empty (catches build failures silently outputting nothing)
           if-no-files-found: error
-```
+```bash
 
 **Success Criteria:**
 
@@ -9482,7 +9549,7 @@ jobs:
         run: |
           echo "Matrix cell: ${{ matrix.os }} / Node ${{ matrix.node }}"
           echo "Status: ${{ job.status }}"
-```
+```bash
 
 2. Run and observe in the Actions UI:
    - All non-excluded combinations run
@@ -9566,7 +9633,7 @@ jobs:
       - name: Verify env var persists
         run: echo "Persisted: $MY_VAR"
         shell: bash
-```
+```bash
 
 2. Simulate a log analysis workflow that surfaces error patterns:
 
@@ -9582,7 +9649,7 @@ jobs:
           # 3. Slow step detection
           echo "Step completed in 145s" | awk '{ if ($NF > 60) print "SLOW:", $0 }'
         shell: bash
-```
+```bash
 
 **Success Criteria:**
 
@@ -9669,7 +9736,7 @@ jobs:
 
       - name: Verify recovery success
         run: echo "Recovery workflow executed successfully"
-```
+```bash
 
 **Success Criteria:**
 
@@ -9680,14 +9747,14 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Detected: Step failed, analyzing pattern...
 pattern=timeout
 Executing timeout recovery: splitting workload...
 Chunk 1 complete
 Chunk 2 complete
 Recovery workflow executed successfully
-```
+```bash
 
 **Troubleshooting:**
 
@@ -9765,7 +9832,7 @@ jobs:
           echo "ALERT: Dependency health check failed"
           echo "Failing service: ${{ steps.github-api.outputs.failing_service || steps.external.outputs.failing_service }}"
           # In production: send to monitoring system (Slack, PagerDuty, etc.)
-```
+```bash
 
 **Success Criteria:**
 
@@ -9776,11 +9843,11 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Health Check Results:
   GitHub API: healthy
   External API: healthy
-```
+```bash
 
 **Troubleshooting:**
 
@@ -9923,7 +9990,7 @@ jobs:
           echo "Team notification: Incident post-mortem prepared"
           echo "Next post-mortem review: [Scheduled time]"
           # In production: Send to Slack channel
-```
+```bash
 
 **Success Criteria:**
 
@@ -9935,12 +10002,12 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 INCIDENT ESCALATION
 Severity: high
 Notifying on-call engineer...
 Team notification: Incident post-mortem prepared
-```
+```bash
 
 **Troubleshooting:**
 
@@ -10093,7 +10160,7 @@ jobs:
 
           [View deployment logs](#) • [Rollback instructions](#)
           EOF
-```
+```bash
 
 2. Run the workflow and navigate to the Actions UI → Summary tab to see the formatted reports.
 
@@ -10128,7 +10195,7 @@ jobs:
 ![CI Status](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)
 ![CD Status](https://github.com/OWNER/REPO/actions/workflows/deploy.yml/badge.svg?branch=main)
 ![Security Scan](https://github.com/OWNER/REPO/actions/workflows/security.yml/badge.svg)
-```
+```bash
 
 2. Create an emergency status check workflow:
 
@@ -10174,7 +10241,7 @@ jobs:
           EOF
         env:
           GH_TOKEN: ${{ github.token }}
-```
+```bash
 
 **Success Criteria:**
 
@@ -10260,16 +10327,18 @@ jobs:
 
           ## Performance Chart
           ```mermaid
+
           pie title Test Results
             "Passed (42)" : 42
             "Failed (2)" : 2
             "Skipped (1)" : 1
-          ```
+
+          ```bash
 
           ---
           **Generated at:** $(date -u +%Y-%m-%dT%H:%M:%SZ)
           EOF
-```
+```bash
 
 **Success Criteria:**
 
@@ -10380,7 +10449,7 @@ jobs:
           | Pass Rate | $(( 100 * ${{ env.total_passed }} / ${{ env.total_tests }} ))% |
 
           EOF
-```
+```bash
 
 **Success Criteria:**
 
@@ -10391,13 +10460,13 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Aggregated Test Dashboard
 Total Test Time: 83s
 Total Tests: 38
 Total Passed: 37
 Pass Rate: 97%
-```
+```bash
 
 **Troubleshooting:**
 
@@ -10490,7 +10559,7 @@ jobs:
           echo "Total workflows run: 127"
           echo "Average duration: 142 seconds"
           echo "Success rate: 96.8%"
-```
+```bash
 
 **Success Criteria:**
 
@@ -10502,13 +10571,13 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Metrics successfully exported to BI system
 Generating weekly workflow report...
 Total workflows run: 127
 Average duration: 142 seconds
 Success rate: 96.8%
-```
+```bash
 
 **Troubleshooting:**
 
@@ -10679,7 +10748,7 @@ jobs:
           - Status: ${{ job.status }}
           - Actor: ${{ github.actor }}
           EOF
-```
+```bash
 
 3. Run the workflow and verify in the Actions UI:
    - Dependency graph shows test → build → deploy
@@ -10841,7 +10910,7 @@ jobs:
           cd infrastructure/${{ matrix.environment }}
           terraform output -json > outputs.json
           echo "Outputs saved"
-```
+```bash
 
 **Success Criteria:**
 
@@ -10853,13 +10922,13 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Terraform initialized
 Validation passed
 Plan: 5 to add, 2 to change, 1 to destroy
 Applied successfully
 Outputs saved
-```
+```bash
 
 **Troubleshooting:**
 
@@ -10964,7 +11033,7 @@ jobs:
         run: |
           echo "Drift remediation completed"
           echo "Resources resynchronized to desired state"
-```
+```bash
 
 **Success Criteria:**
 
@@ -10976,12 +11045,12 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Checking for drift...
 Changes detected in infrastructure
 Drift remediation completed
 Resources resynchronized to desired state
-```
+```bash
 
 **Troubleshooting:**
 
@@ -11102,7 +11171,7 @@ jobs:
           echo "Deployment completed and verified"
           echo "Deployment timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           echo "Deployed by: ${{ github.actor }}"
-```
+```bash
 
 **Success Criteria:**
 
@@ -11115,7 +11184,7 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Deploying to dev...
 Dev environment healthy
 Deploying to staging...
@@ -11123,7 +11192,7 @@ Staging tests passed
 Deploying to production...
 Production environment healthy
 Deployment completed and verified
-```
+```bash
 
 **Troubleshooting:**
 
@@ -11210,7 +11279,7 @@ Deployment completed and verified
 - [ ] Review sections:
 - [ ] Rebuild workflow for:
 - [ ] Re-quiz on:
-```
+```bash
 
 5. After scoring, identify any domain scoring below 70% — those are your priority review areas before the next mock or the actual exam.
 
@@ -11274,7 +11343,7 @@ jobs:
       - run: echo "Key length ${#API_KEY}"
         env:
           API_KEY: ${{ secrets.API_KEY }}
-```
+```bash
 
 **Time Estimate:** 15 minutes per weak area × number of weak areas
 
@@ -11373,7 +11442,7 @@ jobs:
           echo "Reverting 100% traffic to blue environment"
           echo "Green environment stopped"
           echo "Rollback completed at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-```
+```bash
 
 **Success Criteria:**
 
@@ -11385,14 +11454,14 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Deploying to green environment...
 Running smoke tests on green...
 Executing immediate blue-green cutover...
 100% traffic → green environment
 Monitoring deployment metrics...
 Deployment stable
-```
+```bash
 
 **Troubleshooting:**
 
@@ -11503,7 +11572,7 @@ jobs:
               repo: context.repo.repo,
               body: '🚨 Automatic rollback executed due to health check failure'
             });
-```
+```bash
 
 **Success Criteria:**
 
@@ -11516,14 +11585,14 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Running post-deployment health checks...
 Error rate: 3%
 Health check failed
 Initiating automatic rollback...
 Rolling back to previous stable version...
 Rollback successful
-```
+```bash
 
 **Troubleshooting:**
 
@@ -11665,7 +11734,7 @@ jobs:
           echo "✓ Feature disabled for all users"
           echo "✓ Error rate returned to normal"
           echo "✓ Service stable"
-```
+```bash
 
 **Success Criteria:**
 
@@ -11678,14 +11747,14 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Enabling new_checkout_flow for 5% of users...
 Metrics stable at 5% rollout
 Expanding to 25% of users...
 Metrics stable at 25% rollout
 Rolling out to 100% of users...
 Rollout complete and stable
-```
+```bash
 
 **Troubleshooting:**
 
@@ -11798,7 +11867,7 @@ Rollout complete and stable
 6. Composite actions: cannot use `env:` at action level (only at step level)
 7. Matrix `include`: adds a new cell, doesn't modify existing ones
 8. `cancel-in-progress: false` recommended for production deployments
-```
+```bash
 
 **Success Criteria:**
 
@@ -11957,7 +12026,7 @@ jobs:
           }
           EOF
           cat exam-results.json
-```
+```bash
 
 **Success Criteria:**
 
@@ -11969,13 +12038,13 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Exam started: 2026-04-19T14:00:00Z
 Total time used: 118 minutes
 Time remaining: 2 minutes
 Score estimate: 86%
 Time management: Excellent
-```
+```bash
 
 **Troubleshooting:**
 
@@ -12109,7 +12178,7 @@ jobs:
           echo "  ✓ Score improvement of at least 5% on second attempt"
           echo "  ✓ Confidence level 8/10 or higher"
           echo "  ✓ Ready to schedule certification exam"
-```
+```bash
 
 **Success Criteria:**
 
@@ -12121,7 +12190,7 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Knowledge Gap Report:
 🔴 Critical Gaps: Section 10 (78%), Section 15 (76%)
 🟡 Areas for Improvement: Section 13 (82%), Section 9 (80%)
@@ -12129,7 +12198,7 @@ Knowledge Gap Report:
 
 Recommended study time: 5-7 hours
 Expected final score: 92-95%
-```
+```bash
 
 **Troubleshooting:**
 
@@ -12305,7 +12374,7 @@ jobs:
           echo "  ✓ Answer elimination: Help narrow down correct answers"
           echo "  ✓ Knowledge gaps: Focus study on weak areas"
           echo "  ✓ Confidence: Build through practice and preparation"
-```
+```bash
 
 **Success Criteria:**
 
@@ -12318,13 +12387,13 @@ jobs:
 
 **Expected Output:**
 
-```
+```bash
 Exam Patterns Learned
 Time Allocation: 60/30/30 strategy
 Answer Elimination: Practice 5-10 questions using technique
 Pre-exam day: All checklist items completed
 Exam day protocol: Ready to execute
-```
+```bash
 
 **Troubleshooting:**
 
@@ -12431,7 +12500,7 @@ Next Review: _________
 
 Notes:
 _________
-```
+```bash
 
 ---
 
