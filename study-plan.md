@@ -2,45 +2,45 @@
 
 - [GitHub Actions GH-200 Certification - 60-Hour Study Plan](#github-actions-gh-200-certification---60-hour-study-plan)
   - [Study Plan Overview](#study-plan-overview)
-  - [Week 1: Foundations \& Core Concepts](#week-1-foundations--core-concepts)
-    - [Section 1: GitHub Actions Fundamentals \& Tooling (2 hrs)](#section-1-github-actions-fundamentals--tooling-2-hrs)
-    - [Section 2: Understanding GitHub Contexts - Part 1 (2 hrs)](#section-2-understanding-github-contexts---part-1-2-hrs)
-    - [Section 3: Understanding GitHub Contexts - Part 2 (2 hrs)](#section-3-understanding-github-contexts---part-2-2-hrs)
-    - [Section 4: YAML Syntax \& Workflow File Structure (2 hrs)](#section-4-yaml-syntax--workflow-file-structure-2-hrs)
-  - [Week 2: Workflow Triggers \& Events](#week-2-workflow-triggers--events)
-    - [Section 5: Workflow Trigger Events - Part 1 (2 hrs)](#section-5-workflow-trigger-events---part-1-2-hrs)
-    - [Section 6: Workflow Trigger Events - Part 2 (2 hrs)](#section-6-workflow-trigger-events---part-2-2-hrs)
-    - [Section 7: Environment \& Runtime Configuration (2 hrs)](#section-7-environment--runtime-configuration-2-hrs)
-    - [Section 8: Environment Protection Rules \& Secrets (2 hrs)](#section-8-environment-protection-rules--secrets-2-hrs)
-  - [Week 3: Workflow Features \& Data Flow](#week-3-workflow-features--data-flow)
-    - [Section 9: Jobs, Steps \& Conditional Logic (2 hrs)](#section-9-jobs-steps--conditional-logic-2-hrs)
-    - [Section 10: Job Strategy \& Matrix (2 hrs)](#section-10-job-strategy--matrix-2-hrs)
-    - [Section 11: Service Containers \& Dependencies (2 hrs)](#section-11-service-containers--dependencies-2-hrs)
-    - [Section 12: Workflow Artifacts - Storage \& Retrieval (2 hrs)](#section-12-workflow-artifacts---storage--retrieval-2-hrs)
-    - [Section 13: Workflow Caching - Performance \& Security (2 hrs)](#section-13-workflow-caching---performance--security-2-hrs)
-  - [Week 4: Advanced Workflow Features](#week-4-advanced-workflow-features)
-    - [Section 14: Inter-Job Communication \& Outputs (2 hrs)](#section-14-inter-job-communication--outputs-2-hrs)
-    - [Section 15: Workflow Debugging \& Troubleshooting (2 hrs)](#section-15-workflow-debugging--troubleshooting-2-hrs)
-    - [Section 16: GitHub Workflow REST API (2 hrs)](#section-16-github-workflow-rest-api-2-hrs)
-  - [Week 5: Reusable Workflows \& Actions](#week-5-reusable-workflows--actions)
-    - [Section 17: Reusable Workflows \& Workflow Sharing (2 hrs)](#section-17-reusable-workflows--workflow-sharing-2-hrs)
-    - [Section 18: Custom Actions - Types \& Structure (2 hrs)](#section-18-custom-actions---types--structure-2-hrs)
-    - [Section 19: Custom Actions - Distribution \& Publishing (2 hrs)](#section-19-custom-actions---distribution--publishing-2-hrs)
-  - [Week 6: Runners \& Enterprise](#week-6-runners--enterprise)
-    - [Section 20: GitHub-Hosted Runners (2 hrs)](#section-20-github-hosted-runners-2-hrs)
-    - [Section 21: Self-Hosted Runners \& Configuration (2 hrs)](#section-21-self-hosted-runners--configuration-2-hrs)
-    - [Section 22: Enterprise-Level Management (2 hrs)](#section-22-enterprise-level-management-2-hrs)
-  - [Week 7: Security \& Optimization](#week-7-security--optimization)
-    - [Section 23: GitHub Actions Security Best Practices - Part 1 (2 hrs)](#section-23-github-actions-security-best-practices---part-1-2-hrs)
-    - [Section 24: GitHub Actions Security Best Practices - Part 2 (2 hrs)](#section-24-github-actions-security-best-practices---part-2-2-hrs)
-    - [Section 25: Workflow Performance Optimization (2 hrs)](#section-25-workflow-performance-optimization-2-hrs)
-    - [Section 26: Troubleshooting \& Common Failures - Part 2 (2 hrs)](#section-26-troubleshooting--common-failures---part-2-2-hrs)
-  - [Week 8: Job Summaries \& Advanced Features](#week-8-job-summaries--advanced-features)
-    - [Section 27: Job Summaries \& Workflow Status (2 hrs)](#section-27-job-summaries--workflow-status-2-hrs)
-    - [Section 28: Comprehensive Practice Assessment (2 hrs)](#section-28-comprehensive-practice-assessment-2-hrs)
-  - [Week 9: Final Review \& Assessment](#week-9-final-review--assessment)
-    - [Section 29: Mock Exam - Full Practice Test (2 hrs)](#section-29-mock-exam---full-practice-test-2-hrs)
-    - [Section 30: Final Consolidation \& Exam Prep (2 hrs)](#section-30-final-consolidation--exam-prep-2-hrs)
+  - [🏗️ Week 1: Foundations \& Core Concepts](#️-week-1-foundations--core-concepts)
+    - [🔧 Section 1: GitHub Actions Fundamentals \& Tooling (2 hrs)](#-section-1-github-actions-fundamentals--tooling-2-hrs)
+    - [🔍 Section 2: Understanding GitHub Contexts - Part 1 (2 hrs)](#-section-2-understanding-github-contexts---part-1-2-hrs)
+    - [🔍 Section 3: Understanding GitHub Contexts - Part 2 (2 hrs)](#-section-3-understanding-github-contexts---part-2-2-hrs)
+    - [📝 Section 4: YAML Syntax \& Workflow File Structure (2 hrs)](#-section-4-yaml-syntax--workflow-file-structure-2-hrs)
+  - [⚡ Week 2: Workflow Triggers \& Events](#-week-2-workflow-triggers--events)
+    - [⚡ Section 5: Workflow Trigger Events - Part 1 (2 hrs)](#-section-5-workflow-trigger-events---part-1-2-hrs)
+    - [⚡ Section 6: Workflow Trigger Events - Part 2 (2 hrs)](#-section-6-workflow-trigger-events---part-2-2-hrs)
+    - [⚙️ Section 7: Environment \& Runtime Configuration (2 hrs)](#️-section-7-environment--runtime-configuration-2-hrs)
+    - [🔐 Section 8: Environment Protection Rules \& Secrets (2 hrs)](#-section-8-environment-protection-rules--secrets-2-hrs)
+  - [🔄 Week 3: Workflow Features \& Data Flow](#-week-3-workflow-features--data-flow)
+    - [🔀 Section 9: Jobs, Steps \& Conditional Logic (2 hrs)](#-section-9-jobs-steps--conditional-logic-2-hrs)
+    - [🔢 Section 10: Job Strategy \& Matrix (2 hrs)](#-section-10-job-strategy--matrix-2-hrs)
+    - [🐳 Section 11: Service Containers \& Dependencies (2 hrs)](#-section-11-service-containers--dependencies-2-hrs)
+    - [📦 Section 12: Workflow Artifacts - Storage \& Retrieval (2 hrs)](#-section-12-workflow-artifacts---storage--retrieval-2-hrs)
+    - [💨 Section 13: Workflow Caching - Performance \& Security (2 hrs)](#-section-13-workflow-caching---performance--security-2-hrs)
+  - [🚀 Week 4: Advanced Workflow Features](#-week-4-advanced-workflow-features)
+    - [📡 Section 14: Inter-Job Communication \& Outputs (2 hrs)](#-section-14-inter-job-communication--outputs-2-hrs)
+    - [🐛 Section 15: Workflow Debugging \& Troubleshooting (2 hrs)](#-section-15-workflow-debugging--troubleshooting-2-hrs)
+    - [🌐 Section 16: GitHub Workflow REST API (2 hrs)](#-section-16-github-workflow-rest-api-2-hrs)
+  - [♻️ Week 5: Reusable Workflows \& Actions](#️-week-5-reusable-workflows--actions)
+    - [♻️ Section 17: Reusable Workflows \& Workflow Sharing (2 hrs)](#️-section-17-reusable-workflows--workflow-sharing-2-hrs)
+    - [🧩 Section 18: Custom Actions - Types \& Structure (2 hrs)](#-section-18-custom-actions---types--structure-2-hrs)
+    - [📢 Section 19: Custom Actions - Distribution \& Publishing (2 hrs)](#-section-19-custom-actions---distribution--publishing-2-hrs)
+  - [🖥️ Week 6: Runners \& Enterprise](#️-week-6-runners--enterprise)
+    - [🏃 Section 20: GitHub-Hosted Runners (2 hrs)](#-section-20-github-hosted-runners-2-hrs)
+    - [🖥️ Section 21: Self-Hosted Runners \& Configuration (2 hrs)](#️-section-21-self-hosted-runners--configuration-2-hrs)
+    - [🏢 Section 22: Enterprise-Level Management (2 hrs)](#-section-22-enterprise-level-management-2-hrs)
+  - [🔒 Week 7: Security \& Optimization](#-week-7-security--optimization)
+    - [🛡️ Section 23: GitHub Actions Security Best Practices - Part 1 (2 hrs)](#️-section-23-github-actions-security-best-practices---part-1-2-hrs)
+    - [🔒 Section 24: GitHub Actions Security Best Practices - Part 2 (2 hrs)](#-section-24-github-actions-security-best-practices---part-2-2-hrs)
+    - [⚡ Section 25: Workflow Performance Optimization (2 hrs)](#-section-25-workflow-performance-optimization-2-hrs)
+    - [🔦 Section 26: Troubleshooting \& Common Failures - Part 2 (2 hrs)](#-section-26-troubleshooting--common-failures---part-2-2-hrs)
+  - [📊 Week 8: Job Summaries \& Advanced Features](#-week-8-job-summaries--advanced-features)
+    - [📊 Section 27: Job Summaries \& Workflow Status (2 hrs)](#-section-27-job-summaries--workflow-status-2-hrs)
+    - [📝 Section 28: Comprehensive Practice Assessment (2 hrs)](#-section-28-comprehensive-practice-assessment-2-hrs)
+  - [🎯 Week 9: Final Review \& Assessment](#-week-9-final-review--assessment)
+    - [📋 Section 29: Mock Exam - Full Practice Test (2 hrs)](#-section-29-mock-exam---full-practice-test-2-hrs)
+    - [🎓 Section 30: Final Consolidation \& Exam Prep (2 hrs)](#-section-30-final-consolidation--exam-prep-2-hrs)
   - [🎓 Curriculum Complete](#-curriculum-complete)
   - [Study Strategy \& Tips](#study-strategy--tips)
     - [Daily Checklist](#daily-checklist)
@@ -66,9 +66,9 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 ---
 
-## Week 1: Foundations & Core Concepts
+## 🏗️ Week 1: Foundations & Core Concepts
 
-### Section 1: GitHub Actions Fundamentals & Tooling (2 hrs)
+### 🔧 Section 1: GitHub Actions Fundamentals & Tooling (2 hrs)
 
 **Topics:** [01-GitHub-Actions-VS-Code-Extension.md](01-GitHub-Actions-VS-Code-Extension.md)
 **Overview:**
@@ -87,7 +87,7 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 
 
 <details>
-<summary>Scenario 1-A: Install & Configure the VS Code GitHub Actions Extension</summary>
+<summary>🔧 Scenario 1-A: Install & Configure the VS Code GitHub Actions Extension</summary>
 
 
 **Objective:** Install the GitHub Actions VS Code extension, verify YAML IntelliSense activates, and confirm schema validation catches errors.
@@ -150,7 +150,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 ---
 
 <details>
-<summary>Scenario 1-B: Validate a Workflow Locally with `act`</summary>
+<summary>✅ Scenario 1-B: Validate a Workflow Locally with `act`</summary>
 
 
 **Objective:** Install the `act` CLI and run a GitHub Actions workflow on your local machine without pushing to GitHub.
@@ -213,7 +213,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 ---
 
 <details>
-<summary>Scenario 1-C: Advanced Workflow Validation — Linting and Schema Enforcement</summary>
+<summary>🔍 Scenario 1-C: Advanced Workflow Validation — Linting and Schema Enforcement</summary>
 
 
 **Objective:** Set up automated workflow validation beyond the VS Code extension using actionlint, schema linters, and pre-commit hooks to catch errors before pushing to GitHub.
@@ -308,7 +308,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 ---
 
 <details>
-<summary>Scenario 1-D: Troubleshooting Local Workflow Validation — Diagnosing and Fixing Common Issues</summary>
+<summary>🐛 Scenario 1-D: Troubleshooting Local Workflow Validation — Diagnosing and Fixing Common Issues</summary>
 
 
 **Objective:** Diagnose and fix common problems when using the VS Code extension, `act`, and actionlint. Learn systematic troubleshooting methodology.
@@ -407,7 +407,7 @@ $ act push
 ---
 
 <details>
-<summary>Scenario 1-E: Enterprise-Scale Setup — Shared IDE Configuration and Team Workflow Templates</summary>
+<summary>🏢 Scenario 1-E: Enterprise-Scale Setup — Shared IDE Configuration and Team Workflow Templates</summary>
 
 
 **Objective:** Establish organizational standards for GitHub Actions local development: shared VS Code settings, standardized `.actrc` configuration, and reusable workflow templates enforced across the team.
@@ -574,7 +574,7 @@ $ act push
 
 ---
 
-### Section 2: Understanding GitHub Contexts - Part 1 (2 hrs)
+### 🔍 Section 2: Understanding GitHub Contexts - Part 1 (2 hrs)
 
 **Topics:** [02-Contextual-Information.md](02-Contextual-Information.md) (first half)
 **Overview:**
@@ -593,7 +593,7 @@ $ act push
 
 
 <details>
-<summary>Scenario 2-A: Explore the `github` Context in a Workflow</summary>
+<summary>🔍 Scenario 2-A: Explore the `github` Context in a Workflow</summary>
 
 
 **Objective:** Write a workflow that prints key `github` context values to understand what information is available at runtime, and observe how these values differ across trigger types.
@@ -670,7 +670,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 2-B: Secrets Context — Masking and Limitations</summary>
+<summary>🔐 Scenario 2-B: Secrets Context — Masking and Limitations</summary>
 
 
 **Objective:** Add a repository secret, use it in a workflow, and observe how GitHub automatically masks the value in logs to prevent accidental exposure.
@@ -744,7 +744,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 2-C: Advanced Context Interpolation — Nested Objects and Conditional Logic</summary>
+<summary>🧩 Scenario 2-C: Advanced Context Interpolation — Nested Objects and Conditional Logic</summary>
 
 
 **Objective:** Work with complex `github` context nested properties (event payload data), and implement multi-branch conditional logic using context values.
@@ -869,7 +869,7 @@ This should run on PR labeled 'bug' OR any new issue
 ---
 
 <details>
-<summary>Scenario 2-D: Troubleshooting Context Mismatches — Diagnosing Hidden Context Issues</summary>
+<summary>🐛 Scenario 2-D: Troubleshooting Context Mismatches — Diagnosing Hidden Context Issues</summary>
 
 
 **Objective:** Identify and fix scenarios where context values don't match expectations, including permission issues, event payload mismatches, and scope problems.
@@ -1013,7 +1013,7 @@ This should run on PR labeled 'bug' OR any new issue
 ---
 
 <details>
-<summary>Scenario 2-E: Enterprise Secret Management — Rotation, Organizational Secrets, and Protected Context Handling</summary>
+<summary>🏢 Scenario 2-E: Enterprise Secret Management — Rotation, Organizational Secrets, and Protected Context Handling</summary>
 
 
 **Objective:** Implement enterprise-grade secret management: using organizational secrets, automating secret rotation workflows, and ensuring secrets are accessed only by authorized workflows.
@@ -1196,7 +1196,7 @@ Secret rotation logged:
 
 ---
 
-### Section 3: Understanding GitHub Contexts - Part 2 (2 hrs)
+### 🔍 Section 3: Understanding GitHub Contexts - Part 2 (2 hrs)
 
 **Topics:** [02-Contextual-Information.md](02-Contextual-Information.md) (second half) + [03-Context-Availability-Reference.md](03-Context-Availability-Reference.md)
 **Overview:**
@@ -1216,7 +1216,7 @@ Secret rotation logged:
 
 
 <details>
-<summary>Scenario 3-A: Pass Data Between Jobs Using the `needs` Context</summary>
+<summary>📡 Scenario 3-A: Pass Data Between Jobs Using the `needs` Context</summary>
 
 
 **Objective:** Create a two-job workflow where the `deploy` job consumes structured outputs produced by the `build` job via the `needs` context.
@@ -1303,7 +1303,7 @@ Triggered by      : your-username
 ---
 
 <details>
-<summary>Scenario 3-B: Implement Conditional Steps Using the `if:` Expression</summary>
+<summary>🔀 Scenario 3-B: Implement Conditional Steps Using the `if:` Expression</summary>
 
 
 **Objective:** Use `if:` expressions with `github` context values so that individual steps execute only in appropriate trigger scenarios.
@@ -1378,7 +1378,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 3-C: Advanced Conditional Logic — Nested Conditions, Status Checks, and Multi-Output Routing</summary>
+<summary>🧠 Scenario 3-C: Advanced Conditional Logic — Nested Conditions, Status Checks, and Multi-Output Routing</summary>
 
 
 **Objective:** Master complex conditional expressions using GitHub's built-in functions (`success()`, `failure()`, `cancelled()`, `always()`) and multi-branch routing based on step outputs and job status.
@@ -1516,7 +1516,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 3-D: Troubleshooting Conditional Failures — Why Conditions Don't Fire and How to Debug Them</summary>
+<summary>🐛 Scenario 3-D: Troubleshooting Conditional Failures — Why Conditions Don't Fire and How to Debug Them</summary>
 
 
 **Objective:** Diagnose and fix scenarios where conditions silently fail, misfire, or evaluate unexpectedly.
@@ -1685,7 +1685,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 3-E: Enterprise-Scale Conditional Routing — Multi-Environment Deployments and Self-Healing Workflows</summary>
+<summary>🏢 Scenario 3-E: Enterprise-Scale Conditional Routing — Multi-Environment Deployments and Self-Healing Workflows</summary>
 
 
 **Objective:** Design enterprise-grade workflows that intelligently route deployments across multiple environments based on branch, approval status, and health checks, with automatic rollback on failure.
@@ -1880,7 +1880,7 @@ jobs:
 
 ---
 
-### Section 4: YAML Syntax & Workflow File Structure (2 hrs)
+### 📝 Section 4: YAML Syntax & Workflow File Structure (2 hrs)
 
 **Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md)
 **Overview:**
@@ -1901,7 +1901,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 4-A: Build a Workflow from Scratch with Correct Structure</summary>
+<summary>🏗️ Scenario 4-A: Build a Workflow from Scratch with Correct Structure</summary>
 
 
 **Objective:** Author a complete, valid workflow file from memory, correctly using every top-level key and understanding the relationship between `on`, `env`, `defaults`, `concurrency`, and `jobs`.
@@ -2002,7 +2002,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 4-B: YAML Anchors and Fixing Common Syntax Errors</summary>
+<summary>🔧 Scenario 4-B: YAML Anchors and Fixing Common Syntax Errors</summary>
 
 
 **Objective:** Use YAML anchors and merge keys to eliminate step duplication, then practice identifying and fixing the five most common GitHub Actions YAML errors.
@@ -2122,7 +2122,7 @@ Fix: remove the duplicate `runs-on:` line.
 ---
 
 <details>
-<summary>Scenario 4-C: Multi-File Workflow Composition and DRY Principles — Reusable Workflow Components</summary>
+<summary>♻️ Scenario 4-C: Multi-File Workflow Composition and DRY Principles — Reusable Workflow Components</summary>
 
 
 **Objective:** Organize complex workflows using composition patterns: splitting large workflows into smaller reusable units, using defaults, and eliminating duplication.
@@ -2305,7 +2305,7 @@ Fix: remove the duplicate `runs-on:` line.
 ---
 
 <details>
-<summary>Scenario 4-D: Migrating Legacy Workflow to Modern YAML Syntax and Validating Structure</summary>
+<summary>🔄 Scenario 4-D: Migrating Legacy Workflow to Modern YAML Syntax and Validating Structure</summary>
 
 
 **Objective:** Take an outdated or poorly-structured workflow and modernize it using current best practices, then validate it with tooling.
@@ -2481,7 +2481,7 @@ Fix: remove the duplicate `runs-on:` line.
 ---
 
 <details>
-<summary>Scenario 4-E: Programmatically Generate Workflow YAML from Schema and Validation Automation</summary>
+<summary>⚙️ Scenario 4-E: Programmatically Generate Workflow YAML from Schema and Validation Automation</summary>
 
 
 **Objective:** Build a system to generate workflow files from a schema definition, enabling consistency, validation, and rapid workflow creation.
@@ -2725,9 +2725,9 @@ Fix: remove the duplicate `runs-on:` line.
 
 ---
 
-## Week 2: Workflow Triggers & Events
+## ⚡ Week 2: Workflow Triggers & Events
 
-### Section 5: Workflow Trigger Events - Part 1 (2 hrs)
+### ⚡ Section 5: Workflow Trigger Events - Part 1 (2 hrs)
 
 **Topics:** [05-Workflow-Trigger-Events.md](05-Workflow-Trigger-Events.md) (first half)
 **Overview:**
@@ -2747,7 +2747,7 @@ Fix: remove the duplicate `runs-on:` line.
 
 
 <details>
-<summary>Scenario 5-A: Configure Push Triggers with Branch and Path Filtering</summary>
+<summary>⚡ Scenario 5-A: Configure Push Triggers with Branch and Path Filtering</summary>
 
 
 **Objective:** Create a workflow that triggers only when relevant files are changed on relevant branches, preventing unnecessary CI runs on documentation-only commits.
@@ -2830,7 +2830,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 5-B: Create a `workflow_dispatch` with Typed and Validated Inputs</summary>
+<summary>🎮 Scenario 5-B: Create a `workflow_dispatch` with Typed and Validated Inputs</summary>
 
 
 **Objective:** Build a manually-triggered workflow with `choice`, `boolean`, and `string` typed inputs, including server-side validation logic.
@@ -2944,7 +2944,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 5-C: Complex Trigger Combinations — Paths, Branches, Tags, and Ignore Filters</summary>
+<summary>🔀 Scenario 5-C: Complex Trigger Combinations — Paths, Branches, Tags, and Ignore Filters</summary>
 
 
 **Objective:** Combine multiple trigger filters (branches, paths, tags, ignore patterns) to create sophisticated routing workflows that run only under specific conditions.
@@ -3047,7 +3047,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 5-D: Troubleshooting Trigger Events — Why Workflows Don't Fire</summary>
+<summary>🐛 Scenario 5-D: Troubleshooting Trigger Events — Why Workflows Don't Fire</summary>
 
 
 **Objective:** Diagnose and fix workflows that don't trigger when expected using event inspection and testing.
@@ -3170,7 +3170,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 5-E: Enterprise Multi-Trigger Orchestration — Cross-Repository Event Coordination</summary>
+<summary>🏢 Scenario 5-E: Enterprise Multi-Trigger Orchestration — Cross-Repository Event Coordination</summary>
 
 
 **Objective:** Build sophisticated, organization-scale workflows that coordinate across multiple repositories using webhook events and API-driven triggers.
@@ -3290,7 +3290,7 @@ jobs:
 
 ---
 
-### Section 6: Workflow Trigger Events - Part 2 (2 hrs)
+### ⚡ Section 6: Workflow Trigger Events - Part 2 (2 hrs)
 
 **Topics:** [05-Workflow-Trigger-Events.md](05-Workflow-Trigger-Events.md) (second half)
 **Overview:**
@@ -3310,7 +3310,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 6-A: Advanced `paths-ignore` and Tag-Based Triggers</summary>
+<summary>🏷️ Scenario 6-A: Advanced `paths-ignore` and Tag-Based Triggers</summary>
 
 
 **Objective:** Combine `paths-ignore`, tag triggers, and `workflow_run` to build a layered trigger strategy that fires at the right times without redundant runs.
@@ -3406,7 +3406,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 6-B: Pass `workflow_dispatch` Inputs to a Reusable Workflow</summary>
+<summary>📤 Scenario 6-B: Pass `workflow_dispatch` Inputs to a Reusable Workflow</summary>
 
 
 **Objective:** Create a caller workflow that accepts `workflow_dispatch` inputs and forwards them to a reusable `workflow_call` workflow without redefining each input twice.
@@ -3507,7 +3507,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 6-C: Advanced Repository Dispatch — Custom Event Types and Complex Payloads</summary>
+<summary>📨 Scenario 6-C: Advanced Repository Dispatch — Custom Event Types and Complex Payloads</summary>
 
 
 **Objective:** Master `repository_dispatch` event type for triggering workflows programmatically with rich payloads, enabling CI orchestration from scripts or external systems.
@@ -3589,7 +3589,7 @@ curl -X POST \
 ---
 
 <details>
-<summary>Scenario 6-D: Debugging Event Trigger Failures in Monorepo — Path-Based Workflow Selection</summary>
+<summary>🐛 Scenario 6-D: Debugging Event Trigger Failures in Monorepo — Path-Based Workflow Selection</summary>
 
 
 **Objective:** Diagnose and fix workflows in monorepo structures where path changes should trigger specific workflows but fail silently.
@@ -3676,7 +3676,7 @@ git diff HEAD~1 --name-only | grep -E "^frontend/" && echo "Frontend trigger"
 ---
 
 <details>
-<summary>Scenario 6-E: Enterprise Event Coordination — Multi-Trigger Gating and Approval Chains</summary>
+<summary>🏢 Scenario 6-E: Enterprise Event Coordination — Multi-Trigger Gating and Approval Chains</summary>
 
 
 **Objective:** Build sophisticated workflows combining multiple trigger types with approvals and conditional routing for enterprise-safe deployments.
@@ -3801,7 +3801,7 @@ jobs:
 
 ---
 
-### Section 7: Environment & Runtime Configuration (2 hrs)
+### ⚙️ Section 7: Environment & Runtime Configuration (2 hrs)
 
 **Topics:** [06-Custom-Environment-Variables.md](06-Custom-Environment-Variables.md), [07-Default-Environment-Variables.md](07-Default-Environment-Variables.md)
 **Overview:**
@@ -3823,7 +3823,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 7-A: Environment Variable Scope and Precedence</summary>
+<summary>⚙️ Scenario 7-A: Environment Variable Scope and Precedence</summary>
 
 
 **Objective:** Demonstrate that step-level `env:` overrides job-level, which overrides workflow-level, and verify the exact precedence order in logs.
@@ -3889,7 +3889,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 7-B: Dynamic Variables with `GITHUB_ENV` and Default Environment Variables</summary>
+<summary>🔄 Scenario 7-B: Dynamic Variables with `GITHUB_ENV` and Default Environment Variables</summary>
 
 
 **Objective:** Use `$GITHUB_ENV` to set environment variables dynamically in one step and consume them in subsequent steps, and catalog the most important default GitHub-provided environment variables.
@@ -3975,7 +3975,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 7-C: Platform-Specific Paths and Cross-Platform Configuration</summary>
+<summary>🖥️ Scenario 7-C: Platform-Specific Paths and Cross-Platform Configuration</summary>
 
 
 **Objective:** Handle environment variable differences across platforms (Linux, macOS, Windows) for truly portable workflows.
@@ -4040,7 +4040,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 7-D: Fix Environment Variable Pollution — Isolating Variables Between Jobs</summary>
+<summary>🔧 Scenario 7-D: Fix Environment Variable Pollution — Isolating Variables Between Jobs</summary>
 
 
 **Objective:** Diagnose and fix scenarios where environment variables leak between jobs or persist unexpectedly.
@@ -4100,7 +4100,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 7-E: Enterprise Environment Configuration — Shared Org Settings and Team Defaults</summary>
+<summary>🏢 Scenario 7-E: Enterprise Environment Configuration — Shared Org Settings and Team Defaults</summary>
 
 
 **Objective:** Build reusable, organization-wide environment variable configurations deployed across all workflows.
@@ -4177,7 +4177,7 @@ jobs:
 
 ---
 
-### Section 8: Environment Protection Rules & Secrets (2 hrs)
+### 🔐 Section 8: Environment Protection Rules & Secrets (2 hrs)
 
 **Topics:** [08-Environment-Protection-Rules.md](08-Environment-Protection-Rules.md)
 **Overview:**
@@ -4199,7 +4199,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 8-A: Create Environments with Protection Rules and Secrets</summary>
+<summary>🛡️ Scenario 8-A: Create Environments with Protection Rules and Secrets</summary>
 
 
 **Objective:** Set up three GitHub Environments (`development`, `staging`, `production`) with escalating protection, environment-specific secrets, and branch deployment restrictions.
@@ -4299,7 +4299,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 8-B: GITHUB_TOKEN Permissions and Scoping</summary>
+<summary>🔑 Scenario 8-B: GITHUB_TOKEN Permissions and Scoping</summary>
 
 
 **Objective:** Understand the default `GITHUB_TOKEN` permissions, restrict them using the `permissions:` key, and observe the difference between repo-level default and job-level explicit scoping.
@@ -4390,7 +4390,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 8-C: OpenID Connect (OIDC) Token Generation and Short-Lived Credential Exchange</summary>
+<summary>🔐 Scenario 8-C: OpenID Connect (OIDC) Token Generation and Short-Lived Credential Exchange</summary>
 
 
 **Objective:** Replace long-lived personal access tokens with short-lived OIDC tokens for enhanced security in cloud provider authentication.
@@ -4453,7 +4453,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 8-D: Audit and Recover from Excessive GITHUB_TOKEN Permissions</summary>
+<summary>🔍 Scenario 8-D: Audit and Recover from Excessive GITHUB_TOKEN Permissions</summary>
 
 
 **Objective:** Identify workflows with over-permissioned tokens and remediate security risks through permission auditing.
@@ -4521,7 +4521,7 @@ permissions:
 ---
 
 <details>
-<summary>Scenario 8-E: Organization-Wide Secret Rotation and Secure Cross-Repository Access</summary>
+<summary>🔄 Scenario 8-E: Organization-Wide Secret Rotation and Secure Cross-Repository Access</summary>
 
 
 **Objective:** Implement secrets management across an organization: centralizing secret provisioning, enforcing rotation policies, and enabling safe cross-repo access.
@@ -4585,9 +4585,9 @@ permissions:
 
 ---
 
-## Week 3: Workflow Features & Data Flow
+## 🔄 Week 3: Workflow Features & Data Flow
 
-### Section 9: Jobs, Steps & Conditional Logic (2 hrs)
+### 🔀 Section 9: Jobs, Steps & Conditional Logic (2 hrs)
 
 **Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md) (jobs section)
 **Overview:**
@@ -4609,7 +4609,7 @@ permissions:
 
 
 <details>
-<summary>Scenario 9-A: Multi-Job Dependencies with Status Functions</summary>
+<summary>🔗 Scenario 9-A: Multi-Job Dependencies with Status Functions</summary>
 
 
 **Objective:** Build a 4-job pipeline where jobs run in a specific order, one deliberately fails, and downstream jobs use `failure()`, `success()`, and `always()` to respond appropriately.
@@ -4700,7 +4700,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 9-B: `continue-on-error` and Step-Level Error Handling</summary>
+<summary>⚠️ Scenario 9-B: `continue-on-error` and Step-Level Error Handling</summary>
 
 
 **Objective:** Use `continue-on-error` to allow flaky steps to fail without failing the job, and use `outcome` step context to branch on step results.
@@ -4768,7 +4768,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 9-C: Advanced Job Dependencies with Outputs and Complex Routing</summary>
+<summary>📊 Scenario 9-C: Advanced Job Dependencies with Outputs and Complex Routing</summary>
 
 
 **Objective:** Build multi-job workflows with sophisticated dependency chains, passing data between jobs, and conditional routing based on outputs.
@@ -4837,7 +4837,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 9-D: Timeout and Cancellation Handling</summary>
+<summary>⏱️ Scenario 9-D: Timeout and Cancellation Handling</summary>
 
 
 **Objective:** Diagnose and recover from job timeouts and workflow cancellations.
@@ -4887,7 +4887,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 9-E: Self-Healing Orchestration with Automatic Retry and Fallback Logic</summary>
+<summary>🔄 Scenario 9-E: Self-Healing Orchestration with Automatic Retry and Fallback Logic</summary>
 
 
 **Objective:** Build resilient workflows that automatically retry failed jobs and activate fallback paths.
@@ -4957,7 +4957,7 @@ jobs:
 
 ---
 
-### Section 10: Job Strategy & Matrix (2 hrs)
+### 🔢 Section 10: Job Strategy & Matrix (2 hrs)
 
 **Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md) (matrix section)
 **Overview:**
@@ -4979,7 +4979,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 10-A: Multi-Dimensional Matrix with `include` and `exclude`</summary>
+<summary>🔢 Scenario 10-A: Multi-Dimensional Matrix with `include` and `exclude`</summary>
 
 
 **Objective:** Build a test matrix across operating systems and Node.js versions, exclude an unsupported combination, and add an `include` entry that injects extra variables for a specific combination.
@@ -5071,7 +5071,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 10-B: Fail-Fast Behavior and Matrix Output Aggregation</summary>
+<summary>⚡ Scenario 10-B: Fail-Fast Behavior and Matrix Output Aggregation</summary>
 
 
 **Objective:** Observe `fail-fast` behavior, understand when to disable it, and aggregate outputs from multiple matrix jobs into a single downstream job.
@@ -5155,7 +5155,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 10-C: Dynamic Matrix Generation and Large Matrix Optimization</summary>
+<summary>🧮 Scenario 10-C: Dynamic Matrix Generation and Large Matrix Optimization</summary>
 
 
 **Objective:** Generate matrix values programmatically and optimize large matrices for performance and cost.
@@ -5207,7 +5207,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 10-D: Fix Matrix Expansion Bugs and False Failures</summary>
+<summary>🐛 Scenario 10-D: Fix Matrix Expansion Bugs and False Failures</summary>
 
 
 **Objective:** Diagnose and fix bugs where matrix jobs fail unexpectedly or expand incorrectly.
@@ -5249,7 +5249,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 10-E: Distributed Testing with Matrix Across Teams</summary>
+<summary>🌐 Scenario 10-E: Distributed Testing with Matrix Across Teams</summary>
 
 
 **Objective:** Scale testing across distributed teams using multi-dimensional matrix.
@@ -5288,7 +5288,7 @@ strategy:
 
 ---
 
-### Section 11: Service Containers & Dependencies (2 hrs)
+### 🐳 Section 11: Service Containers & Dependencies (2 hrs)
 
 **Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md) (services section)
 **Overview:**
@@ -5310,7 +5310,7 @@ strategy:
 
 
 <details>
-<summary>Scenario 11-A: PostgreSQL Service Container for Integration Tests</summary>
+<summary>🐘 Scenario 11-A: PostgreSQL Service Container for Integration Tests</summary>
 
 
 **Objective:** Spin up a PostgreSQL service container within a workflow job and run database integration tests against it.
@@ -5422,7 +5422,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 11-B: Container Jobs — Running the Entire Job Inside a Container</summary>
+<summary>🐳 Scenario 11-B: Container Jobs — Running the Entire Job Inside a Container</summary>
 
 
 **Objective:** Use `container:` at the job level to run all steps inside a Docker container, and understand how this differs from service containers.
@@ -5504,7 +5504,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 11-C: Multi-Container Networking and Advanced Health Checks</summary>
+<summary>🌐 Scenario 11-C: Multi-Container Networking and Advanced Health Checks</summary>
 
 
 **Objective:** Set up complex multi-container environments with inter-container networking.
@@ -5534,7 +5534,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 11-D: Debug Container Startup Failures and Connection Timeouts</summary>
+<summary>🐛 Scenario 11-D: Debug Container Startup Failures and Connection Timeouts</summary>
 
 
 **Objective:** Troubleshoot why containers fail or services can't connect.
@@ -5565,7 +5565,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 11-E: Kubernetes-Like Container Orchestration Patterns</summary>
+<summary>☸️ Scenario 11-E: Kubernetes-Like Container Orchestration Patterns</summary>
 
 
 **Objective:** Implement container orchestration patterns resembling Kubernetes within GitHub Actions.
@@ -5594,7 +5594,7 @@ jobs:
 
 ---
 
-### Section 12: Workflow Artifacts - Storage & Retrieval (2 hrs)
+### 📦 Section 12: Workflow Artifacts - Storage & Retrieval (2 hrs)
 
 **Topics:** [09-Workflow-Artifacts.md](09-Workflow-Artifacts.md)
 **Overview:**
@@ -5617,7 +5617,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 12-A: Upload and Download Artifacts Across Jobs</summary>
+<summary>📦 Scenario 12-A: Upload and Download Artifacts Across Jobs</summary>
 
 
 **Objective:** Upload test results and a build binary as artifacts in one job, then consume them in separate downstream jobs demonstrating cross-job artifact sharing.
@@ -5742,7 +5742,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 12-B: Download All Artifacts and REST API Access</summary>
+<summary>🌐 Scenario 12-B: Download All Artifacts and REST API Access</summary>
 
 
 **Objective:** Download all artifacts from a run in one step, implement retention policy management, and demonstrate REST API artifact access.
@@ -5825,7 +5825,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 12-C: Artifact Retention Policies and Cost Optimization</summary>
+<summary>💰 Scenario 12-C: Artifact Retention Policies and Cost Optimization</summary>
 
 
 **Objective:** Implement retention policies to manage artifact storage costs.
@@ -5855,7 +5855,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 12-D: Recover from Artifact Storage Quota Exceeded</summary>
+<summary>🔧 Scenario 12-D: Recover from Artifact Storage Quota Exceeded</summary>
 
 
 **Objective:** Diagnose and fix scenarios where artifact storage quota is exhausted.
@@ -5886,7 +5886,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 12-E: Long-Term Artifact Archival Strategy</summary>
+<summary>📁 Scenario 12-E: Long-Term Artifact Archival Strategy</summary>
 
 
 **Objective:** Archive critical artifacts to long-term storage (S3, Azure) while keeping recent artifacts locally.
@@ -5916,7 +5916,7 @@ jobs:
 
 ---
 
-### Section 13: Workflow Caching - Performance & Security (2 hrs)
+### 💨 Section 13: Workflow Caching - Performance & Security (2 hrs)
 
 **Topics:** [10-Workflow-Caching.md](10-Workflow-Caching.md)
 **Overview:**
@@ -5940,7 +5940,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 13-A: npm and Python Cache Strategies with Key Invalidation</summary>
+<summary>💨 Scenario 13-A: npm and Python Cache Strategies with Key Invalidation</summary>
 
 
 **Objective:** Implement caching for npm and pip dependencies with correct key strategies that invalidate automatically when lock files change.
@@ -6054,7 +6054,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 13-B: Gradle/Maven Caching and Cache Size Management</summary>
+<summary>🏎️ Scenario 13-B: Gradle/Maven Caching and Cache Size Management</summary>
 
 
 **Objective:** Implement build tool caching for Java projects (Gradle and Maven), understand cache scope limitations, and practice cache busting.
@@ -6155,7 +6155,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 13-C: Cache Invalidation Strategies and Partial Cache Hits</summary>
+<summary>🔄 Scenario 13-C: Cache Invalidation Strategies and Partial Cache Hits</summary>
 
 
 **Objective:** Master cache invalidation to ensure fresh dependencies while minimizing rebuild time.
@@ -6185,7 +6185,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 13-D: Debug Cache Misses and Slow Builds Despite Caching</summary>
+<summary>🐛 Scenario 13-D: Debug Cache Misses and Slow Builds Despite Caching</summary>
 
 
 **Objective:** Troubleshoot why caches aren't hitting or builds remain slow.
@@ -6215,7 +6215,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 13-E: Multi-Layer Cache Strategy for Monorepo</summary>
+<summary>🗂️ Scenario 13-E: Multi-Layer Cache Strategy for Monorepo</summary>
 
 
 **Objective:** Implement tiered caching for monorepo: shared cache, service-specific cache.
@@ -6244,9 +6244,9 @@ jobs:
 
 ---
 
-## Week 4: Advanced Workflow Features
+## 🚀 Week 4: Advanced Workflow Features
 
-### Section 14: Inter-Job Communication & Outputs (2 hrs)
+### 📡 Section 14: Inter-Job Communication & Outputs (2 hrs)
 
 **Topics:** [GitHub-Workflows-Guide.md](GitHub-Workflows-Guide.md) - Job Outputs section
 **Overview:**
@@ -6269,7 +6269,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 14-A: Job Outputs and GITHUB_OUTPUT</summary>
+<summary>📤 Scenario 14-A: Job Outputs and GITHUB_OUTPUT</summary>
 
 
 **Objective:** Set step outputs using `GITHUB_OUTPUT`, consume them in subsequent steps, and pass job-level outputs to downstream jobs via `needs` context.
@@ -6379,7 +6379,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 14-B: GITHUB_ENV and Environment Variable Sharing</summary>
+<summary>🔄 Scenario 14-B: GITHUB_ENV and Environment Variable Sharing</summary>
 
 
 **Objective:** Use `GITHUB_ENV` to set environment variables that persist across subsequent steps in the same job, and contrast with `GITHUB_OUTPUT` for inter-job sharing.
@@ -6462,7 +6462,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 14-C: Complex Output Parsing and JSON Manipulation</summary>
+<summary>🔣 Scenario 14-C: Complex Output Parsing and JSON Manipulation</summary>
 
 
 **Objective:** Parse and manipulate complex JSON outputs between jobs using jq.
@@ -6492,7 +6492,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 14-D: Fix Data Loss When Passing Large Outputs</summary>
+<summary>🔧 Scenario 14-D: Fix Data Loss When Passing Large Outputs</summary>
 
 
 **Objective:** Diagnose and fix scenarios where large outputs are truncated or lost.
@@ -6522,7 +6522,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 14-E: Event-Driven Job Communication Patterns</summary>
+<summary>📡 Scenario 14-E: Event-Driven Job Communication Patterns</summary>
 
 
 **Objective:** Implement event-driven patterns for loose coupling across repositories.
@@ -6551,7 +6551,7 @@ jobs:
 
 ---
 
-### Section 15: Workflow Debugging & Troubleshooting (2 hrs)
+### 🐛 Section 15: Workflow Debugging & Troubleshooting (2 hrs)
 
 **Topics:** [12-Workflow-Debugging.md](12-Workflow-Debugging.md), [19-Common-Failures-Troubleshooting.md](19-Common-Failures-Troubleshooting.md) (first half)
 **Overview:**
@@ -6575,7 +6575,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 15-A: Enable Debug Logging and Analyze Logs</summary>
+<summary>🔍 Scenario 15-A: Enable Debug Logging and Analyze Logs</summary>
 
 
 **Objective:** Enable step-debug logging via repository secrets, interpret runner diagnostic logs, and build a diagnostic step that surfaces useful context when workflows fail.
@@ -6667,7 +6667,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 15-B: Diagnosing YAML Syntax Errors and Timeout Issues</summary>
+<summary>🔧 Scenario 15-B: Diagnosing YAML Syntax Errors and Timeout Issues</summary>
 
 
 **Objective:** Intentionally introduce and fix common YAML errors, and configure `timeout-minutes` to handle runaway steps.
@@ -6752,7 +6752,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 15-C: Step Debugging with Advanced Log Inspection</summary>
+<summary>🔬 Scenario 15-C: Step Debugging with Advanced Log Inspection</summary>
 
 
 **Objective:** Use GitHub Actions' debug mode and advanced logging to pinpoint failures.
@@ -6782,7 +6782,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 15-D: Reproduce CI Failures Locally with act</summary>
+<summary>🖥️ Scenario 15-D: Reproduce CI Failures Locally with act</summary>
 
 
 **Objective:** Use `act` and Docker to reproduce CI failures locally.
@@ -6813,7 +6813,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 15-E: Advanced Log Aggregation and Automatic Issue Filing</summary>
+<summary>📊 Scenario 15-E: Advanced Log Aggregation and Automatic Issue Filing</summary>
 
 
 **Objective:** Aggregate logs from multiple jobs and auto-file issues for recurring failures.
@@ -6843,7 +6843,7 @@ jobs:
 
 ---
 
-### Section 16: GitHub Workflow REST API (2 hrs)
+### 🌐 Section 16: GitHub Workflow REST API (2 hrs)
 
 **Topics:** [13-Workflows-REST-API.md](13-Workflows-REST-API.md)
 **Overview:**
@@ -6866,7 +6866,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 16-A: Query and Manage Workflow Runs via REST API</summary>
+<summary>🌐 Scenario 16-A: Query and Manage Workflow Runs via REST API</summary>
 
 
 **Objective:** Use the GitHub CLI and REST API to list workflow runs, retrieve job logs, cancel runs, and download artifacts programmatically.
@@ -6978,7 +6978,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 16-B: Trigger Workflows and Manage Deployments via API</summary>
+<summary>🚀 Scenario 16-B: Trigger Workflows and Manage Deployments via API</summary>
 
 
 **Objective:** Trigger a `workflow_dispatch` event via the REST API, approve pending deployments programmatically, and cancel a running workflow.
@@ -7063,7 +7063,7 @@ echo "Run $LATEST_RUN cancelled"
 ---
 
 <details>
-<summary>Scenario 16-C: Advanced Workflow Querying and Filtering</summary>
+<summary>🔍 Scenario 16-C: Advanced Workflow Querying and Filtering</summary>
 
 
 **Objective:** Query workflows with advanced filters (status, branch, conclusion).
@@ -7093,7 +7093,7 @@ echo "Run $LATEST_RUN cancelled"
 ---
 
 <details>
-<summary>Scenario 16-D: Handle Rate Limiting and Pagination in REST API Calls</summary>
+<summary>⏱️ Scenario 16-D: Handle Rate Limiting and Pagination in REST API Calls</summary>
 
 
 **Objective:** Implement robust pagination and handle GitHub API rate limits.
@@ -7123,7 +7123,7 @@ echo "Run $LATEST_RUN cancelled"
 ---
 
 <details>
-<summary>Scenario 16-E: Batch Automation with REST API (Mass Workflow Trigger/Cancel)</summary>
+<summary>🤖 Scenario 16-E: Batch Automation with REST API (Mass Workflow Trigger/Cancel)</summary>
 
 
 **Objective:** Batch trigger or cancel multiple workflows using REST API.
@@ -7152,9 +7152,9 @@ echo "Run $LATEST_RUN cancelled"
 
 ---
 
-## Week 5: Reusable Workflows & Actions
+## ♻️ Week 5: Reusable Workflows & Actions
 
-### Section 17: Reusable Workflows & Workflow Sharing (2 hrs)
+### ♻️ Section 17: Reusable Workflows & Workflow Sharing (2 hrs)
 
 **Topics:** [11-Workflow-Sharing.md](11-Workflow-Sharing.md)
 **Overview:**
@@ -7177,7 +7177,7 @@ echo "Run $LATEST_RUN cancelled"
 
 
 <details>
-<summary>Scenario 17-A: Create and Call a Reusable Workflow</summary>
+<summary>♻️ Scenario 17-A: Create and Call a Reusable Workflow</summary>
 
 
 **Objective:** Create a reusable `workflow_call` workflow with typed inputs, outputs, and secret inheritance, then call it from a caller workflow.
@@ -7322,7 +7322,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 17-B: Cross-Repository Reusable Workflows and Versioning</summary>
+<summary>🔗 Scenario 17-B: Cross-Repository Reusable Workflows and Versioning</summary>
 
 
 **Objective:** Call a reusable workflow from a different repository, understand `secrets: inherit`, and implement version pinning with tags.
@@ -7383,7 +7383,7 @@ git push origin v1.0.0
 ---
 
 <details>
-<summary>Scenario 17-C: Debug Reusable Workflow Issues and Dependency Chains</summary>
+<summary>🐛 Scenario 17-C: Debug Reusable Workflow Issues and Dependency Chains</summary>
 
 
 **Objective:** Troubleshoot common reusable workflow failures (circular calls, missing outputs, timeout).
@@ -7413,7 +7413,7 @@ git push origin v1.0.0
 ---
 
 <details>
-<summary>Scenario 17-D: Conditional Reusable Workflow Calls</summary>
+<summary>🔀 Scenario 17-D: Conditional Reusable Workflow Calls</summary>
 
 
 **Objective:** Call reusable workflows conditionally based on inputs, secrets, or context.
@@ -7443,7 +7443,7 @@ git push origin v1.0.0
 ---
 
 <details>
-<summary>Scenario 17-E: Reusable Workflow Patterns for Enterprise (Matrix, Approval, Secrets)</summary>
+<summary>🏢 Scenario 17-E: Reusable Workflow Patterns for Enterprise (Matrix, Approval, Secrets)</summary>
 
 
 **Objective:** Implement enterprise-scale patterns: matrix builds, approval gates, centralized secrets.
@@ -7472,7 +7472,7 @@ git push origin v1.0.0
 
 ---
 
-### Section 18: Custom Actions - Types & Structure (2 hrs)
+### 🧩 Section 18: Custom Actions - Types & Structure (2 hrs)
 
 **Topics:** [15-Creating-Publishing-Actions.md](15-Creating-Publishing-Actions.md) (first half)
 **Overview:**
@@ -7495,7 +7495,7 @@ git push origin v1.0.0
 
 
 <details>
-<summary>Scenario 18-A: Build a Composite Action</summary>
+<summary>🧩 Scenario 18-A: Build a Composite Action</summary>
 
 
 **Objective:** Create a composite action that combines multiple steps into a reusable action, with typed inputs, outputs, and proper `action.yml` metadata.
@@ -7638,7 +7638,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 18-B: JavaScript Action with Inputs and Outputs</summary>
+<summary>🟨 Scenario 18-B: JavaScript Action with Inputs and Outputs</summary>
 
 
 **Objective:** Create a minimal JavaScript action that processes an input string, returns an output, and handles errors using `@actions/core`.
@@ -7736,7 +7736,7 @@ try {
 ---
 
 <details>
-<summary>Scenario 18-C: Composite Actions with Script Files and OS Detection</summary>
+<summary>🖥️ Scenario 18-C: Composite Actions with Script Files and OS Detection</summary>
 
 
 **Objective:** Create composite actions that use multiple scripts and detect the runner OS.
@@ -7766,7 +7766,7 @@ try {
 ---
 
 <details>
-<summary>Scenario 18-D: Error Handling and Validation in Custom Actions</summary>
+<summary>⚠️ Scenario 18-D: Error Handling and Validation in Custom Actions</summary>
 
 
 **Objective:** Implement robust error handling, input validation, and failure reporting in actions.
@@ -7797,7 +7797,7 @@ try {
 ---
 
 <details>
-<summary>Scenario 18-E: Containerized Actions with Docker</summary>
+<summary>🐳 Scenario 18-E: Containerized Actions with Docker</summary>
 
 
 **Objective:** Build Docker container-based actions for complex workflows.
@@ -7827,7 +7827,7 @@ try {
 
 ---
 
-### Section 19: Custom Actions - Distribution & Publishing (2 hrs)
+### 📢 Section 19: Custom Actions - Distribution & Publishing (2 hrs)
 
 **Topics:** [15-Creating-Publishing-Actions.md](15-Creating-Publishing-Actions.md) (second half)
 **Overview:**
@@ -7850,7 +7850,7 @@ try {
 
 
 <details>
-<summary>Scenario 19-A: Prepare an Action for Marketplace Publishing</summary>
+<summary>🏪 Scenario 19-A: Prepare an Action for Marketplace Publishing</summary>
 
 
 **Objective:** Add all required metadata to `action.yml`, write comprehensive README documentation, and create a versioned release following the major-version-tag convention.
@@ -8007,7 +8007,7 @@ git push origin v1 --force
 ---
 
 <details>
-<summary>Scenario 19-B: Automated Action Release Workflow</summary>
+<summary>🚀 Scenario 19-B: Automated Action Release Workflow</summary>
 
 
 **Objective:** Create a workflow that automatically moves the major version tag on release publication, following GitHub's recommended action versioning pattern.
@@ -8074,7 +8074,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 19-C: Version Management and Semantic Versioning for Actions</summary>
+<summary>🏷️ Scenario 19-C: Version Management and Semantic Versioning for Actions</summary>
 
 
 **Objective:** Implement semantic versioning for actions with major version tags and release branches.
@@ -8105,7 +8105,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 19-D: Marketplace Certification and Documentation</summary>
+<summary>📖 Scenario 19-D: Marketplace Certification and Documentation</summary>
 
 
 **Objective:** Prepare action for Marketplace: README, badges, examples, proper documentation.
@@ -8137,7 +8137,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 19-E: Security Hardening for Published Actions</summary>
+<summary>🛡️ Scenario 19-E: Security Hardening for Published Actions</summary>
 
 
 **Objective:** Harden published actions against security threats (dependency vulnerabilities, secret exposure).
@@ -8168,9 +8168,9 @@ jobs:
 
 ---
 
-## Week 6: Runners & Enterprise
+## 🖥️ Week 6: Runners & Enterprise
 
-### Section 20: GitHub-Hosted Runners (2 hrs)
+### 🏃 Section 20: GitHub-Hosted Runners (2 hrs)
 
 **Topics:** [16-Managing-Runners.md](16-Managing-Runners.md) (first half)
 **Overview:**
@@ -8193,7 +8193,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 20-A: Target Different Runner Types and Verify Environments</summary>
+<summary>🏃 Scenario 20-A: Target Different Runner Types and Verify Environments</summary>
 
 
 **Objective:** Create a matrix workflow that runs across all three GitHub-hosted OS types, verifies the preinstalled tools, and demonstrates runner-specific behavior.
@@ -8308,7 +8308,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 20-B: Runner Image Pinning and Toolcache Inspection</summary>
+<summary>📌 Scenario 20-B: Runner Image Pinning and Toolcache Inspection</summary>
 
 
 **Objective:** Pin to a specific runner image, inspect the toolcache, and simulate a runner image migration from `ubuntu-20.04` to `ubuntu-22.04`.
@@ -8366,7 +8366,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 20-C: Advanced Runner Selection and Constraints</summary>
+<summary>⚙️ Scenario 20-C: Advanced Runner Selection and Constraints</summary>
 
 
 **Objective:** Select runners based on labels, CPU, memory, OS specifications.
@@ -8397,7 +8397,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 20-D: Troubleshoot Runner Availability and Queuing</summary>
+<summary>🐛 Scenario 20-D: Troubleshoot Runner Availability and Queuing</summary>
 
 
 **Objective:** Diagnose why jobs queue too long or fail to find available runners.
@@ -8428,7 +8428,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 20-E: GitHub-Hosted Runner Limits and Enterprise Strategies</summary>
+<summary>🏢 Scenario 20-E: GitHub-Hosted Runner Limits and Enterprise Strategies</summary>
 
 
 **Objective:** Understand runner usage limits and implement strategies for large-scale automation.
@@ -8458,7 +8458,7 @@ jobs:
 
 ---
 
-### Section 21: Self-Hosted Runners & Configuration (2 hrs)
+### 🖥️ Section 21: Self-Hosted Runners & Configuration (2 hrs)
 
 **Topics:** [16-Managing-Runners.md](16-Managing-Runners.md) (second half)
 **Overview:**
@@ -8481,7 +8481,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 21-A: Register and Use a Self-Hosted Runner</summary>
+<summary>🖥️ Scenario 21-A: Register and Use a Self-Hosted Runner</summary>
 
 
 **Objective:** Register a self-hosted runner on your local machine (or a VM), assign it custom labels, and run a workflow that targets it via label selection.
@@ -8578,7 +8578,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 21-B: Runner Groups and Organization-Level Runners</summary>
+<summary>👥 Scenario 21-B: Runner Groups and Organization-Level Runners</summary>
 
 
 **Objective:** Understand runner groups for restricting which repositories can use which runners (concepts and configuration — requires organization access).
@@ -8634,7 +8634,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 21-C: Self-Hosted Runner Scaling and Management</summary>
+<summary>📈 Scenario 21-C: Self-Hosted Runner Scaling and Management</summary>
 
 
 **Objective:** Scale self-hosted runners for high-volume workflows using runner groups.
@@ -8665,7 +8665,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 21-D: Self-Hosted Runner Security Hardening</summary>
+<summary>🛡️ Scenario 21-D: Self-Hosted Runner Security Hardening</summary>
 
 
 **Objective:** Secure self-hosted runners against malicious workflows and exfiltration.
@@ -8696,7 +8696,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 21-E: Self-Hosted Runner Maintenance and Auto-Update</summary>
+<summary>🔧 Scenario 21-E: Self-Hosted Runner Maintenance and Auto-Update</summary>
 
 
 **Objective:** Keep self-hosted runners updated and functioning optimally.
@@ -8727,7 +8727,7 @@ jobs:
 
 ---
 
-### Section 22: Enterprise-Level Management (2 hrs)
+### 🏢 Section 22: Enterprise-Level Management (2 hrs)
 
 **Topics:** [17-GitHub-Actions-Enterprise.md](17-GitHub-Actions-Enterprise.md)
 **Overview:**
@@ -8750,7 +8750,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 22-A: Organization Starter Workflows</summary>
+<summary>🏢 Scenario 22-A: Organization Starter Workflows</summary>
 
 
 **Objective:** Create an organization-level starter workflow that appears in the "Actions" tab of new repositories, providing a standardized CI template.
@@ -8850,7 +8850,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 22-B: Organization Policy Management and Audit Logging</summary>
+<summary>📋 Scenario 22-B: Organization Policy Management and Audit Logging</summary>
 
 
 **Objective:** Configure which actions are allowed in an organization, set required workflows, and query audit logs for workflow activity.
@@ -8933,7 +8933,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 22-C: Enterprise Starter Workflows and Templates</summary>
+<summary>📄 Scenario 22-C: Enterprise Starter Workflows and Templates</summary>
 
 
 **Objective:** Create and distribute starter workflows across enterprise teams.
@@ -8963,7 +8963,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 22-D: Enterprise Audit and Compliance Reporting</summary>
+<summary>📊 Scenario 22-D: Enterprise Audit and Compliance Reporting</summary>
 
 
 **Objective:** Generate audit reports for compliance (SOC2, ISO, etc.) from GitHub Actions audit logs.
@@ -8993,7 +8993,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 22-E: Multi-Organization Workflow Management</summary>
+<summary>🌐 Scenario 22-E: Multi-Organization Workflow Management</summary>
 
 
 **Objective:** Manage workflows consistently across multiple organizations.
@@ -9022,9 +9022,9 @@ jobs:
 
 ---
 
-## Week 7: Security & Optimization
+## 🔒 Week 7: Security & Optimization
 
-### Section 23: GitHub Actions Security Best Practices - Part 1 (2 hrs)
+### 🛡️ Section 23: GitHub Actions Security Best Practices - Part 1 (2 hrs)
 
 **Topics:** [18-Security-and-Optimization.md](18-Security-and-Optimization.md) (first half)
 **Overview:**
@@ -9047,7 +9047,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 23-A: Least-Privilege GITHUB_TOKEN and Input Sanitization</summary>
+<summary>🛡️ Scenario 23-A: Least-Privilege GITHUB_TOKEN and Input Sanitization</summary>
 
 
 **Objective:** Implement explicit minimal permissions, prevent script injection from untrusted PR data, and set up environment approval gates.
@@ -9144,7 +9144,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 23-B: Environment Protection Rules and Approval Gates</summary>
+<summary>🔐 Scenario 23-B: Environment Protection Rules and Approval Gates</summary>
 
 
 **Objective:** Configure a protected environment requiring manual approval before deployment, and test that the approval gate blocks automated deployment.
@@ -9221,7 +9221,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 23-C: Secret Rotation and Expiration Policies</summary>
+<summary>🔄 Scenario 23-C: Secret Rotation and Expiration Policies</summary>
 
 
 **Objective:** Implement automated secret rotation and set expiration policies.
@@ -9251,7 +9251,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 23-D: OIDC Token-Based Authentication</summary>
+<summary>🔑 Scenario 23-D: OIDC Token-Based Authentication</summary>
 
 
 **Objective:** Replace long-lived secrets with OIDC tokens for cloud provider authentication.
@@ -9281,7 +9281,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 23-E: Supply Chain Security and Dependency Scanning</summary>
+<summary>🔍 Scenario 23-E: Supply Chain Security and Dependency Scanning</summary>
 
 
 **Objective:** Scan dependencies for vulnerabilities and implement SBOM for supply chain security.
@@ -9310,7 +9310,7 @@ jobs:
 
 ---
 
-### Section 24: GitHub Actions Security Best Practices - Part 2 (2 hrs)
+### 🔒 Section 24: GitHub Actions Security Best Practices - Part 2 (2 hrs)
 
 **Topics:** [18-Security-and-Optimization.md](18-Security-and-Optimization.md) (second half)
 **Overview:**
@@ -9333,7 +9333,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 24-A: Pin Actions to Commit SHAs and Implement OIDC</summary>
+<summary>📌 Scenario 24-A: Pin Actions to Commit SHAs and Implement OIDC</summary>
 
 
 **Objective:** Convert all action references from mutable tags to immutable commit SHAs, and implement OIDC federation with a cloud provider to eliminate long-lived credentials.
@@ -9434,7 +9434,7 @@ gh api repos/actions/checkout/git/ref/tags/v4 --jq '.object.sha'
 ---
 
 <details>
-<summary>Scenario 24-B: Artifact Attestation and Dependency Scanning</summary>
+<summary>🔍 Scenario 24-B: Artifact Attestation and Dependency Scanning</summary>
 
 
 **Objective:** Generate an artifact attestation (provenance) for a build artifact and scan workflow dependencies for vulnerabilities.
@@ -9509,7 +9509,7 @@ gh attestation verify my-artifact.tar.gz \
 ---
 
 <details>
-<summary>Scenario 24-C: Secrets Scanning and Prevention of Accidental Leaks</summary>
+<summary>🔒 Scenario 24-C: Secrets Scanning and Prevention of Accidental Leaks</summary>
 
 
 **Objective:** Implement secret scanning to detect and prevent accidental credential commits.
@@ -9539,7 +9539,7 @@ gh attestation verify my-artifact.tar.gz \
 ---
 
 <details>
-<summary>Scenario 24-D: Dependency Updates with Automated Security Fixes</summary>
+<summary>🔄 Scenario 24-D: Dependency Updates with Automated Security Fixes</summary>
 
 
 **Objective:** Implement Dependabot for automated dependency updates and security fixes.
@@ -9569,7 +9569,7 @@ gh attestation verify my-artifact.tar.gz \
 ---
 
 <details>
-<summary>Scenario 24-E: Code Analysis and SAST Integration</summary>
+<summary>🔬 Scenario 24-E: Code Analysis and SAST Integration</summary>
 
 
 **Objective:** Integrate CodeQL for static analysis and security scanning.
@@ -9598,7 +9598,7 @@ gh attestation verify my-artifact.tar.gz \
 
 ---
 
-### Section 25: Workflow Performance Optimization (2 hrs)
+### ⚡ Section 25: Workflow Performance Optimization (2 hrs)
 
 **Topics:** [10-Workflow-Caching.md](10-Workflow-Caching.md), [18-Security-and-Optimization.md](18-Security-and-Optimization.md) (optimization section)
 **Overview:**
@@ -9621,7 +9621,7 @@ gh attestation verify my-artifact.tar.gz \
 
 
 <details>
-<summary>Scenario 25-A: Profile and Optimize a Slow Workflow</summary>
+<summary>📊 Scenario 25-A: Profile and Optimize a Slow Workflow</summary>
 
 
 **Objective:** Create a deliberately slow workflow, measure step durations, implement caching and parallelization, then compare before/after timings.
@@ -9763,7 +9763,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 25-B: Concurrency Controls and Artifact Size Optimization</summary>
+<summary>⚙️ Scenario 25-B: Concurrency Controls and Artifact Size Optimization</summary>
 
 
 **Objective:** Implement concurrency groups to cancel in-progress runs on new pushes, and reduce artifact retention and size.
@@ -9824,7 +9824,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 25-C: Parallel Job Execution and Matrix Optimization</summary>
+<summary>⚡ Scenario 25-C: Parallel Job Execution and Matrix Optimization</summary>
 
 
 **Objective:** Maximize parallelization with matrix builds to reduce total workflow time.
@@ -9854,7 +9854,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 25-D: Workflow Runtime Profiling and Bottleneck Analysis</summary>
+<summary>🔬 Scenario 25-D: Workflow Runtime Profiling and Bottleneck Analysis</summary>
 
 
 **Objective:** Profile workflow execution to identify and eliminate bottlenecks.
@@ -9884,7 +9884,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 25-E: Cost Optimization Across Workflow Portfolio</summary>
+<summary>💰 Scenario 25-E: Cost Optimization Across Workflow Portfolio</summary>
 
 
 **Objective:** Optimize total workflow costs across hundreds of workflows.
@@ -9914,7 +9914,7 @@ jobs:
 
 ---
 
-### Section 26: Troubleshooting & Common Failures - Part 2 (2 hrs)
+### 🔦 Section 26: Troubleshooting & Common Failures - Part 2 (2 hrs)
 
 **Topics:** [19-Common-Failures-Troubleshooting.md](19-Common-Failures-Troubleshooting.md) (second half)
 **Overview:**
@@ -9938,7 +9938,7 @@ jobs:
 
 
 <details>
-<summary>Scenario 26-A: Matrix Job Failure Diagnosis and Recovery</summary>
+<summary>🐛 Scenario 26-A: Matrix Job Failure Diagnosis and Recovery</summary>
 
 
 **Objective:** Create a matrix workflow with intentional failures, use `fail-fast: false` to collect all results, implement retry logic, and use `include`/`exclude` to fix matrix edge cases.
@@ -10027,7 +10027,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 26-B: Cross-Platform Compatibility and Log Analysis</summary>
+<summary>🖥️ Scenario 26-B: Cross-Platform Compatibility and Log Analysis</summary>
 
 
 **Objective:** Identify and fix common cross-platform issues (path separators, line endings, command availability) and use log analysis patterns to find failure root causes.
@@ -10121,7 +10121,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 26-C: Advanced Failure Pattern Analysis and Automated Recovery</summary>
+<summary>🔄 Scenario 26-C: Advanced Failure Pattern Analysis and Automated Recovery</summary>
 
 
 **Objective:** Implement ML-style failure pattern detection to automatically recover from known failure modes.
@@ -10230,7 +10230,7 @@ Recovery workflow executed successfully
 ---
 
 <details>
-<summary>Scenario 26-D: Workflow Failure Prevention Through Proactive Monitoring</summary>
+<summary>👁️ Scenario 26-D: Workflow Failure Prevention Through Proactive Monitoring</summary>
 
 
 **Objective:** Implement proactive health checks to prevent failures before they occur.
@@ -10327,7 +10327,7 @@ Health Check Results:
 ---
 
 <details>
-<summary>Scenario 26-E: Enterprise-Scale Incident Response and Post-Mortems</summary>
+<summary>🏢 Scenario 26-E: Enterprise-Scale Incident Response and Post-Mortems</summary>
 
 
 **Objective:** Build incident management workflow for large-scale failures with automated post-mortem generation.
@@ -10490,9 +10490,9 @@ Team notification: Incident post-mortem prepared
 
 ---
 
-## Week 8: Job Summaries & Advanced Features
+## 📊 Week 8: Job Summaries & Advanced Features
 
-### Section 27: Job Summaries & Workflow Status (2 hrs)
+### 📊 Section 27: Job Summaries & Workflow Status (2 hrs)
 
 **Topics:** [04-Workflow-File-Structure.md](04-Workflow-File-Structure.md) (job summaries section), [14-Reviewing-Deployments.md](14-Reviewing-Deployments.md)
 **Overview:**
@@ -10515,7 +10515,7 @@ Team notification: Incident post-mortem prepared
 
 
 <details>
-<summary>Scenario 27-A: Rich Job Summaries with Test and Coverage Reports</summary>
+<summary>📊 Scenario 27-A: Rich Job Summaries with Test and Coverage Reports</summary>
 
 
 **Objective:** Use `GITHUB_STEP_SUMMARY` to generate formatted markdown reports containing test results, coverage percentages, and deployment metadata — visible directly in the Actions UI without needing to download artifacts.
@@ -10651,7 +10651,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 27-B: Status Badges and Emergency Runbook Workflows</summary>
+<summary>🔖 Scenario 27-B: Status Badges and Emergency Runbook Workflows</summary>
 
 
 **Objective:** Add workflow status badges to a README and create an emergency runbook workflow that generates an HTML status summary.
@@ -10729,7 +10729,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 27-C: Custom Formatting and Structured Output in Job Summaries</summary>
+<summary>🎨 Scenario 27-C: Custom Formatting and Structured Output in Job Summaries</summary>
 
 
 **Objective:** Create rich, formatted job summaries with tables, charts, and custom styling.
@@ -10838,7 +10838,7 @@ Formatted summary with table, pie chart, and collapsible sections
 ---
 
 <details>
-<summary>Scenario 27-D: Aggregating Metrics and Dashboards from Multiple Jobs</summary>
+<summary>📈 Scenario 27-D: Aggregating Metrics and Dashboards from Multiple Jobs</summary>
 
 
 **Objective:** Collect metrics from parallel jobs and create unified dashboard views.
@@ -10959,7 +10959,7 @@ Pass Rate: 97%
 ---
 
 <details>
-<summary>Scenario 27-E: Integration with External Reporting and BI Systems</summary>
+<summary>📡 Scenario 27-E: Integration with External Reporting and BI Systems</summary>
 
 
 **Objective:** Export workflow metrics to external BI/analytics platforms for enterprise dashboards.
@@ -11074,7 +11074,7 @@ Success rate: 96.8%
 
 ---
 
-### Section 28: Comprehensive Practice Assessment (2 hrs)
+### 📝 Section 28: Comprehensive Practice Assessment (2 hrs)
 
 **Topics:** All topic files - comprehensive review
 **Overview:**
@@ -11095,7 +11095,7 @@ Success rate: 96.8%
 
 
 <details>
-<summary>Scenario 28-A: Comprehensive Multi-Feature Workflow Assessment</summary>
+<summary>📝 Scenario 28-A: Comprehensive Multi-Feature Workflow Assessment</summary>
 
 
 **Objective:** Build a single production-grade workflow that integrates at minimum 8 GitHub Actions features covered in the study plan, demonstrating mastery of their interaction.
@@ -11252,7 +11252,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 28-B: Practice Exam Question Gauntlet (10 Scenarios)</summary>
+<summary>📋 Scenario 28-B: Practice Exam Question Gauntlet (10 Scenarios)</summary>
 
 
 **Objective:** Work through 10 targeted scenario questions spanning key exam domains without YAML code — pure conceptual recall.
@@ -11288,7 +11288,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 28-C: Advanced IaC Patterns with GitHub Actions Orchestration</summary>
+<summary>☁️ Scenario 28-C: Advanced IaC Patterns with GitHub Actions Orchestration</summary>
 
 
 **Objective:** Orchestrate complex Infrastructure as Code deployments using GitHub Actions with Terraform/CloudFormation.
@@ -11433,7 +11433,7 @@ Outputs saved
 ---
 
 <details>
-<summary>Scenario 28-D: Drift Detection and Auto-Remediation Workflows</summary>
+<summary>🔄 Scenario 28-D: Drift Detection and Auto-Remediation Workflows</summary>
 
 
 **Objective:** Detect infrastructure drift from intended state and automatically remediate divergences.
@@ -11559,7 +11559,7 @@ Resources resynchronized to desired state
 ---
 
 <details>
-<summary>Scenario 28-E: Multi-Environment Orchestration with IaC</summary>
+<summary>🌍 Scenario 28-E: Multi-Environment Orchestration with IaC</summary>
 
 
 **Objective:** Coordinate infrastructure deployments across dev → staging → prod with validation gates and rollback capability.
@@ -11705,9 +11705,9 @@ Deployment completed and verified
 
 ---
 
-## Week 9: Final Review & Assessment
+## 🎯 Week 9: Final Review & Assessment
 
-### Section 29: Mock Exam - Full Practice Test (2 hrs)
+### 📋 Section 29: Mock Exam - Full Practice Test (2 hrs)
 
 **Topics:** [question-prompt.md](question-prompt.md) - Generate practice questions
 **Overview:**
@@ -11727,7 +11727,7 @@ Deployment completed and verified
 
 
 <details>
-<summary>Scenario 29-A: Timed Mock Exam Protocol (2 Hours)</summary>
+<summary>⏱️ Scenario 29-A: Timed Mock Exam Protocol (2 Hours)</summary>
 
 
 **Objective:** Simulate actual exam conditions — time-boxed, no notes, and score yourself honestly to produce an actionable weakness report.
@@ -11804,7 +11804,7 @@ Deployment completed and verified
 ---
 
 <details>
-<summary>Scenario 29-B: Weak Area Drill — Targeted Workflow Reconstruction</summary>
+<summary>🎯 Scenario 29-B: Weak Area Drill — Targeted Workflow Reconstruction</summary>
 
 
 **Objective:** For each domain you scored below 70% in Scenario 29-A, write one workflow from memory without referencing notes, then verify it against documentation.
@@ -11854,7 +11854,7 @@ jobs:
 ---
 
 <details>
-<summary>Scenario 29-C: Blue-Green and Canary Deployments</summary>
+<summary>🚀 Scenario 29-C: Blue-Green and Canary Deployments</summary>
 
 
 **Objective:** Implement blue-green and canary deployment strategies to minimize downtime and risk.
@@ -11983,7 +11983,7 @@ Deployment stable
 ---
 
 <details>
-<summary>Scenario 29-D: Rollback Automation and Failure Recovery</summary>
+<summary>🔄 Scenario 29-D: Rollback Automation and Failure Recovery</summary>
 
 
 **Objective:** Build automated rollback procedures that execute when deployment health checks fail.
@@ -12118,7 +12118,7 @@ Rollback successful
 ---
 
 <details>
-<summary>Scenario 29-E: Progressive Delivery and Feature Flags</summary>
+<summary>🚩 Scenario 29-E: Progressive Delivery and Feature Flags</summary>
 
 
 **Objective:** Deploy new features behind feature flags to enable progressive rollout and easy rollback.
@@ -12283,7 +12283,7 @@ Rollout complete and stable
 
 ---
 
-### Section 30: Final Consolidation & Exam Prep (2 hrs)
+### 🎓 Section 30: Final Consolidation & Exam Prep (2 hrs)
 
 **Topics:** All materials - focused review
 **Overview:**
@@ -12305,7 +12305,7 @@ Rollout complete and stable
 
 
 <details>
-<summary>Scenario 30-A: Personal Quick Reference Guide Construction</summary>
+<summary>📖 Scenario 30-A: Personal Quick Reference Guide Construction</summary>
 
 
 **Objective:** Build a one-page (or single-screen) cheat sheet of the most frequently-tested GitHub Actions facts, syntax patterns, and gotchas — in your own words.
@@ -12395,7 +12395,7 @@ Rollout complete and stable
 ---
 
 <details>
-<summary>Scenario 30-B: Exam Day Protocol and Final Readiness Verification</summary>
+<summary>🎯 Scenario 30-B: Exam Day Protocol and Final Readiness Verification</summary>
 
 
 **Objective:** Confirm technical readiness with a final 20-question speed drill, and establish an exam day strategy.
@@ -12448,7 +12448,7 @@ Answer these without referencing any material:
 ---
 
 <details>
-<summary>Scenario 30-C: Mock Exam Scenarios with Time Constraints</summary>
+<summary>⏱️ Scenario 30-C: Mock Exam Scenarios with Time Constraints</summary>
 
 
 **Objective:** Practice full mock exam scenarios under timed conditions to build exam readiness.
@@ -12581,7 +12581,7 @@ Time management: Excellent
 ---
 
 <details>
-<summary>Scenario 30-D: Gap Analysis and Targeted Review Recommendations</summary>
+<summary>🔍 Scenario 30-D: Gap Analysis and Targeted Review Recommendations</summary>
 
 
 **Objective:** Analyze mock exam results to identify knowledge gaps and recommend focused remediation.
@@ -12739,7 +12739,7 @@ Expected final score: 92-95%
 ---
 
 <details>
-<summary>Scenario 30-E: Real-World Certification Exam Patterns and Strategies</summary>
+<summary>🎓 Scenario 30-E: Real-World Certification Exam Patterns and Strategies</summary>
 
 
 **Objective:** Learn exam strategies and patterns to maximize score on certification day.
