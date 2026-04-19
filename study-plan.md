@@ -34,10 +34,10 @@ This plan is designed to progressively build mastery from fundamentals to advanc
 - Validate a sample workflow locally
 - Understand extension features and troubleshooting
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 1</summary>
 
-### Scenario 1-A: Install & Configure the VS Code GitHub Actions Extension
+<details>
+<summary>### Scenario 1-A: Install & Configure the VS Code GitHub Actions Extension</summary>
+
 
 **Objective:** Install the GitHub Actions VS Code extension, verify YAML IntelliSense activates, and confirm schema validation catches errors.
 
@@ -67,7 +67,7 @@ jobs:
 
       - name: Print greeting
         run: echo "Hello, ${{ github.actor }}!"
-```bash
+```
 
 4. Hover over `runs-on` → verify a tooltip describing the key appears.
 5. Type `runs-on: invalid-runner-name` → verify a red squiggly warning appears.
@@ -94,9 +94,13 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 
 **Cross-Section Connections:** → Section 4 (YAML Syntax) for YAML anchors and advanced structure; → Section 15 (Debugging) for interpreting workflow error messages.
 
+</details>
+
 ---
 
-### Scenario 1-B: Validate a Workflow Locally with `act`
+<details>
+<summary>### Scenario 1-B: Validate a Workflow Locally with `act`</summary>
+
 
 **Objective:** Install the `act` CLI and run a GitHub Actions workflow on your local machine without pushing to GitHub.
 
@@ -119,7 +123,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 
 ```text
 -P ubuntu-latest=catthehacker/ubuntu:act-latest
-```bash
+```
 
 7. Run `act push --dry-run` to preview execution order without running steps.
 
@@ -136,7 +140,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 [Hello World/greet] 🐳 docker run image=catthehacker/ubuntu:act-latest
 [Hello World/greet]   ✅  Success - Checkout code
 [Hello World/greet]   ✅  Success - Print greeting
-```bash
+```
 
 **Troubleshooting:**
 
@@ -153,9 +157,13 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 
 **Cross-Section Connections:** → Section 15 (Debugging) for enabling debug logging inside `act`; → Section 5 (Triggers) for simulating different event types locally.
 
+</details>
+
 ---
 
-### Scenario 1-C: Advanced Workflow Validation — Linting and Schema Enforcement
+<details>
+<summary>### Scenario 1-C: Advanced Workflow Validation — Linting and Schema Enforcement</summary>
+
 
 **Objective:** Set up automated workflow validation beyond the VS Code extension using actionlint, schema linters, and pre-commit hooks to catch errors before pushing to GitHub.
 
@@ -174,7 +182,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 
    ```bash
    actionlint .github/workflows/hello.yml
-   ```bash
+   ```
 
 3. Create an intentionally flawed workflow at `.github/workflows/flawed.yml`:
 
@@ -191,7 +199,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
          - name: Unreachable step
            if: false
            run: echo "Never runs"
-   ```bash
+   ```
 
 4. Run `actionlint .github/workflows/flawed.yml` and observe the warnings.
 
@@ -206,7 +214,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
        rev: v1.6.27
        hooks:
          - id: actionlint
-   ```bash
+   ```
 
 7. Install the git hook: `pre-commit install`
 
@@ -226,7 +234,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 ```bash
 .github/workflows/flawed.yml:7:15: "env.UNDEFINED_VAR" is not defined. available env variables are ["GITHUB_*", ...]
 .github/workflows/flawed.yml:8:5: unreachable step detected. step cannot run because condition is always false
-```bash
+```
 
 **Troubleshooting:**
 
@@ -244,9 +252,13 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 
 **Cross-Section Connections:** → Section 4 (YAML Syntax) for schema rules; → Section 15 (Debugging) for actionlint error interpretation.
 
+</details>
+
 ---
 
-### Scenario 1-D: Troubleshooting Local Workflow Validation — Diagnosing and Fixing Common Issues
+<details>
+<summary>### Scenario 1-D: Troubleshooting Local Workflow Validation — Diagnosing and Fixing Common Issues</summary>
+
 
 **Objective:** Diagnose and fix common problems when using the VS Code extension, `act`, and actionlint. Learn systematic troubleshooting methodology.
 
@@ -279,7 +291,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 
      ```bash
      -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
-     ```bash
+     ```
 
    - Run `act push` again — verify correct image is used
 
@@ -288,7 +300,7 @@ Hovering over `runs-on` shows: *"The type of machine to run the job on. The mach
 
      ```yaml
      invalid: yaml: [structure
-     ```bash
+     ```
 
    - Run `actionlint .github/workflows/hello.yml` — observe error
    - Fix YAML syntax in `.actionlintrc.yaml` — retry
@@ -321,7 +333,7 @@ $ act push
 [Hello World/greet] 🐳 docker run image=ghcr.io/catthehacker/ubuntu:act-latest
 [Hello World/greet]   ✅  Success - Checkout code
 [Hello World/greet]   ✅  Success - Print greeting
-```bash
+```
 
 **Troubleshooting:**
 
@@ -339,9 +351,13 @@ $ act push
 
 **Cross-Section Connections:** → Section 15 (Debugging) for advanced log inspection; → Section 5 (Triggers) for testing different event types locally.
 
+</details>
+
 ---
 
-### Scenario 1-E: Enterprise-Scale Setup — Shared IDE Configuration and Team Workflow Templates
+<details>
+<summary>### Scenario 1-E: Enterprise-Scale Setup — Shared IDE Configuration and Team Workflow Templates</summary>
+
 
 **Objective:** Establish organizational standards for GitHub Actions local development: shared VS Code settings, standardized `.actrc` configuration, and reusable workflow templates enforced across the team.
 
@@ -367,7 +383,7 @@ $ act push
          "source.fixAll": "explicit"
        }
      }
-     ```bash
+     ```
 
 2. **Create Shared Extensions Recommendation:**
    - Create `.vscode/extensions.json`:
@@ -381,7 +397,7 @@ $ act push
          "ms-vscode.makefile-tools"
        ]
      }
-     ```bash
+     ```
 
 3. **Commit Team `.actrc` Configuration:**
    - In repo root, create `.github/.actrc.template`:
@@ -391,7 +407,7 @@ $ act push
      -P windows-latest=ghcr.io/catthehacker/windows:latest
      -P macos-latest=ghcr.io/catthehacker/macos:latest
      --artifact-server-path /tmp/artifacts
-     ```bash
+     ```
 
    - Add documentation: **SETUP.md** → "Copy `.github/.actrc.template` to repo root as `.actrc`"
 
@@ -410,7 +426,7 @@ $ act push
            - uses: actions/checkout@v4
            - name: "[Step description]"
              run: echo "Add your step here"
-     ```bash
+     ```
 
 5. **Create Pre-commit Policy Enforcement:**
    - Extend `.pre-commit-config.yaml` to include filename validation:
@@ -428,7 +444,7 @@ $ act push
              entry: bash -c 'for f in .github/workflows/*.yml; do grep -q "jobs:" "$f" || exit 1; done'
              language: system
              files: ^\.github/workflows/
-     ```bash
+     ```
 
 6. **Create Team Onboarding Guide (DEVELOPMENT.md):**
 
@@ -451,7 +467,7 @@ $ act push
    - Pre-commit hook runs on every commit
    - Manual validation: `actionlint .github/workflows/*.yml`
    - Local simulation: `act push`
-   ```bash
+   ```
 
 7. **Test Team Setup on Fresh Clone:**
    - In a temporary directory: `git clone <repo> test-clone && cd test-clone`
@@ -484,7 +500,7 @@ $ act -l
 
 $ act push
 [workflow runs successfully with shared configuration]
-```bash
+```
 
 **Troubleshooting:**
 
@@ -524,10 +540,10 @@ $ act push
 - Access repository owner and branch information
 - Practice secret masking and context limitations
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 2</summary>
 
-### Scenario 2-A: Explore the `github` Context in a Workflow
+<details>
+<summary>### Scenario 2-A: Explore the `github` Context in a Workflow</summary>
+
 
 **Objective:** Write a workflow that prints key `github` context values to understand what information is available at runtime, and observe how these values differ across trigger types.
 
@@ -578,7 +594,7 @@ jobs:
           # Assign context to env var to safely print JSON
           GITHUB_CTX: ${{ toJSON(github) }}
         run: echo "$GITHUB_CTX"
-```bash
+```
 
 2. Push to `main` and examine the "Trigger Info" output — note `ref` = `refs/heads/main`.
 3. Open a pull request and inspect the same job — note `head_ref` and `base_ref` are now populated.
@@ -598,9 +614,13 @@ jobs:
 
 **Time Estimate:** 15–20 minutes
 
+</details>
+
 ---
 
-### Scenario 2-B: Secrets Context — Masking and Limitations
+<details>
+<summary>### Scenario 2-B: Secrets Context — Masking and Limitations</summary>
+
 
 **Objective:** Add a repository secret, use it in a workflow, and observe how GitHub automatically masks the value in logs to prevent accidental exposure.
 
@@ -646,7 +666,7 @@ jobs:
         run: |
           # ${{ secrets.DEMO_API_KEY }} inline in run: works but is not best practice
           echo "Inline ref: ${{ secrets.DEMO_API_KEY }}"
-```bash
+```
 
 3. Trigger via `workflow_dispatch` and view the logs.
 4. Observe that `super-secret-value-abc123` never appears — it is replaced with `***`.
@@ -668,9 +688,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 7 (Environment Variables) for `GITHUB_ENV` and the difference between env vars and secrets; → Section 8 (Environment Protection) for per-environment secrets; → Section 23 (Security) for script injection via untrusted input.
 
+</details>
+
 ---
 
-### Scenario 2-C: Advanced Context Interpolation — Nested Objects and Conditional Logic
+<details>
+<summary>### Scenario 2-C: Advanced Context Interpolation — Nested Objects and Conditional Logic</summary>
+
 
 **Objective:** Work with complex `github` context nested properties (event payload data), and implement multi-branch conditional logic using context values.
 
@@ -737,7 +761,7 @@ jobs:
           AUTHOR="${{ github.event.issue.user.login || 'Unknown' }}"
           echo "PR Title with default: $TITLE"
           echo "Issue author with default: $AUTHOR"
-```bash
+```
 
 2. Push the workflow to your repository.
 
@@ -750,7 +774,7 @@ jobs:
 
    ```yaml
    if: contains(github.event.pull_request.labels.*.name, 'enhancement')
-   ```bash
+   ```
 
 **Success Criteria:**
 
@@ -771,7 +795,7 @@ PR Head Branch : fix/auth-bug
 PR Draft?      : false
 PR Labels      : bug, urgent
 This should run on PR labeled 'bug' OR any new issue
-```bash
+```
 
 **Troubleshooting:**
 
@@ -789,9 +813,13 @@ This should run on PR labeled 'bug' OR any new issue
 
 **Cross-Section Connections:** → Section 3 (Job & needs context) for multi-job orchestration; → Section 9 (Conditional Logic) for more complex `if:` expressions; → Section 16 (REST API) for comparing context-based decisions with API queries.
 
+</details>
+
 ---
 
-### Scenario 2-D: Troubleshooting Context Mismatches — Diagnosing Hidden Context Issues
+<details>
+<summary>### Scenario 2-D: Troubleshooting Context Mismatches — Diagnosing Hidden Context Issues</summary>
+
 
 **Objective:** Identify and fix scenarios where context values don't match expectations, including permission issues, event payload mismatches, and scope problems.
 
@@ -821,7 +849,7 @@ This should run on PR labeled 'bug' OR any new issue
                if [ -z "$LABELS" ]; then
                  echo "ERROR: Labels are empty! This may indicate wrong event type."
                fi
-     ```bash
+     ```
 
    - Push and create a PR. Labels should print as JSON array.
    - **Fix if empty:** Verify PR actually has labels applied; verify event type is `pull_request`.
@@ -848,7 +876,7 @@ This should run on PR labeled 'bug' OR any new issue
                  echo "ERROR: Secret not available in this job!"
                  echo "Checking permissions..."
                fi
-     ```bash
+     ```
 
    - Push and manually trigger. If secret is empty, check:
      - [ ] Secret name matches exactly (case-sensitive)
@@ -875,7 +903,7 @@ This should run on PR labeled 'bug' OR any new issue
                if [ "${{ github.event_name }}" = "push" ]; then
                  echo "On push: PR context is not available"
                fi
-     ```bash
+     ```
 
    - Push a commit (event type = `push`) and create a PR (event type = `pull_request`).
    - Observe: PR number is only available on `pull_request` events.
@@ -903,7 +931,7 @@ This should run on PR labeled 'bug' OR any new issue
                echo "Job var: $JOB_VAR"
                echo "Step var: $STEP_VAR"
                # WORKFLOW_VAR and JOB_VAR visible here; step-level overrides all
-     ```bash
+     ```
 
    - Push and observe all three variables print correctly.
    - Modify step to remove `STEP_VAR` — `JOB_VAR` takes precedence.
@@ -929,9 +957,13 @@ This should run on PR labeled 'bug' OR any new issue
 
 **Cross-Section Connections:** → Section 15 (Debugging) for log inspection; → Section 8 (Secrets) for secret availability in different contexts.
 
+</details>
+
 ---
 
-### Scenario 2-E: Enterprise Secret Management — Rotation, Organizational Secrets, and Protected Context Handling
+<details>
+<summary>### Scenario 2-E: Enterprise Secret Management — Rotation, Organizational Secrets, and Protected Context Handling</summary>
+
 
 **Objective:** Implement enterprise-grade secret management: using organizational secrets, automating secret rotation workflows, and ensuring secrets are accessed only by authorized workflows.
 
@@ -991,7 +1023,7 @@ jobs:
           # Attempt to print the secret - GitHub auto-masks it
           echo "Secret attempt: ${{ secrets.ORG_API_KEY }}"
           # Output will show *** instead of actual value
-```bash
+```
 
 4. **Implement Secret Rotation Automation:**
    - Create `.github/workflows/rotate-secrets.yml` (manually triggered):
@@ -1034,7 +1066,7 @@ jobs:
 
       - name: Send notification
         run: echo "Secret rotation initiated. Update via Settings → Secrets within 5 minutes."
-```bash
+```
 
 5. **Implement Secret Access Audit (via Workflow Logs):**
    - Create `.github/workflows/audit-secrets.yml`:
@@ -1058,7 +1090,7 @@ jobs:
           echo "Secrets used: ORG_API_KEY, PROD_DATABASE_URL"
           echo "Timestamp: $(date -u)"
           # In real scenario, send to centralized audit log
-```bash
+```
 
 6. **Test the Workflow:**
    - Trigger `Secret Rotation Demo` with `production` environment.
@@ -1090,7 +1122,7 @@ Secret rotation logged:
   Secret: ORG_API_KEY
   Timestamp: 2024-04-19T14:23:45Z
   Status: PENDING (awaits manual update in Settings)
-```bash
+```
 
 **Troubleshooting:**
 
@@ -1131,10 +1163,10 @@ Secret rotation logged:
 - Implement conditional expressions with context data
 - Test context availability at different workflow scopes
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 3</summary>
 
-### Scenario 3-A: Pass Data Between Jobs Using the `needs` Context
+<details>
+<summary>### Scenario 3-A: Pass Data Between Jobs Using the `needs` Context</summary>
+
 
 **Objective:** Create a two-job workflow where the `deploy` job consumes structured outputs produced by the `build` job via the `needs` context.
 
@@ -1178,7 +1210,7 @@ jobs:
           echo "Deploying version : ${{ needs.build.outputs.version }}"
           echo "Artifact name     : ${{ needs.build.outputs.artifact-name }}"
           echo "Triggered by      : ${{ github.actor }}"
-```bash
+```
 
 2. Push the file and navigate to **Actions → Job Outputs Demo → Run workflow**.
 3. In the run detail, click the `build` job → expand the "Generate version string" step → note the `version` output value.
@@ -1198,7 +1230,7 @@ jobs:
 Deploying version : 1.0.42
 Artifact name     : app-42
 Triggered by      : your-username
-```bash
+```
 
 **Troubleshooting:**
 
@@ -1215,9 +1247,13 @@ Triggered by      : your-username
 
 **Cross-Section Connections:** → Section 9 (Conditional Logic) for using `needs.build.outputs.version` inside an `if:` expression; → Section 14 (Inter-Job Communication) for matrix output aggregation patterns.
 
+</details>
+
 ---
 
-### Scenario 3-B: Implement Conditional Steps Using the `if:` Expression
+<details>
+<summary>### Scenario 3-B: Implement Conditional Steps Using the `if:` Expression</summary>
+
 
 **Objective:** Use `if:` expressions with `github` context values so that individual steps execute only in appropriate trigger scenarios.
 
@@ -1264,7 +1300,7 @@ jobs:
       - name: Skip on forks — avoid leaking secrets
         if: github.repository_owner == github.event.repository.owner.login
         run: echo "Running in the origin repo — safe to use secrets"
-```bash
+```
 
 2. Push to `develop` → verify only the "Always runs" step and none of the branch-specific steps execute.
 3. Push to `main` → verify the "Only on push to main" step executes.
@@ -1286,9 +1322,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 9 (Jobs & Steps) for `success()`, `failure()`, and `cancelled()` status functions in `if:` expressions; → Section 5 (Trigger Filters) for combining trigger conditions with `if:` guards.
 
+</details>
+
 ---
 
-### Scenario 3-C: Advanced Conditional Logic — Nested Conditions, Status Checks, and Multi-Output Routing
+<details>
+<summary>### Scenario 3-C: Advanced Conditional Logic — Nested Conditions, Status Checks, and Multi-Output Routing</summary>
+
 
 **Objective:** Master complex conditional expressions using GitHub's built-in functions (`success()`, `failure()`, `cancelled()`, `always()`) and multi-branch routing based on step outputs and job status.
 
@@ -1371,7 +1411,7 @@ jobs:
     steps:
       - name: Send failure notification
         run: echo "📧 Sent failure alert to team"
-```bash
+```
 
 2. Push the workflow and trigger manually. Observe:
    - Build step succeeds → outputs `build_version`
@@ -1394,7 +1434,7 @@ jobs:
     steps:
       - name: Log cancellation
         run: echo "⚠️ Workflow was cancelled by user"
-```bash
+```
 
 **Success Criteria:**
 
@@ -1420,9 +1460,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 9 (Job Dependencies & needs) for coordinating multi-job workflows; → Section 15 (Debugging) for inspecting job status in logs.
 
+</details>
+
 ---
 
-### Scenario 3-D: Troubleshooting Conditional Failures — Why Conditions Don't Fire and How to Debug Them
+<details>
+<summary>### Scenario 3-D: Troubleshooting Conditional Failures — Why Conditions Don't Fire and How to Debug Them</summary>
+
 
 **Objective:** Diagnose and fix scenarios where conditions silently fail, misfire, or evaluate unexpectedly.
 
@@ -1449,7 +1493,7 @@ jobs:
            - name: Intentional syntax error (typo in function name)
              if: succes()  # Typo: missing final 's'
              run: echo "This should run but won't"
-     ```bash
+     ```
 
    - Push and trigger. The step is **Skipped** (not failed).
    - **Fix:** Change `succes()` to `success()`. Step now runs.
@@ -1476,7 +1520,7 @@ jobs:
            - name: Correct reference
              if: steps.check.outputs.status == 'ready'  # Correct: .outputs (plural)
              run: echo "This will run"
-     ```bash
+     ```
 
    - First step with wrong reference is **Skipped**. Second step runs.
    - **Fix:** Always use `.outputs` (plural).
@@ -1501,7 +1545,7 @@ jobs:
            - name: Correct reference
              id: check
              run: echo "status=ready" >> $GITHUB_OUTPUT
-     ```bash
+     ```
 
    - Push and observe: Condition evaluates to false; step skipped.
    - **Fix:** Ensure every step you reference in `if:` has an `id:` field.
@@ -1531,7 +1575,7 @@ jobs:
                echo "Condition 1 (event): $COND1"
                echo "Condition 2 (ref): $COND2"
                echo "Condition 3 (actor): $COND3"
-     ```bash
+     ```
 
    - Run this to understand which part of a complex condition is false.
 
@@ -1559,7 +1603,7 @@ jobs:
          steps:
            - name: Deploy
              run: echo "Deploying version ${{ needs.build.outputs.version }}"
-     ```bash
+     ```
 
    - The deploy job won't run if the condition is wrong. Fix: ensure `build` job declares outputs with exact syntax.
 
@@ -1585,9 +1629,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 15 (Debugging) for using `runner.debug` to enable verbose output; → Section 9 (Job Dependencies) for understanding `needs:` and job-level conditions.
 
+</details>
+
 ---
 
-### Scenario 3-E: Enterprise-Scale Conditional Routing — Multi-Environment Deployments and Self-Healing Workflows
+<details>
+<summary>### Scenario 3-E: Enterprise-Scale Conditional Routing — Multi-Environment Deployments and Self-Healing Workflows</summary>
+
 
 **Objective:** Design enterprise-grade workflows that intelligently route deployments across multiple environments based on branch, approval status, and health checks, with automatic rollback on failure.
 
@@ -1732,7 +1780,7 @@ jobs:
           echo "  Environment: $ENV"
           echo "  Status: $STATUS"
           echo "  Timestamp: $(date -u)"
-```bash
+```
 
 2. **Create Environment Protection Rules (via Settings):**
    - Navigate to **Settings → Environments → prod-approval** (or via UI create it).
@@ -1800,10 +1848,10 @@ jobs:
 - Fix syntax errors in sample workflows
 - Use schema validation to catch mistakes early
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 4</summary>
 
-### Scenario 4-A: Build a Workflow from Scratch with Correct Structure
+<details>
+<summary>### Scenario 4-A: Build a Workflow from Scratch with Correct Structure</summary>
+
 
 **Objective:** Author a complete, valid workflow file from memory, correctly using every top-level key and understanding the relationship between `on`, `env`, `defaults`, `concurrency`, and `jobs`.
 
@@ -1878,7 +1926,7 @@ jobs:
         env:
           BUILD_ENV: test
         run: echo "Test env: $BUILD_ENV"
-```bash
+```
 
 2. Validate with the VS Code extension — confirm no red squiggles.
 3. Push and verify the `test` job waits for `build` to finish in the Actions UI.
@@ -1898,9 +1946,13 @@ jobs:
 
 **Time Estimate:** 20–25 minutes
 
+</details>
+
 ---
 
-### Scenario 4-B: YAML Anchors and Fixing Common Syntax Errors
+<details>
+<summary>### Scenario 4-B: YAML Anchors and Fixing Common Syntax Errors</summary>
+
 
 **Objective:** Use YAML anchors and merge keys to eliminate step duplication, then practice identifying and fixing the five most common GitHub Actions YAML errors.
 
@@ -1939,7 +1991,7 @@ jobs:
       EXTRA_VAR: job-b-only
     steps:
       - run: env | grep -E 'NODE_ENV|LOG_LEVEL|TIMEOUT|EXTRA_VAR'
-```bash
+```
 
 2. Push and verify both jobs show identical values for `NODE_ENV`, `LOG_LEVEL`, and `TIMEOUT` but different `EXTRA_VAR` values.
 
@@ -1952,7 +2004,7 @@ jobs:
 jobs:
   build:
   runs-on: ubuntu-latest  # ❌ should be indented under build:
-```bash
+```
 
 Fix: indent `runs-on:` two more spaces under `build:`.
 
@@ -1966,7 +2018,7 @@ jobs:
     steps:
       - name: Run tests
         # ❌ missing 'run:' or 'uses:' — a step must have one of them
-```bash
+```
 
 Fix: add `run: pytest` or `uses: actions/...`.
 
@@ -1977,7 +2029,7 @@ Fix: add `run: pytest` or `uses: actions/...`.
 - name: Continue on error
   run: false-command
   continue-on-error: True  # ❌ YAML True ≠ GitHub Actions boolean true
-```bash
+```
 
 Fix: use lowercase `true` (YAML boolean, not string).
 
@@ -1988,7 +2040,7 @@ Fix: use lowercase `true` (YAML boolean, not string).
 on:
   push:
     branches: [${{ github.ref }}]  # ❌ expressions not evaluated in on: block
-```bash
+```
 
 Fix: expressions are only evaluated at runtime inside `jobs:`; use a literal branch name.
 
@@ -2000,7 +2052,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     runs-on: windows-latest  # ❌ duplicate key; last value silently wins
-```bash
+```
 
 Fix: remove the duplicate `runs-on:` line.
 
@@ -2014,9 +2066,13 @@ Fix: remove the duplicate `runs-on:` line.
 
 **Cross-Section Connections:** → Section 15 (Debugging) for reading YAML parse errors in workflow run logs; → Section 4 (YAML Structure) self-referential — this is the deepest dive into the topic.
 
+</details>
+
 ---
 
-### Scenario 4-C: Multi-File Workflow Composition and DRY Principles — Reusable Workflow Components
+<details>
+<summary>### Scenario 4-C: Multi-File Workflow Composition and DRY Principles — Reusable Workflow Components</summary>
+
 
 **Objective:** Organize complex workflows using composition patterns: splitting large workflows into smaller reusable units, using defaults, and eliminating duplication.
 
@@ -2058,7 +2114,7 @@ Fix: remove the duplicate `runs-on:` line.
              uses: actions/setup-node@v4
              with:
                node-version: ${{ env.NODE_VERSION }}
-     ```bash
+     ```
 
 2. **Create Reusable Workflow for Common Tasks:**
    - Create `.github/workflows/reusable-build.yml`:
@@ -2098,7 +2154,7 @@ Fix: remove the duplicate `runs-on:` line.
              with:
                name: build-artifact
                path: dist/
-     ```bash
+     ```
 
 3. **Create Reusable Workflow for Testing:**
    - Create `.github/workflows/reusable-test.yml`:
@@ -2130,7 +2186,7 @@ Fix: remove the duplicate `runs-on:` line.
 
            - name: Run tests
              run: npm test -- --type=${{ inputs.test-type }}
-     ```bash
+     ```
 
 4. **Compose Main Workflow Using Reusable Components:**
    - Create `.github/workflows/main-composed.yml`:
@@ -2163,7 +2219,7 @@ Fix: remove the duplicate `runs-on:` line.
          steps:
            - name: Verify artifact
              run: echo "Artifact at: ${{ needs.build-app.outputs.artifact-path }}"
-     ```bash
+     ```
 
 5. **Test the Composed Workflow:**
    - Push to `main` → workflow runs composed structure
@@ -2193,9 +2249,13 @@ Fix: remove the duplicate `runs-on:` line.
 
 **Cross-Section Connections:** → Section 17 (Reusable Workflows) for detailed cross-repo workflow sharing; → Section 25 (Performance) for composition patterns that improve workflow performance.
 
+</details>
+
 ---
 
-### Scenario 4-D: Migrating Legacy Workflow to Modern YAML Syntax and Validating Structure
+<details>
+<summary>### Scenario 4-D: Migrating Legacy Workflow to Modern YAML Syntax and Validating Structure</summary>
+
 
 **Objective:** Take an outdated or poorly-structured workflow and modernize it using current best practices, then validate it with tooling.
 
@@ -2234,7 +2294,7 @@ Fix: remove the duplicate `runs-on:` line.
          steps:
            - run: echo "Deploy"
            # No artifact retrieval
-     ```bash
+     ```
 
 2. **Identify Anti-Patterns:**
    - ✗ Outdated action versions (`@v2`)
@@ -2320,21 +2380,21 @@ Fix: remove the duplicate `runs-on:` line.
              run: |
                echo "Deploying ${{ env.ARTIFACT_DIR }}"
                ls -la ${{ env.ARTIFACT_DIR }}
-     ```bash
+     ```
 
 4. **Validate Refactored Workflow:**
    - Use `actionlint` locally to check for issues:
 
      ```bash
      actionlint modern-refactored.yml
-     ```bash
+     ```
 
    - Use VS Code extension to verify no syntax errors
    - Run `act` locally to simulate execution:
 
      ```bash
      act push -j build
-     ```bash
+     ```
 
 5. **Compare Both Workflows:**
    - Document improvements made (versions, structure, artifact handling, etc.)
@@ -2365,9 +2425,13 @@ Fix: remove the duplicate `runs-on:` line.
 
 **Cross-Section Connections:** → Section 15 (Debugging) for using `act` to test workflows locally; → Section 12 (Artifacts) for proper artifact handling patterns.
 
+</details>
+
 ---
 
-### Scenario 4-E: Programmatically Generate Workflow YAML from Schema and Validation Automation
+<details>
+<summary>### Scenario 4-E: Programmatically Generate Workflow YAML from Schema and Validation Automation</summary>
+
 
 **Objective:** Build a system to generate workflow files from a schema definition, enabling consistency, validation, and rapid workflow creation.
 
@@ -2401,7 +2465,7 @@ Fix: remove the duplicate `runs-on:` line.
        },
        "required": ["name", "trigger"]
      }
-     ```bash
+     ```
 
 2. **Create a Workflow Configuration File:**
    - Create `workflow-config.json`:
@@ -2417,7 +2481,7 @@ Fix: remove the duplicate `runs-on:` line.
        "deploy_env": "staging",
        "artifact_retention": 7
      }
-     ```bash
+     ```
 
 3. **Create a Generator Script (Node.js):**
    - Create `generate-workflow.js`:
@@ -2546,7 +2610,7 @@ Fix: remove the duplicate `runs-on:` line.
 
      console.log('✅ Workflow generated successfully!');
      console.log(`📋 Output: .github/workflows/generated-workflow.yml`);
-     ```bash
+     ```
 
 4. **Create Validation Script:**
    - Create `validate-workflow.js`:
@@ -2569,7 +2633,7 @@ Fix: remove the duplicate `runs-on:` line.
      }
 
      console.log('✅ Workflow validation passed!');
-     ```bash
+     ```
 
 5. **Generate and Validate:**
    - Run:
@@ -2577,7 +2641,7 @@ Fix: remove the duplicate `runs-on:` line.
      ```bash
      node generate-workflow.js
      node validate-workflow.js
-     ```bash
+     ```
 
    - Review generated `.github/workflows/generated-workflow.yml`
    - Modify `workflow-config.json` and regenerate to see changes
@@ -2630,10 +2694,10 @@ Fix: remove the duplicate `runs-on:` line.
 - Validate cron syntax for different time zones
 - Create workflow_dispatch with typed inputs
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 5</summary>
 
-### Scenario 5-A: Configure Push Triggers with Branch and Path Filtering
+<details>
+<summary>### Scenario 5-A: Configure Push Triggers with Branch and Path Filtering</summary>
+
 
 **Objective:** Create a workflow that triggers only when relevant files are changed on relevant branches, preventing unnecessary CI runs on documentation-only commits.
 
@@ -2649,7 +2713,7 @@ Fix: remove the duplicate `runs-on:` line.
    src/app.js
    docs/README.md
    package.json
-   ```bash
+   ```
 
 2. Create `.github/workflows/filtered-ci.yml`:
 
@@ -2681,7 +2745,7 @@ jobs:
           echo "Event  : ${{ github.event_name }}"
           echo "Branch : ${{ github.ref_name }}"
           echo "Actor  : ${{ github.actor }}"
-```bash
+```
 
 3. Push a change to `src/app.js` on `main` → verify workflow triggers.
 4. Push a change to `docs/README.md` on `main` → verify workflow is **not** triggered.
@@ -2710,9 +2774,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 6 (Trigger Events Part 2) for `paths-ignore` vs negation and tag triggers; → Section 9 (Conditional Logic) for adding `if:` to individual jobs as a secondary filter.
 
+</details>
+
 ---
 
-### Scenario 5-B: Create a `workflow_dispatch` with Typed and Validated Inputs
+<details>
+<summary>### Scenario 5-B: Create a `workflow_dispatch` with Typed and Validated Inputs</summary>
+
 
 **Objective:** Build a manually-triggered workflow with `choice`, `boolean`, and `string` typed inputs, including server-side validation logic.
 
@@ -2790,7 +2858,7 @@ jobs:
       - name: Notify (conditional)
         if: inputs.send-notification == true && inputs.dry-run == false
         run: echo "📢 Notification sent for ${{ inputs.environment }} deploy"
-```bash
+```
 
 2. Push the file. Navigate to **Actions → Manual Deploy → Run workflow**.
 3. Verify the form shows a **dropdown** for environment, **text fields** for version, and **checkboxes** for the boolean inputs.
@@ -2820,9 +2888,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 6 (Trigger Events Part 2) for passing `workflow_dispatch` inputs to called workflows; → Section 8 (Environment Protection Rules) for adding required-reviewer gates on the `production` environment.
 
+</details>
+
 ---
 
-### Scenario 5-C: Complex Trigger Combinations — Paths, Branches, Tags, and Ignore Filters
+<details>
+<summary>### Scenario 5-C: Complex Trigger Combinations — Paths, Branches, Tags, and Ignore Filters</summary>
+
 
 **Objective:** Combine multiple trigger filters (branches, paths, tags, ignore patterns) to create sophisticated routing workflows that run only under specific conditions.
 
@@ -2894,7 +2966,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploying ${{ github.ref }}"
-```bash
+```
 
 2. Test each trigger:
    - Push to `develop` with only docs changed → no run
@@ -2919,9 +2991,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 6 (Event Filters) for deeper dive into path matching; → Section 28 (Practice Assessment) for real-world multi-trigger scenarios.
 
+</details>
+
 ---
 
-### Scenario 5-D: Troubleshooting Trigger Events — Why Workflows Don't Fire
+<details>
+<summary>### Scenario 5-D: Troubleshooting Trigger Events — Why Workflows Don't Fire</summary>
+
 
 **Objective:** Diagnose and fix workflows that don't trigger when expected using event inspection and testing.
 
@@ -2948,7 +3024,7 @@ jobs:
          runs-on: ubuntu-latest
          steps:
            - run: echo "Workflow triggered"
-     ```bash
+     ```
 
    - Push to `develop` branch with src/ change → workflow does NOT run (expected: main/staging only)
    - Push to `main` with only README.md change → workflow does NOT run (expected: paths filter)
@@ -2968,7 +3044,7 @@ jobs:
          runs-on: ubuntu-latest
          steps:
            - run: echo "PR event only"
-     ```bash
+     ```
 
    - Comment on an existing PR → no run (event is `issue_comment`, not `pull_request`)
    - Push to main → no run (event is `push`, not `pull_request`)
@@ -2987,7 +3063,7 @@ jobs:
          runs-on: ubuntu-latest
          steps:
            - run: echo "Not a draft PR"
-     ```bash
+     ```
 
    - Open as draft → job skipped (if condition prevents it)
    - Convert to ready → runs ✓
@@ -3006,7 +3082,7 @@ jobs:
          runs-on: ubuntu-latest
          steps:
            - run: echo "Tag: ${{ github.ref }}"
-     ```bash
+     ```
 
    - Create tag `release-1.0` → no run (pattern doesn't match)
    - Create tag `v1.0.0` → runs ✓
@@ -3027,7 +3103,7 @@ jobs:
 **Troubleshooting:**
 
 - **Trigger debug info not visible** → Go to **Actions → [Workflow] → Choose recent run → View trigger details**
-- **Pattern matches locally but not GitHub** → Test regex with https://regex101.com/
+- **Pattern matches locally but not GitHub** → Test regex with [regex101.com](https://regex101.com/)
 
 **Time Estimate:** 25–30 minutes
 
@@ -3038,9 +3114,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 15 (Debugging) for reading GitHub Actions logs; → Section 3 (Conditionals) for job-level trigger guards.
 
+</details>
+
 ---
 
-### Scenario 5-E: Enterprise Multi-Trigger Orchestration — Cross-Repository Event Coordination
+<details>
+<summary>### Scenario 5-E: Enterprise Multi-Trigger Orchestration — Cross-Repository Event Coordination</summary>
+
 
 **Objective:** Build sophisticated, organization-scale workflows that coordinate across multiple repositories using webhook events and API-driven triggers.
 
@@ -3081,7 +3161,7 @@ jobs:
                  -H "Accept: application/vnd.github.v3+json" \
                  https://api.github.com/repos/YOUR_ORG/repo-c/dispatches \
                  -d '{"event_type":"upstream-build"}'
-     ```bash
+     ```
 
 2. **Create Listener Workflows (Repos B & C):**
    - In Repo B, create `.github/workflows/run-on-upstream.yml`:
@@ -3103,7 +3183,7 @@ jobs:
              run: |
                echo "Testing compatibility with Repo A commit: ${{ github.event.client_payload.sha }}"
                npm test
-     ```bash
+     ```
 
 3. **Implement Status Tracking:**
    - Create `.github/workflows/track-status.yml`:
@@ -3126,7 +3206,7 @@ jobs:
                else
                  echo "❌ Downstream tests failed"
                fi
-     ```bash
+     ```
 
 4. **Test the Coordination:**
    - Push to Repo A main → triggers curl POST to Repos B & C
@@ -3177,10 +3257,10 @@ jobs:
 - Pass inputs from parent to reusable workflows
 - Test trigger behavior with different event types
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 6</summary>
 
-### Scenario 6-A: Advanced `paths-ignore` and Tag-Based Triggers
+<details>
+<summary>### Scenario 6-A: Advanced `paths-ignore` and Tag-Based Triggers</summary>
+
 
 **Objective:** Combine `paths-ignore`, tag triggers, and `workflow_run` to build a layered trigger strategy that fires at the right times without redundant runs.
 
@@ -3230,7 +3310,7 @@ jobs:
         run: |
           echo "Triggered by workflow: ${{ github.event.workflow_run.name }}"
           echo "Source commit: ${{ github.event.workflow_run.head_sha }}"
-```bash
+```
 
 2. Create a test workflow `.github/workflows/ci.yml` (referenced by `workflow_run`):
 
@@ -3250,7 +3330,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "CI tests passed"
-```bash
+```
 
 3. Push a commit touching only `README.md` → verify CI workflow is **not** triggered.
 4. Push a commit touching `src/main.js` → verify CI triggers, which then triggers the Release Pipeline.
@@ -3270,9 +3350,13 @@ jobs:
 
 **Time Estimate:** 20–25 minutes
 
+</details>
+
 ---
 
-### Scenario 6-B: Pass `workflow_dispatch` Inputs to a Reusable Workflow
+<details>
+<summary>### Scenario 6-B: Pass `workflow_dispatch` Inputs to a Reusable Workflow</summary>
+
 
 **Objective:** Create a caller workflow that accepts `workflow_dispatch` inputs and forwards them to a reusable `workflow_call` workflow without redefining each input twice.
 
@@ -3315,7 +3399,7 @@ jobs:
           echo "Version     : ${{ inputs.version }}"
           echo "Dry run     : ${{ inputs.dry-run }}"
           echo "Token set   : ${{ secrets.DEPLOY_TOKEN != '' }}"
-```bash
+```
 
 2. Create the caller workflow `.github/workflows/deploy-orchestrator.yml`:
 
@@ -3350,7 +3434,7 @@ jobs:
       dry-run: ${{ inputs.dry-run }}
     secrets:
       DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-```bash
+```
 
 3. Trigger the orchestrator via `workflow_dispatch` with `environment: staging`, `version: 1.2.3`.
 4. Verify the reusable workflow job receives and prints all three values correctly.
@@ -3367,9 +3451,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 17 (Reusable Workflows) for full coverage of `workflow_call` including outputs and versioning; → Section 8 (Environments) for adding required reviewer gates to the `deploy` job inside the reusable workflow.
 
+</details>
+
 ---
 
-### Scenario 6-C: Advanced Repository Dispatch — Custom Event Types and Complex Payloads
+<details>
+<summary>### Scenario 6-C: Advanced Repository Dispatch — Custom Event Types and Complex Payloads</summary>
+
 
 **Objective:** Master `repository_dispatch` event type for triggering workflows programmatically with rich payloads, enabling CI orchestration from scripts or external systems.
 
@@ -3414,7 +3502,7 @@ jobs:
               echo "Rolling back: ${{ github.event.client_payload.previous-version }}"
               ;;
           esac
-```bash
+```
 
 2. Trigger via curl with custom payload:
 
@@ -3430,7 +3518,7 @@ curl -X POST \
       "rebuild-cache": false
     }
   }'
-```bash
+```
 
 3. Test event routing and payload access.
 
@@ -3445,9 +3533,13 @@ curl -X POST \
 
 **Cross-Section Connections:** → Section 5 (Trigger Events Part 1) for basic trigger concepts; → Section 16 (REST API) for advanced API integration.
 
+</details>
+
 ---
 
-### Scenario 6-D: Debugging Event Trigger Failures in Monorepo — Path-Based Workflow Selection
+<details>
+<summary>### Scenario 6-D: Debugging Event Trigger Failures in Monorepo — Path-Based Workflow Selection</summary>
+
 
 **Objective:** Diagnose and fix workflows in monorepo structures where path changes should trigger specific workflows but fail silently.
 
@@ -3466,7 +3558,7 @@ curl -X POST \
   /.github/workflows/backend-tests.yml
 /shared
   /components
-```bash
+```
 
 2. Create `.github/workflows/frontend-tests.yml`:
 
@@ -3485,7 +3577,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm test --prefix frontend
-```bash
+```
 
 3. Create `.github/workflows/backend-tests.yml`:
 
@@ -3504,7 +3596,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm test --prefix backend
-```bash
+```
 
 4. Test scenarios:
    - Push only backend/ changes → Backend Tests runs, Frontend Tests skipped ✓
@@ -3515,7 +3607,7 @@ jobs:
 
 ```bash
 git diff HEAD~1 --name-only | grep -E "^frontend/" && echo "Frontend trigger"
-```bash
+```
 
 **Success Criteria:**
 
@@ -3528,9 +3620,13 @@ git diff HEAD~1 --name-only | grep -E "^frontend/" && echo "Frontend trigger"
 
 **Cross-Section Connections:** → Section 5 (Trigger Events) for path filter syntax; → Section 28 (Practice Assessment) for real monorepo scenarios.
 
+</details>
+
 ---
 
-### Scenario 6-E: Enterprise Event Coordination — Multi-Trigger Gating and Approval Chains
+<details>
+<summary>### Scenario 6-E: Enterprise Event Coordination — Multi-Trigger Gating and Approval Chains</summary>
+
 
 **Objective:** Build sophisticated workflows combining multiple trigger types with approvals and conditional routing for enterprise-safe deployments.
 
@@ -3630,7 +3726,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deployment status: ${{ needs.deploy.result }}"
-```bash
+```
 
 2. Test each trigger path:
    - Manual dispatch to staging → skips approval
@@ -3674,10 +3770,10 @@ jobs:
 - Implement environment-based configuration (dev/prod)
 - Verify variable scope and precedence
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 7</summary>
 
-### Scenario 7-A: Environment Variable Scope and Precedence
+<details>
+<summary>### Scenario 7-A: Environment Variable Scope and Precedence</summary>
+
 
 **Objective:** Demonstrate that step-level `env:` overrides job-level, which overrides workflow-level, and verify the exact precedence order in logs.
 
@@ -3723,7 +3819,7 @@ jobs:
       - name: Step 3 — back to job-level after step 2
         run: |
           echo "APP_ENV    = $APP_ENV"       # expects: job-level (step override gone)
-```bash
+```
 
 2. Trigger via `workflow_dispatch` and verify each step's output matches expectations.
 3. Add `APP_ENV` as a **Repository Variable** (Settings → Secrets and variables → Variables) and observe it does NOT override the YAML-defined env vars (YAML env wins over repository variables that are set via `vars.` context, not plain env vars).
@@ -3737,9 +3833,13 @@ jobs:
 
 **Time Estimate:** 15–20 minutes
 
+</details>
+
 ---
 
-### Scenario 7-B: Dynamic Variables with `GITHUB_ENV` and Default Environment Variables
+<details>
+<summary>### Scenario 7-B: Dynamic Variables with `GITHUB_ENV` and Default Environment Variables</summary>
+
 
 **Objective:** Use `$GITHUB_ENV` to set environment variables dynamically in one step and consume them in subsequent steps, and catalog the most important default GitHub-provided environment variables.
 
@@ -3792,7 +3892,7 @@ jobs:
           echo "GITHUB_RUN_ID          : $GITHUB_RUN_ID"
           echo "GITHUB_RUN_NUMBER      : $GITHUB_RUN_NUMBER"
           echo "GITHUB_ACTIONS         : $GITHUB_ACTIONS"
-```bash
+```
 
 2. Trigger and verify Step 2 uses the values set in Step 1 (not empty).
 3. Note that `GITHUB_ENV` values are **not** available in the same step that sets them — only in subsequent steps.
@@ -3819,9 +3919,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 8 (Environments) for environment-specific variables (not the same as `env:`); → Section 14 (Inter-Job Communication) for `GITHUB_OUTPUT` patterns.
 
+</details>
+
 ---
 
-### Scenario 7-C: Platform-Specific Paths and Cross-Platform Configuration
+<details>
+<summary>### Scenario 7-C: Platform-Specific Paths and Cross-Platform Configuration</summary>
+
 
 **Objective:** Handle environment variable differences across platforms (Linux, macOS, Windows) for truly portable workflows.
 
@@ -3865,7 +3969,7 @@ jobs:
 
       - name: Use platform-aware paths
         run: mkdir -p "$ARTIFACT_PATH"
-```bash
+```
 
 2. Run on all platforms; verify paths are correct for each.
 
@@ -3880,9 +3984,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 20 (GitHub-Hosted Runners) for runner environment details; → Section 15 (Debugging) for cross-platform troubleshooting.
 
+</details>
+
 ---
 
-### Scenario 7-D: Fix Environment Variable Pollution — Isolating Variables Between Jobs
+<details>
+<summary>### Scenario 7-D: Fix Environment Variable Pollution — Isolating Variables Between Jobs</summary>
+
 
 **Objective:** Diagnose and fix scenarios where environment variables leak between jobs or persist unexpectedly.
 
@@ -3921,7 +4029,7 @@ jobs:
           echo "JOB1_VAR: ${JOB1_VAR:-NOT_FOUND}"
           echo "GLOBAL_VAR: $GLOBAL_VAR"
           # Job2 should see GLOBAL_VAR but NOT LEAKED_VAR or JOB1_VAR
-```bash
+```
 
 2. Run and verify: job2 has access ONLY to GLOBAL_VAR.
 3. Fix: Use job outputs instead of GITHUB_ENV for inter-job communication.
@@ -3936,9 +4044,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 14 (Inter-Job Communication) for outputs; → Section 2 (Contexts) for context scope rules.
 
+</details>
+
 ---
 
-### Scenario 7-E: Enterprise Environment Configuration — Shared Org Settings and Team Defaults
+<details>
+<summary>### Scenario 7-E: Enterprise Environment Configuration — Shared Org Settings and Team Defaults</summary>
+
 
 **Objective:** Build reusable, organization-wide environment variable configurations deployed across all workflows.
 
@@ -3973,7 +4085,7 @@ jobs:
           echo "  Node: 20"
           echo "  Cache: npm-cache-${{ github.sha }}"
           echo "  Env: ${{ inputs.environment }}"
-```bash
+```
 
 2. Use in main workflows:
 
@@ -3997,7 +4109,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-```bash
+```
 
 **Success Criteria:**
 
@@ -4034,10 +4146,10 @@ jobs:
 - Configure deployment branch restrictions
 - Test approval workflows
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 8</summary>
 
-### Scenario 8-A: Create Environments with Protection Rules and Secrets
+<details>
+<summary>### Scenario 8-A: Create Environments with Protection Rules and Secrets</summary>
+
 
 **Objective:** Set up three GitHub Environments (`development`, `staging`, `production`) with escalating protection, environment-specific secrets, and branch deployment restrictions.
 
@@ -4111,7 +4223,7 @@ jobs:
         env:
           DB_URL: ${{ secrets.DATABASE_URL }}  # resolves from production environment
         run: echo "Deployed to production — DB: ${#DB_URL} chars"
-```bash
+```
 
 5. Push to `main` and watch the workflow run.
 6. When the `deploy-production` job appears, it should pause and show **"Waiting for review"**.
@@ -4131,9 +4243,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 8-B: GITHUB_TOKEN Permissions and Scoping
+<details>
+<summary>### Scenario 8-B: GITHUB_TOKEN Permissions and Scoping</summary>
+
 
 **Objective:** Understand the default `GITHUB_TOKEN` permissions, restrict them using the `permissions:` key, and observe the difference between repo-level default and job-level explicit scoping.
 
@@ -4196,7 +4312,7 @@ jobs:
           # Using curl to demonstrate the 403 you would get
           echo "Token permissions: contents=read only"
           echo "Any write operation to issues would return 403"
-```bash
+```
 
 2. Trigger via `workflow_dispatch`.
 3. Verify the `write-issues` job creates a comment on Issue #1.
@@ -4218,9 +4334,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 23 (Security) for principle of least privilege applied to GITHUB_TOKEN; → Section 24 (Security Part 2) for OIDC as an alternative to long-lived tokens.
 
+</details>
+
 ---
 
-### Scenario 8-C: OpenID Connect (OIDC) Token Generation and Short-Lived Credential Exchange
+<details>
+<summary>### Scenario 8-C: OpenID Connect (OIDC) Token Generation and Short-Lived Credential Exchange</summary>
+
 
 **Objective:** Replace long-lived personal access tokens with short-lived OIDC tokens for enhanced security in cloud provider authentication.
 
@@ -4258,7 +4378,7 @@ jobs:
         run: |
           echo "Token expires in ~15 minutes"
           echo "No long-lived credentials stored"
-```bash
+```
 
 2. Configure AWS IAM role to trust GitHub:
    - Create trust policy accepting OIDC issuer: `token.actions.githubusercontent.com`
@@ -4277,9 +4397,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 16 (REST API) for programmatic credential handling; → Section 23 (Security) for secure credential patterns.
 
+</details>
+
 ---
 
-### Scenario 8-D: Audit and Recover from Excessive GITHUB_TOKEN Permissions
+<details>
+<summary>### Scenario 8-D: Audit and Recover from Excessive GITHUB_TOKEN Permissions</summary>
+
 
 **Objective:** Identify workflows with over-permissioned tokens and remediate security risks through permission auditing.
 
@@ -4315,7 +4439,7 @@ jobs:
         run: |
           echo "This workflow only reads repo content."
           echo "Scope should be: permissions: { contents: read }"
-```bash
+```
 
 2. Audit using GitHub's built-in security scans:
    - Go to Repo → **Security → Secret scanning → Code scanning**
@@ -4326,7 +4450,7 @@ jobs:
 ```yaml
 permissions:
   contents: read  # Minimal required
-```bash
+```
 
 4. Verify GitHub Actions still work with reduced permissions.
 
@@ -4341,9 +4465,13 @@ permissions:
 
 **Cross-Section Connections:** → Section 23 (Security) for least-privilege principles; → Section 2 (Contexts) for available permission scopes.
 
+</details>
+
 ---
 
-### Scenario 8-E: Organization-Wide Secret Rotation and Secure Cross-Repository Access
+<details>
+<summary>### Scenario 8-E: Organization-Wide Secret Rotation and Secure Cross-Repository Access</summary>
+
 
 **Objective:** Implement secrets management across an organization: centralizing secret provisioning, enforcing rotation policies, and enabling safe cross-repo access.
 
@@ -4381,7 +4509,7 @@ permissions:
                GH_TOKEN: ${{ secrets.ROTATION_TOKEN }}
              run: |
                gh secret set ORG_DATABASE_URL -b "${NEW_VALUE}" --org YOUR_ORG
-     ```bash
+     ```
 
 3. **Enable Across Organization:**
    - Repository-level workflows inherit org secret: `${{ secrets.ORG_DATABASE_URL }}`
@@ -4428,10 +4556,10 @@ permissions:
 - Handle errors and continue execution strategically
 - Test job ordering and failure scenarios
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 9</summary>
 
-### Scenario 9-A: Multi-Job Dependencies with Status Functions
+<details>
+<summary>### Scenario 9-A: Multi-Job Dependencies with Status Functions</summary>
+
 
 **Objective:** Build a 4-job pipeline where jobs run in a specific order, one deliberately fails, and downstream jobs use `failure()`, `success()`, and `always()` to respond appropriately.
 
@@ -4492,7 +4620,7 @@ jobs:
         run: |
           echo "Pipeline status captured"
           echo "Upstream conclusion available via needs context"
-```bash
+```
 
 2. Trigger the workflow and observe the run graph:
    - `build` → succeeds
@@ -4516,9 +4644,13 @@ jobs:
 
 **Time Estimate:** 20–25 minutes
 
+</details>
+
 ---
 
-### Scenario 9-B: `continue-on-error` and Step-Level Error Handling
+<details>
+<summary>### Scenario 9-B: `continue-on-error` and Step-Level Error Handling</summary>
+
 
 **Objective:** Use `continue-on-error` to allow flaky steps to fail without failing the job, and use `outcome` step context to branch on step results.
 
@@ -4563,7 +4695,7 @@ jobs:
 
       - name: Final step — always runs, job is still green
         run: echo "Job completes successfully despite the failed flaky step"
-```bash
+```
 
 2. Trigger and verify the job shows **green** even though a step exited with `exit 1`.
 3. Observe the difference between `outcome` (raw) and `conclusion` (effective): with `continue-on-error: true`, `conclusion` is `success` but `outcome` is `failure`.
@@ -4580,9 +4712,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 15 (Debugging) for using `outcome` context to build diagnostic workflows; → Section 26 (Troubleshooting) for matrix job failure scenarios.
 
+</details>
+
 ---
 
-### Scenario 9-C: Advanced Job Dependencies with Outputs and Complex Routing
+<details>
+<summary>### Scenario 9-C: Advanced Job Dependencies with Outputs and Complex Routing</summary>
+
 
 **Objective:** Build multi-job workflows with sophisticated dependency chains, passing data between jobs, and conditional routing based on outputs.
 
@@ -4630,7 +4766,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploying v${{ needs.analyze.outputs.version }}"
-```bash
+```
 
 2. Test: modify `should-deploy` output to `false` → deploy job skips.
 3. Verify outputs pass through the dependency chain.
@@ -4645,9 +4781,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 14 (Outputs) for inter-job communication; → Section 3 (Conditionals) for complex if expressions.
 
+</details>
+
 ---
 
-### Scenario 9-D: Timeout and Cancellation Handling
+<details>
+<summary>### Scenario 9-D: Timeout and Cancellation Handling</summary>
+
 
 **Objective:** Diagnose and recover from job timeouts and workflow cancellations.
 
@@ -4671,7 +4811,7 @@ jobs:
         run: sleep 90  # Exceeds 1 min timeout
       - name: Never runs (job cancelled)
         run: echo "This is skipped"
-```bash
+```
 
 2. Manually cancel workflow mid-run; observe `cancelled` status.
 3. Add cleanup step that always runs:
@@ -4679,7 +4819,7 @@ jobs:
 ```yaml
       - if: always()
         run: echo "Cleanup: timeout occurred at $(date)"
-```bash
+```
 
 **Success Criteria:**
 
@@ -4691,9 +4831,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 15 (Debugging) for investigating timeouts; → Section 26 (Troubleshooting) for timeout recovery strategies.
 
+</details>
+
 ---
 
-### Scenario 9-E: Self-Healing Orchestration with Automatic Retry and Fallback Logic
+<details>
+<summary>### Scenario 9-E: Self-Healing Orchestration with Automatic Retry and Fallback Logic</summary>
+
 
 **Objective:** Build resilient workflows that automatically retry failed jobs and activate fallback paths.
 
@@ -4743,7 +4887,7 @@ jobs:
       - run: |
           echo "Job status: ${{ needs.flaky-operation.result }}"
           echo "Fallback executed: ${{ needs.fallback-path.result != 'skipped' }}"
-```bash
+```
 
 2. Observe: flaky job fails → fallback auto-activates.
 3. On success: fallback skipped.
@@ -4782,10 +4926,10 @@ jobs:
 - Optimize matrix for cost and speed
 - Access and use matrix context values in steps
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 10</summary>
 
-### Scenario 10-A: Multi-Dimensional Matrix with `include` and `exclude`
+<details>
+<summary>### Scenario 10-A: Multi-Dimensional Matrix with `include` and `exclude`</summary>
+
 
 **Objective:** Build a test matrix across operating systems and Node.js versions, exclude an unsupported combination, and add an `include` entry that injects extra variables for a specific combination.
 
@@ -4850,7 +4994,7 @@ jobs:
 
       - name: Verify Node version
         run: node --version
-```bash
+```
 
 2. Trigger via `workflow_dispatch` and count the jobs: should be 8 (3×3=9 minus 1 excluded macOS/Node18).
 3. Verify only the `ubuntu-latest`/`node-20` job runs the integration test step.
@@ -4871,9 +5015,13 @@ jobs:
 
 **Time Estimate:** 20–25 minutes
 
+</details>
+
 ---
 
-### Scenario 10-B: Fail-Fast Behavior and Matrix Output Aggregation
+<details>
+<summary>### Scenario 10-B: Fail-Fast Behavior and Matrix Output Aggregation</summary>
+
 
 **Objective:** Observe `fail-fast` behavior, understand when to disable it, and aggregate outputs from multiple matrix jobs into a single downstream job.
 
@@ -4928,7 +5076,7 @@ jobs:
           else
             echo "✅ All builds passed"
           fi
-```bash
+```
 
 2. Trigger and observe: `api` and `frontend` succeed, `worker` fails.
 3. With `fail-fast: false`, the `api` and `frontend` jobs should continue to completion.
@@ -4951,9 +5099,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 14 (Inter-Job Communication) for artifact-based aggregation of matrix results; → Section 26 (Troubleshooting) for diagnosing matrix job failures in complex pipelines.
 
+</details>
+
 ---
 
-### Scenario 10-C: Dynamic Matrix Generation and Large Matrix Optimization
+<details>
+<summary>### Scenario 10-C: Dynamic Matrix Generation and Large Matrix Optimization</summary>
+
 
 **Objective:** Generate matrix values programmatically and optimize large matrices for performance and cost.
 
@@ -4984,7 +5136,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Testing Node ${{ matrix.node }}"
-```bash
+```
 
 2. Matrix expands to 4 jobs (2 versions × 2 OS).
 3. Add `exclude` to remove unwanted combinations.
@@ -4999,9 +5151,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 25 (Performance) for cost optimization; → Section 28 (Practice) for real-world matrix scenarios.
 
+</details>
+
 ---
 
-### Scenario 10-D: Fix Matrix Expansion Bugs and False Failures
+<details>
+<summary>### Scenario 10-D: Fix Matrix Expansion Bugs and False Failures</summary>
+
 
 **Objective:** Diagnose and fix bugs where matrix jobs fail unexpectedly or expand incorrectly.
 
@@ -5022,7 +5178,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: cat file.txt | grep "pattern"  # Fails on Windows (different line endings)
-```bash
+```
 
 2. Fix: use cross-platform command or shell setting.
 3. Verify all matrix jobs pass.
@@ -5037,9 +5193,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 26 (Troubleshooting) for platform-specific issues; → Section 7 (Environment) for platform detection.
 
+</details>
+
 ---
 
-### Scenario 10-E: Distributed Testing with Matrix Across Teams
+<details>
+<summary>### Scenario 10-E: Distributed Testing with Matrix Across Teams</summary>
+
 
 **Objective:** Scale testing across distributed teams using multi-dimensional matrix.
 
@@ -5056,7 +5216,7 @@ strategy:
   matrix:
     team: [frontend, backend, infra]
     test-type: [unit, integration]
-```bash
+```
 
 2. This creates 6 jobs (3 teams × 2 types).
 3. Upload results per job.
@@ -5097,10 +5257,10 @@ strategy:
 - Test application code against service containers
 - Debug service container networking issues
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 11</summary>
 
-### Scenario 11-A: PostgreSQL Service Container for Integration Tests
+<details>
+<summary>### Scenario 11-A: PostgreSQL Service Container for Integration Tests</summary>
+
 
 **Objective:** Spin up a PostgreSQL service container within a workflow job and run database integration tests against it.
 
@@ -5184,7 +5344,7 @@ jobs:
           echo "App would connect to: ${DATABASE_URL}"
           echo "Cache would connect to: ${REDIS_URL}"
           echo "All integration tests passed"
-```bash
+```
 
 2. Push to trigger the workflow (or use `workflow_dispatch`).
 3. Verify the `postgres` and `redis` service containers appear in the run log under "Initialize containers".
@@ -5206,9 +5366,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 11-B: Container Jobs — Running the Entire Job Inside a Container
+<details>
+<summary>### Scenario 11-B: Container Jobs — Running the Entire Job Inside a Container</summary>
+
 
 **Objective:** Use `container:` at the job level to run all steps inside a Docker container, and understand how this differs from service containers.
 
@@ -5268,7 +5432,7 @@ jobs:
         run: |
           echo "Tests would run here inside Node 20 Alpine"
           node -e "console.log('Hello from container job!')"
-```bash
+```
 
 2. Trigger and observe that all steps execute inside `node:20-alpine`.
 3. Note the key difference: service containers in container jobs are accessed via their **service name as hostname** (e.g., `redis`), not `localhost`.
@@ -5284,9 +5448,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 20 (GitHub-Hosted Runners) for understanding the runner environment; → Section 21 (Self-Hosted Runners) for using container jobs with self-hosted runners where Docker must be available.
 
+</details>
+
 ---
 
-### Scenario 11-C: Multi-Container Networking and Advanced Health Checks
+<details>
+<summary>### Scenario 11-C: Multi-Container Networking and Advanced Health Checks</summary>
+
 
 **Objective:** Set up complex multi-container environments with inter-container networking.
 
@@ -5310,9 +5478,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 25 (Performance) for optimization.
 
+</details>
+
 ---
 
-### Scenario 11-D: Debug Container Startup Failures and Connection Timeouts
+<details>
+<summary>### Scenario 11-D: Debug Container Startup Failures and Connection Timeouts</summary>
+
 
 **Objective:** Troubleshoot why containers fail or services can't connect.
 
@@ -5337,9 +5509,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 15 (Debugging) for troubleshooting patterns.
 
+</details>
+
 ---
 
-### Scenario 11-E: Kubernetes-Like Container Orchestration Patterns
+<details>
+<summary>### Scenario 11-E: Kubernetes-Like Container Orchestration Patterns</summary>
+
 
 **Objective:** Implement container orchestration patterns resembling Kubernetes within GitHub Actions.
 
@@ -5388,10 +5564,10 @@ jobs:
 - Access artifacts via GitHub API
 - Create artifact download workflows
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 12</summary>
 
-### Scenario 12-A: Upload and Download Artifacts Across Jobs
+<details>
+<summary>### Scenario 12-A: Upload and Download Artifacts Across Jobs</summary>
+
 
 **Objective:** Upload test results and a build binary as artifacts in one job, then consume them in separate downstream jobs demonstrating cross-job artifact sharing.
 
@@ -5490,7 +5666,7 @@ jobs:
 
       - name: Display coverage summary
         run: cat coverage-report/summary.txt
-```bash
+```
 
 2. Push and observe three parallel downstream jobs after `build-and-test`.
 3. Navigate to the run → **Artifacts** section to see three uploaded artifacts.
@@ -5510,9 +5686,13 @@ jobs:
 
 **Time Estimate:** 20–25 minutes
 
+</details>
+
 ---
 
-### Scenario 12-B: Download All Artifacts and REST API Access
+<details>
+<summary>### Scenario 12-B: Download All Artifacts and REST API Access</summary>
+
 
 **Objective:** Download all artifacts from a run in one step, implement retention policy management, and demonstrate REST API artifact access.
 
@@ -5555,7 +5735,7 @@ jobs:
         with:
           name: pipeline-summary-${{ github.run_number }}
           path: pipeline-summary.txt
-```bash
+```
 
 2. Add a separate step showing REST API artifact access:
 
@@ -5568,7 +5748,7 @@ jobs:
           gh api \
             /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts \
             --jq '.artifacts[] | [.name, .size_in_bytes, .expires_at] | @tsv'
-```bash
+```
 
 3. Trigger the workflow and verify the aggregation job lists all artifact files.
 4. Verify the REST API response shows all artifacts with sizes and expiration dates.
@@ -5589,9 +5769,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 16 (Workflow REST API) for full artifact management via API; → Section 27 (Job Summaries) for using `GITHUB_STEP_SUMMARY` as an alternative to artifact-based reporting.
 
+</details>
+
 ---
 
-### Scenario 12-C: Artifact Retention Policies and Cost Optimization
+<details>
+<summary>### Scenario 12-C: Artifact Retention Policies and Cost Optimization</summary>
+
 
 **Objective:** Implement retention policies to manage artifact storage costs.
 
@@ -5615,9 +5799,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 25 (Performance) for cost tracking and optimization.
 
+</details>
+
 ---
 
-### Scenario 12-D: Recover from Artifact Storage Quota Exceeded
+<details>
+<summary>### Scenario 12-D: Recover from Artifact Storage Quota Exceeded</summary>
+
 
 **Objective:** Diagnose and fix scenarios where artifact storage quota is exhausted.
 
@@ -5642,9 +5830,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 16 (REST API) for artifact queries.
 
+</details>
+
 ---
 
-### Scenario 12-E: Long-Term Artifact Archival Strategy
+<details>
+<summary>### Scenario 12-E: Long-Term Artifact Archival Strategy</summary>
+
 
 **Objective:** Archive critical artifacts to long-term storage (S3, Azure) while keeping recent artifacts locally.
 
@@ -5695,10 +5887,10 @@ jobs:
 - Implement cache cleanup for sensitive data
 - Compare caching performance benefits
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 13</summary>
 
-### Scenario 13-A: npm and Python Cache Strategies with Key Invalidation
+<details>
+<summary>### Scenario 13-A: npm and Python Cache Strategies with Key Invalidation</summary>
+
 
 **Objective:** Implement caching for npm and pip dependencies with correct key strategies that invalidate automatically when lock files change.
 
@@ -5715,7 +5907,7 @@ jobs:
 echo '{"name":"demo","version":"1.0.0","dependencies":{"lodash":"^4.17.21"}}' > package.json
 echo '{}' > package-lock.json  # simplified for demo
 echo "requests==2.31.0" > requirements.txt
-```bash
+```
 
 2. Create `.github/workflows/caching-demo.yml`:
 
@@ -5787,7 +5979,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - run: pip install -r requirements.txt
-```bash
+```
 
 3. Push twice and compare run times on the second push (cache hit expected).
 4. Edit `requirements.txt` (add a new package), push again — observe cache miss and rebuild.
@@ -5806,9 +5998,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 13-B: Gradle/Maven Caching and Cache Size Management
+<details>
+<summary>### Scenario 13-B: Gradle/Maven Caching and Cache Size Management</summary>
+
 
 **Objective:** Implement build tool caching for Java projects (Gradle and Maven), understand cache scope limitations, and practice cache busting.
 
@@ -5883,7 +6079,7 @@ jobs:
 
       - name: Build
         run: gradle --version
-```bash
+```
 
 2. Trigger from a feature branch and observe that PRs can restore from the `main` branch cache.
 3. Add `-v2` to the manual cache key to bust the cache (simulating a dependency conflict).
@@ -5903,9 +6099,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 25 (Performance Optimization) for measuring cache impact on total workflow time; → Section 23 (Security) for avoiding sensitive data in caches.
 
+</details>
+
 ---
 
-### Scenario 13-C: Cache Invalidation Strategies and Partial Cache Hits
+<details>
+<summary>### Scenario 13-C: Cache Invalidation Strategies and Partial Cache Hits</summary>
+
 
 **Objective:** Master cache invalidation to ensure fresh dependencies while minimizing rebuild time.
 
@@ -5929,9 +6129,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 25 (Performance) for tuning cache hit rates.
 
+</details>
+
 ---
 
-### Scenario 13-D: Debug Cache Misses and Slow Builds Despite Caching
+<details>
+<summary>### Scenario 13-D: Debug Cache Misses and Slow Builds Despite Caching</summary>
+
 
 **Objective:** Troubleshoot why caches aren't hitting or builds remain slow.
 
@@ -5955,9 +6159,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 15 (Debugging) for cache troubleshooting.
 
+</details>
+
 ---
 
-### Scenario 13-E: Multi-Layer Cache Strategy for Monorepo
+<details>
+<summary>### Scenario 13-E: Multi-Layer Cache Strategy for Monorepo</summary>
+
 
 **Objective:** Implement tiered caching for monorepo: shared cache, service-specific cache.
 
@@ -6008,10 +6216,10 @@ jobs:
 - Pass complex data structures between jobs
 - Test output limits and fallback strategies
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 14</summary>
 
-### Scenario 14-A: Job Outputs and GITHUB_OUTPUT
+<details>
+<summary>### Scenario 14-A: Job Outputs and GITHUB_OUTPUT</summary>
+
 
 **Objective:** Set step outputs using `GITHUB_OUTPUT`, consume them in subsequent steps, and pass job-level outputs to downstream jobs via `needs` context.
 
@@ -6095,7 +6303,7 @@ jobs:
       - run: |
           echo "Deploy result: ${{ needs.deploy.result }}"
           echo "Version      : ${{ needs.prepare.outputs.version }}"
-```bash
+```
 
 2. Trigger via `workflow_dispatch` from `main`.
 3. Verify `deploy` job shows the correct version and environment.
@@ -6115,9 +6323,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 14-B: GITHUB_ENV and Environment Variable Sharing
+<details>
+<summary>### Scenario 14-B: GITHUB_ENV and Environment Variable Sharing</summary>
+
 
 **Objective:** Use `GITHUB_ENV` to set environment variables that persist across subsequent steps in the same job, and contrast with `GITHUB_OUTPUT` for inter-job sharing.
 
@@ -6178,7 +6390,7 @@ jobs:
           echo "GITHUB_ENV  = available in subsequent STEPS of the same JOB"
           echo "GITHUB_OUTPUT = available in downstream JOBS via needs context"
           echo "GITHUB_PATH = modifies PATH for subsequent steps in same job"
-```bash
+```
 
 2. Trigger and verify the `APP_VERSION` and `BUILD_DATE` are available in the second step.
 3. Verify the multi-line `RELEASE_NOTES` variable preserves newlines.
@@ -6194,9 +6406,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 10 (Matrix Strategies) for understanding why `GITHUB_ENV` doesn't persist across matrix job cells; → Section 27 (Job Summaries) for using `GITHUB_STEP_SUMMARY` as another special environment file.
 
+</details>
+
 ---
 
-### Scenario 14-C: Complex Output Parsing and JSON Manipulation
+<details>
+<summary>### Scenario 14-C: Complex Output Parsing and JSON Manipulation</summary>
+
 
 **Objective:** Parse and manipulate complex JSON outputs between jobs using jq.
 
@@ -6220,9 +6436,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 16 (REST API) for JSON handling.
 
+</details>
+
 ---
 
-### Scenario 14-D: Fix Data Loss When Passing Large Outputs
+<details>
+<summary>### Scenario 14-D: Fix Data Loss When Passing Large Outputs</summary>
+
 
 **Objective:** Diagnose and fix scenarios where large outputs are truncated or lost.
 
@@ -6246,9 +6466,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 12 (Artifacts) for inter-job data transfer.
 
+</details>
+
 ---
 
-### Scenario 14-E: Event-Driven Job Communication Patterns
+<details>
+<summary>### Scenario 14-E: Event-Driven Job Communication Patterns</summary>
+
 
 **Objective:** Implement event-driven patterns for loose coupling across repositories.
 
@@ -6298,10 +6522,10 @@ jobs:
 - Use run history to identify failure patterns
 - Create diagnostic workflows
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 15</summary>
 
-### Scenario 15-A: Enable Debug Logging and Analyze Logs
+<details>
+<summary>### Scenario 15-A: Enable Debug Logging and Analyze Logs</summary>
+
 
 **Objective:** Enable step-debug logging via repository secrets, interpret runner diagnostic logs, and build a diagnostic step that surfaces useful context when workflows fail.
 
@@ -6366,7 +6590,7 @@ jobs:
 
       - name: This step is skipped because previous failed
         run: echo "Never runs"
-```bash
+```
 
 4. Trigger via `workflow_dispatch` with debug logging enabled.
 5. Compare the log verbosity with and without `ACTIONS_STEP_DEBUG=true`.
@@ -6387,9 +6611,13 @@ jobs:
 
 **Time Estimate:** 20–25 minutes
 
+</details>
+
 ---
 
-### Scenario 15-B: Diagnosing YAML Syntax Errors and Timeout Issues
+<details>
+<summary>### Scenario 15-B: Diagnosing YAML Syntax Errors and Timeout Issues</summary>
+
 
 **Objective:** Intentionally introduce and fix common YAML errors, and configure `timeout-minutes` to handle runaway steps.
 
@@ -6415,7 +6643,7 @@ jobs:
       run: echo "This fails due to the 4-space indent on steps"
     - name: Second step
        run: echo "Extra space before run causes mapping key error"
-```bash
+```
 
 2. Push this file and observe the workflow error in the Actions tab before it runs.
 3. Fix the indentation and push again.
@@ -6447,7 +6675,7 @@ jobs:
       - name: Cleanup after timeout
         if: always()
         run: echo "Cleanup runs regardless of timeout"
-```bash
+```
 
 5. Push and observe the hung step being killed at 1 minute with exit code 124.
 6. Verify the cleanup step still runs due to `if: always()`.
@@ -6468,9 +6696,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 2 (VS Code extension) for YAML schema validation that catches errors before pushing; → Section 26 (Troubleshooting) for production-level failure diagnosis techniques.
 
+</details>
+
 ---
 
-### Scenario 15-C: Step Debugging with Advanced Log Inspection
+<details>
+<summary>### Scenario 15-C: Step Debugging with Advanced Log Inspection</summary>
+
 
 **Objective:** Use GitHub Actions' debug mode and advanced logging to pinpoint failures.
 
@@ -6494,9 +6726,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 27 (Job Summaries) for rich debugging output.
 
+</details>
+
 ---
 
-### Scenario 15-D: Reproduce CI Failures Locally with act
+<details>
+<summary>### Scenario 15-D: Reproduce CI Failures Locally with act</summary>
+
 
 **Objective:** Use `act` and Docker to reproduce CI failures locally.
 
@@ -6521,9 +6757,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 1 (Fundamentals) for act setup and basic usage.
 
+</details>
+
 ---
 
-### Scenario 15-E: Advanced Log Aggregation and Automatic Issue Filing
+<details>
+<summary>### Scenario 15-E: Advanced Log Aggregation and Automatic Issue Filing</summary>
+
 
 **Objective:** Aggregate logs from multiple jobs and auto-file issues for recurring failures.
 
@@ -6573,10 +6813,10 @@ jobs:
 - Retrieve deployment status via API
 - Build automation around workflow management
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 16</summary>
 
-### Scenario 16-A: Query and Manage Workflow Runs via REST API
+<details>
+<summary>### Scenario 16-A: Query and Manage Workflow Runs via REST API</summary>
+
 
 **Objective:** Use the GitHub CLI and REST API to list workflow runs, retrieve job logs, cancel runs, and download artifacts programmatically.
 
@@ -6591,7 +6831,7 @@ jobs:
 ```bash
 gh auth login
 # Or set GH_TOKEN environment variable
-```bash
+```
 
 2. Create `.github/workflows/api-automation.yml`:
 
@@ -6663,7 +6903,7 @@ jobs:
               --dir ./downloaded-artifacts
             ls -la ./downloaded-artifacts/
           fi
-```bash
+```
 
 3. Trigger via `workflow_dispatch` and review the output of each API query step.
 4. Run the same `gh` commands locally against your repository to practice.
@@ -6682,9 +6922,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 16-B: Trigger Workflows and Manage Deployments via API
+<details>
+<summary>### Scenario 16-B: Trigger Workflows and Manage Deployments via API</summary>
+
 
 **Objective:** Trigger a `workflow_dispatch` event via the REST API, approve pending deployments programmatically, and cancel a running workflow.
 
@@ -6719,7 +6963,7 @@ jobs:
           echo "Debug mode   : ${{ inputs.debug-mode }}"
           echo "Triggered by API or manual dispatch"
           sleep 30  # Long enough to demonstrate cancellation
-```bash
+```
 
 2. Trigger the workflow via REST API using `gh`:
 
@@ -6741,7 +6985,7 @@ LATEST_RUN=$(gh run list \
   --jq '.[0].databaseId')
 
 echo "Triggered run ID: $LATEST_RUN"
-```bash
+```
 
 3. Cancel the run programmatically before `sleep 30` completes:
 
@@ -6749,7 +6993,7 @@ echo "Triggered run ID: $LATEST_RUN"
 # Cancel the running workflow
 gh run cancel $LATEST_RUN --repo OWNER/REPO
 echo "Run $LATEST_RUN cancelled"
-```bash
+```
 
 4. Verify the run shows as "Cancelled" in the Actions UI.
 
@@ -6763,9 +7007,13 @@ echo "Run $LATEST_RUN cancelled"
 
 **Cross-Section Connections:** → Section 8 (Environments) for approving pending deployments via `POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments`; → Section 17 (Reusable Workflows) for triggering reusable workflows via API.
 
+</details>
+
 ---
 
-### Scenario 16-C: Advanced Workflow Querying and Filtering
+<details>
+<summary>### Scenario 16-C: Advanced Workflow Querying and Filtering</summary>
+
 
 **Objective:** Query workflows with advanced filters (status, branch, conclusion).
 
@@ -6789,9 +7037,13 @@ echo "Run $LATEST_RUN cancelled"
 
 **Cross-Section Connections:** → Section 25 (Performance) for monitoring.
 
+</details>
+
 ---
 
-### Scenario 16-D: Handle Rate Limiting and Pagination in REST API Calls
+<details>
+<summary>### Scenario 16-D: Handle Rate Limiting and Pagination in REST API Calls</summary>
+
 
 **Objective:** Implement robust pagination and handle GitHub API rate limits.
 
@@ -6815,9 +7067,13 @@ echo "Run $LATEST_RUN cancelled"
 
 **Cross-Section Connections:** → Section 26 (Troubleshooting) for error handling.
 
+</details>
+
 ---
 
-### Scenario 16-E: Batch Automation with REST API (Mass Workflow Trigger/Cancel)
+<details>
+<summary>### Scenario 16-E: Batch Automation with REST API (Mass Workflow Trigger/Cancel)</summary>
+
 
 **Objective:** Batch trigger or cancel multiple workflows using REST API.
 
@@ -6868,10 +7124,10 @@ echo "Run $LATEST_RUN cancelled"
 - Pass secrets to reusable workflows
 - Test reusable workflow output handling
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 17</summary>
 
-### Scenario 17-A: Create and Call a Reusable Workflow
+<details>
+<summary>### Scenario 17-A: Create and Call a Reusable Workflow</summary>
+
 
 **Objective:** Create a reusable `workflow_call` workflow with typed inputs, outputs, and secret inheritance, then call it from a caller workflow.
 
@@ -6940,7 +7196,7 @@ jobs:
         run: |
           echo "Deployment to ${{ inputs.environment }} complete"
           echo "Accessible at: https://${{ inputs.environment }}.example.com"
-```bash
+```
 
 2. Create `.github/workflows/main-pipeline.yml` (the caller workflow):
 
@@ -6991,7 +7247,7 @@ jobs:
       - run: |
           echo "Staging URL   : ${{ needs.deploy-staging.outputs.deploy-url }}"
           echo "Production URL: ${{ needs.deploy-production.outputs.deploy-url }}"
-```bash
+```
 
 3. Push to `main` and observe both deploy jobs calling the same reusable workflow.
 4. Verify the `deploy-url` output propagates from the reusable workflow back to the caller.
@@ -7010,9 +7266,13 @@ jobs:
 
 **Time Estimate:** 30–35 minutes
 
+</details>
+
 ---
 
-### Scenario 17-B: Cross-Repository Reusable Workflows and Versioning
+<details>
+<summary>### Scenario 17-B: Cross-Repository Reusable Workflows and Versioning</summary>
+
 
 **Objective:** Call a reusable workflow from a different repository, understand `secrets: inherit`, and implement version pinning with tags.
 
@@ -7040,20 +7300,20 @@ jobs:
     # Pass ALL caller secrets to the reusable workflow
     # Avoid if you want explicit control over which secrets are shared
     secrets: inherit
-```bash
+```
 
 2. Create a Git tag and push it:
 
 ```bash
 git tag -a v1.0.0 -m "Release 1.0.0"
 git push origin v1.0.0
-```bash
+```
 
 3. Update the caller to pin to the tag:
 
 ```yaml
     uses: ./.github/workflows/reusable-deploy.yml@v1.0.0
-```bash
+```
 
 4. Verify the tag-pinned call runs the exact version of the workflow at that tag.
 
@@ -7067,9 +7327,13 @@ git push origin v1.0.0
 
 **Cross-Section Connections:** → Section 18 (Custom Actions) for the parallel concept of action versioning with major version tags (`@v1`); → Section 22 (Enterprise) for organization-level starter workflows that call shared reusable workflows.
 
+</details>
+
 ---
 
-### Scenario 17-C: Debug Reusable Workflow Issues and Dependency Chains
+<details>
+<summary>### Scenario 17-C: Debug Reusable Workflow Issues and Dependency Chains</summary>
+
 
 **Objective:** Troubleshoot common reusable workflow failures (circular calls, missing outputs, timeout).
 
@@ -7093,9 +7357,13 @@ git push origin v1.0.0
 
 **Cross-Section Connections:** → Section 15 (Debugging) for troubleshooting techniques.
 
+</details>
+
 ---
 
-### Scenario 17-D: Conditional Reusable Workflow Calls
+<details>
+<summary>### Scenario 17-D: Conditional Reusable Workflow Calls</summary>
+
 
 **Objective:** Call reusable workflows conditionally based on inputs, secrets, or context.
 
@@ -7119,9 +7387,13 @@ git push origin v1.0.0
 
 **Cross-Section Connections:** → Section 9 (Conditional Logic) for conditional syntax.
 
+</details>
+
 ---
 
-### Scenario 17-E: Reusable Workflow Patterns for Enterprise (Matrix, Approval, Secrets)
+<details>
+<summary>### Scenario 17-E: Reusable Workflow Patterns for Enterprise (Matrix, Approval, Secrets)</summary>
+
 
 **Objective:** Implement enterprise-scale patterns: matrix builds, approval gates, centralized secrets.
 
@@ -7170,10 +7442,10 @@ git push origin v1.0.0
 - Test action with workflow
 - Document action usage
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 18</summary>
 
-### Scenario 18-A: Build a Composite Action
+<details>
+<summary>### Scenario 18-A: Build a Composite Action</summary>
+
 
 **Objective:** Create a composite action that combines multiple steps into a reusable action, with typed inputs, outputs, and proper `action.yml` metadata.
 
@@ -7187,7 +7459,7 @@ git push origin v1.0.0
 
 ```bash
 mkdir -p .github/actions/setup-and-validate
-```bash
+```
 
 2. Create `.github/actions/setup-and-validate/action.yml`:
 
@@ -7265,7 +7537,7 @@ runs:
       if: inputs.run-tests == 'true'
       working-directory: ${{ inputs.working-directory }}
       run: npm test --if-present || echo "No tests defined"
-```bash
+```
 
 3. Create `.github/workflows/use-composite-action.yml` to test it:
 
@@ -7292,7 +7564,7 @@ jobs:
         run: |
           echo "Node installed: ${{ steps.setup.outputs.node-version-installed }}"
           echo "Validation    : ${{ steps.setup.outputs.validation-passed }}"
-```bash
+```
 
 4. Push and verify the composite action runs all its steps as part of the `build` job.
 
@@ -7310,9 +7582,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 18-B: JavaScript Action with Inputs and Outputs
+<details>
+<summary>### Scenario 18-B: JavaScript Action with Inputs and Outputs</summary>
+
 
 **Objective:** Create a minimal JavaScript action that processes an input string, returns an output, and handles errors using `@actions/core`.
 
@@ -7329,7 +7605,7 @@ mkdir -p .github/actions/string-transformer
 cd .github/actions/string-transformer
 npm init -y
 npm install @actions/core
-```bash
+```
 
 2. Create `.github/actions/string-transformer/action.yml`:
 
@@ -7350,7 +7626,7 @@ outputs:
 runs:
   using: node20
   main: index.js
-```bash
+```
 
 3. Create `.github/actions/string-transformer/index.js`:
 
@@ -7378,7 +7654,7 @@ try {
 } catch (error) {
   core.setFailed(error.message);
 }
-```bash
+```
 
 4. Commit `index.js`, `action.yml`, and `node_modules` (necessary for JS actions without `ncc`).
 
@@ -7392,7 +7668,7 @@ try {
           transform: uppercase
 
       - run: echo "Result: ${{ steps.transform.outputs.result }}"
-```bash
+```
 
 **Success Criteria:**
 
@@ -7404,9 +7680,13 @@ try {
 
 **Cross-Section Connections:** → Section 19 (Publishing Actions) for distributing this action to the Marketplace with versioned releases; → Section 24 (Security) for pinning third-party actions to commit SHAs.
 
+</details>
+
 ---
 
-### Scenario 18-C: Composite Actions with Script Files and OS Detection
+<details>
+<summary>### Scenario 18-C: Composite Actions with Script Files and OS Detection</summary>
+
 
 **Objective:** Create composite actions that use multiple scripts and detect the runner OS.
 
@@ -7430,9 +7710,13 @@ try {
 
 **Cross-Section Connections:** → Section 20 (Runners) for OS-specific considerations.
 
+</details>
+
 ---
 
-### Scenario 18-D: Error Handling and Validation in Custom Actions
+<details>
+<summary>### Scenario 18-D: Error Handling and Validation in Custom Actions</summary>
+
 
 **Objective:** Implement robust error handling, input validation, and failure reporting in actions.
 
@@ -7457,9 +7741,13 @@ try {
 
 **Cross-Section Connections:** → Section 24 (Security) for secure input handling.
 
+</details>
+
 ---
 
-### Scenario 18-E: Containerized Actions with Docker
+<details>
+<summary>### Scenario 18-E: Containerized Actions with Docker</summary>
+
 
 **Objective:** Build Docker container-based actions for complex workflows.
 
@@ -7509,10 +7797,10 @@ try {
 - Test action from marketplace
 - Document action in README
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 19</summary>
 
-### Scenario 19-A: Prepare an Action for Marketplace Publishing
+<details>
+<summary>### Scenario 19-A: Prepare an Action for Marketplace Publishing</summary>
+
 
 **Objective:** Add all required metadata to `action.yml`, write comprehensive README documentation, and create a versioned release following the major-version-tag convention.
 
@@ -7563,11 +7851,14 @@ runs:
       run: echo "version=$(node --version)" >> $GITHUB_OUTPUT
     - shell: bash
       run: npm ci
-```bash
+```
 
 2. Create `README.md` with usage documentation:
 
 ```markdown
+
+</details>
+
 ## Setup and Validate Action
 
 Sets up Node.js, installs dependencies, validates, and optionally runs tests.
@@ -7603,7 +7894,7 @@ Sets up Node.js, installs dependencies, validates, and optionally runs tests.
           - id: setup
             uses: your-username/setup-and-validate-action@v1
           - run: echo "Node ${{ steps.setup.outputs.node-version-installed }}"
-```bash
+```
 
 3. Create the action test workflow in the action's repository:
 
@@ -7635,7 +7926,7 @@ jobs:
             echo "Invalid output format: $VERSION"
             exit 1
           fi
-```bash
+```
 
 4. Create the release and versioned tags:
 
@@ -7647,7 +7938,7 @@ git push origin v1.0.0
 # Create/move the floating major version tag
 git tag -fa v1 -m "Update v1 to v1.0.0"
 git push origin v1 --force
-```bash
+```
 
 **Success Criteria:**
 
@@ -7665,7 +7956,9 @@ git push origin v1 --force
 
 ---
 
-### Scenario 19-B: Automated Action Release Workflow
+<details>
+<summary>### Scenario 19-B: Automated Action Release Workflow</summary>
+
 
 **Objective:** Create a workflow that automatically moves the major version tag on release publication, following GitHub's recommended action versioning pattern.
 
@@ -7714,7 +8007,7 @@ jobs:
         run: |
           echo "## ${{ steps.version.outputs.tag }} — $(date +%Y-%m-%d)" >> CHANGELOG.md
           echo "See release notes: ${{ github.event.release.html_url }}" >> CHANGELOG.md
-```bash
+```
 
 **Success Criteria:**
 
@@ -7726,9 +8019,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 18 (Custom Actions) for building the action being published; → Section 24 (Security) for why users should pin to full SHA instead of mutable major tags for security-critical workflows.
 
+</details>
+
 ---
 
-### Scenario 19-C: Version Management and Semantic Versioning for Actions
+<details>
+<summary>### Scenario 19-C: Version Management and Semantic Versioning for Actions</summary>
+
 
 **Objective:** Implement semantic versioning for actions with major version tags and release branches.
 
@@ -7753,9 +8050,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 18 (Actions) for versioning concepts.
 
+</details>
+
 ---
 
-### Scenario 19-D: Marketplace Certification and Documentation
+<details>
+<summary>### Scenario 19-D: Marketplace Certification and Documentation</summary>
+
 
 **Objective:** Prepare action for Marketplace: README, badges, examples, proper documentation.
 
@@ -7781,9 +8082,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 1 (Fundamentals) for action best practices.
 
+</details>
+
 ---
 
-### Scenario 19-E: Security Hardening for Published Actions
+<details>
+<summary>### Scenario 19-E: Security Hardening for Published Actions</summary>
+
 
 **Objective:** Harden published actions against security threats (dependency vulnerabilities, secret exposure).
 
@@ -7836,10 +8141,10 @@ jobs:
 - Handle runner image changes and updates
 - Test workflow compatibility across runners
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 20</summary>
 
-### Scenario 20-A: Target Different Runner Types and Verify Environments
+<details>
+<summary>### Scenario 20-A: Target Different Runner Types and Verify Environments</summary>
+
 
 **Objective:** Create a matrix workflow that runs across all three GitHub-hosted OS types, verifies the preinstalled tools, and demonstrates runner-specific behavior.
 
@@ -7929,7 +8234,7 @@ jobs:
             echo "--- $dir ---"
             cat "${dir}runner-info.txt"
           done
-```bash
+```
 
 2. Push and observe the three parallel jobs in the Actions UI.
 3. Review that the artifact content differs per OS.
@@ -7948,9 +8253,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 20-B: Runner Image Pinning and Toolcache Inspection
+<details>
+<summary>### Scenario 20-B: Runner Image Pinning and Toolcache Inspection</summary>
+
 
 **Objective:** Pin to a specific runner image, inspect the toolcache, and simulate a runner image migration from `ubuntu-20.04` to `ubuntu-22.04`.
 
@@ -7990,7 +8299,7 @@ jobs:
 
       - name: Verify version
         run: node --version
-```bash
+```
 
 **Success Criteria:**
 
@@ -8002,9 +8311,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 21 (Self-Hosted Runners) for when GitHub-hosted runners don't have the required tools or network access; → Section 25 (Performance) for using toolcache to avoid repeated downloads.
 
+</details>
+
 ---
 
-### Scenario 20-C: Advanced Runner Selection and Constraints
+<details>
+<summary>### Scenario 20-C: Advanced Runner Selection and Constraints</summary>
+
 
 **Objective:** Select runners based on labels, CPU, memory, OS specifications.
 
@@ -8029,9 +8342,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 10 (Matrix) for testing multiple runners.
 
+</details>
+
 ---
 
-### Scenario 20-D: Troubleshoot Runner Availability and Queuing
+<details>
+<summary>### Scenario 20-D: Troubleshoot Runner Availability and Queuing</summary>
+
 
 **Objective:** Diagnose why jobs queue too long or fail to find available runners.
 
@@ -8056,9 +8373,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 25 (Performance) for optimization.
 
+</details>
+
 ---
 
-### Scenario 20-E: GitHub-Hosted Runner Limits and Enterprise Strategies
+<details>
+<summary>### Scenario 20-E: GitHub-Hosted Runner Limits and Enterprise Strategies</summary>
+
 
 **Objective:** Understand runner usage limits and implement strategies for large-scale automation.
 
@@ -8108,10 +8429,10 @@ jobs:
 - Test runner selection with specific labels
 - Monitor runner health and performance
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 21</summary>
 
-### Scenario 21-A: Register and Use a Self-Hosted Runner
+<details>
+<summary>### Scenario 21-A: Register and Use a Self-Hosted Runner</summary>
+
 
 **Objective:** Register a self-hosted runner on your local machine (or a VM), assign it custom labels, and run a workflow that targets it via label selection.
 
@@ -8144,7 +8465,7 @@ tar xzf ./actions-runner-linux-x64.tar.gz
 
 # Start the runner interactively (for testing)
 ./run.sh
-```bash
+```
 
 3. Verify the runner appears as **Idle** in the repository settings.
 
@@ -8183,7 +8504,7 @@ jobs:
           # Self-hosted runners reuse workspaces by default
           # Clean up to avoid stale files
           find . -name "*.tmp" -delete 2>/dev/null || true
-```bash
+```
 
 5. Trigger via `workflow_dispatch` and verify the job runs on your local machine.
 6. Check the runner's `_work/` directory to see the workspace.
@@ -8202,9 +8523,13 @@ jobs:
 
 **Time Estimate:** 30–35 minutes
 
+</details>
+
 ---
 
-### Scenario 21-B: Runner Groups and Organization-Level Runners
+<details>
+<summary>### Scenario 21-B: Runner Groups and Organization-Level Runners</summary>
+
 
 **Objective:** Understand runner groups for restricting which repositories can use which runners (concepts and configuration — requires organization access).
 
@@ -8240,7 +8565,7 @@ jobs:
       - name: Deploy to production
         run: |
           echo "Production deployment from approved runner"
-```bash
+```
 
 5. Attempt to run the same workflow from a fork — verify it's blocked.
 
@@ -8254,9 +8579,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 22 (Enterprise) for organization-level runner policies; → Section 24 (Security) for the security implications of runner compromise in CI/CD pipelines.
 
+</details>
+
 ---
 
-### Scenario 21-C: Self-Hosted Runner Scaling and Management
+<details>
+<summary>### Scenario 21-C: Self-Hosted Runner Scaling and Management</summary>
+
 
 **Objective:** Scale self-hosted runners for high-volume workflows using runner groups.
 
@@ -8281,9 +8610,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 25 (Performance) for scaling strategies.
 
+</details>
+
 ---
 
-### Scenario 21-D: Self-Hosted Runner Security Hardening
+<details>
+<summary>### Scenario 21-D: Self-Hosted Runner Security Hardening</summary>
+
 
 **Objective:** Secure self-hosted runners against malicious workflows and exfiltration.
 
@@ -8308,9 +8641,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 24 (Security) for hardening.
 
+</details>
+
 ---
 
-### Scenario 21-E: Self-Hosted Runner Maintenance and Auto-Update
+<details>
+<summary>### Scenario 21-E: Self-Hosted Runner Maintenance and Auto-Update</summary>
+
 
 **Objective:** Keep self-hosted runners updated and functioning optimally.
 
@@ -8361,10 +8698,10 @@ jobs:
 - Implement audit logging
 - Establish cost management practices
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 22</summary>
 
-### Scenario 22-A: Organization Starter Workflows
+<details>
+<summary>### Scenario 22-A: Organization Starter Workflows</summary>
+
 
 **Objective:** Create an organization-level starter workflow that appears in the "Actions" tab of new repositories, providing a standardized CI template.
 
@@ -8382,7 +8719,7 @@ jobs:
   workflow-templates/
     node-ci.yml
     node-ci.properties.json
-```bash
+```
 
 3. Create `.github/workflow-templates/node-ci.yml`:
 
@@ -8427,7 +8764,7 @@ jobs:
         with:
           name: coverage-${{ matrix.node-version }}
           path: coverage/
-```bash
+```
 
 4. Create `.github/workflow-templates/node-ci.properties.json`:
 
@@ -8441,7 +8778,7 @@ jobs:
     "JavaScript"
   ]
 }
-```bash
+```
 
 5. Verify the template appears in a new repository under **Actions → New workflow**.
 
@@ -8458,9 +8795,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 22-B: Organization Policy Management and Audit Logging
+<details>
+<summary>### Scenario 22-B: Organization Policy Management and Audit Logging</summary>
+
 
 **Objective:** Configure which actions are allowed in an organization, set required workflows, and query audit logs for workflow activity.
 
@@ -8479,7 +8820,7 @@ actions/*,
 github/*,
 docker/*@v2,
 aws-actions/configure-aws-credentials@*
-```bash
+```
 
 2. Query audit logs via GitHub API:
 
@@ -8513,7 +8854,7 @@ jobs:
               }
             }
           ' --jq '.data.organization.auditLog.nodes[]'
-```bash
+```
 
 3. Review what a `required_workflow` looks like when configured via the API:
 
@@ -8525,7 +8866,7 @@ jobs:
           # Required workflows are org-level policies
           gh api /orgs/YOUR_ORG/actions/required_workflows \
             --jq '.required_workflows[] | "\(.name): \(.workflow_file_path)"'
-```bash
+```
 
 **Success Criteria:**
 
@@ -8537,9 +8878,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 21 (Runner Groups) for org-level runner access control; → Section 24 (Security) for the security rationale behind action policy restrictions.
 
+</details>
+
 ---
 
-### Scenario 22-C: Enterprise Starter Workflows and Templates
+<details>
+<summary>### Scenario 22-C: Enterprise Starter Workflows and Templates</summary>
+
 
 **Objective:** Create and distribute starter workflows across enterprise teams.
 
@@ -8563,9 +8908,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 17 (Reusable Workflows) for shared workflow patterns.
 
+</details>
+
 ---
 
-### Scenario 22-D: Enterprise Audit and Compliance Reporting
+<details>
+<summary>### Scenario 22-D: Enterprise Audit and Compliance Reporting</summary>
+
 
 **Objective:** Generate audit reports for compliance (SOC2, ISO, etc.) from GitHub Actions audit logs.
 
@@ -8589,9 +8938,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 27 (Job Summaries) for reporting.
 
+</details>
+
 ---
 
-### Scenario 22-E: Multi-Organization Workflow Management
+<details>
+<summary>### Scenario 22-E: Multi-Organization Workflow Management</summary>
+
 
 **Objective:** Manage workflows consistently across multiple organizations.
 
@@ -8642,10 +8995,10 @@ jobs:
 - Set up approval gates for sensitive deployments
 - Audit workflow permissions
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 23</summary>
 
-### Scenario 23-A: Least-Privilege GITHUB_TOKEN and Input Sanitization
+<details>
+<summary>### Scenario 23-A: Least-Privilege GITHUB_TOKEN and Input Sanitization</summary>
+
 
 **Objective:** Implement explicit minimal permissions, prevent script injection from untrusted PR data, and set up environment approval gates.
 
@@ -8717,7 +9070,7 @@ jobs:
           gh pr comment ${{ github.event.number }} \
             --repo ${{ github.repository }} \
             --body "PR validation passed. Branch naming convention verified."
-```bash
+```
 
 2. Test by creating a PR from a branch named `feature/my-new-feature`.
 3. Test with a branch named `bad-branch-name` and observe the error.
@@ -8736,9 +9089,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 23-B: Environment Protection Rules and Approval Gates
+<details>
+<summary>### Scenario 23-B: Environment Protection Rules and Approval Gates</summary>
+
 
 **Objective:** Configure a protected environment requiring manual approval before deployment, and test that the approval gate blocks automated deployment.
 
@@ -8791,7 +9148,7 @@ jobs:
           echo "Version : ${{ needs.build.outputs.version }}"
           echo "Actor   : ${{ github.actor }}"
           echo "SHA     : ${{ github.sha }}"
-```bash
+```
 
 4. Push to `main` and verify:
    - Staging deploys automatically
@@ -8809,9 +9166,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 8 (Environments) for full environment configuration; → Section 24 (Security Part 2) for OIDC-based credential security replacing long-lived secrets.
 
+</details>
+
 ---
 
-### Scenario 23-C: Secret Rotation and Expiration Policies
+<details>
+<summary>### Scenario 23-C: Secret Rotation and Expiration Policies</summary>
+
 
 **Objective:** Implement automated secret rotation and set expiration policies.
 
@@ -8835,9 +9196,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 22 (Enterprise) for org-level secret management.
 
+</details>
+
 ---
 
-### Scenario 23-D: OIDC Token-Based Authentication
+<details>
+<summary>### Scenario 23-D: OIDC Token-Based Authentication</summary>
+
 
 **Objective:** Replace long-lived secrets with OIDC tokens for cloud provider authentication.
 
@@ -8861,9 +9226,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 8 (Environments) for integration.
 
+</details>
+
 ---
 
-### Scenario 23-E: Supply Chain Security and Dependency Scanning
+<details>
+<summary>### Scenario 23-E: Supply Chain Security and Dependency Scanning</summary>
+
 
 **Objective:** Scan dependencies for vulnerabilities and implement SBOM for supply chain security.
 
@@ -8912,10 +9281,10 @@ jobs:
 - Set up secrets scanning
 - Implement dependency scanning
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 24</summary>
 
-### Scenario 24-A: Pin Actions to Commit SHAs and Implement OIDC
+<details>
+<summary>### Scenario 24-A: Pin Actions to Commit SHAs and Implement OIDC</summary>
+
 
 **Objective:** Convert all action references from mutable tags to immutable commit SHAs, and implement OIDC federation with a cloud provider to eliminate long-lived credentials.
 
@@ -8973,7 +9342,7 @@ jobs:
           echo "OIDC token acquired (length: ${#OIDC_TOKEN})"
           echo "Token payload (claims):"
           echo $OIDC_TOKEN | cut -d. -f2 | base64 -d 2>/dev/null | jq . || echo "Decode requires padding"
-```bash
+```
 
 2. To find the SHA for any action:
 
@@ -8983,7 +9352,7 @@ gh api repos/actions/checkout/git/ref/tags/v4 --jq '.object.sha'
 
 # Method 2: From the Actions Marketplace page — click the tag, copy SHA from URL
 # Method 3: From the repo commit history
-```bash
+```
 
 3. Configure OIDC trust (concept — requires cloud provider):
 
@@ -8994,7 +9363,7 @@ gh api repos/actions/checkout/git/ref/tags/v4 --jq '.object.sha'
 #
 # Trust policy condition:
 # "token.actions.githubusercontent.com:sub": "repo:ORG/REPO:ref:refs/heads/main"
-```bash
+```
 
 **Success Criteria:**
 
@@ -9010,9 +9379,13 @@ gh api repos/actions/checkout/git/ref/tags/v4 --jq '.object.sha'
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 24-B: Artifact Attestation and Dependency Scanning
+<details>
+<summary>### Scenario 24-B: Artifact Attestation and Dependency Scanning</summary>
+
 
 **Objective:** Generate an artifact attestation (provenance) for a build artifact and scan workflow dependencies for vulnerabilities.
 
@@ -9051,14 +9424,14 @@ jobs:
         with:
           name: my-artifact
           path: my-artifact.tar.gz
-```bash
+```
 
 2. After the run, verify the attestation:
 
 ```bash
 gh attestation verify my-artifact.tar.gz \
   --repo OWNER/REPO
-```bash
+```
 
 3. Add a dependency scanning step:
 
@@ -9069,7 +9442,7 @@ gh attestation verify my-artifact.tar.gz \
           npm audit --audit-level=high || true
           # Or: using Trivy for container/filesystem scanning
           # trivy fs --exit-code 1 --severity HIGH,CRITICAL .
-```bash
+```
 
 **Success Criteria:**
 
@@ -9081,9 +9454,13 @@ gh attestation verify my-artifact.tar.gz \
 
 **Cross-Section Connections:** → Section 19 (Publishing Actions) for understanding why action consumers should pin to SHAs; → Section 22 (Enterprise) for org-level policies requiring SHA pinning.
 
+</details>
+
 ---
 
-### Scenario 24-C: Secrets Scanning and Prevention of Accidental Leaks
+<details>
+<summary>### Scenario 24-C: Secrets Scanning and Prevention of Accidental Leaks</summary>
+
 
 **Objective:** Implement secret scanning to detect and prevent accidental credential commits.
 
@@ -9107,9 +9484,13 @@ gh attestation verify my-artifact.tar.gz \
 
 **Cross-Section Connections:** → Section 23 (Security Part 1) for secrets management.
 
+</details>
+
 ---
 
-### Scenario 24-D: Dependency Updates with Automated Security Fixes
+<details>
+<summary>### Scenario 24-D: Dependency Updates with Automated Security Fixes</summary>
+
 
 **Objective:** Implement Dependabot for automated dependency updates and security fixes.
 
@@ -9133,9 +9514,13 @@ gh attestation verify my-artifact.tar.gz \
 
 **Cross-Section Connections:** → Section 13 (Caching) for dependency management.
 
+</details>
+
 ---
 
-### Scenario 24-E: Code Analysis and SAST Integration
+<details>
+<summary>### Scenario 24-E: Code Analysis and SAST Integration</summary>
+
 
 **Objective:** Integrate CodeQL for static analysis and security scanning.
 
@@ -9184,10 +9569,10 @@ gh attestation verify my-artifact.tar.gz \
 - Parallelize jobs appropriately
 - Measure performance improvements
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 25</summary>
 
-### Scenario 25-A: Profile and Optimize a Slow Workflow
+<details>
+<summary>### Scenario 25-A: Profile and Optimize a Slow Workflow</summary>
+
 
 **Objective:** Create a deliberately slow workflow, measure step durations, implement caching and parallelization, then compare before/after timings.
 
@@ -9233,7 +9618,7 @@ jobs:
           START=$(cat /tmp/start.txt | cut -d: -f2)
           END=$(date +%s)
           echo "Total time: $((END - START)) seconds"
-```bash
+```
 
 2. Run and note the total time (~65+ seconds due to sequential steps).
 
@@ -9305,7 +9690,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "All checks passed — parallel execution complete"
-```bash
+```
 
 4. Compare run times: the optimized version runs lint and both test suites in parallel, reducing wall-clock time from ~65s to ~35s (setup + max of parallel jobs).
 
@@ -9323,9 +9708,13 @@ jobs:
 
 **Time Estimate:** 30–35 minutes
 
+</details>
+
 ---
 
-### Scenario 25-B: Concurrency Controls and Artifact Size Optimization
+<details>
+<summary>### Scenario 25-B: Concurrency Controls and Artifact Size Optimization</summary>
+
 
 **Objective:** Implement concurrency groups to cancel in-progress runs on new pushes, and reduce artifact retention and size.
 
@@ -9368,7 +9757,7 @@ jobs:
           compression-level: 9
           # Fail if artifact is empty (catches build failures silently outputting nothing)
           if-no-files-found: error
-```bash
+```
 
 **Success Criteria:**
 
@@ -9380,9 +9769,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 9 (Caching) for the deep dive on cache keys and restore keys; → Section 14 (Matrix) for parallelizing tests across Node.js versions.
 
+</details>
+
 ---
 
-### Scenario 25-C: Parallel Job Execution and Matrix Optimization
+<details>
+<summary>### Scenario 25-C: Parallel Job Execution and Matrix Optimization</summary>
+
 
 **Objective:** Maximize parallelization with matrix builds to reduce total workflow time.
 
@@ -9406,9 +9799,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 10 (Matrix) for matrix strategy details.
 
+</details>
+
 ---
 
-### Scenario 25-D: Workflow Runtime Profiling and Bottleneck Analysis
+<details>
+<summary>### Scenario 25-D: Workflow Runtime Profiling and Bottleneck Analysis</summary>
+
 
 **Objective:** Profile workflow execution to identify and eliminate bottlenecks.
 
@@ -9432,9 +9829,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 15 (Debugging) for logging patterns.
 
+</details>
+
 ---
 
-### Scenario 25-E: Cost Optimization Across Workflow Portfolio
+<details>
+<summary>### Scenario 25-E: Cost Optimization Across Workflow Portfolio</summary>
+
 
 **Objective:** Optimize total workflow costs across hundreds of workflows.
 
@@ -9485,10 +9886,10 @@ jobs:
 - Test cross-platform workflows
 - Implement recovery strategies
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 26</summary>
 
-### Scenario 26-A: Matrix Job Failure Diagnosis and Recovery
+<details>
+<summary>### Scenario 26-A: Matrix Job Failure Diagnosis and Recovery</summary>
+
 
 **Objective:** Create a matrix workflow with intentional failures, use `fail-fast: false` to collect all results, implement retry logic, and use `include`/`exclude` to fix matrix edge cases.
 
@@ -9549,7 +9950,7 @@ jobs:
         run: |
           echo "Matrix cell: ${{ matrix.os }} / Node ${{ matrix.node }}"
           echo "Status: ${{ job.status }}"
-```bash
+```
 
 2. Run and observe in the Actions UI:
    - All non-excluded combinations run
@@ -9571,9 +9972,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 26-B: Cross-Platform Compatibility and Log Analysis
+<details>
+<summary>### Scenario 26-B: Cross-Platform Compatibility and Log Analysis</summary>
+
 
 **Objective:** Identify and fix common cross-platform issues (path separators, line endings, command availability) and use log analysis patterns to find failure root causes.
 
@@ -9633,7 +10038,7 @@ jobs:
       - name: Verify env var persists
         run: echo "Persisted: $MY_VAR"
         shell: bash
-```bash
+```
 
 2. Simulate a log analysis workflow that surfaces error patterns:
 
@@ -9649,7 +10054,7 @@ jobs:
           # 3. Slow step detection
           echo "Step completed in 145s" | awk '{ if ($NF > 60) print "SLOW:", $0 }'
         shell: bash
-```bash
+```
 
 **Success Criteria:**
 
@@ -9661,9 +10066,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 15 (Troubleshooting Part 1) for debug logging; → Section 25 (Performance) for identifying slow steps via log analysis.
 
+</details>
+
 ---
 
-### Scenario 26-C: Advanced Failure Pattern Analysis and Automated Recovery
+<details>
+<summary>### Scenario 26-C: Advanced Failure Pattern Analysis and Automated Recovery</summary>
+
 
 **Objective:** Implement ML-style failure pattern detection to automatically recover from known failure modes.
 
@@ -9736,7 +10145,7 @@ jobs:
 
       - name: Verify recovery success
         run: echo "Recovery workflow executed successfully"
-```bash
+```
 
 **Success Criteria:**
 
@@ -9754,7 +10163,7 @@ Executing timeout recovery: splitting workload...
 Chunk 1 complete
 Chunk 2 complete
 Recovery workflow executed successfully
-```bash
+```
 
 **Troubleshooting:**
 
@@ -9766,9 +10175,13 @@ Recovery workflow executed successfully
 
 **Cross-Section Connections:** → Section 9 (Conditional Logic) for if-conditions; → Section 15 (Debugging) for log analysis.
 
+</details>
+
 ---
 
-### Scenario 26-D: Workflow Failure Prevention Through Proactive Monitoring
+<details>
+<summary>### Scenario 26-D: Workflow Failure Prevention Through Proactive Monitoring</summary>
+
 
 **Objective:** Implement proactive health checks to prevent failures before they occur.
 
@@ -9832,7 +10245,7 @@ jobs:
           echo "ALERT: Dependency health check failed"
           echo "Failing service: ${{ steps.github-api.outputs.failing_service || steps.external.outputs.failing_service }}"
           # In production: send to monitoring system (Slack, PagerDuty, etc.)
-```bash
+```
 
 **Success Criteria:**
 
@@ -9847,7 +10260,7 @@ jobs:
 Health Check Results:
   GitHub API: healthy
   External API: healthy
-```bash
+```
 
 **Troubleshooting:**
 
@@ -9859,9 +10272,13 @@ Health Check Results:
 
 **Cross-Section Connections:** → Section 5 (Triggers) for scheduled workflows; → Section 24 (Security) for API authentication.
 
+</details>
+
 ---
 
-### Scenario 26-E: Enterprise-Scale Incident Response and Post-Mortems
+<details>
+<summary>### Scenario 26-E: Enterprise-Scale Incident Response and Post-Mortems</summary>
+
 
 **Objective:** Build incident management workflow for large-scale failures with automated post-mortem generation.
 
@@ -9990,7 +10407,7 @@ jobs:
           echo "Team notification: Incident post-mortem prepared"
           echo "Next post-mortem review: [Scheduled time]"
           # In production: Send to Slack channel
-```bash
+```
 
 **Success Criteria:**
 
@@ -10007,7 +10424,7 @@ INCIDENT ESCALATION
 Severity: high
 Notifying on-call engineer...
 Team notification: Incident post-mortem prepared
-```bash
+```
 
 **Troubleshooting:**
 
@@ -10046,10 +10463,10 @@ Team notification: Incident post-mortem prepared
 - Set up deployment review workflows
 - Configure manual approvals
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 27</summary>
 
-### Scenario 27-A: Rich Job Summaries with Test and Coverage Reports
+<details>
+<summary>### Scenario 27-A: Rich Job Summaries with Test and Coverage Reports</summary>
+
 
 **Objective:** Use `GITHUB_STEP_SUMMARY` to generate formatted markdown reports containing test results, coverage percentages, and deployment metadata — visible directly in the Actions UI without needing to download artifacts.
 
@@ -10160,7 +10577,7 @@ jobs:
 
           [View deployment logs](#) • [Rollback instructions](#)
           EOF
-```bash
+```
 
 2. Run the workflow and navigate to the Actions UI → Summary tab to see the formatted reports.
 
@@ -10179,9 +10596,13 @@ jobs:
 
 **Time Estimate:** 25–30 minutes
 
+</details>
+
 ---
 
-### Scenario 27-B: Status Badges and Emergency Runbook Workflows
+<details>
+<summary>### Scenario 27-B: Status Badges and Emergency Runbook Workflows</summary>
+
 
 **Objective:** Add workflow status badges to a README and create an emergency runbook workflow that generates an HTML status summary.
 
@@ -10195,7 +10616,7 @@ jobs:
 ![CI Status](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)
 ![CD Status](https://github.com/OWNER/REPO/actions/workflows/deploy.yml/badge.svg?branch=main)
 ![Security Scan](https://github.com/OWNER/REPO/actions/workflows/security.yml/badge.svg)
-```bash
+```
 
 2. Create an emergency status check workflow:
 
@@ -10241,7 +10662,7 @@ jobs:
           EOF
         env:
           GH_TOKEN: ${{ github.token }}
-```bash
+```
 
 **Success Criteria:**
 
@@ -10253,9 +10674,13 @@ jobs:
 
 **Cross-Section Connections:** → Section 12 (Artifacts) for when summaries aren't sufficient and full reports need downloading; → Section 16 (Workflow REST API) for querying workflow run data via API.
 
+</details>
+
 ---
 
-### Scenario 27-C: Custom Formatting and Structured Output in Job Summaries
+<details>
+<summary>### Scenario 27-C: Custom Formatting and Structured Output in Job Summaries</summary>
+
 
 **Objective:** Create rich, formatted job summaries with tables, charts, and custom styling.
 
@@ -10313,8 +10738,6 @@ jobs:
 
           ## Test Breakdown
 
-          <details>
-          <summary>📈 Detailed Results</summary>
 
           ### Failed Tests
           - `test_auth_token_refresh` - timeout
@@ -10323,7 +10746,6 @@ jobs:
           ### Skipped Tests
           - `test_performance_benchmark` - requires special config
 
-          </details>
 
           ## Performance Chart
           ```mermaid
@@ -10338,7 +10760,7 @@ jobs:
           ---
           **Generated at:** $(date -u +%Y-%m-%dT%H:%M:%SZ)
           EOF
-```bash
+```
 
 **Success Criteria:**
 
@@ -10361,9 +10783,13 @@ Formatted summary with table, pie chart, and collapsible sections
 
 **Cross-Section Connections:** → Section 14 (Inter-Job Communication) for parsing job outputs; → Section 15 (Debugging) for log summaries.
 
+</details>
+
 ---
 
-### Scenario 27-D: Aggregating Metrics and Dashboards from Multiple Jobs
+<details>
+<summary>### Scenario 27-D: Aggregating Metrics and Dashboards from Multiple Jobs</summary>
+
 
 **Objective:** Collect metrics from parallel jobs and create unified dashboard views.
 
@@ -10449,7 +10875,7 @@ jobs:
           | Pass Rate | $(( 100 * ${{ env.total_passed }} / ${{ env.total_tests }} ))% |
 
           EOF
-```bash
+```
 
 **Success Criteria:**
 
@@ -10466,7 +10892,7 @@ Total Test Time: 83s
 Total Tests: 38
 Total Passed: 37
 Pass Rate: 97%
-```bash
+```
 
 **Troubleshooting:**
 
@@ -10478,9 +10904,13 @@ Pass Rate: 97%
 
 **Cross-Section Connections:** → Section 12 (Artifacts) for multi-artifact handling; → Section 14 (Outputs) for metrics passing.
 
+</details>
+
 ---
 
-### Scenario 27-E: Integration with External Reporting and BI Systems
+<details>
+<summary>### Scenario 27-E: Integration with External Reporting and BI Systems</summary>
+
 
 **Objective:** Export workflow metrics to external BI/analytics platforms for enterprise dashboards.
 
@@ -10559,7 +10989,7 @@ jobs:
           echo "Total workflows run: 127"
           echo "Average duration: 142 seconds"
           echo "Success rate: 96.8%"
-```bash
+```
 
 **Success Criteria:**
 
@@ -10577,7 +11007,7 @@ Generating weekly workflow report...
 Total workflows run: 127
 Average duration: 142 seconds
 Success rate: 96.8%
-```bash
+```
 
 **Troubleshooting:**
 
@@ -10613,10 +11043,10 @@ Success rate: 96.8%
 - Solve 10+ practice questions
 - Review explanations for any incorrect answers
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 28</summary>
 
-### Scenario 28-A: Comprehensive Multi-Feature Workflow Assessment
+<details>
+<summary>### Scenario 28-A: Comprehensive Multi-Feature Workflow Assessment</summary>
+
 
 **Objective:** Build a single production-grade workflow that integrates at minimum 8 GitHub Actions features covered in the study plan, demonstrating mastery of their interaction.
 
@@ -10748,7 +11178,7 @@ jobs:
           - Status: ${{ job.status }}
           - Actor: ${{ github.actor }}
           EOF
-```bash
+```
 
 3. Run the workflow and verify in the Actions UI:
    - Dependency graph shows test → build → deploy
@@ -10767,9 +11197,13 @@ jobs:
 
 **Time Estimate:** 45–60 minutes
 
+</details>
+
 ---
 
-### Scenario 28-B: Practice Exam Question Gauntlet (10 Scenarios)
+<details>
+<summary>### Scenario 28-B: Practice Exam Question Gauntlet (10 Scenarios)</summary>
+
 
 **Objective:** Work through 10 targeted scenario questions spanning key exam domains without YAML code — pure conceptual recall.
 
@@ -10799,9 +11233,13 @@ jobs:
 
 **Cross-Section Connections:** → All sections — this is a comprehensive review assessment.
 
+</details>
+
 ---
 
-### Scenario 28-C: Advanced IaC Patterns with GitHub Actions Orchestration
+<details>
+<summary>### Scenario 28-C: Advanced IaC Patterns with GitHub Actions Orchestration</summary>
+
 
 **Objective:** Orchestrate complex Infrastructure as Code deployments using GitHub Actions with Terraform/CloudFormation.
 
@@ -10910,7 +11348,7 @@ jobs:
           cd infrastructure/${{ matrix.environment }}
           terraform output -json > outputs.json
           echo "Outputs saved"
-```bash
+```
 
 **Success Criteria:**
 
@@ -10928,7 +11366,7 @@ Validation passed
 Plan: 5 to add, 2 to change, 1 to destroy
 Applied successfully
 Outputs saved
-```bash
+```
 
 **Troubleshooting:**
 
@@ -10940,9 +11378,13 @@ Outputs saved
 
 **Cross-Section Connections:** → Section 8 (Secrets) for sensitive variables; → Section 22 (Enterprise) for multi-account governance.
 
+</details>
+
 ---
 
-### Scenario 28-D: Drift Detection and Auto-Remediation Workflows
+<details>
+<summary>### Scenario 28-D: Drift Detection and Auto-Remediation Workflows</summary>
+
 
 **Objective:** Detect infrastructure drift from intended state and automatically remediate divergences.
 
@@ -11033,7 +11475,7 @@ jobs:
         run: |
           echo "Drift remediation completed"
           echo "Resources resynchronized to desired state"
-```bash
+```
 
 **Success Criteria:**
 
@@ -11050,7 +11492,7 @@ Checking for drift...
 Changes detected in infrastructure
 Drift remediation completed
 Resources resynchronized to desired state
-```bash
+```
 
 **Troubleshooting:**
 
@@ -11062,9 +11504,13 @@ Resources resynchronized to desired state
 
 **Cross-Section Connections:** → Section 5 (Triggers) for scheduled workflows; → Section 15 (Debugging) for drift analysis.
 
+</details>
+
 ---
 
-### Scenario 28-E: Multi-Environment Orchestration with IaC
+<details>
+<summary>### Scenario 28-E: Multi-Environment Orchestration with IaC</summary>
+
 
 **Objective:** Coordinate infrastructure deployments across dev → staging → prod with validation gates and rollback capability.
 
@@ -11171,7 +11617,7 @@ jobs:
           echo "Deployment completed and verified"
           echo "Deployment timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           echo "Deployed by: ${{ github.actor }}"
-```bash
+```
 
 **Success Criteria:**
 
@@ -11192,7 +11638,7 @@ Staging tests passed
 Deploying to production...
 Production environment healthy
 Deployment completed and verified
-```bash
+```
 
 **Troubleshooting:**
 
@@ -11229,10 +11675,10 @@ Deployment completed and verified
 - Review explanations for all incorrect answers
 - Track improvement from earlier assessments
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 29</summary>
 
-### Scenario 29-A: Timed Mock Exam Protocol (2 Hours)
+<details>
+<summary>### Scenario 29-A: Timed Mock Exam Protocol (2 Hours)</summary>
+
 
 **Objective:** Simulate actual exam conditions — time-boxed, no notes, and score yourself honestly to produce an actionable weakness report.
 
@@ -11251,6 +11697,9 @@ Deployment completed and verified
 **Scoring Template:**
 
 ```markdown
+
+</details>
+
 ## Mock Exam Score Sheet — Attempt [N]
 
 **Date:** [YYYY-MM-DD]
@@ -11279,7 +11728,7 @@ Deployment completed and verified
 - [ ] Review sections:
 - [ ] Rebuild workflow for:
 - [ ] Re-quiz on:
-```bash
+```
 
 5. After scoring, identify any domain scoring below 70% — those are your priority review areas before the next mock or the actual exam.
 
@@ -11305,7 +11754,9 @@ Deployment completed and verified
 
 ---
 
-### Scenario 29-B: Weak Area Drill — Targeted Workflow Reconstruction
+<details>
+<summary>### Scenario 29-B: Weak Area Drill — Targeted Workflow Reconstruction</summary>
+
 
 **Objective:** For each domain you scored below 70% in Scenario 29-A, write one workflow from memory without referencing notes, then verify it against documentation.
 
@@ -11343,15 +11794,19 @@ jobs:
       - run: echo "Key length ${#API_KEY}"
         env:
           API_KEY: ${{ secrets.API_KEY }}
-```bash
+```
 
 **Time Estimate:** 15 minutes per weak area × number of weak areas
 
 **Cross-Section Connections:** → Section 28 (Comprehensive Assessment) for the initial practice scenarios that informed weak areas; → Section 30 (Final Prep) for the final targeted review before exam day.
 
+</details>
+
 ---
 
-### Scenario 29-C: Blue-Green and Canary Deployments
+<details>
+<summary>### Scenario 29-C: Blue-Green and Canary Deployments</summary>
+
 
 **Objective:** Implement blue-green and canary deployment strategies to minimize downtime and risk.
 
@@ -11442,7 +11897,7 @@ jobs:
           echo "Reverting 100% traffic to blue environment"
           echo "Green environment stopped"
           echo "Rollback completed at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-```bash
+```
 
 **Success Criteria:**
 
@@ -11461,7 +11916,7 @@ Executing immediate blue-green cutover...
 100% traffic → green environment
 Monitoring deployment metrics...
 Deployment stable
-```bash
+```
 
 **Troubleshooting:**
 
@@ -11474,9 +11929,13 @@ Deployment stable
 
 **Cross-Section Connections:** → Section 20 (Runners) for deployment infrastructure; → Section 25 (Performance) for monitoring during deployment.
 
+</details>
+
 ---
 
-### Scenario 29-D: Rollback Automation and Failure Recovery
+<details>
+<summary>### Scenario 29-D: Rollback Automation and Failure Recovery</summary>
+
 
 **Objective:** Build automated rollback procedures that execute when deployment health checks fail.
 
@@ -11572,7 +12031,7 @@ jobs:
               repo: context.repo.repo,
               body: '🚨 Automatic rollback executed due to health check failure'
             });
-```bash
+```
 
 **Success Criteria:**
 
@@ -11592,7 +12051,7 @@ Health check failed
 Initiating automatic rollback...
 Rolling back to previous stable version...
 Rollback successful
-```bash
+```
 
 **Troubleshooting:**
 
@@ -11605,9 +12064,13 @@ Rollback successful
 
 **Cross-Section Connections:** → Section 15 (Debugging) for metrics collection; → Section 26 (Troubleshooting) for failure analysis.
 
+</details>
+
 ---
 
-### Scenario 29-E: Progressive Delivery and Feature Flags
+<details>
+<summary>### Scenario 29-E: Progressive Delivery and Feature Flags</summary>
+
 
 **Objective:** Deploy new features behind feature flags to enable progressive rollout and easy rollback.
 
@@ -11734,7 +12197,7 @@ jobs:
           echo "✓ Feature disabled for all users"
           echo "✓ Error rate returned to normal"
           echo "✓ Service stable"
-```bash
+```
 
 **Success Criteria:**
 
@@ -11754,7 +12217,7 @@ Expanding to 25% of users...
 Metrics stable at 25% rollout
 Rolling out to 100% of users...
 Rollout complete and stable
-```bash
+```
 
 **Troubleshooting:**
 
@@ -11791,10 +12254,10 @@ Rollout complete and stable
 - Verify readiness with final mini-quizzes
 - Plan exam day approach
 
-<details>
-<summary>🔬 Enhanced Practical Scenarios — Section 30</summary>
 
-### Scenario 30-A: Personal Quick Reference Guide Construction
+<details>
+<summary>### Scenario 30-A: Personal Quick Reference Guide Construction</summary>
+
 
 **Objective:** Build a one-page (or single-screen) cheat sheet of the most frequently-tested GitHub Actions facts, syntax patterns, and gotchas — in your own words.
 
@@ -11806,6 +12269,8 @@ Rollout complete and stable
 
 ```markdown
 # GitHub Actions GH-200 Quick Reference
+
+</details>
 
 ## Trigger Syntax (on:)
 | Event              | Key Options                        |
@@ -11867,7 +12332,7 @@ Rollout complete and stable
 6. Composite actions: cannot use `env:` at action level (only at step level)
 7. Matrix `include`: adds a new cell, doesn't modify existing ones
 8. `cancel-in-progress: false` recommended for production deployments
-```bash
+```
 
 **Success Criteria:**
 
@@ -11880,7 +12345,9 @@ Rollout complete and stable
 
 ---
 
-### Scenario 30-B: Exam Day Protocol and Final Readiness Verification
+<details>
+<summary>### Scenario 30-B: Exam Day Protocol and Final Readiness Verification</summary>
+
 
 **Objective:** Confirm technical readiness with a final 20-question speed drill, and establish an exam day strategy.
 
@@ -11927,9 +12394,13 @@ Answer these without referencing any material:
 
 **Cross-Section Connections:** → This section synthesizes all 29 preceding sections. If any drill answer above is uncertain, return to the corresponding section for a 20-minute targeted review.
 
+</details>
+
 ---
 
-### Scenario 30-C: Mock Exam Scenarios with Time Constraints
+<details>
+<summary>### Scenario 30-C: Mock Exam Scenarios with Time Constraints</summary>
+
 
 **Objective:** Practice full mock exam scenarios under timed conditions to build exam readiness.
 
@@ -12026,7 +12497,7 @@ jobs:
           }
           EOF
           cat exam-results.json
-```bash
+```
 
 **Success Criteria:**
 
@@ -12044,7 +12515,7 @@ Total time used: 118 minutes
 Time remaining: 2 minutes
 Score estimate: 86%
 Time management: Excellent
-```bash
+```
 
 **Troubleshooting:**
 
@@ -12056,9 +12527,13 @@ Time management: Excellent
 
 **Cross-Section Connections:** → All sections for comprehensive exam coverage.
 
+</details>
+
 ---
 
-### Scenario 30-D: Gap Analysis and Targeted Review Recommendations
+<details>
+<summary>### Scenario 30-D: Gap Analysis and Targeted Review Recommendations</summary>
+
 
 **Objective:** Analyze mock exam results to identify knowledge gaps and recommend focused remediation.
 
@@ -12178,7 +12653,7 @@ jobs:
           echo "  ✓ Score improvement of at least 5% on second attempt"
           echo "  ✓ Confidence level 8/10 or higher"
           echo "  ✓ Ready to schedule certification exam"
-```bash
+```
 
 **Success Criteria:**
 
@@ -12198,7 +12673,7 @@ Knowledge Gap Report:
 
 Recommended study time: 5-7 hours
 Expected final score: 92-95%
-```bash
+```
 
 **Troubleshooting:**
 
@@ -12210,9 +12685,13 @@ Expected final score: 92-95%
 
 **Cross-Section Connections:** → All sections for comprehensive reference.
 
+</details>
+
 ---
 
-### Scenario 30-E: Real-World Certification Exam Patterns and Strategies
+<details>
+<summary>### Scenario 30-E: Real-World Certification Exam Patterns and Strategies</summary>
+
 
 **Objective:** Learn exam strategies and patterns to maximize score on certification day.
 
@@ -12374,7 +12853,7 @@ jobs:
           echo "  ✓ Answer elimination: Help narrow down correct answers"
           echo "  ✓ Knowledge gaps: Focus study on weak areas"
           echo "  ✓ Confidence: Build through practice and preparation"
-```bash
+```
 
 **Success Criteria:**
 
@@ -12393,7 +12872,7 @@ Time Allocation: 60/30/30 strategy
 Answer Elimination: Practice 5-10 questions using technique
 Pre-exam day: All checklist items completed
 Exam day protocol: Ready to execute
-```bash
+```
 
 **Troubleshooting:**
 
@@ -12410,11 +12889,12 @@ Exam day protocol: Ready to execute
 
 ---
 
-## 🎓 Curriculum Complete!
+## 🎓 Curriculum Complete
 
 You have now completed the full GitHub Actions GH-200 Certification Study Plan with **150 comprehensive practical scenarios** across all 30 sections. Each section includes foundational (A), intermediate (B), advanced (C), troubleshooting (D), and enterprise-scale (E) scenarios, providing a complete learning progression.
 
 **Study Plan Statistics:**
+
 - **Total Sections:** 30
 - **Total Scenarios:** 150 (5 per section)
 - **Total Lines of Content:** 11,900+
@@ -12500,7 +12980,7 @@ Next Review: _________
 
 Notes:
 _________
-```bash
+```
 
 ---
 
