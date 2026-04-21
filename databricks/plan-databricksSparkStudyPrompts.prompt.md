@@ -8,16 +8,29 @@
 #### Prompt 1: Spark Architecture Fundamentals
 "Create a comprehensive guide explaining the Apache Spark architecture including:
 - The difference between Driver and Executor nodes
-- How the execution hierarchy works (Driver → Executor → Tasks)
+- How the **physical execution hierarchy** works (Driver → Executor → Tasks): the Driver is the JVM process hosting SparkContext; Executors are JVM processes on worker nodes that run Tasks; Tasks are the smallest unit of work, one per partition
+- The **logical execution hierarchy**: an **Action** triggers a **Job**; each Job is divided into **Stages** at shuffle boundaries; each Stage contains **Tasks** (one per input partition)
+- The **DAGScheduler**: receives the physical plan and converts it into a DAG of stages; splits stages at wide transformation (shuffle) boundaries into ShuffleMapStages and a final ResultStage
+- The **TaskScheduler**: receives completed stages from the DAGScheduler and submits individual Tasks to available Executors via the SchedulerBackend
+- The **Cluster Manager** role: external resource allocator (Standalone, YARN, Mesos, Kubernetes) that grants worker containers/nodes to Spark on request — Spark does not manage cluster resources itself
 - The role of the Spark Context and Session
 - Include a detailed diagram description and practical examples in Python"
 
-#### Prompt 2: Execution Modes Deep Dive
-"Explain the three Spark execution modes (Local, Standalone, and Cluster) with:
-- When to use each mode
-- Performance implications
-- Code examples showing how to configure each mode
-- Advantages and disadvantages of each approach"
+#### Prompt 2: Execution Modes and Deploy Modes Deep Dive
+"Explain Spark execution modes and deploy modes — two related but distinct concepts tested on the exam:
+- **Execution modes** (where the Spark cluster runs):
+  - Local mode: everything runs in a single JVM on the submitting machine; `master('local')` (1 thread), `master('local[4]')` (4 threads), `master('local[*]')` (all cores)
+  - Standalone mode: Spark's built-in cluster manager; `master('spark://host:7077')`
+  - YARN mode: resource managed by Hadoop YARN; `master('yarn')`
+  - Kubernetes mode: containers managed by Kubernetes; `master('k8s://https://host:port')`
+  - When to use each mode, performance implications, and advantages/disadvantages
+- **Deploy modes** (where the Driver process runs) — configured with `--deploy-mode` on spark-submit:
+  - `--deploy-mode client`: Driver runs on the machine that submitted the job; stdout/stderr visible in the terminal; used for interactive development and debugging
+  - `--deploy-mode cluster`: Driver runs on a worker node inside the cluster; client machine can disconnect after submission; used for production scheduled jobs
+  - Key exam distinction: in client mode the client machine must stay alive; in cluster mode it does not
+- **spark-submit command structure** (exam-relevant): `spark-submit --master yarn --deploy-mode cluster --executor-memory 4g --executor-cores 2 --num-executors 10 my_app.py`
+- Common exam scenario: 'You submit a job with --deploy-mode cluster. Where does the driver run?' — answer: on a worker node inside the cluster
+- Code examples showing how to configure execution mode in SparkSession.builder"
 
 #### Prompt 3: Lazy Evaluation & Transformation vs Action
 "Create an educational guide on Lazy Evaluation including:
@@ -116,8 +129,15 @@
 
 > **Exam weight: 30% — ~14 questions out of 45.** This is the highest-weighted topic. Cover every subtopic in the exam overview: selecting, renaming, manipulating columns; filtering, dropping, sorting, aggregating rows; missing data; combining, reading, writing, partitioning DataFrames; schemas; UDFs.
 
-#### Prompt 12: Column Selection and Renaming
-"Create a practical guide on selecting and renaming columns for the exam:
+#### Prompt 12: DataFrame Creation, Column Selection and Renaming
+"Create a practical guide on creating DataFrames and working with their columns for the exam:
+- **Creating DataFrames in-memory** (fundamental — tested as setup in code-reading questions):
+  - `spark.createDataFrame(data, schema)` from a Python list of tuples: `spark.createDataFrame([(1, 'Alice'), (2, 'Bob')], ['id', 'name'])`
+  - `spark.createDataFrame(data, schema)` with an explicit StructType schema
+  - `spark.createDataFrame(pandas_df)` to convert a pandas DataFrame to a Spark DataFrame
+  - `spark.range(n)` — creates a DataFrame with a single `id` column (LongType); useful for testing and benchmarking
+  - `rdd.toDF(column_names)` — creates a DataFrame from an RDD with optional column name list
+  - `df.toDF(*new_names)` — returns a new DataFrame with renamed columns (position-based)
 - Selecting specific columns with select() using string names, col(), and df['colname'] notation
 - Differences between col('name'), df['name'], and df.name — when each fails (e.g., column names with spaces or dots)
 - Renaming a column with withColumnRenamed('old', 'new') and alias()
