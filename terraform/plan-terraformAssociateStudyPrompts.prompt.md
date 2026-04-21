@@ -34,6 +34,11 @@ Use each prompt below with an AI tool (GitHub Copilot, ChatGPT, Claude) to gener
 - How Terraform interacts with providers: the plugin model — provider binary downloaded separately from Terraform core
 - The `provider` block: purpose, required_providers block, `source` and `version` constraints
 - Provider source address format: `registry.terraform.io/hashicorp/aws` — namespace/type
+- Provider tiers on the Terraform Public Registry:
+  - **Official**: authored and maintained by HashiCorp (e.g., `hashicorp/aws`, `hashicorp/azurerm`, `hashicorp/google`)
+  - **Partner**: built and maintained by a technology partner, verified by HashiCorp (e.g., `datadog/datadog`, `cloudflare/cloudflare`)
+  - **Community**: published by individual or community contributors — use with caution
+  - **Archived**: previously published providers no longer actively maintained
 - Version constraint operators: `=`, `!=`, `>`, `>=`, `<`, `<=`, `~>` (pessimistic constraint — know this one)
 - How `terraform init` downloads providers and populates `.terraform/providers/`
 - The dependency lock file (`.terraform.lock.hcl`): purpose, what it records, when to commit it to version control, and why
@@ -96,6 +101,7 @@ Use each prompt below with an AI tool (GitHub Copilot, ChatGPT, Claude) to gener
   - Prompts for confirmation unless `-auto-approve` is passed
   - Updates state file after each resource change
   - Can apply a saved plan file: `terraform apply plan.tfplan`
+  - `-replace=<resource_address>`: force replacement (destroy and recreate) of a specific resource — replaces the deprecated `terraform taint` command
 
 - **terraform destroy**:
   - Destroys all resources managed in the current workspace
@@ -105,7 +111,18 @@ Use each prompt below with an AI tool (GitHub Copilot, ChatGPT, Claude) to gener
 - **terraform output**: show output values from state
 - **terraform refresh**: update state to match real infrastructure (deprecated — use `-refresh-only` plan instead)
 
-Include a flowchart description of the full workflow and 4 exam-style questions covering command behavior edge cases"
+- **terraform workspace**: manage multiple named workspaces (separate state files) within a single configuration directory
+  - `terraform workspace list`: list all workspaces; active workspace marked with `*`
+  - `terraform workspace new <name>`: create and switch to a new workspace
+  - `terraform workspace select <name>`: switch to an existing workspace
+  - `terraform workspace show`: print the name of the current workspace
+  - `terraform workspace delete <name>`: delete a workspace (cannot delete the active workspace or the `default` workspace)
+  - State for non-default workspaces stored at `terraform.tfstate.d/<workspace_name>/terraform.tfstate`
+  - The `default` workspace always exists and cannot be deleted
+  - Use `terraform.workspace` in expressions to branch configuration by workspace name (e.g., different instance sizes per environment)
+  - Key distinction: CLI workspaces share the same configuration and backend but have separate state files; HCP Terraform workspaces are fully independent environments with separate config, state, variables, and team access
+
+Include a flowchart description of the full workflow and 4 exam-style questions covering command behavior edge cases — include at least one question on `terraform workspace` commands and one on `terraform apply -replace`"
 
 ---
 
@@ -211,9 +228,13 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
   - `prevent_destroy = true`: Terraform will refuse to plan any operation that would destroy the resource
   - `ignore_changes = [attribute_name]`: Terraform will not compute a diff for these attributes
   - `replace_triggered_by`: force replacement of this resource when a referenced resource or attribute changes
+- **`provider` meta-argument**: select which provider configuration a resource uses — required when multiple configurations of the same provider exist via `alias`
+  - Syntax: `provider = aws.us-east-1` inside the resource block
+  - If omitted, Terraform uses the default (non-aliased) provider configuration for that resource type
+  - Use case: deploy resources to two AWS regions in the same workspace by aliasing the `aws` provider twice and using `provider =` on each resource
 - **`moved` block**: refactor resource addresses without destroying and recreating — used when renaming resources or moving them into/out of modules
 - **`removed` block**: remove a resource from state without destroying the actual infrastructure
-- Code examples: implicit reference creating order, `depends_on` for hidden dependency, lifecycle with `create_before_destroy`
+- Code examples: implicit reference creating order, `depends_on` for hidden dependency, lifecycle with `create_before_destroy`, resource using `provider` meta-argument with an aliased provider
 - 3 exam-style questions"
 
 #### Prompt 10: Custom Conditions and Sensitive Data
@@ -400,6 +421,7 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 
 - **HCP Terraform run lifecycle**: trigger → plan → policy check → apply confirmation → apply
 - **CLI-driven workflow**: configure `cloud` block in `terraform.tf` → `terraform login` → `terraform init` → normal CLI commands run remotely
+- **`cloud` block vs `backend "remote"`**: the `cloud` block (available since Terraform 1.1) is the preferred way to connect to HCP Terraform; the older `backend "remote"` block still works but is deprecated for HCP Terraform usage; the `cloud` block supports workspace tag-based filtering and is more feature-complete
 - **VCS-driven workflow**: connect workspace to a GitHub/GitLab/etc. repo → push to branch triggers speculative plan; merge to default branch triggers apply
 - **`terraform login`**: authenticates CLI to HCP Terraform, stores token in `~/.terraform.d/credentials.tfrc.json`
 - **Migrating state to HCP Terraform**: add `cloud` block to backend config → `terraform init` → follow migration prompts
@@ -553,5 +575,9 @@ For each task: include the HCL code, the expected CLI output at key steps, and a
 - `sensitive = true` → masks in CLI output, still plaintext in state file
 - `moved` block → refactor resource names without destroy/recreate
 - HCP Terraform workspaces ≠ `terraform workspace` CLI workspaces
+- `terraform apply -replace=<address>` → force resource replacement (replaces deprecated `terraform taint`)
+- `terraform workspace` → CLI workspaces share config directory, separate state files; reference current workspace in config with `terraform.workspace`
+- `provider` meta-argument on a resource → selects which aliased provider configuration that resource uses
+- Provider tiers: Official (HashiCorp-authored) > Partner (HashiCorp-verified) > Community > Archived
 
 ---
