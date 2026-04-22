@@ -5,7 +5,12 @@
 
 ### TOPIC 1: Apache Spark Architecture & Components (20%)
 
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 #### Prompt 1: Spark Architecture Fundamentals
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a comprehensive guide explaining the Apache Spark architecture including:
 - The difference between Driver and Executor nodes
 - How the **physical execution hierarchy** works (Driver → Executor → Tasks): the Driver is the JVM process hosting SparkContext; Executors are JVM processes on worker nodes that run Tasks; Tasks are the smallest unit of work, one per partition
@@ -18,6 +23,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 2: Execution Modes and Deploy Modes Deep Dive
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Explain Spark execution modes and deploy modes — two related but distinct concepts tested on the exam:
 - **Execution modes** (where the Spark cluster runs):
   - Local mode: everything runs in a single JVM on the submitting machine; `master('local')` (1 thread), `master('local[4]')` (4 threads), `master('local[*]')` (all cores)
@@ -35,6 +43,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 3: Lazy Evaluation & Transformation vs Action
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create an educational guide on Lazy Evaluation including:
 - What transformations are and why they're lazy
 - What actions trigger computation
@@ -45,6 +56,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 4: Shuffling and Performance Impact
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a detailed explanation of Shuffling in Spark covering:
 - What shuffling is and when it occurs
 - Operations that trigger shuffles (joins, group by, order by)
@@ -54,6 +68,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 5: Broadcasting & Optimization
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a guide on Broadcasting in Spark including:
 - What broadcasting is and when to use it
 - How to broadcast variables in PySpark
@@ -63,6 +80,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 6: Fault Tolerance & Resilience
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Explain Spark's fault tolerance mechanisms:
 - How RDD lineage provides fault tolerance
 - Checkpointing concepts
@@ -72,6 +92,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 7: Garbage Collection in Spark
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a technical guide on Garbage Collection:
 - Why GC matters in Spark applications
 - GC tuning parameters
@@ -87,6 +110,9 @@
 > **Exam weight: 20% — 9 questions out of 45.** Focus on SQL functions, query execution, and how SQL and the DataFrame API interoperate.
 
 #### Prompt 8: Spark SQL Fundamentals — Querying DataFrames
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a focused guide on using Spark SQL to query DataFrames for the Databricks Associate exam:
 - Registering DataFrames as local temporary views with createOrReplaceTempView()
 - Registering global temporary views with createGlobalTempView() and accessing them via global_temp database
@@ -99,6 +125,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 9: Built-in Spark SQL Functions Reference
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a comprehensive reference on Spark SQL built-in functions required for the exam. For each category include the function signature, what it does, and a PySpark code example with expected output:
 - **String functions**: upper(), lower(), trim(), ltrim(), rtrim(), length(), initcap(), substring(), split(), concat(), concat_ws(), regexp_replace(), regexp_extract(), translate(), lpad(), rpad()
 - **Numeric/math functions**: round(), bround(), abs(), ceil(), floor(), sqrt(), pow(), log(), mod()
@@ -111,6 +140,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 10: Window Functions in Spark SQL and DataFrame API
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a dedicated guide on Window Functions — a key exam topic:
 - What window functions are and how they differ from aggregations (no row reduction)
 - Defining a WindowSpec with pyspark.sql.Window: partitionBy(), orderBy(), rowsBetween(), rangeBetween()
@@ -124,6 +156,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 11: Spark SQL Query Optimization and Execution Plans
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a guide on Spark SQL query optimization relevant to the exam:
 - Catalyst optimizer pipeline: parse → analyze → logical optimize → physical plan → code generation
 - Key Catalyst optimizations to recognize: predicate pushdown, column pruning, constant folding, join reordering
@@ -141,6 +176,9 @@
 > **Exam weight: 30% — ~14 questions out of 45.** This is the highest-weighted topic. Cover every subtopic in the exam overview: selecting, renaming, manipulating columns; filtering, dropping, sorting, aggregating rows; missing data; combining, reading, writing, partitioning DataFrames; schemas; UDFs.
 
 #### Prompt 12: DataFrame Creation, Column Selection and Renaming
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a practical guide on creating DataFrames and working with their columns for the exam:
 - **Creating DataFrames in-memory** (fundamental — tested as setup in code-reading questions):
   - `spark.createDataFrame(data, schema)` from a Python list of tuples: `spark.createDataFrame([(1, 'Alice'), (2, 'Bob')], ['id', 'name'])`
@@ -160,6 +198,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 13: Column Manipulation and Expressions
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a comprehensive guide on transforming column values — a core exam topic:
 - Adding a new column or replacing an existing column with withColumn('name', expression)
 - Dropping one or more columns with drop()
@@ -173,6 +214,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 14: Data Filtering and Row Manipulation
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a comprehensive guide covering row-level operations:
 - Filtering rows with filter() and where() — confirm they are aliases
 - Single-condition filter, AND (&), OR (|), NOT (~) with column expressions
@@ -186,6 +230,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 15: Aggregations and Grouping
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create an in-depth aggregation guide covering exam scenarios:
 - groupBy() with one column and multiple columns
 - agg() with single and multiple named aggregations using F.alias()
@@ -199,6 +246,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 16: Handling Missing Data (NULLs)
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write about detecting and handling missing/null data — tested directly on the exam:
 - Identifying null values in a column using isNull() and isNotNull() inside filter()
 - Counting nulls per column: df.select([count(when(isnan(c) | col(c).isNull(), c)).alias(c) for c in df.columns])
@@ -212,6 +262,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 17: Joining DataFrames
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a comprehensive joining guide covering all join types tested in the exam:
 - Join syntax: df1.join(df2, on=condition, how='join_type')
 - All join types with explanation and example: inner, left (left_outer), right (right_outer), full (outer / full_outer), left_semi, left_anti, cross
@@ -225,6 +278,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 18: Combining DataFrames — Union, Intersect, Except
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a complete guide on set-based and vertical combining operations — exam topic often missed:
 - union(other): combines all rows from both DataFrames (includes duplicates), requires same column count and order
 - unionAll(other): alias for union() in Spark 2+; explain the history
@@ -239,6 +295,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 19: Reading and Writing DataFrames
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a complete I/O reference covering all formats and options tested on the exam:
 - **Reading**: spark.read.format('csv').option(...).load(path) vs spark.read.csv(path, ...)
   - CSV options: header, inferSchema, sep/delimiter, nullValue, nanValue, dateFormat, timestampFormat, encoding, multiLine
@@ -255,6 +314,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 20: DataFrame Partitioning — Repartition and Coalesce
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a guide on managing DataFrame partitions for the exam:
 - What a partition is in Spark and its relationship to parallelism and task count
 - Checking partition count: df.rdd.getNumPartitions()
@@ -268,6 +330,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 21: Schemas and Data Types
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write about defining, enforcing, and working with schemas for the exam:
 - StructType and StructField: constructing schemas in Python with types from pyspark.sql.types
 - All Spark data types to know: StringType, IntegerType, LongType, FloatType, DoubleType, DecimalType, BooleanType, DateType, TimestampType, BinaryType, NullType
@@ -282,6 +347,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 22: User Defined Functions (UDFs)
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a comprehensive UDF guide covering everything tested on the exam:
 - Defining a Python UDF using udf() with explicit return type: my_udf = udf(lambda x: x.upper(), StringType())
 - Applying a UDF to a DataFrame column: df.withColumn('new', my_udf(col('existing')))
@@ -298,6 +366,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 23: Complex End-to-End Data Manipulation Scenarios
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create three realistic exam-style pipeline scenarios that chain multiple DataFrame operations:
 - **Scenario 1 — Sales Analytics**: Read a partitioned CSV dataset with an explicit schema → cast and clean types → fillna for missing regions → filter for the current year → groupBy region and product, agg total sales and avg price → rank products by sales within each region using a window function → write results to Parquet partitioned by region
 - **Scenario 2 — Log Processing**: Read JSON logs → explode an array column → filter for ERROR level → extract fields with regexp_extract → join with a user reference table (broadcast join) → deduplicate with dropDuplicates → count errors per user per day → write to Delta format
@@ -312,6 +383,9 @@
 > **Exam weight: 10% — ~5 questions out of 45.** Focus on identifying bottlenecks, knowing key configuration properties, and recognizing common error types.
 
 #### Prompt 24: Performance Tuning Techniques
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a comprehensive tuning guide targeting the exam:
 - **Spark UI navigation**: Jobs tab (job status), Stages tab (stage timeline, shuffle read/write), Tasks tab (per-task duration, skew detection), SQL tab (plan visualization), Storage tab (cached RDDs/DataFrames), Environment tab (configuration)
 - **Memory model**: driver memory (spark.driver.memory), executor memory (spark.executor.memory), executor memory overhead (spark.executor.memoryOverhead), storage vs execution memory split
@@ -324,6 +398,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 25: Common Spark Errors and Failure Scenarios
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a troubleshooting reference for error types that appear on the exam:
 - **OutOfMemoryError (OOM)**: driver OOM (too much data collected with collect()/toPandas()) vs executor OOM (too large a partition); fix with repartition, increase memory, avoid collect() on large datasets
 - **AnalysisException — Column not found**: referencing a column that doesn't exist or was dropped; misspelled column name; column ambiguity after join (two columns with the same name)
@@ -337,6 +414,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 26: Debugging Spark Applications
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write about debugging and monitoring approaches relevant to the exam:
 - Reading the Spark UI: how to access it, what each tab shows, how to navigate from a failed job to the failed stage to the failed task and find the error message
 - Interpreting explain() output to understand why a query is slow (no predicate pushdown, SortMergeJoin when BroadcastHashJoin expected)
@@ -355,6 +435,9 @@
 > **Exam weight: 10% — ~5 questions out of 45.** Focus on the streaming DataFrame API, output modes, triggers, and watermarking.
 
 #### Prompt 27: Structured Streaming Fundamentals
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a guide on the core Structured Streaming API for the exam:
 - What Structured Streaming is: an extension of the Spark SQL engine that treats a live data stream as an unbounded table
 - How the streaming DataFrame API mirrors the batch DataFrame API — same transformations apply
@@ -370,6 +453,9 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 28: Stateful Streaming — Windows and Watermarking
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a guide on stateful streaming operations — the advanced exam streaming topic:
 - Difference between stateless transformations (filter, select, map — applied per row) and stateful operations (groupBy, aggregations, deduplication — require state across rows)
 - **Tumbling windows**: non-overlapping fixed windows using window(timeColumn, windowDuration); e.g., count events per 10-minute window
@@ -388,6 +474,9 @@
 > **Exam weight: 5% — ~2 questions out of 45.** Understand the architecture and how to connect.
 
 #### Prompt 29: Spark Connect — Architecture and Usage
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Write a focused guide on Spark Connect for the exam:
 - **What Spark Connect is**: a new client-server architecture (introduced in Spark 3.4) that decouples the client-side API from the Spark cluster — a thin client model
 - **How it differs from the classic SparkContext approach**: classic approach embeds the Spark driver in the application process; Spark Connect runs the driver on the cluster and communicates over a network protocol
@@ -407,6 +496,9 @@
 > **Exam weight: 5% — ~2 questions out of 45.** Focus on the API differences, conversion methods, and trade-offs.
 
 #### Prompt 30: Pandas API on Apache Spark (pyspark.pandas)
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a guide on the Pandas API on Apache Spark for the exam:
 - **What it is**: a pandas-compatible API that runs on Spark, enabling pandas-style code to process distributed data; previously called Koalas
 - **Import pattern**: import pyspark.pandas as ps (not pandas as pd)
@@ -430,6 +522,9 @@
 ### EXAM PRACTICE
 
 #### Prompt 31: Practice Exam Questions — All Topics
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Generate 20 realistic multiple-choice practice questions for the Databricks Certified Associate Developer for Apache Spark exam. Format each question as:
 
 **Q{N}: [Question text]**
@@ -457,6 +552,9 @@ Include a mix of:
 - Generate 5 practical real-world scenarios that illustrate common developer mistakes or tricky situations where knowing the correct exam answer matters. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise situation title and the `<details>` body for the developer context, the exam-style question it raises, the correct answer, and why the other options are wrong."
 
 #### Prompt 32: Hands-On Capstone Project
+
+> **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
+
 "Create a complete capstone project that exercises all 7 exam topic areas in one cohesive pipeline:
 
 **Dataset**: Ride-sharing trip data. Create it in-memory with the following columns:
@@ -510,7 +608,8 @@ After completing all 12 tasks, generate 5 additional real-world scenarios that e
 
 **How to Use Each Prompt:**
 1. Feed the prompt directly to an AI tool (GitHub Copilot, ChatGPT, Claude) to generate detailed study content
-2. Run all code examples in a Databricks Community Edition notebook to verify output
+2. Save all generated files to `databricks\learning\`
+3. Run all code examples in a Databricks Community Edition notebook to verify output
 3. After reading generated content, ask follow-up questions on any unclear concept
 4. After completing each topic area, use Prompt 31 to self-test — filter by topic if needed
 5. Complete Prompt 32 capstone as the final hands-on review before your exam date
