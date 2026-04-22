@@ -69,6 +69,8 @@
 
 #### Prompt 5: Broadcasting & Optimization
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Create a guide on Broadcasting in Spark including:
@@ -81,6 +83,8 @@
 
 #### Prompt 6: Fault Tolerance & Resilience
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Explain Spark's fault tolerance mechanisms:
@@ -92,6 +96,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 7: Garbage Collection in Spark
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -106,6 +112,8 @@
 ---
 
 ### TOPIC 2: Using Spark SQL (20%)
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Exam weight: 20% — 9 questions out of 45.** Focus on SQL functions, query execution, and how SQL and the DataFrame API interoperate.
 
@@ -126,6 +134,8 @@
 
 #### Prompt 9: Built-in Spark SQL Functions Reference
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Write a comprehensive reference on Spark SQL built-in functions required for the exam. For each category include the function signature, what it does, and a PySpark code example with expected output:
@@ -140,6 +150,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 10: Window Functions in Spark SQL and DataFrame API
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -156,6 +168,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 11: Spark SQL Query Optimization and Execution Plans
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -176,6 +190,8 @@
 > **Exam weight: 30% — ~14 questions out of 45.** This is the highest-weighted topic. Cover every subtopic in the exam overview: selecting, renaming, manipulating columns; filtering, dropping, sorting, aggregating rows; missing data; combining, reading, writing, partitioning DataFrames; schemas; UDFs.
 
 #### Prompt 12: DataFrame Creation, Column Selection and Renaming
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -199,6 +215,8 @@
 
 #### Prompt 13: Column Manipulation and Expressions
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Write a comprehensive guide on transforming column values — a core exam topic:
@@ -214,6 +232,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 14: Data Filtering and Row Manipulation
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -231,6 +251,8 @@
 
 #### Prompt 15: Aggregations and Grouping
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Create an in-depth aggregation guide covering exam scenarios:
@@ -246,6 +268,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 16: Handling Missing Data (NULLs)
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -263,6 +287,8 @@
 
 #### Prompt 17: Joining DataFrames
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Create a comprehensive joining guide covering all join types tested in the exam:
@@ -278,6 +304,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 18: Combining DataFrames — Union, Intersect, Except
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -295,6 +323,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 19: Reading and Writing DataFrames
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -315,6 +345,8 @@
 
 #### Prompt 20: DataFrame Partitioning — Repartition and Coalesce
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Create a guide on managing DataFrame partitions for the exam:
@@ -330,6 +362,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 21: Schemas and Data Types
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -347,6 +381,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 22: User Defined Functions (UDFs)
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -367,6 +403,8 @@
 
 #### Prompt 23: Complex End-to-End Data Manipulation Scenarios
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Create three realistic exam-style pipeline scenarios that chain multiple DataFrame operations:
@@ -379,6 +417,8 @@
 ---
 
 ### TOPIC 4: Troubleshooting and Tuning Spark Applications (10%)
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Exam weight: 10% — ~5 questions out of 45.** Focus on identifying bottlenecks, knowing key configuration properties, and recognizing common error types.
 
@@ -399,6 +439,8 @@
 
 #### Prompt 25: Common Spark Errors and Failure Scenarios
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Create a troubleshooting reference for error types that appear on the exam:
@@ -414,6 +456,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 26: Debugging Spark Applications
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -436,6 +480,8 @@
 
 #### Prompt 27: Structured Streaming Fundamentals
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Create a guide on the core Structured Streaming API for the exam:
@@ -453,6 +499,8 @@
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant PySpark code or CLI commands, the expected outcome, and which exam sub-topic is being demonstrated."
 
 #### Prompt 28: Stateful Streaming — Windows and Watermarking
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -475,6 +523,8 @@
 
 #### Prompt 29: Spark Connect — Architecture and Usage
 
+DO not exit until you are sure that the response from this prompt has been save to file(s)
+
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
 "Write a focused guide on Spark Connect for the exam:
@@ -496,6 +546,8 @@
 > **Exam weight: 5% — ~2 questions out of 45.** Focus on the API differences, conversion methods, and trade-offs.
 
 #### Prompt 30: Pandas API on Apache Spark (pyspark.pandas)
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -522,6 +574,8 @@
 ### EXAM PRACTICE
 
 #### Prompt 31: Practice Exam Questions — All Topics
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
@@ -552,6 +606,8 @@ Include a mix of:
 - Generate 5 practical real-world scenarios that illustrate common developer mistakes or tricky situations where knowing the correct exam answer matters. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise situation title and the `<details>` body for the developer context, the exam-style question it raises, the correct answer, and why the other options are wrong."
 
 #### Prompt 32: Hands-On Capstone Project
+
+DO not exit until you are sure that the response from this prompt has been save to file(s)
 
 > **Output Directory**: Save all generated files (notebooks, scripts, notes, exercises) to `databricks\learning\`
 
