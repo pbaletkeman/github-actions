@@ -23,7 +23,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 - Multi-cloud and service-agnostic advantages: one workflow for AWS, Azure, GCP, and hundreds of other providers using the same HCL syntax
 - Hybrid cloud use cases: managing on-premises VMware alongside public cloud in one workspace
 - Real-world scenario: describe how IaC would let a team rebuild an entire environment in minutes vs days manually
-- Include 3 exam-style questions with answers on IaC concepts
+- Include 3 exam-style questions with answers on IaC concepts; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 ---
@@ -53,7 +53,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 - Multiple provider configurations using `alias` — when and why you'd use two configurations of the same provider
 - Writing configuration that uses two different providers in one workspace
 - Code examples: `required_providers` block, aliased provider, provider in a module
-- 3 exam-style questions with answers on provider configuration and versioning
+- 3 exam-style questions with answers on provider configuration and versioning; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 3: Terraform State — Purpose and Management
@@ -73,7 +73,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 - The `terraform show` command: show human-readable state or plan
 - How Terraform determines whether a resource needs to be created, updated, or destroyed by comparing desired state (config) to current state (state file) to actual state (real infrastructure)
 - Code examples: sample `terraform.tfstate` JSON snippet annotated to explain each field
-- 3 exam-style questions with answers
+- 3 exam-style questions with answers; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 ---
@@ -137,7 +137,7 @@ You are not done until you save the response and files  to `terraform/learning/`
   - Use `terraform.workspace` in expressions to branch configuration by workspace name (e.g., different instance sizes per environment)
   - Key distinction: CLI workspaces share the same configuration and backend but have separate state files; HCP Terraform workspaces are fully independent environments with separate config, state, variables, and team access
 
-Include a flowchart description of the full workflow and 4 exam-style questions covering command behavior edge cases — include at least one question on `terraform workspace` commands and one on `terraform apply -replace`
+Include a flowchart description of the full workflow and 4 exam-style questions covering command behavior edge cases — include at least one question on `terraform workspace` commands and one on `terraform apply -replace`; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 ---
@@ -167,7 +167,7 @@ You are not done until you save the response and files  to `terraform/learning/`
   - `ignore_changes`: tell Terraform to ignore changes to specific attributes made outside Terraform
   - `replace_triggered_by`: force replacement when another resource changes
 - Code examples: resource with lifecycle block, data source lookup used in a resource argument
-- 3 exam-style questions with answers
+- 3 exam-style questions with answers; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 6: Variables, Locals, and Outputs
@@ -197,7 +197,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 
 - Variable precedence list (from lowest to highest priority): default → `.tfvars` file → `*.auto.tfvars` → `-var-file` flag → `-var` flag → environment variable
 - Code examples for each block type with explanations
-- 4 exam-style questions covering variable scoping, precedence, and output access
+- 4 exam-style questions covering variable scoping, precedence, and output access; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 7: Complex Types and Collections in Terraform
@@ -221,7 +221,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 - **Splat expressions**: `aws_instance.web[*].id` — shorthand for extracting a list of attribute values from count-based resources
 - **`dynamic` block**: generate repeated nested blocks programmatically based on a collection
 - Code examples: resource with `for_each` over a map, `dynamic` block for security group rules, `for` expression to transform a list
-- 4 exam-style questions with answers
+- 4 exam-style questions with answers; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 8: Built-in Functions and Expressions
@@ -243,7 +243,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 - **`try()` function**: evaluates expressions in order and returns the first that succeeds without error
 - Code examples showing each function category with input and output
 - Emphasis on functions most likely to appear: `lookup()`, `merge()`, `flatten()`, `jsonencode()`, `templatefile()`, `cidrsubnet()`
-- 3 exam-style questions with answers
+- 3 exam-style questions with answers; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 9: Resource Dependencies and Lifecycle
@@ -270,7 +270,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 - **`moved` block**: refactor resource addresses without destroying and recreating — used when renaming resources or moving them into/out of modules
 - **`removed` block**: remove a resource from state without destroying the actual infrastructure
 - Code examples: implicit reference creating order, `depends_on` for hidden dependency, lifecycle with `create_before_destroy`, resource using `provider` meta-argument with an aliased provider
-- 3 exam-style questions
+- 3 exam-style questions; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 10: Custom Conditions and Sensitive Data
@@ -309,7 +309,7 @@ You are not done until you save the response and files  to `terraform/learning/`
   - Dynamic credentials: HCP Terraform can use dynamic credentials to authenticate to cloud providers via Vault
 
 - Code examples: variable with validation, check block with data source, sensitive variable with output
-- 3 exam-style questions with answers
+- 3 exam-style questions with answers; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 ---
@@ -361,7 +361,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 
 - **Module composition**: passing outputs of one module as inputs to another
 - Code examples: calling a registry module with version pinning, local module call, accessing module output
-- 4 exam-style questions on module sources, scoping, and versioning
+- 4 exam-style questions on module sources, scoping, and versioning; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 ---
@@ -410,7 +410,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 - **`terraform state pull`** and **`terraform state push`**: download/upload raw state
 
 - Code examples: `backend` block for S3, `moved` block, `removed` block, `-refresh-only` plan output
-- 4 exam-style questions on state locking, drift, and backend configuration
+- 4 exam-style questions on state locking, drift, and backend configuration; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 ---
@@ -452,7 +452,7 @@ You are not done until you save the response and files  to `terraform/learning/`
   - `TF_LOG_CORE` and `TF_LOG_PROVIDER`: separately control core and provider log levels
 
 - Code examples: `import` block with `terraform plan` output, `state list` and `state show` outputs
-- 3 exam-style questions on import and logging
+- 3 exam-style questions on import and logging; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 ---
@@ -488,7 +488,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 - **Projects**: organize multiple workspaces — control access at the project level; `project_id` on workspace
 
 - Code examples: `cloud` block configuration, variable set usage, `terraform_remote_state` data source
-- 4 exam-style questions on HCP Terraform workflows and workspace management
+- 4 exam-style questions on HCP Terraform workflows and workspace management; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 15: HCP Terraform Governance, Security, and Advanced Features
@@ -531,7 +531,7 @@ You are not done until you save the response and files  to `terraform/learning/`
 - **Explorer**: organization-wide visibility into resources and workspace health
 
 - Code examples: sentinel policy example (advisory level), dynamic credentials configuration
-- 4 exam-style questions on policy enforcement, teams, and health features
+- 4 exam-style questions on policy enforcement, teams, and health features; for each question, wrap the answer letter and full explanation inside <details><summary>Answer</summary> ... </details> HTML tags so answers are collapsed by default
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 ---
@@ -549,8 +549,13 @@ A) ...
 B) ...
 C) ...
 D) ...
+<details>
+<summary>Answer</summary>
+
 **Answer: [Letter]**
 **Explanation**: [2–3 sentences explaining why the answer is correct and why the others are wrong]
+
+</details>
 
 Distribution matching all 8 exam objectives:
 - 3 questions on IaC concepts (Objective 1)
