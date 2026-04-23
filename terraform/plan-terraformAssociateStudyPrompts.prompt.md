@@ -7,6 +7,8 @@ Use each prompt below with an AI tool (GitHub Copilot, ChatGPT, Claude) to gener
 
 ### OBJECTIVE 1: Infrastructure as Code (IaC) with Terraform
 
+You are not done until you save the response and files  to `terraform/learning/`
+
 > **Exam objective: Understand what IaC is, its advantages, and how Terraform fits the multi-cloud landscape.**
 
 #### Prompt 1: What is Infrastructure as Code?
@@ -26,6 +28,8 @@ Use each prompt below with an AI tool (GitHub Copilot, ChatGPT, Claude) to gener
 ---
 
 ### OBJECTIVE 2: Terraform Fundamentals
+
+You are not done until you save the response and files  to `terraform/learning/`
 
 > **Exam objective: Understand providers, the plugin model, state purpose, and how to install/version providers.**
 
@@ -51,6 +55,9 @@ Use each prompt below with an AI tool (GitHub Copilot, ChatGPT, Claude) to gener
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 3: Terraform State — Purpose and Management
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Create a guide on Terraform state fundamentals for the exam:
 - What the state file is: `terraform.tfstate` — maps Terraform configuration to real-world resources
 - Why state is required: Terraform needs to know what it manages to compute diffs, understand ordering, and track metadata
@@ -74,6 +81,9 @@ Use each prompt below with an AI tool (GitHub Copilot, ChatGPT, Claude) to gener
 > **Exam objective: Know every CLI command in the write → plan → apply → destroy cycle and what each does.**
 
 #### Prompt 4: The Core Terraform Workflow — All CLI Commands
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Write a comprehensive guide on the Terraform CLI workflow for the Associate exam. For each command include: purpose, key flags, what it reads/writes, and a practical example:
 
 - **terraform init**:
@@ -135,6 +145,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 > **Exam objective: The largest topic area. Write and interpret HCL — resources, data, variables, outputs, functions, expressions, dependencies, lifecycle, custom conditions, sensitive data.**
 
 #### Prompt 5: Resource and Data Blocks
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Create a guide on `resource` and `data` blocks for the exam:
 - **Resource block**: declares a piece of infrastructure to manage
   - Syntax: `resource \"<provider_type>\" \"<name>\" { ... }` — resource address is `<provider_type>.<name>`
@@ -156,6 +169,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 6: Variables, Locals, and Outputs
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Write a comprehensive guide on input variables, local values, and output values for the exam:
 - **Input variables** (`variable` block):
   - Declaring variables: `type`, `default`, `description`, `validation`, `sensitive` arguments
@@ -183,6 +199,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 7: Complex Types and Collections in Terraform
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Create a guide on Terraform complex types — commonly tested on the exam:
 - **Primitive types**: string, number, bool — conversions between them
 - **Collection types**:
@@ -204,6 +223,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 8: Built-in Functions and Expressions
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Write a reference guide on Terraform built-in functions required for the exam:
 - How to test functions interactively: `terraform console` — run expressions without applying
 - **String functions**: `upper()`, `lower()`, `trimspace()`, `split()`, `join()`, `replace()`, `substr()`, `format()`, `formatlist()`, `regex()`, `regexall()`, `startswith()`, `endswith()`
@@ -223,6 +245,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 9: Resource Dependencies and Lifecycle
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Create a guide on Terraform dependency management for the exam:
 - **Implicit dependencies**: Terraform automatically determines order when one resource references another's attribute — `resource.type.name.attribute` creates a dependency edge
 - **Explicit dependencies** with `depends_on`: use when a dependency exists that Terraform cannot detect from configuration alone (e.g., a resource depends on a side effect of another)
@@ -247,6 +272,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 10: Custom Conditions and Sensitive Data
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Write a guide on validation, custom conditions, and sensitive data handling for the exam:
 
 - **Variable `validation` block**:
@@ -289,6 +317,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 > **Exam objective: Understand how to use and create modules, source types, variable scope, and versioning.**
 
 #### Prompt 11: Terraform Modules — Using, Creating, and Versioning
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Create a comprehensive guide on Terraform modules for the exam:
 - **What a module is**: a container for multiple resources used together; every Terraform configuration is a module (the root module)
 - **Module types**:
@@ -338,6 +369,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 > **Exam objective: Understand state backends, state locking, remote state, and managing drift.**
 
 #### Prompt 12: State Backends, Locking, and Remote State
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Write an in-depth state management guide for the exam:
 - **Local backend**:
   - Default backend — stores state in `terraform.tfstate` in the working directory
@@ -384,6 +418,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 > **Exam objective: Import existing resources, inspect state, and use verbose logging to debug.**
 
 #### Prompt 13: Importing Existing Infrastructure and Inspecting State
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Create a guide on infrastructure import and state inspection for the exam:
 - **Why import is needed**: infrastructure created outside Terraform (manually, by another tool, or before Terraform adoption) must be imported before Terraform can manage it
 - **The `import` block** (Terraform 1.5+ — preferred method):
@@ -423,6 +460,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 > **Exam objective: The second largest topic. Know workspaces, runs, state storage, variable sets, governance, dynamic credentials, drift detection.**
 
 #### Prompt 14: HCP Terraform — Workspaces, Runs, and State
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Write a guide on HCP Terraform core functionality for the exam:
 - **What HCP Terraform is**: HashiCorp's hosted service for Terraform — manages state, runs, variables, and collaboration in the cloud (formerly Terraform Cloud)
 - **Difference from Terraform Community Edition**: Community Edition is a local CLI tool; HCP Terraform adds remote state, team collaboration, policy enforcement, audit logging, and SSO
@@ -450,6 +490,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 - Generate 5 practical real-world scenarios to thoroughly demonstrate the concepts above. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, any relevant HCL configuration or CLI commands, the expected outcome, and which exam sub-objective is being demonstrated."
 
 #### Prompt 15: HCP Terraform Governance, Security, and Advanced Features
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Create a guide on HCP Terraform collaboration and governance features for the exam:
 - **Teams and permissions**:
   - Organizations contain teams; teams have workspace-level permissions
@@ -494,6 +537,9 @@ Include a flowchart description of the full workflow and 4 exam-style questions 
 ### EXAM PRACTICE
 
 #### Prompt 16: Practice Exam Questions — All Objectives
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Generate 25 realistic multiple-choice and true/false practice questions for the HashiCorp Certified Terraform Associate (004) exam. Format each question as:
 
 **Q{N}: [Question text]**
@@ -523,6 +569,9 @@ Include a mix of:
 - Generate 5 practical real-world scenarios — each presenting a realistic developer situation where understanding the correct answer to an exam-style question is critical. Enclose each scenario in HTML `<details>` and `<summary>` tags — use the `<summary>` tag for a concise scenario title and the `<details>` body for the situation, the question it raises, the correct answer, and a full explanation of why the other options are wrong."
 
 #### Prompt 17: Hands-On Capstone Project
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Create a complete end-to-end Terraform project that exercises all 8 exam objectives. Do not use a real cloud provider — use the `random`, `local`, and `null` providers which require no credentials.
 
 **Project goal**: Provision a simulated application environment with multiple resources, a reusable module, remote state, and validation.
