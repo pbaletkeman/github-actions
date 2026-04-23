@@ -7,11 +7,12 @@ Use each prompt below with an AI tool (GitHub Copilot, ChatGPT, Claude) to gener
 
 ### OBJECTIVE 1: Infrastructure as Code (IaC) with Terraform
 
-You are not done until you save the response and files  to `terraform/learning/`
-
 > **Exam objective: Understand what IaC is, its advantages, and how Terraform fits the multi-cloud landscape.**
 
 #### Prompt 1: What is Infrastructure as Code?
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Create a comprehensive study guide on Infrastructure as Code (IaC) concepts tested on the Terraform Associate exam:
 - Define IaC: managing and provisioning infrastructure through machine-readable configuration files rather than manual processes
 - Core IaC principles: idempotency, declarative vs imperative approaches — explain the difference with examples
@@ -29,11 +30,12 @@ You are not done until you save the response and files  to `terraform/learning/`
 
 ### OBJECTIVE 2: Terraform Fundamentals
 
-You are not done until you save the response and files  to `terraform/learning/`
-
 > **Exam objective: Understand providers, the plugin model, state purpose, and how to install/version providers.**
 
 #### Prompt 2: Terraform Providers and the Plugin Model
+
+You are not done until you save the response and files  to `terraform/learning/`
+
 "Write a detailed guide on Terraform providers for the Associate exam:
 - What a provider is: a plugin that translates Terraform HCL into API calls for a specific platform (AWS, Azure, GCP, GitHub, Kubernetes, etc.)
 - How Terraform interacts with providers: the plugin model — provider binary downloaded separately from Terraform core
