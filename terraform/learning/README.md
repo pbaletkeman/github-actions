@@ -33,25 +33,25 @@ All notebooks contain explanatory markdown cells and HCL (HashiCorp Configuratio
 
 ## Notebooks
 
-| # | File | Title |
-|---|------|-------|
-| 01 | [prompt01-what-is-iac.ipynb](prompt01-what-is-iac.ipynb) | What is Infrastructure as Code (IaC)? |
-| 02 | [prompt02-providers-plugin-model.ipynb](prompt02-providers-plugin-model.ipynb) | Terraform Providers and the Plugin Model |
-| 03 | [prompt03-terraform-state.ipynb](prompt03-terraform-state.ipynb) | Terraform State: Purpose and Management |
-| 04 | [prompt04-core-workflow-cli.ipynb](prompt04-core-workflow-cli.ipynb) | The Core Terraform Workflow: All CLI Commands |
-| 05 | [prompt05-resource-data-blocks.ipynb](prompt05-resource-data-blocks.ipynb) | Resource and Data Blocks |
-| 06 | [prompt06-variables-locals-outputs.ipynb](prompt06-variables-locals-outputs.ipynb) | Variables, Locals, and Outputs |
-| 07 | [prompt07-complex-types-collections.ipynb](prompt07-complex-types-collections.ipynb) | Complex Types and Collections |
-| 08 | [prompt08-builtin-functions-expressions.ipynb](prompt08-builtin-functions-expressions.ipynb) | Built-in Functions and Expressions |
-| 09 | [prompt09-dependencies-lifecycle.ipynb](prompt09-dependencies-lifecycle.ipynb) | Resource Dependencies and Lifecycle |
-| 10 | [prompt10-custom-conditions-sensitive-data.ipynb](prompt10-custom-conditions-sensitive-data.ipynb) | Custom Conditions and Sensitive Data |
-| 11 | [prompt11-terraform-modules.ipynb](prompt11-terraform-modules.ipynb) | Terraform Modules |
-| 12 | [prompt12-state-backends-locking-remote-state.ipynb](prompt12-state-backends-locking-remote-state.ipynb) | State Backends, Locking, and Remote State |
-| 13 | [prompt13-importing-infrastructure-state-inspection.ipynb](prompt13-importing-infrastructure-state-inspection.ipynb) | Importing Existing Infrastructure and Inspecting State |
-| 14 | [prompt14-hcp-terraform-workspaces-runs-state.ipynb](prompt14-hcp-terraform-workspaces-runs-state.ipynb) | HCP Terraform — Workspaces, Runs, and State |
-| 15 | [prompt15-hcp-terraform-governance-security-advanced.ipynb](prompt15-hcp-terraform-governance-security-advanced.ipynb) | HCP Terraform — Governance, Security, and Advanced Features |
-| 16 | [prompt16-practice-exam-questions-all-objectives.ipynb](prompt16-practice-exam-questions-all-objectives.ipynb) | Practice Exam Questions — All Objectives (25 questions) |
-| 17 | [prompt17-hands-on-capstone-project.ipynb](prompt17-hands-on-capstone-project.ipynb) | Hands-On Capstone Project |
+| # | Notebook | Study Guide | Title |
+|---|----------|-------------|-------|
+| 01 | [prompt01-what-is-iac.ipynb](prompt01-what-is-iac.ipynb) | [📄 MD](prompt01-what-is-iac.md) | What is Infrastructure as Code (IaC)? |
+| 02 | [prompt02-providers-plugin-model.ipynb](prompt02-providers-plugin-model.ipynb) | [📄 MD](prompt02-providers-plugin-model.md) | Terraform Providers and the Plugin Model |
+| 03 | [prompt03-terraform-state.ipynb](prompt03-terraform-state.ipynb) | [📄 MD](prompt03-terraform-state.md) | Terraform State: Purpose and Management |
+| 04 | [prompt04-core-workflow-cli.ipynb](prompt04-core-workflow-cli.ipynb) | [📄 MD](prompt04-core-workflow-cli.md) | The Core Terraform Workflow: All CLI Commands |
+| 05 | [prompt05-resource-data-blocks.ipynb](prompt05-resource-data-blocks.ipynb) | [📄 MD](prompt05-resource-data-blocks.md) | Resource and Data Blocks |
+| 06 | [prompt06-variables-locals-outputs.ipynb](prompt06-variables-locals-outputs.ipynb) | [📄 MD](prompt06-variables-locals-outputs.md) | Variables, Locals, and Outputs |
+| 07 | [prompt07-complex-types-collections.ipynb](prompt07-complex-types-collections.ipynb) | [📄 MD](prompt07-complex-types-collections.md) | Complex Types and Collections |
+| 08 | [prompt08-builtin-functions-expressions.ipynb](prompt08-builtin-functions-expressions.ipynb) | [📄 MD](prompt08-builtin-functions-expressions.md) | Built-in Functions and Expressions |
+| 09 | [prompt09-dependencies-lifecycle.ipynb](prompt09-dependencies-lifecycle.ipynb) | [📄 MD](prompt09-dependencies-lifecycle.md) | Resource Dependencies and Lifecycle |
+| 10 | [prompt10-custom-conditions-sensitive-data.ipynb](prompt10-custom-conditions-sensitive-data.ipynb) | [📄 MD](prompt10-custom-conditions-sensitive-data.md) | Custom Conditions and Sensitive Data |
+| 11 | [prompt11-terraform-modules.ipynb](prompt11-terraform-modules.ipynb) | [📄 MD](prompt11-terraform-modules.md) | Terraform Modules |
+| 12 | [prompt12-state-backends-locking-remote-state.ipynb](prompt12-state-backends-locking-remote-state.ipynb) | [📄 MD](prompt12-state-backends-locking-remote-state.md) | State Backends, Locking, and Remote State |
+| 13 | [prompt13-importing-infrastructure-state-inspection.ipynb](prompt13-importing-infrastructure-state-inspection.ipynb) | [📄 MD](prompt13-importing-infrastructure-state-inspection.md) | Importing Existing Infrastructure and Inspecting State |
+| 14 | [prompt14-hcp-terraform-workspaces-runs-state.ipynb](prompt14-hcp-terraform-workspaces-runs-state.ipynb) | [📄 MD](prompt14-hcp-terraform-workspaces-runs-state.md) | HCP Terraform — Workspaces, Runs, and State |
+| 15 | [prompt15-hcp-terraform-governance-security-advanced.ipynb](prompt15-hcp-terraform-governance-security-advanced.ipynb) | [📄 MD](prompt15-hcp-terraform-governance-security-advanced.md) | HCP Terraform — Governance, Security, and Advanced Features |
+| 16 | [prompt16-practice-exam-questions-all-objectives.ipynb](prompt16-practice-exam-questions-all-objectives.ipynb) | [📄 MD](prompt16-practice-exam-questions-all-objectives.md) | Practice Exam Questions — All Objectives (25 questions) |
+| 17 | [prompt17-hands-on-capstone-project.ipynb](prompt17-hands-on-capstone-project.ipynb) | [📄 MD](prompt17-hands-on-capstone-project.md) | Hands-On Capstone Project |
 
 ---
 
