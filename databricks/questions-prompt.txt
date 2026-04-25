@@ -1,5 +1,5 @@
-Use the format from `actions-source-material\gh-200-iteration-5.md` and category weights from `databricks\plan-databricksSparkExamOverview.prompt.md`.
-Target file: `databricks\learning\questions\spark-200-iteration-5.md`
+Use the format from `actions-source-material\gh-200-iteration-10.md` and category weights from `databricks\plan-databricksSparkExamOverview.prompt.md`.
+Target file: `databricks\learning\questions\spark-200-iteration-10.md`
 Do NOT repeat any question already in `databricks\learning\questions\`.
 
 Generate questions in 4 separate batches. Wait for each batch to complete before starting the next.

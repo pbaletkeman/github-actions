@@ -1,0 +1,11 @@
+The expression after '.' in a pipeline element produced an object that was not 
+valid. It must result in a command name, a script block, or a CommandInfo 
+object.
+At 
+C:\Users\Pete\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1:1 
+char:41
++ ... AM -eq "vscode") { . "$(code --locate-shell-integration-path pwsh)" }
++                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:String) [], RuntimeException
+    + FullyQualifiedErrorId : BadExpression
+ 
