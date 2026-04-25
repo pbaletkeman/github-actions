@@ -1,5 +1,10 @@
-inspect `actions-source-material\gh-200-iteration-5.md`
-create a comparable file covering the material in `databricks\learning\` place the file in `databricks\learning\questions`
-make sure to create at least 100 unique questions which do not overlap and do not repeat
-make sure that the questions are do not overlap with any existing questions in `databricks\learning\questions`
-make sure to use the category weights found in databricks\plan-databricksSparkExamOverview.prompt.md
+Use the format from `actions-source-material\gh-200-iteration-5.md` and category weights from `databricks\plan-databricksSparkExamOverview.prompt.md`.
+Target file: `databricks\learning\questions\spark-200-iteration-5.md`
+Do NOT repeat any question already in `databricks\learning\questions\`.
+
+Generate questions in 4 separate batches. Wait for each batch to complete before starting the next.
+
+Batch 1 — write the file header block and Q1–25 (Topic 1: Architecture Q1–20, Topic 2: Spark SQL Q21–25)
+Batch 2 — append Q26–50 (Topic 2: Spark SQL Q26–40, Topic 3: DataFrame API Q41–50)
+Batch 3 — append Q51–75 (Topic 3: DataFrame API Q51–70, Topic 4: Tuning Q71–75)
+Batch 4 — append Q76–100 (Topic 4: Tuning Q76–80, Topic 5: Streaming Q81–90, Topic 6: Connect Q91–95, Topic 7: Pandas API Q96–100)
