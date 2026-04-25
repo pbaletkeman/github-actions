@@ -1513,3 +1513,110 @@ What is the difference between `default_index_type = "sequence"` and `default_in
 - B) The **`sequence`** index type assigns globally unique, **consecutive integers starting from 0** to each row (0, 1, 2, …) — this requires a **full sort/shuffle** to assign stable consecutive IDs, making it expensive for large DataFrames but producing a pandas-compatible integer index; the **`distributed-sequence`** index type (the default in Pandas API on Spark) assigns integers that are **unique but not necessarily consecutive or globally ordered** — it uses monotonically increasing IDs within each partition, avoiding the shuffle; the result is a valid unique index but not a contiguous range, so operations that rely on positional access (e.g., `iloc[5]`) may produce unexpected results; `ps.set_option("compute.default_index_type", "sequence")` switches to the expensive but pandas-compatible sequential index
 - C) `sequence` distributes row numbering across partitions; `distributed-sequence` computes the full sequential order on the driver
 - D) Both index types use consecutive integers; the difference is only the starting value (`sequence` starts at 0, `distributed-sequence` starts at 1)
+
+---
+
+## Answer Key
+
+| Q# | Answer(s) | Explanation | Source | Difficulty |
+|----|-----------|-------------|--------|------------|
+| 1 | B | Tasks in a stage = number of input partitions; each task processes exactly one partition. | topic1-prompt1-spark-architecture.md | Easy |
+| 2 | B | Unified memory: execution can evict storage blocks above the storageFraction watermark. | topic1-prompt1-spark-architecture.md | Hard |
+| 3 | B | Sort-based shuffle writes exactly 1 data file + 1 index file per mapper, reducing file count. | topic1-prompt4-shuffling-performance.md | Hard |
+| 4 | B | `TaskContext.get().partitionId()` and `.attemptNumber()` expose task metadata inside a task. | topic1-prompt1-spark-architecture.md | Hard |
+| 5 | B | Barrier mode requires all tasks in the stage to start simultaneously before any can proceed. | topic1-prompt1-spark-architecture.md | Hard |
+| 6 | B | Default scheduler is FIFO; FAIR scheduler interleaves tasks from concurrent jobs. | topic1-prompt1-spark-architecture.md | Hard |
+| 7 | B | `spark.python.worker.reuse=true` keeps Python workers alive and reuses them across tasks. | topic1-prompt1-spark-architecture.md | Hard |
+| 8 | B | `checkpoint()` truncates RDD lineage; `persist(DISK_ONLY)` writes to disk but retains lineage. | topic1-prompt6-fault-tolerance.md | Hard |
+| 9 | B | Locality preference degrades: PROCESS_LOCAL → NODE_LOCAL → RACK_LOCAL → ANY after wait timeouts. | topic1-prompt1-spark-architecture.md | Hard |
+| 10 | B | UnsafeRow is an off-heap binary row format (Tungsten) that avoids Java object GC pressure. | topic1-prompt1-spark-architecture.md | Hard |
+| 11 | B | `spark.executor.instances` is ignored when dynamic allocation is enabled. | topic1-prompt1-spark-architecture.md | Medium |
+| 12 | B | `spark.sql.files.maxPartitionBytes` caps the maximum data read per input partition. | topic1-prompt1-spark-architecture.md | Medium |
+| 13 | B | Accumulators double-count when a task is retried; use only in actions or idempotently. | topic1-prompt1-spark-architecture.md | Medium |
+| 14 | B | `spark.sql.broadcastTimeout` is the max driver wait time to complete a broadcast; exceeded = SparkException. | topic1-prompt5-broadcasting-optimization.md | Medium |
+| 15 | B | spark-submit CLI flags take highest precedence, overriding spark-defaults.conf and programmatic config. | topic1-prompt1-spark-architecture.md | Medium |
+| 16 | B | `spark.rdd.compress=true` compresses serialized RDD partitions on disk/memory at CPU cost. | topic1-prompt1-spark-architecture.md | Medium |
+| 17 | B | `spark.driver.maxResultSize` caps the total serialized size of results returned to the driver. | topic1-prompt1-spark-architecture.md | Medium |
+| 18 | B | `sc.addFile()` distributes files accessible via `SparkFiles.get()`; `sc.addJar()` adds JARs to executor classpaths. | topic1-prompt1-spark-architecture.md | Medium |
+| 19 | B | With Arrow enabled, `toPandas()` and `createDataFrame()` use columnar Arrow IPC format for transfer. | topic1-prompt1-spark-architecture.md | Medium |
+| 20 | B | `spark.ui.retainedJobs` and `retainedStages` control the in-memory Web UI history cache size (FIFO eviction). | topic1-prompt1-spark-architecture.md | Medium |
+| 21 | B | `regexp_replace` returns the original string unchanged when the pattern has no match. | topic2-prompt9-builtin-sql-functions.md | Easy |
+| 22 | B | `overlay(str, replace, pos, len)` replaces a substring by position, not by regex pattern. | topic2-prompt9-builtin-sql-functions.md | Medium |
+| 23 | B | `soundex()` returns a 4-character phonetic code useful for fuzzy name matching. | topic2-prompt9-builtin-sql-functions.md | Medium |
+| 24 | B | `initcap()` uppercases the first letter of each word (title case); `upper()`/`lower()` affect the whole string. | topic2-prompt9-builtin-sql-functions.md | Medium |
+| 25 | B | `array_distinct()` returns unique elements; `null` is treated as a distinct value and retained once. | topic2-prompt9-builtin-sql-functions.md | Medium |
+| 26 | B | `array_union`, `array_intersect`, `array_except` perform set operations on arrays and deduplicate results. | topic2-prompt9-builtin-sql-functions.md | Medium |
+| 27 | B | `aggregate()` is a fold-left; the optional `finish` lambda post-processes the final accumulator value. | topic2-prompt9-builtin-sql-functions.md | Hard |
+| 28 | B | `forall()` is vacuously true for an empty array; `exists()` returns false for an empty array. | topic2-prompt9-builtin-sql-functions.md | Hard |
+| 29 | B | `zip_with()` result length equals the longer array; the shorter array is padded with null. | topic2-prompt9-builtin-sql-functions.md | Hard |
+| 30 | B | `map_from_entries()` expects an array of 2-field structs; duplicate keys keep the last value. | topic2-prompt9-builtin-sql-functions.md | Hard |
+| 31 | A | `to_utc_timestamp` converts local→UTC; `from_utc_timestamp` converts UTC→local; they are inverses. | topic2-prompt9-builtin-sql-functions.md | Medium |
+| 32 | B | `make_date()` returns null for invalid date inputs rather than throwing an exception. | topic2-prompt9-builtin-sql-functions.md | Medium |
+| 33 | B | `datediff` returns integer days between dates; `timestampdiff` supports any time unit. | topic2-prompt9-builtin-sql-functions.md | Medium |
+| 34 | B | `sequence(start, stop, step)` with a negative step generates a descending integer array. | topic2-prompt9-builtin-sql-functions.md | Medium |
+| 35 | B | `try_cast` returns null instead of an error; `try_divide` returns null for division by zero. | topic2-prompt9-builtin-sql-functions.md | Hard |
+| 36 | B | `UNPIVOT` (Spark 3.4+ SQL) rotates wide columns into rows without a self-join workaround. | topic2-prompt8-spark-sql-fundamentals.md | Hard |
+| 37 | B | `QUALIFY` filters on window function results inline, avoiding a subquery (Spark 3.3+). | topic2-prompt10-window-functions.md | Hard |
+| 38 | B | `TABLESAMPLE(10 PERCENT)` is Bernoulli ~10%; `TABLESAMPLE(100 ROWS)` returns at most 100 rows. | topic2-prompt8-spark-sql-fundamentals.md | Medium |
+| 39 | B | `LATERAL VIEW OUTER` preserves rows where the array is null or empty (OUTER semantics). | topic2-prompt8-spark-sql-fundamentals.md | Medium |
+| 40 | B | `schema_of_json()` returns a DDL-format schema string, typically used as input to `from_json()`. | topic2-prompt8-spark-sql-fundamentals.md | Medium |
+| 41 | B | `write.mode("overwrite")` deletes the existing output directory entirely before writing new data. | topic3-prompt19-reading-writing-dataframes.md | Easy |
+| 42 | B | `write.partitionBy()` creates a Hive-style directory tree; partition columns are removed from the data files. | topic3-prompt19-reading-writing-dataframes.md | Medium |
+| 43 | B | `bucketBy(64, "user_id")` creates 64 fixed buckets; joins on matching-bucket tables skip the shuffle phase. | topic3-prompt19-reading-writing-dataframes.md | Medium |
+| 44 | B | `writeTo()` uses the DataSource V2 API with richer semantics such as `overwrite(condition)`. | topic3-prompt19-reading-writing-dataframes.md | Medium |
+| 45 | B | `df.observe()` attaches named aggregate metrics computed in a single pass during the action. | topic3-prompt19-reading-writing-dataframes.md | Hard |
+| 46 | B | `df.stat.freqItems()` uses the Misra-Gries approximate algorithm; `support` is the minimum frequency fraction. | topic3-prompt12-dataframe-creation-selection.md | Hard |
+| 47 | B | Pandas scalar UDFs receive a `pandas.Series` per Arrow batch; typically 10–100× faster than row UDFs. | topic3-prompt22-udfs.md | Hard |
+| 48 | B | `localCheckpoint()` materialises on executor local disk without HDFS; not fault-tolerant across executor loss. | topic3-prompt19-reading-writing-dataframes.md | Medium |
+| 49 | B | `F.input_file_name()` returns the fully qualified source file path for each row. | topic3-prompt19-reading-writing-dataframes.md | Medium |
+| 50 | B | `df.stat.crosstab()` returns a contingency table: col1 values = rows, col2 values = columns, cell = count. | topic3-prompt12-dataframe-creation-selection.md | Medium |
+| 51 | B | `regexp_extract()` returns `""` when there is no match; returns null only when the input is null. | topic3-prompt13-column-manipulation-expressions.md | Medium |
+| 52 | B | `split(str, pattern, limit)` produces at most `limit` elements (at most `limit-1` splits). | topic3-prompt13-column-manipulation-expressions.md | Medium |
+| 53 | B | `from_json()` is permissive: missing fields → null, extra fields ignored, malformed input → all-null struct. | topic3-prompt21-schemas-data-types.md | Hard |
+| 54 | B | `StructType.fromDDL()` parses a DDL string into a StructType; all fields are nullable by default. | topic3-prompt21-schemas-data-types.md | Hard |
+| 55 | B | `randomSplit()` is reproducible with a seed; cache the source DataFrame to avoid double-scanning. | topic3-prompt12-dataframe-creation-selection.md | Hard |
+| 56 | B | `df.hint("broadcast")` forces a broadcast hash join regardless of the auto-broadcast size threshold. | topic1-prompt5-broadcasting-optimization.md | Medium |
+| 57 | B | `encode(str, charset)` returns Binary; `decode(binary, charset)` returns String using the named charset. | topic3-prompt13-column-manipulation-expressions.md | Medium |
+| 58 | B | `maxRecordsPerFile` limits the number of rows per output file, splitting within a task if needed. | topic3-prompt19-reading-writing-dataframes.md | Medium |
+| 59 | B | `sortWithinPartitions()` sorts locally with no shuffle; `orderBy()` performs a global sort with a shuffle. | topic3-prompt20-repartition-coalesce.md | Hard |
+| 60 | A | `na.drop(how="all")` drops rows where all columns are null; `na.drop(how="any")` drops rows where any column is null. | topic3-prompt16-handling-nulls.md | Hard |
+| 61 | B | After a join, reference an ambiguous column via `df1["id"]` directly or pass a column list `["id"]` to `join()`. | topic3-prompt17-joins.md | Hard |
+| 62 | B | A `when()` chain with no `.otherwise()` returns null for all rows that match no condition. | topic3-prompt13-column-manipulation-expressions.md | Medium |
+| 63 | B | `df.select(F.col("*"), new_col)` returns all existing columns plus the new column appended. | topic3-prompt12-dataframe-creation-selection.md | Medium |
+| 64 | B | `withColumn()` called with an existing column name silently overwrites that column. | topic3-prompt13-column-manipulation-expressions.md | Medium |
+| 65 | B | `df.toDF(*names)` renames all columns in order; a count mismatch raises an AnalysisException. | topic3-prompt13-column-manipulation-expressions.md | Medium |
+| 66 | B | `df1.crossJoin(df2)` produces the Cartesian product (M × N rows); enabled by default in Spark 3.x. | topic3-prompt17-joins.md | Hard |
+| 67 | B | `selectExpr()` accepts SQL expression strings parsed by Catalyst; `"*"` expands to all columns. | topic3-prompt12-dataframe-creation-selection.md | Hard |
+| 68 | B | `distinct()` deduplicates on all columns; `dropDuplicates(["id"])` deduplicates on the specified subset. | topic3-prompt14-filtering-row-manipulation.md | Medium |
+| 69 | B | `F.expr()` is preferred for complex SQL expressions; `F.col() + F.col()` is cleaner for simple arithmetic. | topic3-prompt13-column-manipulation-expressions.md | Medium |
+| 70 | B | `rowsBetween` counts physical row positions; `rangeBetween` includes all rows with tied ORDER BY values. | topic2-prompt10-window-functions.md | Hard |
+| 71 | A | AQE coalesce requires `coalescePartitions.enabled=true`; it merges small adjacent post-shuffle partitions. | topic4-prompt24-performance-tuning.md | Hard |
+| 72 | B | `storageFraction` sets the fraction of unified memory protected from eviction by execution; default 0.5. | topic4-prompt24-performance-tuning.md | Hard |
+| 73 | B | `EXPLAIN CODEGEN` shows the generated Java source code for each Whole-Stage Code Generation pipeline. | topic4-prompt26-debugging.md | Hard |
+| 74 | B | Skew join causes straggler tasks; AQE splits skewed partitions and replicates the matching side. | topic4-prompt24-performance-tuning.md | Medium |
+| 75 | B | Set `spark.sql.autoBroadcastJoinThreshold=-1` to completely disable automatic broadcast joins. | topic4-prompt24-performance-tuning.md | Medium |
+| 76 | B | Both ORC and Parquet are columnar; Parquet is the ecosystem standard; ORC is preferred for Hive ACID. | topic4-prompt24-performance-tuning.md | Hard |
+| 77 | B | G1GC is recommended for large executor heaps; enable with `-XX:+UseG1GC` in `executor.extraJavaOptions`. | topic1-prompt7-garbage-collection.md | Hard |
+| 78 | B | `inMemoryColumnarStorage.batchSize` controls the number of rows per columnar cache batch (default 10000). | topic4-prompt24-performance-tuning.md | Medium |
+| 79 | B | `spark.eventLog.enabled=true` writes all application events to `spark.eventLog.dir` for the History Server. | topic4-prompt26-debugging.md | Medium |
+| 80 | B | Shuffle spill is confirmed by `Shuffle Spill (Memory)` and `Shuffle Spill (Disk)` metrics in the Stage UI. | topic4-prompt24-performance-tuning.md | Medium |
+| 81 | A | Register a listener with `spark.streams.addListener()`; callbacks: `onQueryStarted`, `onQueryProgress`, `onQueryTerminated`. | topic5-prompt27-structured-streaming.md | Hard |
+| 82 | B | `mapGroupsWithState` emits exactly 1 record per group; `flatMapGroupsWithState` emits 0 or more records. | topic5-prompt28-stateful-streaming.md | Hard |
+| 83 | B | `failOnDataLoss=true` raises an exception when Kafka offsets are missing; `false` skips them with a warning. | topic5-prompt27-structured-streaming.md | Hard |
+| 84 | B | `complete` mode rewrites the entire result table each micro-batch; required for aggregations without a watermark. | topic5-prompt27-structured-streaming.md | Medium |
+| 85 | B | `Trigger.Once()` processes all data in one micro-batch then stops; `Trigger.AvailableNow()` uses multiple rate-limited micro-batches. | topic5-prompt27-structured-streaming.md | Medium |
+| 86 | B | `maxFilesPerTrigger` limits new files consumed per micro-batch; excess files queue for the next batch. | topic5-prompt27-structured-streaming.md | Medium |
+| 87 | B | Stream-static join re-reads the static side each batch; late streaming rows that missed a match cannot be recovered. | topic5-prompt27-structured-streaming.md | Hard |
+| 88 | B | Global `orderBy()` on a streaming DataFrame raises AnalysisException because all rows must be seen first. | topic5-prompt27-structured-streaming.md | Medium |
+| 89 | B | Continuous processing runs tasks without micro-batches achieving millisecond latency; only stateless ops supported. | topic5-prompt27-structured-streaming.md | Hard |
+| 90 | B | The rate source produces two columns: `timestamp` (TimestampType) and `value` (LongType counter from 0). | topic5-prompt27-structured-streaming.md | Medium |
+| 91 | B | Spark Connect decouples client and driver via a gRPC/protobuf client-server architecture. | topic6-prompt29-spark-connect.md | Medium |
+| 92 | B | Transformations build a local plan tree; only an action serialises the plan as protobuf and sends it to the server. | topic6-prompt29-spark-connect.md | Hard |
+| 93 | B | TLS is configured with `use_ssl=true` in the Spark Connect URL: `sc://host:port/;use_ssl=true`. | topic6-prompt29-spark-connect.md | Medium |
+| 94 | B | SparkContext-level APIs (RDD, `addFile`, `addJar`, `sc.parallelize`) are not available via Spark Connect. | topic6-prompt29-spark-connect.md | Hard |
+| 95 | B | Protobuf field numbering provides forward/backward compatibility; clients and server can be versioned independently. | topic6-prompt29-spark-connect.md | Medium |
+| 96 | B | `ps.from_pandas(pdf)` converts a `pandas.DataFrame` to a Pandas API on Spark DataFrame. | topic7-prompt30-pandas-api.md | Easy |
+| 97 | B | Cross-DataFrame operations raise an error by default; enable with `ps.set_option("compute.ops_on_diff_frames", True)`. | topic7-prompt30-pandas-api.md | Medium |
+| 98 | B | `ps.get_dummies()` performs one-hot encoding, adding a binary column per distinct category value. | topic7-prompt30-pandas-api.md | Medium |
+| 99 | B | `shortcut_limit` (default 1000) short-circuits small DataFrames to local Pandas to avoid Spark job overhead. | topic7-prompt30-pandas-api.md | Hard |
+| 100 | B | `sequence` index assigns consecutive integers (requires a shuffle); `distributed-sequence` assigns unique but non-consecutive integers per partition. | topic7-prompt30-pandas-api.md | Hard |
