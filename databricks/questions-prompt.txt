@@ -1,0 +1,5 @@
+inspect `actions-source-material\gh-200-iteration-1.md`
+create a comparable file covering the material in `databricks\learning\` place the file in `databricks\learning\questions`
+make sure to create at least 100 unique questions which do not overlap and do not repeat
+make sure that the questions are do not overlap with any existing questions in `databricks\learning\questions`
+make sure to use the category weights found in databricks\plan-databricksSparkExamOverview.prompt.md
