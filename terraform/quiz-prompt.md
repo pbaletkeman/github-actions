@@ -15,7 +15,7 @@ This prompt is designed to be run **once per (ITERATION, BATCH) pair** to avoid 
 
 **Set BOTH values before each run:**
 
-> **CURRENT ITERATION**: `4`  ← change this to 1–10 before each run
+> **CURRENT ITERATION**: `7`  ← change this to 1–10 before each run
 > **CURRENT BATCH**: `2` ← change this to 1–8 before each run
 
 ---
